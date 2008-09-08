@@ -1,0 +1,110 @@
+\documentclass[a4paper]{article}
+\usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
+\usepackage{graphicx}
+\usepackage{color}
+
+%\usepackage{url}                % Opmaak van URLs
+%\usepackage[official]{eurosym}  % Euro symbool
+%\usepackage{colortbl}           % Kleur tabellen
+
+\usepackage{nonfloat}            % Voeg non-floating tables & figures toe
+\usepackage{pdfpages}            % Maak dat voorblad kan toegevoegd worden
+\usepackage{amsmath,amsfonts}    % Wiskunde
+\usepackage{listings}            % Code Listings
+
+% Plaats van afbeeldingen
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+% Zet hier de woorden waarmee de splitser problemen heeft:
+\hyphenation{}
+
+% Regel nummering van figuren
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\newcommand{\Section}[1]{\section{#1} \setcounter{figure}{0}}
+
+% Listings setup
+\definecolor{darkkeyword}{rgb}{0,0.08,0.40} %Requires the color package.
+\definecolor{gray}{gray}{0.7}
+
+\lstdefinelanguage{gezel}{
+  tabsize=3,
+  frame=single,
+  basicstyle=\footnotesize\ttfamily,
+  rulecolor=\color{gray},
+  identifierstyle=, % nothing happens
+  commentstyle=\color{gray}, % red comments
+  stringstyle=\color{gray},%\ttfamily, % typewriter type for strings
+  showstringspaces={false}, % no special string spaces
+  morecomment=[l]{//},
+  morestring=[b]",
+  morekeywords={always, dp, in, out, tc, ns, reg, sig, sfg, hardwired, sequencer,
+                fsm, use, ipblock, ipparm, iptype, lookup, initial, state, system,
+                if, then, else, stimulus},
+                keywordstyle=\color{blue}\bfseries,classoffset=1,
+  morekeywords={\$display, \$cycle, \$dec, \$bin, \$dp, \$finish,
+                \$hex, \$sfg, \$trace, \$option},
+                keywordstyle=\color{darkkeyword}\bfseries,classoffset=0
+}
+
+\lstset{language=gezel, 
+        showstringspaces=false, 
+        frameround=ftft, 
+        captionpos=b, 
+        xleftmargin=-1cm, 
+        xrightmargin=-1cm,
+        numbers=left,
+        numberstyle=\tiny,
+        stepnumber=5,
+        numberfirstline=true,
+        firstnumber=1
+}
+
+\renewcommand*\lstlistlistingname{Lijst van listings}
+
+% BibTex opmaak
+\bibliographystyle{abbrvurl}
+
+% Voorkom lelijke opmaak
+\clubpenalty=8000
+\widowpenalty=8000
+\displaywidowpenalty=8000
+
+\hyphenpenalty=5000
+\tolerance=1000
+
+%%% Code voor figuren %%%
+%\vspace{\intextsep}
+%\begin{minipage}{\linewidth}
+%    \begin{center}
+%    \includegraphics[width=311px]{fig}
+%    \figcaption{Figuur uitleg}\label{Figuur label}
+%    \end{center}
+%    \end{minipage}
+%\vspace{\intextsep}
+
+\begin{document}
+
+% Voeg voorblad toe
+%\includepdf{voorblad.pdf}
+
+% Reset counter & maak inhoudstafel
+\setcounter{page}{1}
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+
+% Include gedeelte (begint op nieuwe pagina
+% Indien gewoon invoegen op huidige plaats \input
+\include{codetest}
+
+% BibTex referenties
+%\bibliography{references-file-here}
+
+% Lege achterpagina
+\clearpage
+\mbox{~}
+\thispagestyle{empty}
+
+\end{document}
