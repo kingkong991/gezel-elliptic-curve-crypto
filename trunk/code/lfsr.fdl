@@ -1,0 +1,11 @@
+dp lfsr(in  seed : ns(5);
+        in  load : ns(1);
+        out b    : ns(1)) {
+  reg shft : ns(5);
+  sig shft_new : ns(5);
+  always {
+    shft_new = (shft << 1) | (shft[1] ^ shft[4]);
+    shft = load ? seed : shft_new;
+    b    = shft[4];
+  }
+}

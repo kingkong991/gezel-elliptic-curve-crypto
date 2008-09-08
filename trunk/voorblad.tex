@@ -1,0 +1,86 @@
+\documentclass[a4paper]{article}    % Type document
+\usepackage[dutch]{babel}   % Opmaakregels document
+\usepackage{graphicx}       % Afbeeldingen
+\usepackage[left=1.5cm, right=1.5cm, top=2cm, bottom=2cm]{geometry} % Pagina layout
+
+% Plaats van afbeeldingen
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.png}
+
+% Vak
+\newcommand{\vak}{ESAT - Thesis}
+
+% Opgave
+\newcommand{\opgave}{Implementation of cryptographic protocols in constrained environments}
+
+% Titel
+\newcommand{\titel}{{\LARGE \vak}\\[2mm]
+{\Large \opgave}}
+
+% Datum
+\newcommand{\datum}{16 mei 2009}
+
+% Departement
+\newcommand{\departement}{Departement Elektrotechniek}
+
+% Departement Adres
+\newcommand{\depadres}{Kasteelpark Arenberg 10, B-3001 Leuven (Heverlee), Belgi\"e}
+
+% Departement Contact Info
+\newcommand{\depcontact}{Tel.: +32~16~321130 - Fax: +32~16~321986}
+
+% Professoren
+\newcommand{\professoren}{Prof.~dr.~ir.~Bart~Preneel}
+
+% Assistenten
+\newcommand{\assistenten}{ir.~Lejla~Batina\\ir.~Nele~Mentens}
+
+% Student
+\newcommand{\student}{Anthony~Van~Herrewege}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{minipage}[c]{100mm}
+\small
+\textsc{Katholieke Universiteit Leuven\\
+Faculteit Toegepaste Wetenschappen\\
+\departement\\[3mm]
+\depadres\\
+\depcontact}
+\end{minipage}
+\hfill
+\begin{minipage}{45mm}
+\parbox[b]{15mm}{\rule{1pt}{32mm}}
+\includegraphics[height=32mm,bb=0 0 309 520]{voorblad-sedes}
+\end{minipage}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\parbox[c]{0.7\textwidth}{
+    \centering
+    \textsf{\titel\\[6mm]
+            {\small \datum}}
+}
+\end{center}
+
+\vspace*{\stretch{2}}
+
+\begin{minipage}{60mm}
+\textsf{{\large Promotoren:\\}}
+\parbox[t]{3mm}{~}
+\parbox[t]{70mm}{\textsf{\professoren}\\[3mm]}
+\textsf{{\large Assistenten:}}\\
+\parbox[t]{3mm}{~}
+\parbox[t]{50mm}{\textsf{\assistenten}}
+\end{minipage}
+%\hspace{\stretch{1}}
+\hfill
+\begin{minipage}{50mm}
+\textsf{{\large Door:\\}}
+\parbox[t]{3mm}{~}
+\parbox[t]{60mm}{\textsf{\student}}
+\end{minipage}
+
+\end{document}
