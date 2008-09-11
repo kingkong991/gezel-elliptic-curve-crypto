@@ -9,3 +9,31 @@ dp lfsr(in  seed : ns(5);
     b    = shft[4];
   }
 }
+
+ // testbench
+dp lfsr_tb(out seed : ns(5);
+           out load : ns(1);
+           in  b    : ns(1)) {
+   sfg init { seed = 0x1F; load = 1; }
+   sfg run  { seed = 0; load = 0;    }
+   sfg show { $display("b= ", b);    }
+}
+
+fsm hlfsr_tb(lfsr_tb) {
+  initial s0;
+  state s1;
+  @s0 (init) -> s1;
+  @s1 (run, show) -> s1;
+}
+
+dp top {
+  sig seed : ns(5);
+  sig load, b : ns(1);
+  use lfsr(seed, load, b);
+  use lfsr_tb(seed, load, b);
+}
+
+system S {
+  top;
+}
+
