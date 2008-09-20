@@ -1,0 +1,45 @@
+dp add_bff(	in  a: ns(8); 
+		in  b: ns(8);
+		out c: ns(8)) {
+
+	always {
+		c = a ^ b;
+	}
+}
+
+// Testbench
+dp add_bff_tb(	in  c: ns(8);
+		out b, a: ns(8)) {
+
+	sfg init {
+		a = 0xDF;
+		b = 0x4F;
+	}
+
+	sfg show {
+		$display("c = ", c);
+	}
+
+	sfg idle {
+
+	}
+}
+
+fsm hadd_bff_tb(add_bff_tb) {
+	initial s0;
+	state s1, s2;
+	
+	@s0 (init) -> s1;
+	@s1 (show) -> s2;
+	@s2 (idle) -> s2;
+}
+
+dp top {
+	sig a, b, c: ns(8);
+	use add_bff_tb(c, b, a);
+	use add_bff(a, b, c);
+}
+
+system S {
+	top;
+}
