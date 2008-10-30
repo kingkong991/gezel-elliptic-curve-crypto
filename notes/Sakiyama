@@ -1,0 +1,5 @@
+p 45:	Normal-basis representation = free squaring
+p 46:	Protect against side-channel attacks by making multiplication and squaring take equally long
+p 60:	MOF algorithm: same result as NAF, but MSB first (instead of LSB), eleminates waiting period between NAF calculation and point multiplication.
+p 62:	Joyce's method for point multiplication by addition (side channel attack resistance) - Speed needs to be researched
+p 64:	Montgomery multiplication is fastest, p 65 gives info on bit serial implementation, etc.

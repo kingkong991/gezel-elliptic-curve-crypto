@@ -1,0 +1,15 @@
+GEZEL:
+	* Do you always need a signal for something like:
+			use counter(regA, regB)
+
+	  Which becomes
+			use counter(sigA, sigB)
+	  and
+			sfg set_regs {
+				regA = sigA;
+				regB = sigB;
+			}
+
+	* How to concatenate signals/registers?
+
+	* How to solve delay when reading from ramblock? (See ramblock.fdl)

@@ -1,0 +1,4 @@
+* HW design boeken?
+* Pairing uitleg gedetaileerd
+* Implementatie? (bit parallel, word serial; ...)
+* Taal thesis?
