@@ -1,0 +1,14 @@
+GEZEL:
+	- When assigning things like:
+
+			st_1 = sum2_2 # sum2_1;
+
+	  Is sum2_2 the MSB? See weird output from sum.fdl.
+
+	- Bluetooth exercise: Error in LFSR code? See index of output in reload sfg vs other sfg's.
+
+	- Is there some way to include files? Or should I use cat to concatenate files and pipe this to GEZEL?
+
+	- Why use multiple states and not use tons of if's? Is this slower, bigger, ...? For example see the E0 FSM in bluetooth.fdl.
+
+	- Is there a known correct output of the Bluetooth E0 excercise?

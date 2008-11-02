@@ -1,0 +1,511 @@
+dp half_adder (in x_1: ns(1);
+					in x_2: ns(1);
+					out output: ns(1);
+					out carry: ns(1)) {
+	sfg go {
+		output = x_1 ^ x_2;
+		carry = x_1 & x_2;
+	}
+} hardwired h_half_adder (half_adder) {go;}
+
+dp half_adder2: half_adder
+
+dp full_adder (in x_1: ns(1);
+					in x_2: ns(1);
+					in c_in: ns(1);
+					out output: ns(1);
+					out carry:	ns(1)) {
+
+	sig output_1:	ns(1);
+	sig carry_1:	ns(1);
+
+	sig output_2:	ns(1);
+	sig carry_2:	ns(1);
+
+	use half_adder(x_1, x_2, output_1, carry_1);
+	use half_adder2(output_1, c_in, output_2, carry_2);
+
+	sfg go {
+		output = output_2;
+		carry = carry_1 | carry_2;
+	}
+
+} hardwired h_full_adder (full_adder) {go;}
+
+dp full_adder2: full_adder
+dp full_adder3: full_adder
+
+dp scl_bottom (	in x1:	ns(1);
+						in x2:	ns(1);
+						in x3:	ns(1);
+						in x4:	ns(1);
+						in ct:	ns(2);
+						out st_1:	ns(2)) {
+
+	sig yt:	ns(3);
+
+	sig sum2_0:	ns(1);
+	sig sum2_1:	ns(1);
+	sig sum2_2:	ns(1);
+
+	sig zero:	ns(1);
+
+	sig carry_1:	ns(1);
+	sig carry_2:	ns(1);
+	sig carry_3:	ns(1);
+
+	use full_adder((ct[0]), (yt[0]), zero, sum2_0, carry_1);
+	use full_adder2((ct[1]), (yt[1]), carry_1, sum2_1, carry_2);
+	use full_adder3((ct[2]), (yt[2]), carry_2, sum2_2, carry_3);
+
+	sfg go {
+		zero = x1 ^ x1;
+		yt = x1 + x2 + x3 + x4;
+		st_1 = sum2_2 # sum2_1;
+	}
+
+} hardwired h_scl_bottom (scl_bottom) {go;}
+
+dp blend (	in st_1: ns(2);
+				out ct_out: ns(2);
+				in counter: ns(11)) {
+
+	reg cycle:	ns(11);
+
+	reg ct_0:	ns(2);
+	reg ct_1:	ns(2);
+
+	sig t1:	ns(2);
+	sig t2:	ns(2);
+
+	sfg update_cycle {
+		cycle = counter;
+	}
+
+	sfg run {
+		ct_out = ct_1;
+
+		t1 = ct_out;
+		t2 = ct_0[0] # (ct_0[0] ^ ct_0[1]);
+
+		ct_0 = ct_1;
+		ct_1 = t1 ^ t2 ^ st_1;
+	}
+	
+	sfg reset {
+		ct_out = 0;
+		
+		ct_0 = 0;
+		ct_1 = 0;
+	}
+
+	sfg hold {
+		ct_out = ct_1;
+	
+		ct_0 = ct_0;
+		ct_1 = ct_1;
+	}
+
+}
+
+fsm ctl_blend (blend) {
+	initial go;
+
+	@go		if (cycle == 39) then (update_cycle, reset) -> go;
+				else if (cycle == 240) then (update_cycle, hold) -> go;
+				else (update_cycle, run) -> go;
+}
+
+dp sum_comb_log (	in x1: ns(1);
+						in x2: ns(1);
+						in x3: ns(1);
+						in x4: ns(1);
+						in ct: ns(2);
+						out st_1: ns(2);
+						out encr: ns(1)){
+
+	use scl_bottom(x1, x2, x3, x4, ct, st_1);
+
+	sfg run {
+		encr = x1 ^ x2 ^ x3 ^ x4 ^ (ct[0]);
+	}
+
+} hardwired h_sum_comb_log (sum_comb_log) {run;}
+
+dp lfsr1 (	in key: ns(128);
+				in adr: ns(48);
+				in IV: ns(128);
+				in counter: ns(11);
+				in master: ns(26);
+				out output:ns(1)) {
+
+	reg content:	ns(25);
+	reg tmp_init:	ns(49);
+	reg cycle:	ns(11);
+
+	$trace(content,"register1.txt");
+	$trace(output,"X1.txt");
+
+	sfg init {
+		cycle = counter;
+		tmp_init = adr[24:31] # master[8:15] # key[96:103] # key[64:71] # key[32:39] # key[0:7] # master[24];
+
+		output = 0;
+	}
+
+	sfg init_continue {
+		cycle = counter;
+		content = content[0:23] # tmp_init[0];
+		tmp_init = tmp_init >> 1;
+
+		output = content[23];
+	}
+
+	sfg init_continue_closed {
+		cycle = counter;
+		content = content[0:23] # (tmp_init[0] ^ content[7] ^ content[11] ^ content[19]);
+		tmp_init = tmp_init >> 1;
+
+		output = content[23];
+	}
+
+	sfg update {
+		cycle = counter;
+		content = content[0:23] # (content[7] ^ content[11] ^ content[19]);
+
+		output = content[23];
+	}
+
+	sfg reload {
+		cycle = counter;
+		content = IV[96] # IV[64:71] # IV[32:39] # IV[0:7];		
+
+		output = content[23];
+	}
+}
+
+fsm ctl_lfsr1 (lfsr1) {
+	initial start;
+	state run;
+
+	@start	init -> run;
+	@run		if (cycle < 25) then (init_continue) -> run;
+				else if (cycle < 49) then (init_continue_closed) -> run;
+				else if (cycle == 240) then (reload) -> run;
+				else (update) -> run;
+}
+
+dp lfsr2 (	in key: ns(128);
+				in rand: ns(128);
+				in adr: ns(48);
+				in IV: ns(128);
+				in counte: ns(11);
+				in master: ns(26);
+				out output:ns(1)) {
+	
+	reg inst_reg:  ns(31);	
+	reg temp: ns(55);
+	reg count: ns(11);
+
+	$trace(inst_reg,"register2.txt");
+	$trace(output,"X2.txt");
+
+	sfg init {
+		temp=adr[24:31] << 47 | adr[0:7] << 39 | key[104:111] << 31 | key[72:79] << 23 | key[40:47] << 15 | key[8:15] << 7 | master[0:3] << 3 | 0 << 2 |0 << 1 | 1;
+		output=0;
+		count =counte;
+	}
+
+	sfg update_init {
+		inst_reg = inst_reg[0:29] << 1 | temp[0];
+		temp = temp >> 1;
+		output=inst_reg[23];
+		count =counte;
+	}
+
+	sfg update_close {
+		inst_reg = inst_reg[0:29] << 1 | (inst_reg[11]^inst_reg[15]^inst_reg[23]^inst_reg[30]);
+		output=inst_reg[23];
+		count =counte;
+	}
+
+	sfg update_close_with {
+		inst_reg = inst_reg[0:29] << 1 | (inst_reg[11]^inst_reg[15]^inst_reg[23]^inst_reg[30]^temp[0]);
+		temp = temp >> 1;
+		output=inst_reg[23];
+		count =counte;
+	}
+
+	sfg reload {
+		inst_reg =IV[97:103] << 24 | IV[72:79] << 16 | IV[40:47] << 8 | IV[8:15] ;
+		count =counte;
+		output=inst_reg[22];
+	}
+}
+
+fsm lfsr2_ctl(lfsr2) {
+	initial s0;
+	state s1, s2;
+
+	@s0	(init)->s1;
+	@s1	if (count < 31) then (update_init) -> s1;
+	   	else if (count < 55) then (update_close_with) -> s1;
+	   	else (update_close) -> s2;
+	@s2	if (count ==  240) then (reload) ->s2;
+			else (update_close) -> s2;
+}
+
+dp lfsr3 (	in key: ns(128);
+				in rand: ns(128);
+				in adr: ns(48);
+				in IV: ns(128);
+				in counte:ns(11);
+				in master: ns(26);
+				out output:ns(1)) {
+	
+	reg inst_reg:  ns(33);	
+	reg temp: ns(49);
+	reg count: ns(11);
+
+	$trace(inst_reg,"register3.txt");
+	$trace(output,"X3.txt");
+	
+	sfg init {
+		temp=adr[24:31] << 41 | master[16:23] << 33 | key[112:119] << 25 | key[80:87] << 17 | key[48:55] << 9 | key[16:23] << 1 | master[25];
+		output=0;
+		count =counte;
+	}
+
+	sfg update_init {
+		inst_reg = inst_reg[0:31] << 1| temp[0];
+		temp = temp >> 1;
+		output=inst_reg[31];
+		count =counte;
+	}
+
+	sfg update_close {
+		inst_reg = inst_reg[0:31] << 1| (inst_reg[3]^inst_reg[23]^inst_reg[27]^inst_reg[32]);
+		output=inst_reg[31];
+		count =counte;
+	}
+
+	sfg update_close_with {
+		inst_reg = inst_reg[0:31] << 1| (inst_reg[3]^inst_reg[23]^inst_reg[27]^inst_reg[32]^temp[0]);
+		temp = temp >> 1;
+		output=inst_reg[31];
+		count =counte;
+	}
+
+	sfg reload {
+		inst_reg = IV[120] << 32 | IV[104:111]  << 24 | IV[80:87] << 16 | IV[48:55]  << 8 | IV[16:23] ;
+		count =counte;
+		output=inst_reg[30];
+	}
+}
+
+fsm lfsr3_ctl(lfsr3) {
+	initial s0;
+	state s1, s2;
+
+	@s0	(init)->s1;
+	@s1	if (count < 33) then (update_init) -> s1;
+			else if (count < 49) then (update_close_with) -> s1;
+			else (update_close) -> s2;
+	@s2	if (count ==  240)then (reload) ->s2;
+			else (update_close) -> s2;
+}
+
+dp lfsr4 (	in key: ns(128);
+				in rand: ns(128);
+				in adr: ns(48);
+				in IV: ns(128);
+				in counte: ns(11);
+				in master: ns(26);
+				out output:ns(1)) {
+	
+	reg inst_reg:  ns(39);	
+	reg temp: ns(57);
+	reg count: ns(11);
+
+	$trace(inst_reg,"register4.txt");
+	$trace(output,"X4.txt");
+	
+	sfg init {
+		temp=adr[40:47] << 47 | adr[8:15] << 39 | key[120:127] << 31 | key[88:95] << 23 | key[56:63] << 15 | key[24:31] << 7 | master[4:7] << 3| 1 << 2| 1 << 1| 1;
+		output=0;
+		count =counte;
+	}
+
+	sfg update_init {
+		inst_reg = inst_reg[0:37] << 1 | temp[0];
+		temp = temp >> 1;
+		output=inst_reg[31];
+		count =counte;
+	}
+
+	sfg update_close {
+		inst_reg = inst_reg[0:37] << 1 | (inst_reg[3]^inst_reg[27]^inst_reg[35]^inst_reg[38]);
+		output=inst_reg[31];
+		count =counte;
+	}
+
+	sfg update_close_with {
+		inst_reg = inst_reg[0:37] << 1 | (inst_reg[3]^inst_reg[27]^inst_reg[35]^inst_reg[38]^temp[0]);
+		output=inst_reg[31];
+		temp =  temp >> 1;
+		count =counte;
+	}
+
+	sfg reload {
+		inst_reg = IV[121:127]  << 32 | IV[112:119]  << 24 | IV[88:95] << 16 | IV[56:63] << 8 | IV[24:31];
+		count =counte;
+		output=inst_reg[32];
+	}
+}
+
+fsm lfsr4_ctl(lfsr4) {
+	initial s0;
+	state s1, s2, s3;
+
+	@s0	(init)->s1;
+	@s1	if (count < 39) then (update_init) -> s1;
+			else if (count < 57) then (update_close_with) -> s1;
+			else (update_close) -> s2;
+	@s2	if (count ==  240)then (reload) ->s3;
+			else (update_close) -> s2;
+	@s3	(update_close) -> s3;
+}
+
+dp generate_key_stream (	in encr : ns(1);
+									in counte : ns(11);
+									out keystream : ns(128)) {
+
+	reg key_stream: ns(128);
+	reg count: ns(11);
+
+	sfg go {
+		key_stream= encr << 127 | key_stream[1:127];
+		keystream = key_stream;
+		count =counte;
+	}
+
+	sfg wait {
+		key_stream= 0;
+		keystream = key_stream;
+		count =counte;
+	}
+}
+
+fsm h_generate_key_stream(generate_key_stream){
+	initial s0;
+	state s1;
+	
+	@s0	if (count < 40) then (wait) -> s0;
+			else (go) -> s1;
+	@s1	(go) -> s1;
+}
+
+dp counter(out value : ns(11)) {
+	reg c : ns(11);
+
+	sfg run {
+		value = c;
+		c = c + 1;
+	}
+
+	sfg reset {
+		value = 0;
+		c = 0;
+	}
+}
+
+fsm c_counter(counter) {
+	initial s0;
+	state s1;
+
+	@s0 (run) -> s1;
+	@s1 (run) -> s1;
+}
+
+dp E0 (	in key:	ns(128);
+			in rand:	ns(128);
+			in adr:	ns(48);
+			in master:	ns(26);
+			in data:	ns(1)) {
+
+	sig x1:	ns(1);
+	sig x2:	ns(1);
+	sig x3:	ns(1);
+	sig x4:	ns(1);
+
+	sig ct:	ns(2);
+	sig st_1:	ns(2);
+	
+	sig encr:	ns(1);
+
+	sig IV:	ns(128);
+
+	sig count:	ns(11);
+	reg counter:	ns(11);
+
+	use counter(count);
+	use generate_key_stream(encr, count, IV);
+
+	use lfsr1(key, rand, adr, IV, count, master, x1);
+	use lfsr2(key, rand, adr, IV, count, master, x2);
+	use lfsr3(key, rand, adr, IV, count, master, x3);
+	use lfsr4(key, rand, adr, IV, count, master, x4);
+	
+	use sum_comb_log(x1, x2, x3, x4, ct, st_1, encr);
+	use blend(st_1, ct, count);
+
+	sfg run {
+		counter = count;
+	}
+
+	sfg encrypt {
+		$display("Data = ", data, " - Encrypted: ", data ^ encr);
+	}
+}
+
+fsm ctl_E0 (E0) {
+	initial init;
+	state run;
+
+	@init	if (counter < 240) then (run) -> init;
+			else (run, encrypt) -> run;
+	@run	(run, encrypt) -> run;
+}
+
+dp test_E0 (	out key: ns(128);
+					out rand: ns(128);
+					out adr: ns(48);
+					out master: ns(26);
+					out data: ns(1)) {
+	
+	reg startsign: ns(1);
+
+	sfg start{
+		key = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+		rand = 0xAAAAAAAAAAAAAAAAAAAA;
+		adr = 0xFFFFFFFFFFFF;
+		master = 0x03FFFFFF;
+		data = 0x1;
+		startsign = 1;
+	}
+} hardwired h_test_E0(test_E0) {start;}
+
+dp test_system  {
+	sig key:		ns(128);
+	sig rand:	ns(128);
+	sig adr:		ns(48);
+	sig master:	ns(26);
+	sig data:	ns(1);
+
+	use E0(key, rand, adr, master, data);
+	use test_E0(key, rand, adr, master, data);
+}
+
+system S {
+	test_system;
+}
