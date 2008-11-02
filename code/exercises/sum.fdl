@@ -1,0 +1,16 @@
+dp sum() {
+
+	sig result:	ns(3);
+	sig a:		ns(2);
+
+	sfg go {
+		a = 0b1 # 0b0;
+		result = a + 2;
+		$display("A: ", $bin, a, " - Result: ", result);
+	}
+
+} hardwired h_sum (sum) {go;}
+
+system sys {
+	sum;
+}
