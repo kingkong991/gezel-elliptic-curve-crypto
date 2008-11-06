@@ -143,9 +143,6 @@ dp lfsr1 (	in key: ns(128);
 	reg tmp_init:	ns(49);
 	reg cycle:	ns(11);
 
-	$trace(content,"register1.txt");
-	$trace(output,"X1.txt");
-
 	sfg init {
 		cycle = counter;
 		tmp_init = adr[24:31] # master[8:15] # key[96:103] # key[64:71] # key[32:39] # key[0:7] # master[24];
@@ -207,9 +204,6 @@ dp lfsr2 (	in key: ns(128);
 	reg temp: ns(55);
 	reg count: ns(11);
 
-	$trace(inst_reg,"register2.txt");
-	$trace(output,"X2.txt");
-
 	sfg init {
 		temp=adr[24:31] << 47 | adr[0:7] << 39 | key[104:111] << 31 | key[72:79] << 23 | key[40:47] << 15 | key[8:15] << 7 | master[0:3] << 3 | 0 << 2 |0 << 1 | 1;
 		output=0;
@@ -267,9 +261,6 @@ dp lfsr3 (	in key: ns(128);
 	reg temp: ns(49);
 	reg count: ns(11);
 
-	$trace(inst_reg,"register3.txt");
-	$trace(output,"X3.txt");
-	
 	sfg init {
 		temp=adr[24:31] << 41 | master[16:23] << 33 | key[112:119] << 25 | key[80:87] << 17 | key[48:55] << 9 | key[16:23] << 1 | master[25];
 		output=0;
@@ -326,9 +317,6 @@ dp lfsr4 (	in key: ns(128);
 	reg inst_reg:  ns(39);	
 	reg temp: ns(57);
 	reg count: ns(11);
-
-	$trace(inst_reg,"register4.txt");
-	$trace(output,"X4.txt");
 	
 	sfg init {
 		temp=adr[40:47] << 47 | adr[8:15] << 39 | key[120:127] << 31 | key[88:95] << 23 | key[56:63] << 15 | key[24:31] << 7 | master[4:7] << 3| 1 << 2| 1 << 1| 1;
