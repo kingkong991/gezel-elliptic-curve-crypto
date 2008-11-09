@@ -12,3 +12,6 @@ GEZEL:
 	- Why use multiple states and not use tons of if's? Is this slower, bigger, ...? For example see the E0 FSM in bluetooth.fdl.
 
 	- Is there a known correct output of the Bluetooth E0 excercise?
+
+Sakiyama:
+	- How exactly does the OR/MUX part of figure 5.3 (p. 109) work?
