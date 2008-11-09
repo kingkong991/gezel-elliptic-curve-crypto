@@ -6,9 +6,9 @@ dp sum() {
    sig s2 : ns(1);
 
 	sfg go {
-      s1 = 0b1;
-      s2 = 0b0;
-		a = (ns(2)) s1 # s2;//(0b1) # (0b1);
+		s1 = 0b1;
+		s2 = 0b0;
+		a =  (ns(1)) 0b1 # (ns(1)) 0b0; //(ns(1)) s1 # (ns(1)) s2;//(0b1) # (0b1);
 		result = a + 2;
 		$display("A: ", $bin, a, " - Result: ", result);
 	}

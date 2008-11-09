@@ -411,7 +411,7 @@ fsm c_counter(counter) {
 	initial s0;
 	state s1;
 
-	@s0 (run) -> s1;
+	@s0 (reset) -> s1;
 	@s1 (run) -> s1;
 }
 
