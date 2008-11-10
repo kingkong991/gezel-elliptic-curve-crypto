@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{report}
 \usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
 \usepackage{graphicx}
 \usepackage{color}
@@ -16,12 +16,15 @@
 \graphicspath{{images/}}
 \DeclareGraphicsExtensions{.png,.jpg}
 
+% Stel paginastijl in
+\pagestyle{headings}
+
 % Zet hier de woorden waarmee de splitser problemen heeft:
 \hyphenation{}
 
 % Regel nummering van figuren
-\renewcommand{\thefigure}{\thesection.\arabic{figure}}
-\newcommand{\Section}[1]{\section{#1} \setcounter{figure}{0}}
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\newcommand{\Chapter}[1]{\chapter{#1} \setcounter{figure}{0}}
 
 % Listings setup
 \definecolor{darkkeyword}{rgb}{0,0.08,0.40} %Requires the color package.
@@ -47,11 +50,11 @@
                 keywordstyle=\color{darkkeyword}\bfseries,classoffset=0
 }
 
-\lstset{language=gezel, 
-        showstringspaces=false, 
-        frameround=ftft, 
-        captionpos=b, 
-        xleftmargin=-1cm, 
+\lstset{language=gezel,
+        showstringspaces=false,
+        frameround=ftft,
+        captionpos=b,
+        xleftmargin=-1cm,
         xrightmargin=-1cm,
         numbers=left,
         numberstyle=\tiny,
@@ -74,14 +77,16 @@
 \tolerance=1000
 
 %%% Code voor figuren %%%
-%\vspace{\intextsep}
+%%% Plaatst figuur op huidige plaats %%%
+%
+%\vspace{\textfloatsep}
 %\begin{minipage}{\linewidth}
 %    \begin{center}
 %    \includegraphics[width=311px]{fig}
 %    \figcaption{Figuur uitleg}\label{Figuur label}
 %    \end{center}
 %    \end{minipage}
-%\vspace{\intextsep}
+%\vspace{\textfloatsep}
 
 \begin{document}
 
@@ -97,7 +102,9 @@
 
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
-\include{codetest}
+\include{pairings}
+
+\include{malu}
 
 % BibTex referenties
 %\bibliography{references-file-here}
