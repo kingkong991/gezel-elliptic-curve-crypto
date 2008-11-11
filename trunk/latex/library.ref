@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+<manage_target braces="true" utf8="true">file:///home/anthony/thesis/latex/references.bib</manage_target>
+<library_folder monitor="true"></library_folder>
+<taglist>
+</taglist>
+<doclist>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Hankerson%20et%20Al%20-%20Software%20Implementation%20of%20Pairings.pdf</filename>
+    <relative_filename>Hankerson%20et%20Al%20-%20Software%20Implementation%20of%20Pairings.pdf</relative_filename>
+    <key>software-pairings</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Software Implementation of Pairings</bib_title>
+    <bib_authors>Hankerson, Darrel and Menezes, Alfred and Scott, Michael</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2008</bib_year>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/K%20Sakiyama%20-%20Secure%20Design%20Methodology%20and%20Implementation%20for%20Embedded%20Public-key%20Cryptosystems.pdf</filename>
+    <relative_filename>K%20Sakiyama%20-%20Secure%20Design%20Methodology%20and%20Implementation%20for%20Embedded%20Public-key%20Cryptosystems.pdf</relative_filename>
+    <key>sakiyama</key>
+    <notes></notes>
+    <bib_type>phdthesis</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Secure Design Methodology and Implementation for Embedded Public-key Cryptosystems</bib_title>
+    <bib_authors>Sakiyama, Kazuo</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2007</bib_year>
+    <bib_extra key="address">Kasteelpark Arenberg 10, 3001 Heverlee</bib_extra>
+    <bib_extra key="month">december</bib_extra>
+    <bib_extra key="school">Katholieke Universiteit Leuven</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/M%20Maas%20-%20Pairing-Based%20Cryptography.pdf</filename>
+    <relative_filename>M%20Maas%20-%20Pairing-Based%20Cryptography.pdf</relative_filename>
+    <key>maas</key>
+    <notes></notes>
+    <bib_type>mastersthesis</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Pairing-Based Cryptography</bib_title>
+    <bib_authors>Maas, Martijn</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2004</bib_year>
+    <bib_extra key="month">januari</bib_extra>
+    <bib_extra key="school">Technische Universiteit Eindhoven</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/JP%20Deschamps%20ea.%20-%20Synthesis%20Of%20Arithmetic%20Circuits%20-%20FPGA,%20ASIC%20and%20Embedded%20Systems.pdf</filename>
+    <relative_filename>JP%20Deschamps%20ea.%20-%20Synthesis%20Of%20Arithmetic%20Circuits%20-%20FPGA,%20ASIC%20and%20Embedded%20Systems.pdf</relative_filename>
+    <key>synthesis-arithmetic</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Synthesis of arithmetic circuits: FPGA, ASIC and embedded systems</bib_title>
+    <bib_authors>Deschamps, Jean-Pierre and Bioul, Géry Jean Antoine and Sutter, Gustavo D.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2006</bib_year>
+    <bib_extra key="address">Hoboken, New Jersey</bib_extra>
+    <bib_extra key="publisher">Wiley</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/M%20Gagne%20-%20Applications%20of%20Bilinear%20Maps%20in%20Cryptography.pdf</filename>
+    <relative_filename>M%20Gagne%20-%20Applications%20of%20Bilinear%20Maps%20in%20Cryptography.pdf</relative_filename>
+    <key>gagne</key>
+    <notes></notes>
+    <bib_type>mastersthesis</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Applications of Bilinear Maps in Cryptography</bib_title>
+    <bib_authors>Gagné, Martin</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2002</bib_year>
+    <bib_extra key="address">Ontario, Canada</bib_extra>
+    <bib_extra key="school">University of Waterloo</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Tom%20St%20Denis%20-%20BigNum%20Math%20-%20Implementing%20Cryptographic%20Multiple%20Precision%20Arithmetic.pdf</filename>
+    <relative_filename>Tom%20St%20Denis%20-%20BigNum%20Math%20-%20Implementing%20Cryptographic%20Multiple%20Precision%20Arithmetic.pdf</relative_filename>
+    <key>bignum</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>BigNum Math: Implementing Cryptographic Multiple Precision Arithmetic</bib_title>
+    <bib_authors>St Denis, Tom and Rose, Greg</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2006</bib_year>
+    <bib_extra key="address">800 Hingham Street, Rockland, MA 02370</bib_extra>
+    <bib_extra key="editor">Beth Roberts</bib_extra>
+    <bib_extra key="publisher">Syngress Publishing</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/N%20Mentens%20-%20Secure%20And%20Efficient%20Corprocessor%20Design%20For%20Cryptographic%20Applications%20On%20FPGAs.pdf</filename>
+    <relative_filename>N%20Mentens%20-%20Secure%20And%20Efficient%20Corprocessor%20Design%20For%20Cryptographic%20Applications%20On%20FPGAs.pdf</relative_filename>
+    <key>mentens</key>
+    <notes></notes>
+    <bib_type>phdthesis</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Secure And Efficient Corprocessor Design for Cryptographic Applications on FPGAs</bib_title>
+    <bib_authors>Mentens, Nele</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2007</bib_year>
+    <bib_extra key="address">Kasteelpark Arenberg 10, 3001 Heverlee</bib_extra>
+    <bib_extra key="month">juni</bib_extra>
+    <bib_extra key="school">Katholieke Universiteit Leuven</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/W%20Townsend%20et%20Al%20-%20A%20Comparison%20Of%20Dadda%20And%20Wallace%20Multiplier%20Delays.pdf</filename>
+    <relative_filename>W%20Townsend%20et%20Al%20-%20A%20Comparison%20Of%20Dadda%20And%20Wallace%20Multiplier%20Delays.pdf</relative_filename>
+    <key>townsend</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>10.1117/12.507012</bib_doi>
+    <bib_title>A comparison of Dadda and Wallace multiplier delays</bib_title>
+    <bib_authors>Townsend, Whitney J.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume>5205</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>552</bib_pages>
+    <bib_year>2003</bib_year>
+    <bib_extra key="booktitle">Proceedings of SPIE</bib_extra>
+  </doc>
+</doclist>
+</library>
