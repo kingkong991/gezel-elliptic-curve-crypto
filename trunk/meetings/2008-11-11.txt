@@ -1,0 +1,9 @@
+Sakiyama
+	- Algorithm 3.3
+		* Why no final substraction like in algorithm 3.2?
+		* How does T stay smaller than n?
+		* How come X and Y suddenly have an extra bit?
+
+GEZEL
+	- 'Importing' -> Run testbench.fdl and see error
+		

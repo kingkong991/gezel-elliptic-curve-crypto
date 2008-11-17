@@ -1,24 +1,26 @@
-dp montgomery (in A: ns(20);
-	in B: ns(20);
-	in P: ns(20);
-	out T: ns(20);
+#include "malu.fdl"
+
+dp montgomery (in A: ns(const_m);
+	in B: ns(const_m);
+	in P: ns(const_m);
+	out T: ns(const_m);
 	in start: ns(1)) {
 
 	reg reg_start: ns(1);
-	reg reg_T: ns(20);
+	reg reg_T: ns(const_m);
 	reg reg_m: ns(1);
 
-	reg reg_A: ns(20);
-	reg reg_B: ns(20);
-	reg reg_P: ns(20);
+	reg reg_A: ns(const_m);
+	reg reg_B: ns(const_m);
+	reg reg_P: ns(const_m);
 
-	reg cycle:	ns(20);
+	reg cycle:	ns(const_m);
 
-	sig T_in: ns(20);
-	sig B_in: ns(20);
-	sig P_in: ns(20);
+	sig T_in: ns(const_m);
+	sig B_in: ns(const_m);
+	sig P_in: ns(const_m);
 
-	sig T_out: ns(20);
+	sig T_out: ns(const_m);
 	sig m_out: ns(1);
 
 	use malu(T_in, B_in, P_in, T_out, m_out);
@@ -31,18 +33,14 @@ dp montgomery (in A: ns(20);
 	sfg init {
 		cycle = 0;
 
-		reg_A = A >> 1;	// Shift, A[0] already used in this cycle
+		reg_A = A;
 		reg_B = B;
 		reg_P = P;
-
-		T_in = 0;
-		B_in = (A[0] == 0) ? 0 : B;
-		P_in = 0;
 
 		reg_T = T_out;
 		reg_m = m_out;
 
-		$display("[Iteration 0] Cycle = ", cycle, " - A = ", reg_A, " - B_in = ", B_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		$display("[Iteration 0] Cycle = ", cycle, " - Init");
 	}
 
 	sfg idle {
@@ -53,8 +51,11 @@ dp montgomery (in A: ns(20);
 
 	sfg iteration {
 		T_in = reg_T;
-		B_in = (reg_A[0] == 0) ? 0 : reg_B;
-		P_in = (reg_m == 0) ? 0 : reg_P;
+
+		// And B & P instead of muxing: less area
+		// reg_A[0] and reg_m are only ns(1), need to be copied const_m times.
+		B_in = reg_A[0] & reg_B;
+		P_in = reg_m & reg_P;
 		
 		cycle = cycle + 1;
 
@@ -68,7 +69,7 @@ dp montgomery (in A: ns(20);
 
 	// "Divide" by x at the end
 	sfg end {
-		reg_T = (ns(1)) m_out # reg_T[1:19];
+		reg_T = (ns(1)) m_out # reg_T[1:(const_m - 1)];
 
 		$display("[End] reg_T = ", reg_T, " - T = ", T);
 	}
@@ -78,8 +79,8 @@ fsm fsm_montgomery (montgomery) {
 	initial idle;
 	state run;
 
-	@idle	if (reg_start == 1) then (init, do_always) -> run;
+	@idle	if (reg_start == 1) then (init, idle, do_always) -> run;
 			else (idle, do_always) -> idle;
-	@run	if (cycle < 18) then (iteration, do_always) -> run;
-			else (end, idle, do_always) -> idle;	// Cycle = 20 (start op 0, leest in als 18 en wordt zogezegd hier dan op 19 gezet)
+	@run	if (cycle <= (const_m - 1)) then (iteration, do_always) -> run;
+			else (end, idle, do_always) -> idle;
 }

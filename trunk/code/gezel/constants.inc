@@ -1,0 +1,3 @@
+// Constants such as field size, ...
+
+#define const_m 20
