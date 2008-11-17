@@ -1,9 +1,11 @@
-dp testbench {
-	sig A: ns(20);
-	sig B: ns(20);
-	sig P: ns(20);
+#include "montgomery.fdl"
 
-	sig T: ns(20);
+dp testbench {
+	sig A: ns(const_m);
+	sig B: ns(const_m);
+	sig P: ns(const_m);
+
+	sig T: ns(const_m);
 
 	sig start: ns(1);
 

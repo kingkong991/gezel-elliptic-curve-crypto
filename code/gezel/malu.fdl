@@ -1,17 +1,19 @@
-dp malu (in T: ns(20);
-	in B: ns(20);
-	in P: ns(20);
-	out T_n: ns(20);
+#include "constants.inc"
+
+dp malu (in T: ns(const_m);
+	in B: ns(const_m);
+	in P: ns(const_m);
+	out T_n: ns(const_m);
 	out m_n: ns(1)) {
 
-	sig sum: ns(20);
-	sig result: ns(20);
+	sig sum: ns(const_m);
+	sig result: ns(const_m);
 
 	sfg run {
 		sum = T ^ B;
 		result = sum ^ P;
 
-		T_n = result[1:19]  # ((ns(1)) 0b0);
-		m_n = result[20];
+		T_n = result[1:(const_m - 1)]  # ((ns(1)) 0b0);
+		m_n = result[m];
 	}
 } hardwired h_malu (malu) { run; }
