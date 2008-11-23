@@ -1,4 +1,6 @@
-#include "montgomery.fdl"
+#include "constants.inc"
+
+#include "mult_mod.fdl"
 
 dp testbench {
 	sig A: ns(const_m);
@@ -25,3 +27,4 @@ dp testbench {
 system S {
 	testbench;
 }
+
