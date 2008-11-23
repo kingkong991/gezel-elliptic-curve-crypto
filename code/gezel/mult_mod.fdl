@@ -1,20 +1,26 @@
+#ifndef MULT_MOD_FDL
+#define MULT_MOD_FDL
+
+#include "constants.inc"
+
 #include "malu.fdl"
 
-dp montgomery (in A: ns(const_m);
+dp mult_mod (in A: ns(const_m);
 	in B: ns(const_m);
-	in P: ns(const_m);
+	in start: ns(1);
 	out T: ns(const_m);
-	in start: ns(1)) {
+	out ready: ns(1)) {
 
-	reg reg_start: ns(1);
+	reg reg_start: ns(1);MULT_MOD
+
 	reg reg_T: ns(const_m);
+	reg reg_ready: ns(1);
 	reg reg_m: ns(1);
 
 	reg reg_A: ns(const_m);
 	reg reg_B: ns(const_m);
-	reg reg_P: ns(const_m);
 
-	reg cycle:	ns(const_m);
+	reg cycle: ns(const_m);
 
 	sig T_in: ns(const_m);
 	sig B_in: ns(const_m);
@@ -23,11 +29,13 @@ dp montgomery (in A: ns(const_m);
 	sig T_out: ns(const_m);
 	sig m_out: ns(1);
 
-	use malu(T_in, B_in, P_in, T_out, m_out);
+	use malu(T_in, B_in, T_out, m_out);
 
 	sfg do_always {
 		reg_start = start;
+
 		T = reg_T;
+		ready = reg_ready;
 	}
 
 	sfg init {
@@ -35,12 +43,8 @@ dp montgomery (in A: ns(const_m);
 
 		reg_A = A;
 		reg_B = B;
-		reg_P = P;
 
-		reg_T = T_out;
-		reg_m = m_out;
-
-		$display("[Iteration 0] Cycle = ", cycle, " - Init");
+		reg_ready = 0;
 	}
 
 	sfg idle {
@@ -54,8 +58,8 @@ dp montgomery (in A: ns(const_m);
 
 		// And B & P instead of muxing: less area
 		// reg_A[0] and reg_m are only ns(1), need to be copied const_m times.
-		B_in = reg_A[0] & reg_B;
-		P_in = reg_m & reg_P;
+		B_in = ANDMBITS(reg_A[0], reg_B);
+		P_in = ANDMBITS(reg_m, reg_P);
 		
 		cycle = cycle + 1;
 
@@ -63,24 +67,30 @@ dp montgomery (in A: ns(const_m);
 		reg_m = m_out;
 
 		reg_A = reg_A >> 1;
-
-		$display("[Iteration] Cycle = ", $dec, cycle, " - A = ", reg_A, " - B_in = ", B_in, " - T_out = ", T_out, " - m_out = ", m_out);
 	}
 
 	// "Divide" by x at the end
 	sfg end {
-		reg_T = (ns(1)) m_out # reg_T[1:(const_m - 1)];
+		T_in = reg_T;
 
-		$display("[End] reg_T = ", reg_T, " - T = ", T);
+		B_in = ANDMBITS(reg_A[0], reg_B);
+		P_in = ANDMBITS(reg_m, const_P);
+		
+		cycle = cycle + 1;
+
+		reg_T = (ns(1)) m_out # reg_T[1:(const_m - 1)];
+		reg_ready = 1;
 	}
 }
 
-fsm fsm_montgomery (montgomery) {
+fsm fsm_mult_mod (mult_mod) {
 	initial idle;
 	state run;
 
 	@idle	if (reg_start == 1) then (init, idle, do_always) -> run;
 			else (idle, do_always) -> idle;
-	@run	if (cycle <= (const_m - 1)) then (iteration, do_always) -> run;
+	@run	if (cycle <= (const_m - 2)) then (iteration, do_always) -> run;	// const_m - 2, last iteration is done in sfg end.
 			else (end, idle, do_always) -> idle;
 }
+
+#endif /* MULT_MOD_FDL */

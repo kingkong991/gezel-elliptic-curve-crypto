@@ -1,0 +1,6 @@
+* GEZEL:
+	- sig = 0 gets connected to ground, but using both
+			B_in = 0
+		and
+			B_in = ANDMBITS(reg_A[0], reg_B);
+		requires the use of a MUX, right? So just set reg_A to 0 and use the 2nd line of code everywhere when needed?

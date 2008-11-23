@@ -1,3 +1,6 @@
+#ifndef MALU_FDL
+#define MALU_FDL
+
 #include "constants.inc"
 
 dp malu (in T: ns(const_m);
@@ -14,6 +17,8 @@ dp malu (in T: ns(const_m);
 		result = sum ^ P;
 
 		T_n = result[1:(const_m - 1)]  # ((ns(1)) 0b0);
-		m_n = result[m];
+		m_n = result[const_m];
 	}
 } hardwired h_malu (malu) { run; }
+
+#endif /* MALU_FDL */
