@@ -14,7 +14,7 @@
 
 % Plaats van afbeeldingen
 \graphicspath{{images/}}
-\DeclareGraphicsExtensions{.png,.jpg}
+\DeclareGraphicsExtensions{.pdf,.eps,.png}
 
 % Stel paginastijl in
 \pagestyle{headings}
@@ -25,6 +25,9 @@
 % Regel nummering van figuren
 \renewcommand{\thefigure}{\thechapter.\arabic{figure}}
 \newcommand{\Chapter}[1]{\chapter{#1} \setcounter{figure}{0}}
+
+% Citatie commando voor figuren
+\newcommand{\reffig}[1]{Fig.~\ref{#1}}
 
 % Listings setup
 \definecolor{darkkeyword}{rgb}{0,0.08,0.40} %Requires the color package.
@@ -102,12 +105,24 @@
 
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
-\include{pairings}
 
-\include{malu}
+\include{inleiding}             % Inleiding
+\include{encryptie-applicaties} % Encryptie - Applicaties van encryptie
+\include{encryptie-wiskunde}    % Encryptie - Wiskundige achtergrond
+\include{malu}                  % Modular Aritmitic Logical Unit - Design
+\include{malu-pairings}         % MALU - Uitbreiding naar pairings
+\include{malu-pairings-hw}      % MALU - Pairings hardware implementatie
+\include{optimalisatie}         % MALU - Optimalisatie (& parallellisatie)
+\include{tests}                 % MALU - Oppervlakte/snelheids tests
+\include{side-channel-attacks}  % Side channel attack weerstand
+\include{conclusie}             % Conclusie
+
+\appendix                       % Start appendices
+
+\include{code}                  % Implementatie code
 
 % BibTex referenties
-\bibliography{bibliography}
+\bibliography{references}
 
 % Lege achterpagina
 \clearpage
