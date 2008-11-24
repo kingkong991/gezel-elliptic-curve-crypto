@@ -141,5 +141,21 @@
     <bib_year>2003</bib_year>
     <bib_extra key="booktitle">Proceedings of SPIE</bib_extra>
   </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>diffie-hellman</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>New Directions in Cryptography</bib_title>
+    <bib_authors>Whitfield Diffie and Martin E Hellman</bib_authors>
+    <bib_journal>Transaction on Information Theory</bib_journal>
+    <bib_volume>IT-22</bib_volume>
+    <bib_number>6</bib_number>
+    <bib_pages>644--654</bib_pages>
+    <bib_year>1976</bib_year>
+    <bib_extra key="booktitle">IEEE Transactions On Informatoin Theory</bib_extra>
+  </doc>
 </doclist>
 </library>
