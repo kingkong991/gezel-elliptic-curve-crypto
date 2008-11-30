@@ -7,11 +7,12 @@
 
 dp mult_mod (in A: ns(const_m);
 	in B: ns(const_m);
+	in C: ns(const_m);
 	in start: ns(1);
 	out T: ns(const_m);
 	out ready: ns(1)) {
 
-	reg reg_start: ns(1);MULT_MOD
+	reg reg_start: ns(1);
 
 	reg reg_T: ns(const_m);
 	reg reg_ready: ns(1);
@@ -19,6 +20,7 @@ dp mult_mod (in A: ns(const_m);
 
 	reg reg_A: ns(const_m);
 	reg reg_B: ns(const_m);
+	reg reg_C: ns(const_m);
 
 	reg cycle: ns(const_m);
 
@@ -29,22 +31,27 @@ dp mult_mod (in A: ns(const_m);
 	sig T_out: ns(const_m);
 	sig m_out: ns(1);
 
-	use malu(T_in, B_in, T_out, m_out);
+	use malu(T_in, B_in, P_in, T_out, m_out);
 
 	sfg do_always {
 		reg_start = start;
 
-		T = reg_T;
+		T = reg_T ^ reg_C;
 		ready = reg_ready;
+
+		$display("Out = ", $bin, T);
 	}
 
 	sfg init {
 		cycle = 0;
 
-		reg_A = A;
-		reg_B = B;
+		reg_A = A[const_m - 1] == 1 ? A ^ const_P : A;
+		reg_B = B[const_m - 1] == 1 ? B ^ const_P : B;
+		reg_C = C[const_m - 1] == 1 ? C ^ const_P : C;
 
 		reg_ready = 0;
+
+		$display($bin, "[Init] A = ", $bin, reg_A, " - B = ", reg_B, " - C = ", reg_C);
 	}
 
 	sfg idle {
@@ -58,28 +65,52 @@ dp mult_mod (in A: ns(const_m);
 
 		// And B & P instead of muxing: less area
 		// reg_A[0] and reg_m are only ns(1), need to be copied const_m times.
-		B_in = ANDMBITS(reg_A[0], reg_B);
-		P_in = ANDMBITS(reg_m, reg_P);
+		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
+		P_in = ANDMBITS(reg_m, const_P);
 		
 		cycle = cycle + 1;
 
 		reg_T = T_out;
 		reg_m = m_out;
 
-		reg_A = reg_A >> 1;
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		//$display($bin, "reg_B = ", reg_B, " - reg_B[5 - 3 - 1] = ", $bin, ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 3 - 1]) # ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 4 - 1]));
+
+		reg_A = reg_A << 1;
 	}
 
 	// "Divide" by x at the end
 	sfg end {
 		T_in = reg_T;
 
-		B_in = ANDMBITS(reg_A[0], reg_B);
+		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
 		P_in = ANDMBITS(reg_m, const_P);
 		
-		cycle = cycle + 1;
+		cycle = cycle + 1;		
 
-		reg_T = (ns(1)) m_out # reg_T[1:(const_m - 1)];
+		reg_T = m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]);
+		reg_m = m_out;
+
+		reg_A = reg_A << 1;
+
+		//$display("[End] T = ", $bin, reg_T, " = ", $dec, reg_T);
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+	}
+
+	// Check if highest bit = 1, if so, XOR with P once more
+	sfg final {
+		T_in = reg_T;
+
+		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);	// We can keep using reg_A, last bit is always 0 now.
+		P_in = ANDMBITS(reg_m, const_P);
+		
+		cycle = cycle + 1;		
+
+		reg_T = m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]);
 		reg_ready = 1;
+
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		$display("[Final] T = ", $bin, reg_T, " - C = ", reg_C, " - Out = T ^ C");
 	}
 }
 
@@ -90,7 +121,8 @@ fsm fsm_mult_mod (mult_mod) {
 	@idle	if (reg_start == 1) then (init, idle, do_always) -> run;
 			else (idle, do_always) -> idle;
 	@run	if (cycle <= (const_m - 2)) then (iteration, do_always) -> run;	// const_m - 2, last iteration is done in sfg end.
-			else (end, idle, do_always) -> idle;
+			else if (cycle <= (const_m - 1)) then (end, do_always) -> run;
+			else (final, do_always) -> idle;
 }
 
 #endif /* MULT_MOD_FDL */
