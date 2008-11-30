@@ -16,8 +16,8 @@ dp malu (in T: ns(const_m);
 		sum = T ^ B;
 		result = sum ^ P;
 
-		T_n = result[1:(const_m - 1)]  # ((ns(1)) 0b0);
-		m_n = result[const_m];
+		T_n = result[0:(const_m - 2)]  # ((ns(1)) 0b0);
+		m_n = result[const_m - 1];
 	}
 } hardwired h_malu (malu) { run; }
 

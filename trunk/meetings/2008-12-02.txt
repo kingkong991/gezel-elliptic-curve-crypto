@@ -1,0 +1,18 @@
+* GEZEL:
+	- sig = 0 gets connected to ground, but using both
+			B_in = 0
+		and
+			B_in = ANDMBITS(reg_A[0], reg_B);
+		requires the use of a MUX, right? So just set reg_A to 0 and use the 2nd line of code everywhere when needed?
+
+	- start inputs make the fsm lose 1 cycle (also annoying for inits, because you have to feed params in cycle AFTER setting start high);
+		so make registers always take value at ports with something like:
+			reg_A = start == 1 ? in_A : reg_A;
+		or is there a better solution?
+
+* Sakiyama:
+	- Error in algorithm 3.4? 
+		For example compare with Wikipedia (wrong on there as well?): 
+			http://en.wikipedia.org/wiki/Finite_field_arithmetic#Rijndael.27s_finite_field
+		
+		So, need 1 more iteration? (See implementation in mult_mod.fdl.)
