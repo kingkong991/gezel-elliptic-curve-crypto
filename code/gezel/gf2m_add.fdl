@@ -10,7 +10,7 @@
  *
  * Input: Input in 2 cycles, first P, then Q (or vice versa, doesn't matter of course)
  */
-dp gfm_add(in in_X:	ns(const_m);
+dp gf2m_add(in in_X:	ns(const_m);
 	in in_Y:	ns(const_m);
 	in in_Z:	ns(const_m);
 	in start:	ns(1);
@@ -43,6 +43,7 @@ dp gfm_add(in in_X:	ns(const_m);
 	// Signals for multiplier.
 	sig mult_A: ns(const_m);
 	sig mult_B: ns(const_m);
+	sig mult_C: ns(const_m);
 	sig mult_start: ns(1);
 	sig mult_T:	ns(const_m);
 	sig mult_ready: ns(1);
