@@ -5,7 +5,7 @@
 
 dp malu (in T: ns(const_m);
 	in B: ns(const_m);
-	in P: ns(const_m);
+	in m_in: ns(1);
 	out T_n: ns(const_m);
 	out m_n: ns(1)) {
 
@@ -14,7 +14,7 @@ dp malu (in T: ns(const_m);
 
 	sfg run {
 		sum = T ^ B;
-		result = sum ^ P;
+		result = XOR_P(sum, m_in);
 
 		T_n = result[0:(const_m - 2)]  # ((ns(1)) 0b0);
 		m_n = result[const_m - 1];
