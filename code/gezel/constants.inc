@@ -8,7 +8,7 @@
 // Reduction polynomial
 // Test P = x^4 + x + 1 (= 19) (irreducible)
 #define const_P 0b10011
-#define XOR_P(a,b) a[2:3] CONCATENATION a[1] ^ b CONCATENATION a[0] ^ b
+#define XOR_P(a,b) a[2:3] CONCATENATION (ns(1)) a[1] ^ b CONCATENATION (ns(1)) a[0] ^ b
 
 // Real polynomial: P = x^1223 + x^255 + 1
 //#define XOR_P(a, b) a[256:1222] CONCATENATION a[255] ^ b CONCATENATION a[1:254] CONCATENATION a[0] ^ b
