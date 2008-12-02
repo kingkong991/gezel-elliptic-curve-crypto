@@ -18,6 +18,8 @@ dp malu (in T: ns(const_m);
 
 		T_n = result[0:(const_m - 2)]  # ((ns(1)) 0b0);
 		m_n = result[const_m - 1];
+
+		$display("[MALU] Result = ", $bin, result);
 	}
 } hardwired h_malu (malu) { run; }
 
