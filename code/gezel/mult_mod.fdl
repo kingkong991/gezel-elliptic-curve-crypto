@@ -26,12 +26,12 @@ dp mult_mod (in A: ns(const_m);
 
 	sig T_in: ns(const_m);
 	sig B_in: ns(const_m);
-	sig P_in: ns(const_m);
+	sig m_in: ns(1);
 
 	sig T_out: ns(const_m);
 	sig m_out: ns(1);
 
-	use malu(T_in, B_in, P_in, T_out, m_out);
+	use malu(T_in, B_in, m_in, T_out, m_out);
 
 	sfg do_always {
 		reg_start = start;
@@ -45,9 +45,9 @@ dp mult_mod (in A: ns(const_m);
 	sfg init {
 		cycle = 0;
 
-		reg_A = A[const_m - 1] == 1 ? A ^ const_P : A;
-		reg_B = B[const_m - 1] == 1 ? B ^ const_P : B;
-		reg_C = C[const_m - 1] == 1 ? C ^ const_P : C;
+		reg_A = A;
+		reg_B = B;
+		reg_C = C;
 
 		reg_ready = 0;
 
@@ -57,7 +57,7 @@ dp mult_mod (in A: ns(const_m);
 	sfg idle {
 		T_in = 0;
 		B_in = 0;
-		P_in = 0;
+		m_in = 0;
 	}
 
 	sfg iteration {
@@ -66,14 +66,14 @@ dp mult_mod (in A: ns(const_m);
 		// And B & P instead of muxing: less area
 		// reg_A[0] and reg_m are only ns(1), need to be copied const_m times.
 		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
-		P_in = ANDMBITS(reg_m, const_P);
+		m_in = reg_m;
 		
 		cycle = cycle + 1;
 
 		reg_T = T_out;
 		reg_m = m_out;
 
-		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
 		//$display($bin, "reg_B = ", reg_B, " - reg_B[5 - 3 - 1] = ", $bin, ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 3 - 1]) # ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 4 - 1]));
 
 		reg_A = reg_A << 1;
@@ -84,7 +84,7 @@ dp mult_mod (in A: ns(const_m);
 		T_in = reg_T;
 
 		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
-		P_in = ANDMBITS(reg_m, const_P);
+		m_in = reg_m;
 		
 		cycle = cycle + 1;		
 
@@ -93,8 +93,8 @@ dp mult_mod (in A: ns(const_m);
 
 		reg_A = reg_A << 1;
 
-		//$display("[End] T = ", $bin, reg_T, " = ", $dec, reg_T);
-		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		$display("[End] T = ", $bin, reg_T, " = ", $dec, reg_T);
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
 	}
 
 	// Check if highest bit = 1, if so, XOR with P once more
@@ -102,14 +102,14 @@ dp mult_mod (in A: ns(const_m);
 		T_in = reg_T;
 
 		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);	// We can keep using reg_A, last bit is always 0 now.
-		P_in = ANDMBITS(reg_m, const_P);
+		m_in = reg_m;
 		
 		cycle = cycle + 1;		
 
 		reg_T = m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]);
 		reg_ready = 1;
 
-		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - P_in = ", P_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
 		$display("[Final] T = ", $bin, reg_T, " - C = ", reg_C, " - Out = T ^ C");
 	}
 }
