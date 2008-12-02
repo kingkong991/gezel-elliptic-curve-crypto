@@ -16,3 +16,5 @@
 			http://en.wikipedia.org/wiki/Finite_field_arithmetic#Rijndael.27s_finite_field
 		
 		So, need 1 more iteration? (See implementation in mult_mod.fdl.)
+
+		`-> Nevermind, was testing with wrong reduction polynomial.

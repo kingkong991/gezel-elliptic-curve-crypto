@@ -89,9 +89,9 @@ dp mult_mod (in A: ns(const_m);
 		cycle = cycle + 1;		
 
 		reg_T = m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]);
-		reg_m = m_out;
+		//reg_m = m_out;
 
-		reg_A = reg_A << 1;
+		//reg_A = reg_A << 1;
 
 		$display("[End] T = ", $bin, reg_T, " = ", $dec, reg_T);
 		$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
@@ -121,8 +121,9 @@ fsm fsm_mult_mod (mult_mod) {
 	@idle	if (reg_start == 1) then (init, idle, do_always) -> run;
 			else (idle, do_always) -> idle;
 	@run	if (cycle <= (const_m - 2)) then (iteration, do_always) -> run;	// const_m - 2, last iteration is done in sfg end.
-			else if (cycle <= (const_m - 1)) then (end, do_always) -> run;
-			else (final, do_always) -> idle;
+			else (end, do_always) -> idle;
+			//else if (cycle <= (const_m - 1)) then (end, do_always) -> run;
+			//else (final, do_always) -> idle;
 }
 
 #endif /* MULT_MOD_FDL */
