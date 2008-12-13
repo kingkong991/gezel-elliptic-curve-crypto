@@ -13,6 +13,7 @@
 //#define XOR_P(a, b) a[256:1222] CONCATENATION a[255] ^ b CONCATENATION a[1:254] CONCATENATION a[0] ^ b // Reduction polynomial P = x^1223 + x^255 + 1
 #define curve_A 1
 #define curve_B 0
+#define curve_C 0		// c = b^(2^(m - 1)) (c^2 = b)
 
 /* AND m-bit register (b) with 1-bit register (a): */
 #include <boost/preprocessor/repetition/repeat.hpp>

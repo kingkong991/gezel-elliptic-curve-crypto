@@ -5,21 +5,21 @@
 
 #include "malu_wrapper.fdl"
 
-/* Add 2 points on an elliptic curve. Points in projective coordinates:
- *	Output: Q(X, Y, Z) = P(X, Y, Z) * Q(X, Y, Z)
- *
- * Input: Input in 2 cycles, first P, then Q (or vice versa, doesn't matter of course)
+/* Calculate kP, with k >= 0 and P a point on the curve.
+ *	Output: Q(X, Y) = k * P(X, Y)
  */
 dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	in in_Y:	ns(const_m);
-	in in_Z:	ns(const_m);
+	in in_k:	ns(const_m);
 	in start:	ns(1);
 	out out_X:	ns(const_m);
 	out out_Y:	ns(const_m);
-	out out_Z:	ns(const_m);
 	out ready:	ns(1)) {
 
 	// Minimum amount of registers needed.
+	reg X:	ns(const_m);
+	reg Y:	ns(const_m);
+
 	reg X1: ns(const_m);
 	reg Z1: ns(const_m);
 	reg X2: ns(const_m);
@@ -35,23 +35,25 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	
 	reg reg_malu_ready: ns(1);
 
-	// Signals for maluiplier.
+	// Signals for the MALU.
 	sig malu_A: ns(const_m);
 	sig malu_B: ns(const_m);
-	sig malu_C: ns(const_m);
 	sig malu_start: ns(1);
 	sig malu_mode: ns(1);
 	sig malu_T:	ns(const_m);
 	sig malu_ready: ns(1);
 
-	use malu_wrapper(malu_A, malu_B, malu_C, malu_start, malu_mode, malu_T, malu_ready);
+	use malu_wrapper(malu_A, malu_B, malu_start, malu_mode, malu_T, malu_ready);
 	
 	sfg do_always {
 		reg_start = start;
 
-		out_X = Q_X;
-		out_Y = Q_Y;
-		out_Z = Q_Z;
+		// Don't waste cycles in init
+		
+		
+		// Set output
+		out_X = X2;
+		out_Y = Z2;
 
 		ready = reg_ready;
 
@@ -61,17 +63,16 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	sfg idle {
 		malu_A = 0;
 		malu_B = 0;
-		malu_C = 0;
 
 		malu_start = 0;
+		malu_mode = 0;
 	}
 
-	sfg init1 {
+	sfg init {
 		reg_ready = 0;
 
-		P_X = in_X;
-		P_Y = in_Y;
-		P_Z = in_Z;
+		X1 = in_X;
+		Z1 = in_Y;
 	}
 
 	sfg init2 {
