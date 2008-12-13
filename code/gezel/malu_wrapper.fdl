@@ -1,0 +1,108 @@
+#ifndef MALU_WRAPPER_FDL
+#define MALU_WRAPPER_FDL
+
+#include "constants.inc"
+
+#include "malu.fdl"
+
+dp malu_wrapper (in A: ns(const_m);
+	in B: ns(const_m);
+	in start: ns(1);
+	in mode: ns(1);
+	out T: ns(const_m);
+	out ready: ns(1)) {
+
+	reg reg_start: ns(1);
+	reg reg_mode: ns(1);
+
+	reg reg_T: ns(const_m);
+	reg reg_ready: ns(1);
+	reg reg_m: ns(1);
+
+	reg reg_A: ns(const_m);
+	reg reg_B: ns(const_m);
+
+	reg reg_cycle: ns(const_m);	// TODO: Too big, needs to be log2(const_m).
+
+	sig T_in: ns(const_m);
+	sig B_in: ns(const_m);
+	sig m_in: ns(1);
+
+	sig T_out: ns(const_m);
+	sig m_out: ns(1);
+
+	use malu(T_in, B_in, m_in, T_out, m_out);
+
+	sfg do_always {
+		reg_start = start;
+		reg_mode = start == 1 ? mode : reg_mode;
+
+		// Do it this way, so init doesn't waste a reg_cycle.
+		reg_A = start == 1 ? A : reg_A << 1;
+		reg_B = start == 1 ? B : reg_B;
+		reg_C = start == 1 ? C : reg_C;
+
+		reg_cycle = start == 1 ? 0 : reg_cycle + 1;
+
+		reg_m = m_out;
+
+		T = mode == 0 ? reg_T : reg_A ^ reg_B;
+		ready = reg_ready;
+
+		//$display("Out = ", $bin, T, " - Start = ", start);
+	}
+
+	sfg init {
+		reg_ready = 0;
+
+		$display($bin, "[Init] A = ", $bin, reg_A, " - B = ", reg_B, " - C = ", reg_C);
+	}
+
+	sfg idle {
+		T_in = 0;
+		B_in = 0;
+		m_in = 0;
+	}
+
+	sfg iteration {
+		T_in = reg_T;
+
+		// And B & P instead of muxing: less area
+		// reg_A[0] and reg_m are only ns(1), need to be copied const_m times.
+		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
+		m_in = reg_m;
+
+		reg_T = T_out;
+
+		//$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
+		//$display($bin, "reg_B = ", reg_B, " - reg_B[5 - 3 - 1] = ", $bin, ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 3 - 1]) # ((ns(1)) reg_A[const_m - 1] & reg_B[5 - 4 - 1]));
+	}
+
+	// "Divide" by x at the end
+	sfg end_mult {
+		T_in = reg_T;
+
+		B_in = ANDMBITS(reg_A[const_m - 1], reg_B);
+		m_in = reg_m;
+		
+		reg_T = m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]);
+		reg_ready = 1;
+
+		$display("[[End]] Output = T ^ C - T = ", $bin, reg_T, " = ", $dec, reg_T, " - C = ", $bin, reg_C, " = ", $dec, reg_C);
+		//$display($bin, "reg_A[const_m - 1] = ", reg_A[const_m - 1], " - reg_m = ", reg_m, " - B_in = ", B_in, " - m_in = ", m_in, " - T_out = ", T_out, " - m_out = ", m_out);
+	}
+}
+
+fsm fsm_malu_wrapper (malu_wrapper) {
+	initial idle;
+	state run;
+
+	@idle	if (reg_start == 1) then 
+				if (reg_mode == 0) then (init, iteration, do_always) -> run;	// Multiplication
+				else (init, end, do_always) -> idle;	// Addition
+			else (idle, do_always) -> idle;
+	@run	if (reg_cycle <= (const_m - 2)) then (iteration, do_always) -> run;	// const_m - 2, last iteration is done in sfg end.
+			else (end_mult, do_always) -> idle;
+}
+
+#endif /* MALU_WRAPPER_FDL */
