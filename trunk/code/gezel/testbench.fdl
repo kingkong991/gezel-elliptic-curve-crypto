@@ -5,17 +5,20 @@
 dp testbench {
 	sig A: ns(const_m);
 	sig B: ns(const_m);
-	sig C: ns(const_m);
 
 	sig T: ns(const_m);
 
 	sig start: ns(1);
+	sig mode: ns(1);
 
 	sig ready: ns(1);
 
 	reg reg_cycle: ns(const_m);	// Way too big, needs to be ns(log2(const_m)).
+	reg reg_ready: ns(1);
 	
-	use mult_mod(A, B, C, start, T, ready);
+	reg reg_T: ns(const_m);
+
+	use malu_wrapper(A, B, start, mode, T, ready);
 
 	sfg init {
 		reg_cycle = 0;
@@ -25,11 +28,9 @@ dp testbench {
 	sfg run {
 		A = 8;
 		B = 2;
-		C = 5;
+		mode = 1;
 
-		reg_cycle = reg_cycle == const_m ? 0 : reg_cycle + 1;
-
-		$display("[Cycle ", $cycle, "] - Start = ", start);
+		reg_cycle = reg_cycle + 1;
 	}
 
 	sfg set_start {
@@ -41,15 +42,29 @@ dp testbench {
 	sfg unset_start {
 		start = 0;
 	}
+
+	sfg do_always {
+		reg_ready = start == 1 ? 0 : ready;
+		
+		reg_T = ready == 1 ? T : reg_T;
+
+		$display("[Cycle ", $cycle, "] - Start = ", start, " - ready: ", reg_ready, " - T: ", reg_T);
+	}
+
+	sfg end {
+		$display("[Testbench] Done (In previous cycle) - Cur cycle: ", $cycle);
+	}
 }
 
 fsm fsm_testbench (testbench) {
 	initial init;
-	state run;
+	state start, run;
 
-	@init (init) -> run;
-	@run	if (reg_cycle == 0) then (run, set_start) -> run;
-			else (run, unset_start) -> run;
+	@init (init, do_always) -> start;
+	@start (run, set_start, do_always) -> run;
+	@run	if (reg_ready == 1) then (init, do_always, end) -> start;
+			else	if (reg_cycle == 0) then (run, unset_start, do_always) -> run;
+					else (run, unset_start, do_always) -> run;
 }
 
 system S {
