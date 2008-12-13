@@ -1,5 +1,5 @@
-#ifndef GF2M_ADD_FDL
-#define GF2M_ADD_FDL
+#ifndef GF2M_ADD_AND_MULT_FDL
+#define GF2M_ADD_AND_MULT_FDL
 
 #include "constants.inc"
 
@@ -10,7 +10,7 @@
  *
  * Input: Input in 2 cycles, first P, then Q (or vice versa, doesn't matter of course)
  */
-dp gf2m_add(in in_X:	ns(const_m);
+dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	in in_Y:	ns(const_m);
 	in in_Z:	ns(const_m);
 	in start:	ns(1);
@@ -20,20 +20,15 @@ dp gf2m_add(in in_X:	ns(const_m);
 	out ready:	ns(1)) {
 
 	// Minimum amount of registers needed.
-	reg P_X: ns(const_m);
-	reg P_Y: ns(const_m);
-	reg P_Z: ns(const_m);
-
-	reg Q_X: ns(const_m);
-	reg Q_Y: ns(const_m);
-	reg Q_Z: ns(const_m);
+	reg X1: ns(const_m);
+	reg Z1: ns(const_m);
+	reg X2: ns(const_m);
+	reg Z2: ns(const_m);
 
 	reg T1: ns(const_m);
 	reg T2: ns(const_m);
 	reg T3: ns(const_m);
 	reg T4: ns(const_m);
-	reg T5: ns(const_m);
-	reg T6: ns(const_m);
 
 	reg reg_start:	ns(1);
 	reg reg_ready:	ns(1);
@@ -194,7 +189,7 @@ dp gf2m_add(in in_X:	ns(const_m);
 
 }
 
-fsm fsm_gf2m_add (gf2m_add) {
+fsm fsm_gf2m_add_and_mult (gf2m_add_and_mult) {
 	initial idle;
 	state init;
 	state step1, step2, step3, step4, step5, step6, step7, step8, step9, step10;
@@ -246,5 +241,5 @@ fsm fsm_gf2m_add (gf2m_add) {
 				else (idle, do_always) -> step20;
 }
 
-#endif /* GF2M_ADD_FDL */
+#endif /* GF2M_ADD_AND_MULT_FDL */
 

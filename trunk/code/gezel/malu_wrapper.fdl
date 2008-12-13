@@ -59,7 +59,15 @@ dp malu_wrapper (in A: ns(const_m);
 		// Set output depending on mode.
 		T = reg_mode == 0 ? reg_T : reg_A ^ reg_B;
 
-		reg_ready = start == 1 ? 0 : (sig_end == 1 ? 1 : reg_ready);	// TODO: Make this a logical expression.
+		// When start is high and we go for addition, set ready to 1, result is ready in 1 cycle. When
+		// doing multiplication, set to zero.
+		//reg_ready = start == 1 ? (mode == 0 ? 0 : 1) : (sig_end == 1 ? 1 : reg_ready);	// TODO: Make this a logical expression.
+		/*
+		 * Logic function (solution  of Quine-McCluskey: (!A*D)+(!A*C)+(A*B)
+		 * With A = start, B = mode, C = sig_end, D = reg_ready
+		 */
+		reg_ready = (~start & reg_ready) | (~start & sig_end) | (start & mode);
+
 		ready = reg_ready;
 	}
 

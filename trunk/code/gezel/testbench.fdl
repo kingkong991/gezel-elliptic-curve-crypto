@@ -23,6 +23,7 @@ dp testbench {
 	sfg init {
 		reg_cycle = 0;
 		start = 0;
+		mode = 0;
 	}
 
 	sfg run {
