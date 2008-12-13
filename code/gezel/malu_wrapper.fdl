@@ -11,6 +11,9 @@
  *		already started.
  */
 
+// Mode:	0 = multiplication
+//			1 = addition
+
 dp malu_wrapper (in A: ns(const_m);
 	in B: ns(const_m);
 	in start: ns(1);
