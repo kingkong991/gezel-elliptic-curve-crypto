@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-#include "mult_mod.fdl"
+#include "malu_wrapper.fdl"
 
 dp testbench {
 	sig A: ns(const_m);
@@ -13,18 +13,44 @@ dp testbench {
 
 	sig ready: ns(1);
 
+	reg reg_cycle: ns(const_m);	// Way too big, needs to be ns(log2(const_m)).
+	
 	use mult_mod(A, B, C, start, T, ready);
+
+	sfg init {
+		reg_cycle = 0;
+		start = 0;
+	}
 
 	sfg run {
 		A = 8;
 		B = 2;
 		C = 5;
 
+		reg_cycle = reg_cycle == const_m ? 0 : reg_cycle + 1;
+
+		$display("[Cycle ", $cycle, "] - Start = ", start);
+	}
+
+	sfg set_start {
 		start = 1;
 
-		$display("[Cycle ", $cycle, "]");
+		$display("[[Starting]]");
 	}
-} hardwired h_testbench (testbench) { run; }
+
+	sfg unset_start {
+		start = 0;
+	}
+}
+
+fsm fsm_testbench (testbench) {
+	initial init;
+	state run;
+
+	@init (init) -> run;
+	@run	if (reg_cycle == 0) then (run, set_start) -> run;
+			else (run, unset_start) -> run;
+}
 
 system S {
 	testbench;

@@ -3,7 +3,7 @@
 
 #include "constants.inc"
 
-#include "mult_mod.fdl"
+#include "malu_wrapper.fdl"
 
 /* Add 2 points on an elliptic curve. Points in projective coordinates:
  *	Output: Q(X, Y, Z) = P(X, Y, Z) * Q(X, Y, Z)
@@ -38,17 +38,18 @@ dp gf2m_add(in in_X:	ns(const_m);
 	reg reg_start:	ns(1);
 	reg reg_ready:	ns(1);
 	
-	reg reg_mult_ready: ns(1);
+	reg reg_malu_ready: ns(1);
 
-	// Signals for multiplier.
-	sig mult_A: ns(const_m);
-	sig mult_B: ns(const_m);
-	sig mult_C: ns(const_m);
-	sig mult_start: ns(1);
-	sig mult_T:	ns(const_m);
-	sig mult_ready: ns(1);
+	// Signals for maluiplier.
+	sig malu_A: ns(const_m);
+	sig malu_B: ns(const_m);
+	sig malu_C: ns(const_m);
+	sig malu_start: ns(1);
+	sig malu_mode: ns(1);
+	sig malu_T:	ns(const_m);
+	sig malu_ready: ns(1);
 
-	use mult_mod(mult_A, mult_B, mult_C, mult_start, mult_T, mult_ready);
+	use malu_wrapper(malu_A, malu_B, malu_C, malu_start, malu_mode, malu_T, malu_ready);
 	
 	sfg do_always {
 		reg_start = start;
@@ -59,15 +60,15 @@ dp gf2m_add(in in_X:	ns(const_m);
 
 		ready = reg_ready;
 
-		reg_mult_ready = mult_ready;
+		reg_malu_ready = malu_ready;
 	}
 
 	sfg idle {
-		mult_A = 0;
-		mult_B = 0;
-		mult_C = 0;
+		malu_A = 0;
+		malu_B = 0;
+		malu_C = 0;
 
-		mult_start = 0;
+		malu_start = 0;
 	}
 
 	sfg init1 {
@@ -86,203 +87,105 @@ dp gf2m_add(in in_X:	ns(const_m);
 
 	// All steps in order (algorithm Sakiyama 2.12)
 	sfg step1 {
-		mult_A = P_Z;
-		mult_B = P_Z;
-		mult_C = 0;
+		malu_A = P_Z;
+		malu_B = P_Z;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step2 {
-		mult_A = T6;
-		mult_B = Q_X;
-		mult_C = 0;
+		malu_A = T6;
+		malu_B = Q_X;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step3 {
-		mult_A = Q_Z;
-		mult_B = Q_Z;
-		mult_C = 0;
+		malu_A = Q_Z;
+		malu_B = Q_Z;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step4 {
-		mult_A = T2;
-		mult_B = P_X;
-		mult_C = T3;
+		malu_A = T2;
+		malu_B = P_X;
+		malu_C = T3;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step5 {
-		mult_A = T6;
-		mult_B = P_Z;
-		mult_C = 0;
+		malu_A = T6;
+		malu_B = P_Z;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step6 {
-		mult_A = T1;
-		mult_B = Q_Y;
-		mult_C = 0;
+		malu_A = T1;
+		malu_B = Q_Y;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step7 {
-		mult_A = T2;
-		mult_B = Q_Z;
-		mult_C = 0;
+		malu_A = T2;
+		malu_B = Q_Z;
+		malu_C = 0;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
 	sfg step8 {
-		mult_A = T2;
-		mult_B = P_Y;
-		mult_C = T3;
+		malu_A = T2;
+		malu_B = P_Y;
+		malu_C = T3;
 
-		mult_start = 1;
+		malu_start = 1;
 	}
 
-	sfg step9 {
-		mult_A = T4;
-		mult_B = P_Z;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	sfg step10 {
-		mult_A = T5;
-		mult_B = Q_Y;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	sfg step11 {
-		mult_A = T1;
-		mult_B = Q_X;
-		mult_C = T3;
-
-		mult_start = 1;
-	}
-
-	sfg step12 {
-		mult_A = T5;
-		mult_B = Q_Z;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	// TODO: Fix this, bad because of XORing here.
-	sfg step13 {
-		mult_A = T1;
-		mult_B = T1 ^ Q_Z;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	sfg step14 {
-		mult_A = T4;
-		mult_B = T4;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	sfg step15 {
-		mult_A = T4;
-		mult_B = Q_Y;
-		mult_C = T5;
-
-		mult_start = 1;
-	}
-
-	// TODO: Set correct curve_A in constants.inc
-	sfg step16 {
-		mult_A = curve_A;
-		mult_B = Q_Z;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	sfg step17 {
-		mult_A = Q_X;
-		mult_B = Q_Z;
-		mult_C = T2;
-
-		mult_start = 1;
-	}
-
-	sfg step18 {
-		mult_A = Q_Y;
-		mult_B = T3;
-
-		mult_start = 1;
-	}
-
-	sfg step19 {
-		mult_A = T4;
-		mult_B = T6;
-		mult_C = 0;
-
-		mult_start = 1;
-	}
-
-	// TODO: Crappy implementation with XOR again.
-	sfg step20 {
-		mult_A = Q_X;
-		mult_B = T1 ^ Q_Z;
-		mult_C = T4;
-
-		mult_start = 1;
-	}
-
-	// Save sfgs
+	// Save sfg's
 
 	sfg save_X {
-		Q_X = mult_T;
+		Q_X = malu_T;
 	}
 
 	sfg save_Y {
-		Q_Y = mult_T;
+		Q_Y = malu_T;
 	}
 
 	sfg save_Z {
-		Q_Z = mult_T;
+		Q_Z = malu_T;
 	}
 
 	sfg save_T1 {
-		T1 = mult_T;
+		T1 = malu_T;
 	}
 
 	sfg save_T2 {
-		T2 = mult_T;
+		T2 = malu_T;
 	}
 
 	sfg save_T3 {
-		T3 = mult_T;
+		T3 = malu_T;
 	}
 
 	sfg save_T4 {
-		T4 = mult_T;
+		T4 = malu_T;
 	}
 
 	sfg save_T5 {
-		T5 = mult_T;
+		T5 = malu_T;
 	}
 
 	sfg save_T6 {
-		T6 = mult_T;
+		T6 = malu_T;
 	}
 
 	sfg end {
@@ -301,45 +204,45 @@ fsm fsm_gf2m_add (gf2m_add) {
 	@idle if (reg_start == 1) then (init1, do_always) -> init;
 			else (idle, do_always) -> idle;
 	@init (init2, step1, do_always) -> step1;	// TODO: Make sure this works (right now, step 1 doesn't use Q registers, so all is fine.
-	@step1	if (reg_mult_ready == 1) then (save_T6, step2, do_always) -> step2;
+	@step1	if (reg_malu_ready == 1) then (save_T6, step2, do_always) -> step2;
 				else (idle, do_always) -> step1;
-	@step2	if (reg_mult_ready == 1) then (save_T3, step3, do_always) -> step3;
+	@step2	if (reg_malu_ready == 1) then (save_T3, step3, do_always) -> step3;
 				else (idle, do_always) -> step2;
-	@step3	if (reg_mult_ready == 1) then (save_T2, step4, do_always) -> step4;
+	@step3	if (reg_malu_ready == 1) then (save_T2, step4, do_always) -> step4;
 				else (idle, do_always) -> step3;
-	@step4	if (reg_mult_ready == 1) then (save_T4, step5, do_always) -> step5;
+	@step4	if (reg_malu_ready == 1) then (save_T4, step5, do_always) -> step5;
 				else (idle, do_always) -> step4;
-	@step5	if (reg_mult_ready == 1) then (save_T1, step6, do_always) -> step6;
+	@step5	if (reg_malu_ready == 1) then (save_T1, step6, do_always) -> step6;
 				else (idle, do_always) -> step5;
-	@step6	if (reg_mult_ready == 1) then (save_T3, step7, do_always) -> step7;
+	@step6	if (reg_malu_ready == 1) then (save_T3, step7, do_always) -> step7;
 				else (idle, do_always) -> step6;
-	@step7	if (reg_mult_ready == 1) then (save_T2, step8, do_always) -> step8;
+	@step7	if (reg_malu_ready == 1) then (save_T2, step8, do_always) -> step8;
 				else (idle, do_always) -> step7;
-	@step8	if (reg_mult_ready == 1) then (save_T1, step9, do_always) -> step9;
+	@step8	if (reg_malu_ready == 1) then (save_T1, step9, do_always) -> step9;
 				else (idle, do_always) -> step8;
-	@step9	if (reg_mult_ready == 1) then (save_T5, step10, do_always) -> step10;
+	@step9	if (reg_malu_ready == 1) then (save_T5, step10, do_always) -> step10;
 				else (idle, do_always) -> step9;
-	@step10	if (reg_mult_ready == 1) then (save_T3, step11, do_always) -> step11;
+	@step10	if (reg_malu_ready == 1) then (save_T3, step11, do_always) -> step11;
 				else (idle, do_always) -> step10;
-	@step11	if (reg_mult_ready == 1) then (save_T3, step11, do_always) -> step12;
+	@step11	if (reg_malu_ready == 1) then (save_T3, step11, do_always) -> step12;
 				else (idle, do_always) -> step11;
-	@step12	if (reg_mult_ready == 1) then (save_Z, step11, do_always) -> step13;
+	@step12	if (reg_malu_ready == 1) then (save_Z, step11, do_always) -> step13;
 				else (idle, do_always) -> step12;
-	@step13	if (reg_mult_ready == 1) then (save_T5, step11, do_always) -> step14;
+	@step13	if (reg_malu_ready == 1) then (save_T5, step11, do_always) -> step14;
 				else (idle, do_always) -> step13;
-	@step14	if (reg_mult_ready == 1) then (save_Y, step11, do_always) -> step15;
+	@step14	if (reg_malu_ready == 1) then (save_Y, step11, do_always) -> step15;
 				else (idle, do_always) -> step14;
-	@step15	if (reg_mult_ready == 1) then (save_T2, step11, do_always) -> step16;
+	@step15	if (reg_malu_ready == 1) then (save_T2, step11, do_always) -> step16;
 				else (idle, do_always) -> step15;
-	@step16	if (reg_mult_ready == 1) then (save_X, step11, do_always) -> step17;
+	@step16	if (reg_malu_ready == 1) then (save_X, step11, do_always) -> step17;
 				else (idle, do_always) -> step16;
-	@step17	if (reg_mult_ready == 1) then (save_X, step11, do_always) -> step18;
+	@step17	if (reg_malu_ready == 1) then (save_X, step11, do_always) -> step18;
 				else (idle, do_always) -> step17;
-	@step18	if (reg_mult_ready == 1) then (save_T4, step11, do_always) -> step19;
+	@step18	if (reg_malu_ready == 1) then (save_T4, step11, do_always) -> step19;
 				else (idle, do_always) -> step18;
-	@step19	if (reg_mult_ready == 1) then (save_T4, step11, do_always) -> step20;
+	@step19	if (reg_malu_ready == 1) then (save_T4, step11, do_always) -> step20;
 				else (idle, do_always) -> step19;
-	@step20	if (reg_mult_ready == 1) then (save_Y, end, do_always) -> idle;
+	@step20	if (reg_malu_ready == 1) then (save_Y, end, do_always) -> idle;
 				else (idle, do_always) -> step20;
 }
 
