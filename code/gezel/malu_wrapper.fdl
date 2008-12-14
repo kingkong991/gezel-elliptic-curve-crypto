@@ -70,7 +70,6 @@ dp malu_wrapper (in A: ns(const_m);
 		 * With A = start, B = mode, C = sig_end, D = reg_ready
 		 */
 		reg_ready = (~start & reg_ready) | (~start & sig_end) | (start & mode);
-
 		ready = reg_ready;
 	}
 
