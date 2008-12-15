@@ -1,0 +1,87 @@
+#ifndef MONTGOMERY_LADDER_FDL
+#define MONTGOMERY_LADDER_FDL
+
+#include "constants.inc"
+
+#include "gf2m_add_and_mult.fdl"
+
+dp montgomery_ladder (in in_X: ns(const_m);
+	in in_Y: ns(const_m);
+	in in_k: ns(const_m);
+	in start: ns(1);
+	out out_X: ns(const_m);
+	out out_Y: ns(const_m);
+	out ready:	ns(1)) {
+
+	reg reg_k: ns(const_m);
+
+	reg reg_start: ns(1);
+
+	sig sig_ready: ns(1);
+	reg reg_ready: ns(1);
+
+	reg reg_gf2m_ready: ns(1);
+
+	reg reg_counter: ns(const_m);	// TODO: Size should be ceil(log2(const_m)).
+
+	// Signals for the GF2m ALU block
+	sig sig_gf2m_reset: ns(1);
+	sig sig_gf2m_mode: ns(1);
+	sig sig_gf2m_stop: ns(1);
+
+	sig sig_gf2m_ready: ns(1);
+
+	use gf2m_add_and_mult(in_X, in_Y, sig_gf2m_reset, sig_gf2m_mode, sig_gf2m_stop, out_X, out_Y, sig_gf2m_ready);
+
+	sfg do_always {
+		reg_start = start;
+
+		reg_counter = start == 1 ? 0 : reg_counter + 1;
+
+		reg_k = start ==  1 ? in_k : reg_k;
+		
+		reg_ready = start == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);
+		ready = reg_ready;
+
+		sig_gf2m_mode = k[const_m - 2];	// Start at const_m - 2 down to 0.
+
+		reg_gf2m_ready = sig_gf2m_ready;
+	}
+
+	sfg set_reset {
+		sig_gf2m_reset = 1;
+	}
+
+	sfg shift_k {
+		reg_k = reg_k << 1;
+	}
+
+	sfg idle {
+		sig_gf2m_reset = 0;
+		sig_gf2m_stop = 0;
+
+		sig_ready = 0;
+	}
+
+	sfg set_stop {
+		sig_gf2m_stop = 1;
+	}
+
+	sfg set_ready {
+		sig_ready = 1;
+	}
+}
+
+fsm fsm_montgomery_ladder (montgomery_ladder) {
+	initial idle;
+	state run;
+
+	@idle	if (reg_start == 1) then (set_reset, do_always) -> run;
+			else (idle, do_always) -> idle;
+	@run	if (reg_counter == const_m - 2) then (set_stop, set_ready, do_always) -> idle;
+			else	if (reg_gf2m_ready == 0) then (idle, do_always) -> run;
+					else (shift_k, idle, do_always) -> run
+}
+
+// TODO: Fix fsm, mode is wrong every time the way it's programmed now.
+#endif /* MONTGOMERY_LADDER_FDL */
