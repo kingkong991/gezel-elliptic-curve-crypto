@@ -10,7 +10,6 @@
  */
 dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	in in_Y:	ns(const_m);
-	in in_k:	ns(const_m);
 	in reset:	ns(1);
 	in stop:		ns(1);
 	in mode:		ns(2);
@@ -244,8 +243,16 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 
 fsm fsm_gf2m_add_and_mult (gf2m_add_and_mult) {
 	initial idle;
-	state start;
-	state mode0_step2;
+	state start
+
+	state mode0_step2, mode0_step3, mode0_step4, mode0_step5, mode0_step6, mode0_step7, mode0_step8, mode0_step9;
+	state mode0_step10, mode0_step11, mode0_step12, mode0_step13, mode0_step14, mode0_step15, mode0_step16, mode0_step17, mode0_step18, mode0_step19;
+	state mode0_step20, mode0_step21, mode0_step22;
+
+	state mode1_step2, mode1_step3, mode1_step4, mode1_step5, mode1_step6, mode1_step7, mode1_step8, mode1_step9;
+	state mode1_step10, mode1_step11, mode1_step12, mode1_step13, mode1_step14, mode1_step15, mode1_step16, mode1_step17, mode1_step18, mode1_step19;
+	state mode1_step20, mode1_step21, mode1_step22;
+
 	state end;
 
 	@idle if (reg_reset == 1) then (init, idle, do_always) -> start;
