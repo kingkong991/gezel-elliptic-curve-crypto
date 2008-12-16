@@ -23,6 +23,7 @@ dp montgomery_ladder (in in_X: ns(const_m);
 	reg reg_gf2m_ready: ns(1);
 
 	reg reg_counter: ns(const_m);	// TODO: Size should be ceil(log2(const_m)).
+	sig sig_inc_counter: ns(1);
 
 	// Signals for the GF2m ALU block
 	sig sig_gf2m_reset: ns(1);
@@ -36,14 +37,13 @@ dp montgomery_ladder (in in_X: ns(const_m);
 	sfg do_always {
 		reg_start = start;
 
-		reg_counter = start == 1 ? 0 : reg_counter + 1;
-
-		reg_k = start ==  1 ? in_k : reg_k;
+		reg_counter = start == 1 ? 0 : (sig_inc_counter == 1 ? reg_counter + 1 : reg_counter);
+		reg_k = start ==  1 ? in_k : (sig_inc_counter == 1 ? reg_k << 1 : reg_k);
 		
 		reg_ready = start == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);
 		ready = reg_ready;
 
-		sig_gf2m_mode = k[const_m - 2];	// Start at const_m - 2 down to 0.
+		sig_gf2m_mode = reg_k[const_m - 2];	// Start at const_m - 2 down to 0.
 
 		reg_gf2m_ready = sig_gf2m_ready;
 	}
@@ -52,36 +52,47 @@ dp montgomery_ladder (in in_X: ns(const_m);
 		sig_gf2m_reset = 1;
 	}
 
-	sfg shift_k {
-		reg_k = reg_k << 1;
-	}
-
-	sfg idle {
+	sfg unset_reset {
 		sig_gf2m_reset = 0;
-		sig_gf2m_stop = 0;
-
-		sig_ready = 0;
 	}
 
 	sfg set_stop {
 		sig_gf2m_stop = 1;
 	}
 
+	sfg unset_stop {
+		sig_gf2m_stop = 0;
+	}
+
 	sfg set_ready {
 		sig_ready = 1;
+	}
+
+	sfg unset_ready {
+		sig_ready = 0;
+	}
+
+	// Updates the counter and shifts k by 1 bit to the left.
+	sfg inc_counter {
+		sig_inc_counter = 1;
+	}
+
+	sfg hold_counter {
+		sig_inc_counter = 0;
 	}
 }
 
 fsm fsm_montgomery_ladder (montgomery_ladder) {
 	initial idle;
-	state run;
+	state run, end;
 
-	@idle	if (reg_start == 1) then (set_reset, do_always) -> run;
-			else (idle, do_always) -> idle;
-	@run	if (reg_counter == const_m - 2) then (set_stop, set_ready, do_always) -> idle;
-			else	if (reg_gf2m_ready == 0) then (idle, do_always) -> run;
-					else (shift_k, idle, do_always) -> run
+	@idle	if (reg_start == 1) then (set_reset, unset_stop, hold_counter, do_always) -> run;
+			else (unset_reset, unset_stop, unset_ready, hold_counter, do_always) -> idle;
+	@run	if (reg_counter == const_m - 2) then (set_stop, unset_reset, unset_ready, hold_counter, do_always) -> end;
+			else	if (reg_gf2m_ready == 0) then (unset_reset, unset_stop, unset_ready, hold_counter, do_always) -> run;
+					else (inc_counter, unset_reset, unset_stop, unset_ready, do_always) -> run;
+	@end	if (reg_gf2m_ready == 1) then (set_ready, unset_reset, unset_stop, hold_counter, do_always) -> idle;
+			else (unset_reset, unset_stop, unset_ready, hold_counter, do_always) -> end;
 }
 
-// TODO: Fix fsm, mode is wrong every time the way it's programmed now.
 #endif /* MONTGOMERY_LADDER_FDL */
