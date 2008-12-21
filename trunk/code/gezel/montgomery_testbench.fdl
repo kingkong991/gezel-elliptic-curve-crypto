@@ -1,0 +1,58 @@
+#include "constants.inc"
+
+#include "montgomery_ladder.fdl"
+
+dp testbench {
+	sig in_X: ns(const_m);
+	sig in_Y: ns(const_m);
+	sig in_k: ns(const_m);
+
+	sig start: ns(1);
+
+	sig out_X: ns(const_m);
+	sig out_Y: ns(const_m);
+
+	sig ready: ns(1);
+	reg reg_ready: ns(1);
+
+	use montgomery_ladder(in_X, in_Y, in_k, start, out_X, out_Y, ready);
+
+	sfg run {
+		in_X = 8;
+		in_Y = 2;
+
+		in_k = 5;
+	}
+
+	sfg set_start {
+		start = 1;
+
+		$display("[Testbench] Starting");
+	}
+
+	sfg unset_start {
+		start = 0;
+	}
+
+	sfg do_always {
+		reg_ready = start == 1 ? 0 : ready;
+	}
+
+	sfg end {
+		$display("[Testbench] Done (In previous cycle) - Cur cycle: ", $cycle);
+	}
+}
+
+fsm fsm_testbench (testbench) {
+	initial init;
+	state run;
+
+	@init (run, set_start, do_always) -> run;
+	@run	if (reg_ready == 1) then (unset_start, do_always, end) -> init;
+			else (run, unset_start, do_always) -> run;
+}
+
+system S {
+	testbench;
+}
+

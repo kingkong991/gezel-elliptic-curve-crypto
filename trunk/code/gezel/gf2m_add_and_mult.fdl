@@ -21,8 +21,6 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	reg reg_X: ns(const_m);
 	reg reg_Y: ns(const_m);
 
-	reg reg_k: ns(const_m);
-
 	reg X1: ns(const_m);
 	reg Z1: ns(const_m);
 	reg X2: ns(const_m);
@@ -37,11 +35,10 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	reg reg_stop: ns(1);
 	reg reg_mode: ns(2);
 
+	sig sig_ready: ns(1);
 	reg reg_ready:	ns(1);
 	
 	reg reg_malu_ready: ns(1);
-
-	sig sig_ready: ns(1);
 
 	// Signals for the MALU.
 	sig malu_A: ns(const_m);
@@ -66,14 +63,16 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 		out_X = X2;
 		out_Y = Z2;
 
-		//reg_ready = reset == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);	// TODO: Make logical expression.
-		//ready = reg_ready;
-		ready = reset == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);	// TODO: Make logical expression.
+		reg_ready = reset == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);	// TODO: Make logical expression.
+		ready = reg_ready;
+		//ready = reset == 1 ? 0 : (sig_ready == 1 ? 1 : reg_ready);	// TODO: Make logical expression.
 
 		// If we start a calculation, set to 0, otherwise we get:
 		// <calc done> -> reg = 1 -> <start calc> | <reg still 1> -> <reg set to 0> | <reg read as 1>
 		//	And thus, the fsm will think the calculation  is ready, even though it's not.
 		reg_malu_ready = malu_start == 1 ? 0 : malu_ready;
+
+		//$display("[GF2m] Reset: ", reg_reset, " - Stop: ", reg_stop, " - Mode: ", reg_mode);
 	}
 
 	sfg idle {
@@ -82,6 +81,8 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 		malu_mode = 0;
 
 		malu_start = 0;
+
+		sig_ready = 0;
 	}
 
 	sfg init {
@@ -204,8 +205,14 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 		malu_start = 1;
 	}
 
+	sfg malu_unset_start {
+		malu_start = 0;
+	}
+
 	sfg store_X_in_T1 {
 		T1 = reg_X;
+
+		$display("[GF2m] [Cycle ", $cycle, "] Storing X in T1");
 	}
 
 	sfg store_C_in_T1 {
@@ -213,7 +220,17 @@ dp gf2m_add_and_mult(in in_X:	ns(const_m);
 	}
 
 	sfg end {
+		malu_A = 0;
+		malu_B = 0;
+		malu_mode = 0;
+
+		malu_start = 0;
+
 		sig_ready = 1;
+	}
+
+	sfg unset_ready {
+		sig_ready = 0;
 	}
 
 	// Save sfg's
@@ -260,80 +277,80 @@ fsm fsm_gf2m_add_and_mult (gf2m_add_and_mult) {
 			else (idle, do_always) -> idle;
 
 	@start	if (reg_stop == 1) then (idle, do_always) -> idle;
-				else	if (reg_mode == 0) then (store_X_in_T1, mult_X2Z1, do_always, malu_start) -> mode0_step2;
-						else (store_X_in_T1, mult_X1Z2, do_always, malu_start) -> mode1_step2;
+				else	if (reg_mode == 0) then (store_X_in_T1, mult_X2Z1, unset_ready, do_always, malu_start) -> mode0_step2;
+						else (store_X_in_T1, mult_X1Z2, unset_ready, do_always, malu_start) -> mode1_step2;
 
 	@mode0_step2	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step2;
-						else (save_X2, mult_X1Z2, do_always, malu_start) -> mode0_step3;
+						else (save_X2, mult_X1Z2, unset_ready, do_always, malu_start) -> mode0_step3;
 	@mode0_step3	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step3;
-						else (save_Z2, do_always) -> mode0_step4;	// We need new Z2 in next step, so we can't start calculation yet.
-	@mode0_step4	(mult_X2Z2, do_always, malu_start) -> mode0_step5;
+						else (save_Z2, idle, do_always) -> mode0_step4;	// We need new Z2 in next step, so we can't start calculation yet.
+	@mode0_step4	(mult_X2Z2, unset_ready, do_always, malu_start) -> mode0_step5;
 	@mode0_step5	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step5;
-						else (save_T2, add_X2Z2, do_always, malu_start) -> mode0_step6;
+						else (save_T2, add_X2Z2, unset_ready, do_always, malu_start) -> mode0_step6;
 	@mode0_step6	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step6;
-						else (save_Z2, do_always) -> mode0_step7;
-	@mode0_step7	(mult_Z2Z2, do_always, malu_start) -> mode0_step8;
+						else (save_Z2, idle, do_always) -> mode0_step7;
+	@mode0_step7	(mult_Z2Z2, unset_ready, do_always, malu_start) -> mode0_step8;
 	@mode0_step8	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step8;
-						else (save_Z2, do_always) -> mode0_step9;
-	@mode0_step9	(mult_Z2T1, do_always, malu_start) -> mode0_step10;
+						else (save_Z2, idle, do_always) -> mode0_step9;
+	@mode0_step9	(mult_Z2T1, unset_ready, do_always, malu_start) -> mode0_step10;
 	@mode0_step10	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step10;
-						else (save_X1, do_always) -> mode0_step11;
-	@mode0_step11	(add_X2T2, do_always, malu_start) -> mode0_step12;
+						else (save_X1, idle, do_always) -> mode0_step11;
+	@mode0_step11	(add_X2T2, unset_ready, do_always, malu_start) -> mode0_step12;
 	@mode0_step12	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step12;
-						else (save_X2, store_C_in_T1, mult_X1X1, do_always, malu_start) -> mode0_step13;
+						else (save_X2, store_C_in_T1, mult_X1X1, unset_ready, do_always, malu_start) -> mode0_step13;
 	@mode0_step13	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step13;
-						else (save_X1, mult_Z1Z1, do_always, malu_start) -> mode0_step14;
+						else (save_X1, mult_Z1Z1, unset_ready, do_always, malu_start) -> mode0_step14;
 	@mode0_step14	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step14;
-						else (save_Z1, do_always) -> mode0_step15;
-	@mode0_step15	(mult_Z1T1, do_always, malu_start) -> mode0_step16;
+						else (save_Z1, idle, do_always) -> mode0_step15;
+	@mode0_step15	(mult_Z1T1, unset_ready, do_always, malu_start) -> mode0_step16;
 	@mode0_step16	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step16;
-						else (save_T1, mult_X1Z1, do_always, malu_start) -> mode0_step17;
+						else (save_T1, mult_X1Z1, unset_ready, do_always, malu_start) -> mode0_step17;
 	@mode0_step17	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step17;
-						else (save_Z1, mult_T1T1, do_always, malu_start) -> mode0_step18;	
+						else (save_Z1, mult_T1T1, unset_ready, do_always, malu_start) -> mode0_step18;	
 	@mode0_step18	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step18;
-						else (save_Z1, mult_T1T1, do_always, malu_start) -> mode0_step19;
+						else (save_Z1, mult_T1T1, unset_ready, do_always, malu_start) -> mode0_step19;
 	@mode0_step19	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step19;
-						else (save_T1, mult_X1X1, do_always, malu_start) -> mode0_step20;
+						else (save_T1, mult_X1X1, unset_ready, do_always, malu_start) -> mode0_step20;
 	@mode0_step20	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step20;
-						else (save_X1, do_always) -> mode0_step21;
-	@mode0_step21	(add_X1T1, do_always, malu_start) -> mode0_step22;
+						else (save_X1, idle, do_always) -> mode0_step21;
+	@mode0_step21	(add_X1T1, unset_ready, do_always, malu_start) -> mode0_step22;
 	@mode0_step22	if (reg_malu_ready == 0) then (idle, do_always) -> mode0_step22;
 						else (save_X1, do_always, end) -> start;
 
 	@mode1_step2	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step2;
-						else (save_X1, mult_X2Z1, do_always, malu_start) -> mode1_step3;
+						else (save_X1, mult_X2Z1, unset_ready, do_always, malu_start) -> mode1_step3;
 	@mode1_step3	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step3;
-						else (save_Z1, do_always) -> mode1_step4;	// We need new Z1 in next step, so we can't start calculation yet.
-	@mode1_step4	(mult_X1Z1, do_always, malu_start) -> mode1_step5;
+						else (save_Z1, idle, do_always) -> mode1_step4;	// We need new Z1 in next step, so we can't start calculation yet.
+	@mode1_step4	(mult_X1Z1, unset_ready, do_always, malu_start) -> mode1_step5;
 	@mode1_step5	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step5;
-						else (save_T2, add_X1Z1, do_always, malu_start) -> mode1_step6;
+						else (save_T2, add_X1Z1, unset_ready, do_always, malu_start) -> mode1_step6;
 	@mode1_step6	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step6;
-						else (save_Z1, do_always) -> mode1_step7;
-	@mode1_step7	(mult_Z1Z1, do_always, malu_start) -> mode1_step8;
+						else (save_Z1, idle, do_always) -> mode1_step7;
+	@mode1_step7	(mult_Z1Z1, unset_ready, do_always, malu_start) -> mode1_step8;
 	@mode1_step8	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step8;
-						else (save_Z1, do_always) -> mode1_step9;
-	@mode1_step9	(mult_Z1T1, do_always, malu_start) -> mode1_step10;
+						else (save_Z1, idle, do_always) -> mode1_step9;
+	@mode1_step9	(mult_Z1T1, unset_ready, do_always, malu_start) -> mode1_step10;
 	@mode1_step10	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step10;
-						else (save_X2, do_always) -> mode1_step11;
-	@mode1_step11	(add_X1T2, do_always, malu_start) -> mode1_step12;
+						else (save_X2, idle, do_always) -> mode1_step11;
+	@mode1_step11	(add_X1T2, unset_ready, do_always, malu_start) -> mode1_step12;
 	@mode1_step12	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step12;
-						else (save_X1, store_C_in_T1, mult_X2X2, do_always, malu_start) -> mode1_step13;
+						else (save_X1, store_C_in_T1, mult_X2X2, unset_ready, do_always, malu_start) -> mode1_step13;
 	@mode1_step13	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step13;
-						else (save_X2, mult_Z2Z2, do_always, malu_start) -> mode1_step14;
+						else (save_X2, mult_Z2Z2, unset_ready, do_always, malu_start) -> mode1_step14;
 	@mode1_step14	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step14;
-						else (save_Z2, do_always) -> mode1_step15;
-	@mode1_step15	(mult_Z2T1, do_always, malu_start) -> mode1_step16;
+						else (save_Z2, idle, do_always) -> mode1_step15;
+	@mode1_step15	(mult_Z2T1, unset_ready, do_always, malu_start) -> mode1_step16;
 	@mode1_step16	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step16;
-						else (save_T1, mult_X2Z2, do_always, malu_start) -> mode1_step17;
+						else (save_T1, mult_X2Z2, unset_ready, do_always, malu_start) -> mode1_step17;
 	@mode1_step17	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step17;
-						else (save_Z2, mult_T1T1, do_always, malu_start) -> mode1_step18;	
+						else (save_Z2, mult_T1T1, unset_ready, do_always, malu_start) -> mode1_step18;	
 	@mode1_step18	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step18;
-						else (save_Z2, mult_T1T1, do_always, malu_start) -> mode1_step19;
+						else (save_Z2, mult_T1T1, unset_ready, do_always, malu_start) -> mode1_step19;
 	@mode1_step19	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step19;
-						else (save_T1, mult_X2X2, do_always, malu_start) -> mode1_step20;
+						else (save_T1, mult_X2X2, unset_ready, do_always, malu_start) -> mode1_step20;
 	@mode1_step20	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step20;
-						else (save_X2, do_always) -> mode1_step21;
-	@mode1_step21	(add_X2T1, do_always, malu_start) -> mode1_step22;
+						else (save_X2, idle, do_always) -> mode1_step21;
+	@mode1_step21	(add_X2T1, unset_ready, do_always, malu_start) -> mode1_step22;
 	@mode1_step22	if (reg_malu_ready == 0) then (idle, do_always) -> mode1_step22;
 						else (save_X2, do_always, end) -> start;
 }

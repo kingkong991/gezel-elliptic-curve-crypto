@@ -102,7 +102,7 @@ dp malu_wrapper (in A: ns(const_m);
 		
 		sig_end = 1;
 
-		$display("[[End]] Output = T - T = ", $bin, reg_T, " = ", $dec, reg_T);
+		//$display("[MALU] [End Mult] Output = T - T = ", $bin, reg_T, " = ", $dec, reg_T);
 	}
 
 	sfg end_add {
@@ -112,7 +112,7 @@ dp malu_wrapper (in A: ns(const_m);
 
 		sig_end = 1;
 
-		$display("[[End]] Output = T - T = ", $bin, reg_A ^ reg_B, " = ", $dec, reg_A ^ reg_B);
+		//$display("[MALU] [End Add] Output = T - T = ", $bin, reg_A ^ reg_B, " = ", $dec, reg_A ^ reg_B);
 	}
 }
 

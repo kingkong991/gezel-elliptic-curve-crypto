@@ -126,22 +126,6 @@
     <bib_extra key="school">Katholieke Universiteit Leuven</bib_extra>
   </doc>
   <doc>
-    <filename>file:///home/anthony/thesis/references/W%20Townsend%20et%20Al%20-%20A%20Comparison%20Of%20Dadda%20And%20Wallace%20Multiplier%20Delays.pdf</filename>
-    <relative_filename>W%20Townsend%20et%20Al%20-%20A%20Comparison%20Of%20Dadda%20And%20Wallace%20Multiplier%20Delays.pdf</relative_filename>
-    <key>townsend</key>
-    <notes></notes>
-    <bib_type>inproceedings</bib_type>
-    <bib_doi>10.1117/12.507012</bib_doi>
-    <bib_title>A comparison of Dadda and Wallace multiplier delays</bib_title>
-    <bib_authors>Townsend, Whitney J.</bib_authors>
-    <bib_journal></bib_journal>
-    <bib_volume>5205</bib_volume>
-    <bib_number></bib_number>
-    <bib_pages>552</bib_pages>
-    <bib_year>2003</bib_year>
-    <bib_extra key="booktitle">Proceedings of SPIE</bib_extra>
-  </doc>
-  <doc>
     <filename></filename>
     <relative_filename></relative_filename>
     <key>diffie-hellman</key>
@@ -156,6 +140,21 @@
     <bib_pages>644--654</bib_pages>
     <bib_year>1976</bib_year>
     <bib_extra key="url">citeseer.ist.psu.edu/diffie76new.html</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</filename>
+    <relative_filename>Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</relative_filename>
+    <key>lee</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>A Compact Architecture for Montgomery Elliptic Curve Scalar Multiplication Processor</bib_title>
+    <bib_authors>Lee, Yong Kee and Verbauwhede, Ingrid</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2006</bib_year>
   </doc>
 </doclist>
 </library>
