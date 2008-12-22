@@ -1,15 +1,10 @@
 \subsection{Clock gating voor het A register}
 
-Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers. Daar moet immers slechts uit X of X$_{\text{in}}$ gekozen worden, wat, zoals eerder aangetoond, toelaat een MUX uit te sparen door toepassing van clock gating. In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten enkele toevoegingen gebeuren.
+%\kmap{4}{Zat$_{\text{En}}:$}{{tequila}{H$_2$O}{bier}{sangria}}{1101{\ddag}{$-$}2aC{$C$}{$\ll$}{$\sqrt{2}$}0011}{\draw[red] (node cs:name=G0, anchor=south east) rectangle ($(node cs:name=G5, anchor=north west) + (0, 4pt)$);\draw[red] ($(node cs:name=G1, anchor=south east) + (3pt, -2pt)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);}
+
+Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers. Daar moet immers slechts uit X of X$_{\text{in}}$ gekozen worden, wat, zoals eerder aangetoond, toelaat een multiplexer uit te sparen door toepassing van clock gating. In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten enkele toevoegingen gebeuren.
 
 Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating enable signaal zijn. Indien er vermenigvuldigd wordt (mode $= 0$), moet elke clock cycle A$_{\ll 1}$ in A opgeslagen worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint (start $= 1$) of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
-
-%\begin{tabular}{r|c|c|}
-%	& \multicolumn{2}{|l}{$mode$} \\
-%	$start$ & 0 & 1 \\ \hline
-%	0 & 1 & 0 \\ \hline
-%	1 & 1 & 1 \\ \hline
-%\end{tabular}
 
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
