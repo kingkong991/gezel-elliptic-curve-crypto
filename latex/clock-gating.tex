@@ -1,8 +1,8 @@
 \subsection{Clock gating voor het A register}
 
-Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers (zoals bv. register B, waar slechts uit B en B$_{\text{in}}$ gekozen moet worden). In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten aanpassingen gebeuren.
+Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers. Daar moet immers slechts uit X of X$_{\text{in}}$ gekozen worden, wat, zoals eerder aangetoond, toelaat een MUX uit te sparen door toepassing van clock gating. In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten enkele toevoegingen gebeuren.
 
-Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating signaal zijn. Indien er vermenigvuldigd wordt ($mode = 0$), moet elke clock cycle een nieuwe waarde in A opgeslaan worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
+Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating enable signaal zijn. Indien er vermenigvuldigd wordt (mode $= 0$), moet elke clock cycle A$_{\ll 1}$ in A opgeslagen worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint (start $= 1$) of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
 
 %\begin{tabular}{r|c|c|}
 %	& \multicolumn{2}{|l}{$mode$} \\
@@ -14,22 +14,30 @@ Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating s
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
 	\begin{center}
-		\kmap{2}{1101}{\draw[red] (node cs:name=G0, anchor=south east) rectangle ($(node cs:name=G5, anchor=north west) + (0, 3pt)$);\draw[red] ($(node cs:name=G1, anchor=south east) + (3pt, -2pt)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);}{start}{mode}{}
+		\kmap{2}{Clk$_{\text{En}}:$}{{start}{mode}}{1101}{%
+			\draw[red] (node cs:name=G0, anchor=south east) rectangle ($(node cs:name=G5, anchor=north west) + (0, 4pt)$);
+			\draw[red] ($(node cs:name=G1, anchor=south east) + (3pt, -2pt)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);%
+		}
 	\end{center}
 \end{minipage}
 \vspace{\textfloatsep}
 
-M.a.w. het klok signaal aan de ingang van de flip flops wordt:
+M.a.w.\ het nodige klok enable signaal voor de flip flops is:
 
-\[ \text{Clk}_{\text{in}} = start + \overline{mode} \]
+\[ \text{Clk}_{\text{En}} = \text{start} + \overline{\text{mode}} \]
 
-Ten tweede wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Bij het optellen ($mode = 1$) maakt het niet uit welke ingang gekozen wordt tijdens het uitvoeren van de berekening, aangezien de klok ingang van de flip flop dan uitgeschakeld is. Er kan dus een ``don't care'' geplaatst worden in de Karnaugh map op positie 2. We sluiten A$_{\ll 1}$ aan op de 0-ingang en A$_{\text{in}}$ op de 1-ingang. Op die manier kan $start$ gebruikt worden als schakelsignaal, aangezien positie 0 en 2 in de Karnaugh map niet uit maken.
+Ten tweede wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Bij het starten van een berekening, moet uiteraard A$_{\text{in}}$ geselecteerd worden. Bij de uitvoering van een vermenigvuldiging (mode $= 0$) dient A$_{\ll 1}$ geselecteerd te worden. Wanneer een berekening aan de gang is, maakt het voor een optelling (mode $= 1$) niet uit welke ingang gekozen wordt, aangezien de klok ingang van de flip flop dan uitgeschakeld is. Dit geeft aanleiding tot de volgende Karnaugh map:
 
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
 	\begin{center}
-	%\karnaughmap{2}{}{{$mode\qquad$}{$start$}}{01-1}{}
+	\kmap{2}{A$_{\text{sel}}:$}{{start}{mode}}{{A$_{\ll 1}$}{A$_{\text{in}}$}{$-$}{A$_{\text{in}}$}}{%
+			\draw[red] ($(node cs:name=G1, anchor=south east) + (2pt, 0)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);
+}
 	\end{center}
 	\end{minipage}
 \vspace{\textfloatsep}
 
+Waarbij het $-$ symbool staat voor een zogenaamde ``don't care''. Indien men A$_{\ll 1}$ aansluit op de 0-ingang van de MUX en A$_{\text{in}}$ op de 1-ingang, kan start dus gebruikt worden als schakelsignaal:
+
+\[ \text{A}_{\text{sel}} = \text{start} \]
