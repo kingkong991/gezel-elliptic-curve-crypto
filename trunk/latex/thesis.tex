@@ -3,7 +3,7 @@
 \usepackage{graphicx}
 \usepackage{color}
 
-%\usepackage{url}                % Opmaak van URLs
+\usepackage{url}                % Opmaak van URLs
 %\usepackage[official]{eurosym}  % Euro symbool
 %\usepackage{colortbl}           % Kleur tabellen
 
@@ -11,6 +11,103 @@
 \usepackage{pdfpages}            % Maak dat voorblad kan toegevoegd worden
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
+
+\usepackage{tikz}	% Graphics framework
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+% Substring macro
+\def\substring#1#2#3{%
+  \expandafter\subm\romannumeral#3000x.{}#1\relax\relax{#2}}
+\def\subm#1#2.#3#4\relax#5\relax{%
+  \csname sub#1\endcsname#2.#4\relax#5#3\relax}
+\def\subx#1.#2\relax#3\relax#4{%
+  \expandafter\submb\romannumeral#4000x.{}{}#3\relax}
+\def\submb#1#2.#3{\csname sub#1b\endcsname#2.}
+\def\subxb#1.#2\relax{#2}
+
+% Karnaugh map macro
+% For now, first command (size) is ignored, only 2x2 maps are drawn.
+\newcounter{karnaughgrid}
+\newcounter{karnaughcount}
+
+\newcounter{karnaughsize}
+\newcounter{karnaughsizex}
+\newcounter{karnaughsizey}
+
+\newcommand{\kmap}[6]{%
+\setcounter{karnaughsize}{#1}
+
+\begin{tikzpicture}
+	\setcounter{karnaughgrid}{0};
+	\setcounter{karnaughcount}{0};
+
+	\ifcase\value{karnaughsize}
+		% Size 0
+		\exit
+	\or
+		% Size 1
+		\setcounter{karnaughsizex}{2}
+		\setcounter{karnaughsizey}{1}
+	\or
+		% Size 2
+		\setcounter{karnaughsizex}{2};
+		\setcounter{karnaughsizey}{2};
+	\or
+		% Size 3
+		\setcounter{karnaughsizex}{4}
+		\setcounter{karnaughsizey}{2}
+	\else
+		\exit	% Wrong size
+	\fi
+
+	% Background grid
+	\draw	(0,0) grid (\arabic{karnaughsizex},\arabic{karnaughsizey});
+
+	% Set named node at each grid point
+	\foreach \y in {\arabic{karnaughsizey},...,0} {
+		\foreach \x in {0,...,\arabic{karnaughsizex}} {
+			\node (G\arabic{karnaughgrid}) at (\x, \y) {};
+			\addtocounter{karnaughgrid}{1};
+		}
+	}
+
+	% Counting starts at 0, so lower size counters
+	\addtocounter{karnaughsizex}{-1};
+	\addtocounter{karnaughsizey}{-1};
+
+	\foreach \y in {\arabic{karnaughsizey},...,0} {
+		\foreach \x in {0,...,\arabic{karnaughsizex}} {
+			\node (I\arabic{karnaughcount}) at (\x, \y) [above right=-1.5pt and -1.5pt] {\tiny \arabic{karnaughcount}};
+			\addtocounter{karnaughcount}{1};
+
+			\node at (\x + 0.5, \y + 0.5) {\large $ \substring{#2}{\arabic{karnaughcount}}{\arabic{karnaughcount}} $};
+		}
+	}
+
+	% Draw variable names
+	\ifcase\value{karnaughsize}
+		% No zero size maps
+	\or
+		% Size 1 maps
+		\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 3pt)$) -- node[above] {$#4$} ($(node cs:name=G2, anchor=north)  + (0, 3pt)$);
+	\or
+		% Size 2 maps
+		\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 3pt)$) -- node[above] {$#4$} ($(node cs:name=G2, anchor=north)  + (0, 3pt)$);
+		\useasboundingbox; % Set bounding box to current size for nicer centering
+
+		\draw[arrows=|-|] ($(node cs:name=G3, anchor=west) + (-3pt, 0)$) -- node[left] {$#5$} ($(node cs:name=G6, anchor=west)  + (-3pt, 0)$);
+	\else
+	\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 3pt)$) -- node[above] {$#4$} ($(node cs:name=G3, anchor=north)  + (0, 3pt)$);
+		\draw[arrows=|-|] ($(node cs:name=G2, anchor=north) + (0, 23pt)$) -- node[above] {$#5$} ($(node cs:name=G4, anchor=north)  + (0, 23pt)$);
+		\useasboundingbox; % Set bounding box to current size for nicer centering
+
+		\draw[arrows=|-|] ($(node cs:name=G5, anchor=west) + (-3pt, 0)$) -- node[left] {$#6$} ($(node cs:name=G10, anchor=west)  + (-3pt, 0)$);
+	\fi
+	
+	% Draw extra stuff (like minimizations)
+	#3
+\end{tikzpicture}}
 
 % Plaats van afbeeldingen
 \graphicspath{{images/}}

@@ -1,8 +1,8 @@
 \subsection{Clock gating voor het A register}
 
-Aangezien voor het A register gekozen moet worden uit drie  inputs, zijnde A$_{\text{in}}$, A of A$_{\ll 1}$, is voor dit register meer hardware nodig dan voor het B register (waar slechts uit B$_{\text{in}}$ en B gekozen moet worden). In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moet echter iets veranderd worden.
+Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers (zoals bv. register B, waar slechts uit B en B$_{\text{in}}$ gekozen moet worden). In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten aanpassingen gebeuren.
 
-Allereerst wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Zoals te zien in volgende Karnaugh map, is het antwoord heel eenvoudig:
+Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating signaal zijn. Indien er vermenigvuldigd wordt ($mode = 0$), moet elke clock cycle een nieuwe waarde in A opgeslaan worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
 
 %\begin{tabular}{r|c|c|}
 %	& \multicolumn{2}{|l}{$mode$} \\
@@ -11,14 +11,25 @@ Allereerst wordt gezocht welk signaal gebruikt moet worden om de MUX te schakele
 %	1 & 1 & 1 \\ \hline
 %\end{tabular}
 
-\karnaughmap{2}{}{{$mode$}{$start$}}{11-0}
-
-Aangezien het bij optellen ($mode = 1$) niet uit maakt welke ingang gekozen wordt tijdens het uitvoeren van de berekening, kan er een "don't care" geplaatst worden op positie 3. Indien we dan A$_{\ll 1}$ aansluiten op de 0-ingang, kan simpelweg $start$ gebruikt worden als schakelsignaal.
-
-Ten tweede zijn er aanpassingen nodig aan het clock gating signaal, indien er vermenigvuldigd wordt, moet er immers elke clock cycle een nieuwe waarde in A opgeslaan worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint of indien een vermenigvuldiging aan de gang is. Dit lijdt tot onderstaande Karnaugh map:
-
-\karnaughmap{2}{}{{$mode$}{$start$}}{1011}
+\vspace{\textfloatsep}
+\begin{minipage}{\linewidth}
+	\begin{center}
+		\kmap{2}{1101}{\draw[red] (node cs:name=G0, anchor=south east) rectangle ($(node cs:name=G5, anchor=north west) + (0, 3pt)$);\draw[red] ($(node cs:name=G1, anchor=south east) + (3pt, -2pt)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);}{start}{mode}{}
+	\end{center}
+\end{minipage}
+\vspace{\textfloatsep}
 
 M.a.w. het klok signaal aan de ingang van de flip flops wordt:
 
 \[ \text{Clk}_{\text{in}} = start + \overline{mode} \]
+
+Ten tweede wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Bij het optellen ($mode = 1$) maakt het niet uit welke ingang gekozen wordt tijdens het uitvoeren van de berekening, aangezien de klok ingang van de flip flop dan uitgeschakeld is. Er kan dus een ``don't care'' geplaatst worden in de Karnaugh map op positie 2. We sluiten A$_{\ll 1}$ aan op de 0-ingang en A$_{\text{in}}$ op de 1-ingang. Op die manier kan $start$ gebruikt worden als schakelsignaal, aangezien positie 0 en 2 in de Karnaugh map niet uit maken.
+
+\vspace{\textfloatsep}
+\begin{minipage}{\linewidth}
+	\begin{center}
+	%\karnaughmap{2}{}{{$mode\qquad$}{$start$}}{01-1}{}
+	\end{center}
+	\end{minipage}
+\vspace{\textfloatsep}
+
