@@ -1,0 +1,120 @@
+\usepackage{tikz}	% Graphics framework
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+% Karnaugh map macro
+% Takes 5 arguments:
+%	- Number of variables
+%	- Function description (not used right now)
+%	- Variable names, if the name is more than 1 char, enclose in {}
+%	- Output values, if not 1 char, again enclose in {}
+%	- Tikz functions (eg. for drawing rectangles around the minimizations)
+%
+% Furthermore, for ease of use, each point on the grid (where 2 lines meet) has a 
+% named node attached to it, starting with G0 at the top left, G1 to the right of it, etc.
+%
+% Should it be required, the output values are named as well, starting with I0, I1, ...
+
+% Argument string macro shamelessly stolen from Andreas W. Wielands Karnaugh map code
+\def\kmapargumentstring#1{\gdef\kmapdummystring{#1{}\noexpand\end}}
+\def\kmapgetchar{\expandafter\kmapgetonechar\kmapdummystring}
+\def\kmapgetonechar#1#2\end{{#1}\gdef\kmapdummystring{#2\noexpand\end}}%
+
+% Some counters
+\newcounter{karnaughgrid}
+\newcounter{karnaughindex}
+
+\newcounter{karnaughsize}
+\newcounter{karnaughsizex}
+\newcounter{karnaughsizey}
+
+\newcommand{\kmap}[5]{%
+\setcounter{karnaughsize}{#1}
+
+\begin{tikzpicture}
+	\setcounter{karnaughgrid}{0};
+	\setcounter{karnaughindex}{0};
+
+	\ifcase\value{karnaughsize}
+		% Size 0
+		\exit
+	\or
+		% Size 1
+		\setcounter{karnaughsizex}{2}
+		\setcounter{karnaughsizey}{1}
+	\or
+		% Size 2
+		\setcounter{karnaughsizex}{2};
+		\setcounter{karnaughsizey}{2};
+	\or
+		% Size 3
+		\setcounter{karnaughsizex}{4}
+		\setcounter{karnaughsizey}{2}
+	\or
+		% Size 4
+		\setcounter{karnaughsizex}{4}
+		\setcounter{karnaughsizey}{4}
+	\else
+		\exit	% Wrong size
+	\fi
+
+	% Background grid
+	\draw	(0,0) grid (\arabic{karnaughsizex},\arabic{karnaughsizey});
+
+	% Set named node at each grid point for ease of drawing boxes & text later
+	\foreach \y in {\arabic{karnaughsizey},...,0} {
+		\foreach \x in {0,...,\arabic{karnaughsizex}} {
+			\node (G\arabic{karnaughgrid}) at (\x, \y) {};
+			\addtocounter{karnaughgrid}{1};
+		}
+	}
+
+	% Draw function name
+	\node at ($(G0) + {\value{karnaughsizey}/2}*(-0.4, 0) + {\value{karnaughsizex}/2}*(0, 0.4)$) [left] {#2};
+
+	% Set bounding box to current size for nicer centering
+	%\useasboundingbox;
+
+	% Counting starts at 0, so lower size counters
+	\addtocounter{karnaughsizex}{-1};
+	\addtocounter{karnaughsizey}{-1};
+
+	\kmapargumentstring{#4}
+
+	\foreach \y in {\arabic{karnaughsizey},...,0} {
+		\foreach \x in {0,...,\arabic{karnaughsizex}} {
+			\node (I\arabic{karnaughindex}) at (\x, \y) [above right=-0.05 and -0.05] {\tiny \arabic{karnaughindex}};
+			\addtocounter{karnaughindex}{1};
+
+			\node at (\x + 0.5, \y + 0.5) {\large \kmapgetchar};
+		}
+	}
+
+	% Draw variable names
+	\kmapargumentstring{#3}
+
+	\ifcase\value{karnaughsize}
+		% No zero size maps
+	\or
+		% Size 1 maps
+		\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 0.1)$) -- node[above] (V1) {\kmapgetchar} ($(node cs:name=G2, anchor=north)  + (0, 0.1)$);
+	\or
+		% Size 2 maps
+		\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 0.1)$) -- node[above] (V1) {\kmapgetchar} ($(node cs:name=G2, anchor=north)  + (0, 0.1)$);
+		\draw[arrows=|-|] ($(node cs:name=G3, anchor=west) + (-0.1, 0)$) -- node[left] (V2) {\kmapgetchar} ($(node cs:name=G6, anchor=west)  + (-0.1, 0)$);
+	\or
+		% Size 3 maps
+		\draw[arrows=|-|] ($(node cs:name=G2, anchor=north) + (0, 0.8)$) -- node[above] (V1) {\kmapgetchar} ($(node cs:name=G4, anchor=north)  + (0, 0.8)$);
+		\draw[arrows=|-|] ($(node cs:name=G5, anchor=west) + (-0.1, 0)$) -- node[left] (V2) {\kmapgetchar} ($(node cs:name=G10, anchor=west)  + (-0.1, 0)$);
+	\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 0.1)$) -- node[above] (V3) {\kmapgetchar} ($(node cs:name=G3, anchor=north)  + (0, 0.1)$);
+	\else
+		% Size 4 maps
+		\draw[arrows=|-|] ($(node cs:name=G10, anchor=west) + (-1, 0)$) -- node[left] (V1) {\kmapgetchar} ($(node cs:name=G20, anchor=west)  + (-1, 0)$);
+		\draw[arrows=|-|] ($(node cs:name=G2, anchor=north) + (0, 0.8)$) -- node[above] (V2) {\kmapgetchar} ($(node cs:name=G4, anchor=north)  + (0, 0.8)$);
+		\draw[arrows=|-|] ($(node cs:name=G5, anchor=west) + (-0.1, 0)$) -- node[left] (V3) {\kmapgetchar} ($(node cs:name=G15, anchor=west)  + (-0.1, 0)$);
+		\draw[arrows=|-|] ($(node cs:name=G1, anchor=north) + (0, 0.1)$) -- node[above] (V4) {\kmapgetchar} ($(node cs:name=G3, anchor=north)  + (0, 0.1)$);
+	\fi
+
+	% Draw extra stuff (like minimizations)
+	#5
+\end{tikzpicture}}
