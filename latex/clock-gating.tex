@@ -2,9 +2,9 @@
 
 %\kmap{4}{Zat$_{\text{En}}:$}{{tequila}{H$_2$O}{bier}{sangria}}{1101{\ddag}{$-$}2aC{$C$}{$\ll$}{$\sqrt{2}$}0011}{\draw[red] (node cs:name=G0, anchor=south east) rectangle ($(node cs:name=G5, anchor=north west) + (0, 4pt)$);\draw[red] ($(node cs:name=G1, anchor=south east) + (3pt, -2pt)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);}
 
-Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers. Daar moet immers slechts uit X of X$_{\text{in}}$ gekozen worden, wat, zoals eerder aangetoond, toelaat een multiplexer uit te sparen door toepassing van clock gating. In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten enkele toevoegingen gebeuren.
+Daar voor het A register gekozen moet worden uit drie  inputs, zijnde A, A$_{\text{in}}$ of A$_{\ll 1}$, is voor dit register een andere implementatie vereist dan voor de overige registers. Daar moet immers slechts uit $X$ of $X_{\text{in}}$ gekozen worden, wat, zoals eerder aangetoond, toelaat een multiplexer uit te sparen door toepassing van clock gating. In tegenstelling tot de andere registers kan men hier niet anders dan een MUX gebruiken. Ook aan het circuit voor de clock gating moeten enkele toevoegingen gebeuren.
 
-Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating enable signaal zijn. Indien er vermenigvuldigd wordt (mode $= 0$), moet elke clock cycle A$_{\ll 1}$ in A opgeslagen worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint (start $= 1$) of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
+Ten eerste wordt gekeken wat juist de nodige aanpassingen aan het clock gating enable signaal zijn. Indien er vermenigvuldigd wordt ($mode = 0$), moet elke clock cycle A$_{\ll 1}$ in A opgeslagen worden. Het kloksignaal dient dus doorgelaten te worden indien een berekening begint ($start = 1$) of indien een vermenigvuldiging aan de gang is. Dit leidt tot onderstaande Karnaugh map:
 
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
@@ -21,18 +21,18 @@ M.a.w.\ het nodige klok enable signaal voor de flip flops is:
 
 \[ \text{Clk}_{\text{En}} = \text{start} + \overline{\text{mode}} \]
 
-Ten tweede wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Bij het starten van een berekening, moet uiteraard A$_{\text{in}}$ geselecteerd worden. Bij de uitvoering van een vermenigvuldiging (mode $= 0$) dient A$_{\ll 1}$ geselecteerd te worden. Wanneer een berekening aan de gang is, maakt het voor een optelling (mode $= 1$) niet uit welke ingang gekozen wordt, aangezien de klok ingang van de flip flop dan uitgeschakeld is. Dit geeft aanleiding tot de volgende Karnaugh map:
+Ten tweede wordt gezocht welk signaal gebruikt moet worden om de MUX te schakelen. Bij het starten van een berekening moet uiteraard A$_{\text{in}}$ geselecteerd worden. Bij de uitvoering van een vermenigvuldiging ($mode = 0$) dient A$_{\ll 1}$ geselecteerd te worden. Wanneer een berekening aan de gang is, maakt het voor een optelling ($mode = 1$) niet uit welke ingang gekozen wordt, aangezien de klok ingang van de flip flop dan uitgeschakeld is. Dit geeft aanleiding tot de volgende Karnaugh map:
 
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
 	\begin{center}
-	\kmap{2}{A$_{\text{sel}}:$}{{start}{mode}}{{A$_{\ll 1}$}{A$_{\text{in}}$}{$-$}{A$_{\text{in}}$}}{%
+	\kmap{2}{A$_{\text{sel}}:$}{{start}{mode}}{{A$_{\ll 1}$}{A$_{\text{in}}$}{$\times$}{A$_{\text{in}}$}}{%
 			\draw[red] ($(node cs:name=G1, anchor=south east) + (2pt, 0)$) rectangle ($(node cs:name=G8, anchor=north west) + (-2pt, 3pt)$);
 }
 	\end{center}
 	\end{minipage}
 \vspace{\textfloatsep}
 
-Waarbij het $-$ symbool staat voor een zogenaamde ``don't care''. Indien men A$_{\ll 1}$ aansluit op de 0-ingang van de MUX en A$_{\text{in}}$ op de 1-ingang, kan start dus gebruikt worden als schakelsignaal:
+Waarbij het $\times$-symbool staat voor een zogenaamde ``don't care''. Indien men A$_{\ll 1}$ aansluit op de 0-ingang van de multiplexer en A$_{\text{in}}$ op de 1-ingang, kan $start$ dus gebruikt worden als schakelsignaal:
 
 \[ \text{A}_{\text{sel}} = \text{start} \]
