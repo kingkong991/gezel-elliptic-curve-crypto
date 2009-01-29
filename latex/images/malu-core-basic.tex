@@ -1,3 +1,4 @@
+\begin{tikzpicture}
 \tikzset {
 	xor/.style={draw, xor gate US, logic gate inputs=nn, rotate=90, xscale=-1, line width=0.6pt},
 	labelbox/.style={draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, chamfered rectangle angle=55, chamfered rectangle xsep=2cm, chamfered rectangle ysep=14pt/2, minimum height=14pt, minimum width=1.2cm, text width=1cm, inner sep=0pt, text ragged},
@@ -13,7 +14,6 @@
 	labeltextout/.style={labeltext, anchor=west, xshift=0mm}
 }
 
-\begin{tikzpicture}
 \matrix [column sep=1.5mm, row sep=1.5mm] {
 	\node[labeltextin] {T$_i$}; \node[labelboxin] (i1) {}; &
 	&[1mm]

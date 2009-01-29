@@ -2,15 +2,38 @@
 
 \section{MALU over GF($2^m$)}
 
-Blabla, MALU, hupsakee!
-
 \vspace{\textfloatsep}
 \begin{minipage}{\linewidth}
     \begin{center}
-    \includegraphics[width=7cm]{MALU-Basic}
-    \figcaption{Basis implementatie van een MALU-blok met $d = 1$}\label{fig-malu-basic}
+    \beginpgfgraphicnamed{malu-core-basic}
+      \input{images/malu-core-basic}
+    \endpgfgraphicnamed
+    \figcaption{Basis implementatie van een MALU-blok met $d = 1$}
+    \label{fig-malu-core-basic}
     \end{center}
     \end{minipage}
 \vspace{\textfloatsep}
 
-En nog veel meer teskt! Yes!
+\vspace{\textfloatsep}
+\begin{minipage}{\linewidth}
+    \begin{center}
+    \beginpgfgraphicnamed{malu-core-optimized}
+      \input{images/malu-core-optimized}
+    \endpgfgraphicnamed
+    \figcaption{Geoptimaliseerde implementatie van een MALU-blok met $d = 1$}
+    \label{fig-malu-core-basic}
+    \end{center}
+    \end{minipage}
+\vspace{\textfloatsep}
+
+\vspace{\textfloatsep}
+\begin{minipage}{\linewidth}
+    \begin{center}
+    \beginpgfgraphicnamed{malu-wrapper}
+      \input{images/malu-wrapper}
+    \endpgfgraphicnamed
+    \figcaption{MALU Wrapped}
+    \label{fig-malu-core-basic}
+    \end{center}
+    \end{minipage}
+\vspace{\textfloatsep}
