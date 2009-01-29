@@ -14,6 +14,9 @@
 
 \input{kmapmacros}	% Karnaugh map macros
 
+\usepackage{tikz}
+\pgfrealjobname{thesis}
+
 % Substring macro
 \def\substring#1#2#3{%
   \expandafter\subm\romannumeral#3000x.{}#1\relax\relax{#2}}
@@ -121,7 +124,7 @@
 %\include{inleiding}             % Inleiding
 %\include{encryptie-applicaties} % Encryptie - Applicaties van encryptie
 %\include{encryptie-wiskunde}    % Encryptie - Wiskundige achtergrond
-%\include{malu}                  % Modular Aritmitic Logical Unit - Design
+\include{malu}                  % Modular Aritmitic Logical Unit - Design
 %\include{malu-pairings}         % MALU - Uitbreiding naar pairings
 %\include{malu-pairings-hw}      % MALU - Pairings hardware implementatie
 \include{optimalisatie}         % MALU - Optimalisatie (& parallellisatie)
