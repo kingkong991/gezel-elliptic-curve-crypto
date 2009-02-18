@@ -11,7 +11,7 @@
 \usecolortheme{bear}
 
 \title{Implementation of elliptic curve cryptography in constrained environments}
-\author[Anthony Van Herrewege]{Anthony Van Herrewege\\Prof. Dr. Ir. I. Verbouwerende \& Prof. Dr. Ir. B. Preneel}
+\author[Anthony Van Herrewege]{Anthony Van Herrewege\\Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
 \date{18 Februari 2009}
 %\pgfdeclareimage[height=1cm]{brown-logo}{brown-logo.pdf}
 %\logo{\pgfuseimage{brown-logo}\hspace*{0.3cm}}
@@ -60,9 +60,9 @@
 
 \begin{frame}{What?}
   \begin{itemize}
-    \item<1-> Calculations over elliptic curves
-    \item<2-> Public key cryptography
-    \item<3-> \alert{Identity}-based cryptography
+    \item<1-> Public key cryptography
+    \item<2-> \alert{Identity}-based cryptography
+    \item<3-> Calculations over elliptic curves
   \end{itemize}
 \end{frame}
 
@@ -71,21 +71,24 @@
   		\item<1-> Identity-based cryptography\\
   			\begin{itemize}
 				\item<1-> No public key lookup required:\\
-					eg. $P$ = National identification number
+					$\quad$eg. $P$ = National identification number
 				\item<2-> Date-stamped encryption possible:\\
-					eg. $P$ = Nin + "20091223"
-				\item<3-> Drawbacks as well:\\
-					key revocation, central authority, $\ldots$
+					$\quad$eg. $P$ = Nin + "20091223"
+				\item<3-> Other positive aspects:\\
+					$\quad$Fast (1 round) key establishment protocols\\
+					$\quad$Ideal for eg. sensor networks
+				\item<4-> Drawbacks as well:\\
+					$\quad$no key revocation, still a central authority, $\ldots$
 			\end{itemize}
-		\item<4-> Key strength [bits]:\\
+		\item<5-> Key strength comparison [bits]:\\
 			\begin{tabular}{ll}
-				RSA			&	\\
+				RSA			&	3072\\
 				\alert{ECC}	&	\alert{256}\\
 			\end{tabular}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Underlying mathematics}
+\begin{frame}{How? - Underlying mathematics}
 	\begin{itemize}
 		\item<1-> Discrete logarithm (DL) problem [hard]:\\
 				\[\text{Given: } g, h \in G \colon h \overset{?}{=} g^a \pmod n\]
@@ -96,7 +99,7 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Pairings}
+\begin{frame}{How? - Pairings}
 	Q: What group satisfies CDL$_{\text{hard}}$ and DDL$_{\text{easy}}$?\\
 	A: Elliptic curve pairing $e$:
 	
@@ -110,37 +113,53 @@
 
 \section{Implementation}
 \subsection*{Implementation}
-\begin{frame}[t]{MALU}
-	Modulo Arithmetic Logical Unit [general]:\\
+\begin{frame}{MALU}
+	Modulo Arithmetic Logical Unit [general]:\\[3mm]
 	\begin{center}
 		\includegraphics[height=0.5\paperheight]{images/malu-core-basic}
 	\end{center}
 \end{frame}
 
-\begin{frame}[t]{MALU}
-	Modulo Arithmetic Logical Unit [optimized]:\\
+\begin{frame}{MALU}
+	Modulo Arithmetic Logical Unit [optimized]:\\[3mm]
 	\begin{center}
 		\includegraphics[height=0.5\paperheight]{images/malu-core-optimized}
 	\end{center}
 \end{frame}
 
-
-\begin{frame}{Wrappers}
-	Multiplication/Addition:\\
+\begin{frame}{MALU}
+	Modulo Arithmetic Logical Unit [optimized; d-bits wide]:\\
 	\begin{center}
-		\includegraphics[height=0.55\paperheight]{images/malu-wrapper}
+		\includegraphics[height=0.55\paperheight]{images/malu-core-optimized-d}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Wrappers - $GF_{2^m}$}
+	$GF_{2^m}$ Multiplication/Addition:\\
+	\begin{center}
+		\includegraphics[height=0.55\paperheight]{images/malu-wrapper-gf2m}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Wrappers - ECC}
+	ECC Point Addition/Doubling:\\
+	\begin{center}
+		\includegraphics[height=0.55\paperheight]{images/malu-wrapper-ecc}
 	\end{center}
 \end{frame}
 
 \begin{frame}{State of the art}
-	Current available implementations:\\
+	Some currently available implementations:\\
 	
 	\begin{center}
-	\begin{tabular}{lcl}
-		Name		&	SW/HW	&	Speed\\
+	\begin{tabular}{llll}
+		Name		&	Platform	&	Field	&	Speed\\
 		\hline
-		TinyTate	&	SW		&	5s\\
-	\end{tabluar}
+		TinyTate		&	ATMega128L [7.4Mhz]	& $\mathbb{F}_{2^{256}}$	& 30.2s\\
+		TinyPBC		&	ATMega128L [7.4Mhz]	& $\mathbb{F}_{2^{256}}$	& 5.45s\\
+		Hankerson	&	P4 [2.8Ghz]				& $\mathbb{F}_{2^{1223}}$	& 0.07s\\
+		Hankerson	&	P4 [2.8Ghz]	(SSE) 	& $\mathbb{F}_{2^{1223}}$	& 0.03s\\
+		\end{tabluar}
 	\end{center}
 \end{frame}
 
@@ -150,12 +169,13 @@
 	\begin{itemize}
 		\item MALU
 		\item ECC functions
-		\item Pairing functions
+		\item Pairing functions (partial)
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{To do}
 	\begin{itemize}
+		\item Complete pairing functions
 		\item Bugfixing
 		\item Optimization (VHDL)
 	\end{itemize}
