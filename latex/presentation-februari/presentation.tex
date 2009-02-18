@@ -75,7 +75,8 @@
 				\item<2-> Date-stamped encryption possible:\\
 					$\quad$eg. $P$ = Nin + "20091223"
 				\item<3-> Other positive aspects:\\
-					$\quad$Fast (1 round) key establishment protocols\\
+					$\quad$Non-interactive key establishment\\
+					$\quad$Single round tripartite key establishment\\
 					$\quad$Ideal for eg. sensor networks
 				\item<4-> Drawbacks as well:\\
 					$\quad$no key revocation, still a central authority, $\ldots$
@@ -88,24 +89,30 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{How? - Underlying mathematics}
-	\begin{itemize}
-		\item<1-> Discrete logarithm (DL) problem [hard]:\\
-				\[\text{Given: } g, h \in G \colon h \overset{?}{=} g^a \pmod n\]
-		\item<2-> Computational DL problem [hard]:\\
-				\[\text{Given: } g, g^a, g^b, \in G \colon h \overset{?}{=} g^{ab} \pmod n\]
-		\item<3-> Decision DL problem [easy]:\\
-				\[\text{Given: } g, g^a, g^b, g^c \in G \colon g^c \overset{?}{=} g^{ab} \pmod n \]
-	\end{itemize}
-\end{frame}
+%\begin{frame}{How? - Underlying mathematics}
+%	\begin{itemize}
+%		\item<1-> Discrete logarithm (DL) problem [hard]:\\
+%				\[\text{Given: } g, h \in G \colon h \overset{?}{=} g^a \pmod n\]
+%		\item<2-> Computational DL problem [hard]:\\
+%				\[\text{Given: } g, g^a, g^b, \in G \colon h \overset{?}{=} g^{ab} \pmod n\]
+%		\item<3-> Decision DL problem [easy]:\\
+%				\[\text{Given: } g, g^a, g^b, g^c \in G \colon g^c \overset{?}{=} g^{ab} \pmod n \]
+%	\end{itemize}
+%\end{frame}
 
-\begin{frame}{How? - Pairings}
-	Q: What group satisfies CDL$_{\text{hard}}$ and DDL$_{\text{easy}}$?\\
-	A: Elliptic curve pairing $e$:
+\begin{frame}{How?}
+	Elliptic curve pairing $e$:
 	
 	\[ e : G_1 \times G_1 \rightarrow G_2 \]
 	
-	Mapping needs to be bilinear, non-degenerate \& efficiently computable.
+	Mapping needs to be:
+	
+	\begin{itemize}
+		\item<1-> Bilinear: $e(P_1 + P_2, P_3) = e(P_1, P_3) \cdot e(P_2, P_3)$
+		\item<1-> Non-degenerate: $e(P, P) \neq 1$
+		\item<1-> Efficiently computable
+	\end{itemize}
+	
 	Several available pairings:\\
 	
 	\begin{center}Weil, \alert{Tate}, ate, eta, $\ldots$\end{center}
@@ -114,7 +121,7 @@
 \section{Implementation}
 \subsection*{Implementation}
 \begin{frame}{MALU}
-	Modulo Arithmetic Logical Unit [general]:\\[3mm]
+	Modulo Arithmetic Logical Unit [general]:\\[8mm]
 	\begin{center}
 		\includegraphics[height=0.5\paperheight]{images/malu-core-basic}
 	\end{center}
@@ -168,6 +175,7 @@
 \begin{frame}{Progress so far}
 	\begin{itemize}
 		\item MALU
+		\item	$GF_{2^m}$ functions
 		\item ECC functions
 		\item Pairing functions (partial)
 	\end{itemize}
@@ -178,6 +186,7 @@
 		\item Complete pairing functions
 		\item Bugfixing
 		\item Optimization (VHDL)
+		\item Write thesis text
 	\end{itemize}
 \end{frame}
 
