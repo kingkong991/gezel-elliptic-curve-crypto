@@ -61,7 +61,7 @@ dp scl_bottom (	in x1:	ns(1);
 	sfg go {
 		zero = x1 ^ x1;
 		yt = x1 + x2 + x3 + x4;
-		st_1 = sum2_2 # sum2_1;
+		st_1 = ((ns(1)) sum2_2) # ((ns(1)) sum2_1);
 	}
 
 } hardwired h_scl_bottom (scl_bottom) {go;}
@@ -86,7 +86,7 @@ dp blend (	in st_1: ns(2);
 		ct_out = ct_1;
 
 		t1 = ct_out;
-		t2 = ct_0[0] # (ct_0[0] ^ ct_0[1]);
+		t2 = ((ns(1)) ct_0[0]) # ((ns(1)) (ct_0[0] ^ ct_0[1]));
 
 		ct_0 = ct_1;
 		ct_1 = t1 ^ t2 ^ st_1;

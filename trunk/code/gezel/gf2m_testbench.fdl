@@ -18,7 +18,7 @@ dp testbench {
 	
 	reg reg_T: ns(const_m);
 
-	use wrapper_gf2m(A, B, start, mode, T, ready);
+	use malu_wrapper(A, B, start, mode, T, ready);
 
 	sfg init {
 		reg_cycle = 0;
