@@ -56,7 +56,7 @@ dp wrapper_gf2m (in A: ns(const_m);
 		reg_cycle = start == 1 ? 0 : reg_cycle + 1;
 
 		// Store MALU output or reset reg_T when necessary.
-		reg_T = start == 1 ? 0 : (sig_end == 1 ? m_out # ((ns(const_m - 	1)) T_out[1:(const_m - 1)]) : T_out);
+		reg_T = start == 1 ? 0 : (sig_end == 1 ? m_out # ((ns(const_m - 1)) T_out[1:(const_m - 1)]) : T_out);
 		reg_m = m_out;
 
 		// Set output depending on mode.
