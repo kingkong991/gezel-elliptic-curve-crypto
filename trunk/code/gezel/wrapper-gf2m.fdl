@@ -11,8 +11,10 @@
  *		already started.
  */
 
-// Mode:	0 = multiplication
-//			1 = addition
+/* Mode:	0 = addition
+ *			1 = multiplication
+ *			2 = inversion
+ */
 
 dp wrapper_gf2m (in A: ns(const_m);
 	in B: ns(const_m);
@@ -31,7 +33,7 @@ dp wrapper_gf2m (in A: ns(const_m);
 	reg reg_A: ns(const_m);
 	reg reg_B: ns(const_m);
 
-	reg reg_cycle: ns(const_m);	// TODO: Too big, needs to be log2(const_m).
+	reg reg_cycle: ns(const_m_log);	// TODO: Too big, needs to be log2(const_m).
 
 	sig T_in: ns(const_m);
 	sig B_in: ns(const_m);
@@ -121,7 +123,7 @@ fsm fsm_wrapper_gf2m (wrapper_gf2m) {
 	state run;
 
 	@idle	if (reg_start == 1) then 
-				if (reg_mode == 0) then (iteration, do_always) -> run;	// Multiplication
+				if (reg_mode == 1) then (iteration, do_always) -> run;	// Multiplication
 				else (end_add, do_always) -> idle;	// Addition
 			else (idle, do_always) -> idle;
 	@run	if (reg_cycle <= (const_m - 2)) then (iteration, do_always) -> run;	// const_m - 2, last iteration is done in sfg end.

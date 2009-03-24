@@ -85,6 +85,6 @@ int main () {
 	for (; rit < result.rend(); rit++) {
 		printf("%d ", *rit);
 	}*/
-		
+	
 	printf("\nDone");
 }
