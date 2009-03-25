@@ -74,7 +74,7 @@ dp wrapper_gf2m (in A: ns(const_m);
 		// If doing addition, set ready to 1. Else, when doing multiplication, set to zero as long as start == 1 or reg_cycle <= const_m - 2.
 		// Logic function: !A*D + C
 		// With A = start, B = mode, C = sig_ready, D = reg_ready
-		sig_ready = mode == 0 ? 1 : (start == 0 ? 0 : (reg_cycle <= (const_m - 2) ? 0 : 1));
+		sig_ready = start == 1 ? (mode == 0 ? 1 : 0) : (reg_mode == 0 ? 1 : (reg_cycle <= (const_m - 2) ? 0 : 1));
 		reg_ready = sig_ready;
 		ready = reg_ready;
 	}
