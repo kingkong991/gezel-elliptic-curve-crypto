@@ -15,7 +15,6 @@ dp malu (in T: ns(const_m);
 	sfg run {
 		sum = T ^ B;
 		result = XOR_P(sum, m_in);
-		//result = ((ns(155)) sum[8:162]) # ((ns(1)) sum[7] ^ m_in) # ((ns(1)) sum[6] ^ m_in) # ((ns(2)) sum[4:5]) # ((ns(1)) sum[3] ^ m_in) # ((ns(2)) sum[1:2]) # ((ns(1)) sum[0] ^ m_in);
 
 		T_n = result[0:(const_m - 2)]  # ((ns(1)) 0b0);
 		m_n = result[const_m - 1];
