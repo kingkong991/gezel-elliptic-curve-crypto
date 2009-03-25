@@ -3,6 +3,11 @@
 #include "wrapper-gf2m.fdl"
 
 dp testbench {
+	reg reg_A: ns(const_m);
+	reg reg_B: ns(const_m);
+
+	reg reg_mode: ns(1);
+
 	sig A: ns(const_m);
 	sig B: ns(const_m);
 
@@ -23,14 +28,14 @@ dp testbench {
 	sfg init {
 		reg_cycle = 0;
 		start = 0;
-		mode = 0;
+		reg_mode = 0;
+
+		reg_A = 3;
+		reg_B = 8;
 	}
 
 	sfg run {
-		A = 8;
-		B = 2;
-		mode = 1;
-
+		reg_A = reg_A << 1;
 		reg_cycle = reg_cycle + 1;
 	}
 
@@ -45,27 +50,33 @@ dp testbench {
 	}
 
 	sfg do_always {
+		A = reg_A;
+		B = reg_B;
+		mode = reg_mode;
+
 		reg_ready = start == 1 ? 0 : ready;
 		
 		reg_T = ready == 1 ? T : reg_T;
+	}
 
-		$display("[Cycle ", $cycle, "] - Start = ", start, " - ready: ", reg_ready, " - T: ", reg_T);
+	sfg print {
+		//$display("[Cycle ", $cycle, "] - Start = ", start, " - ready: ", ready, " - T: ", T);
 	}
 
 	sfg end {
-		$display("[Testbench] Done (In previous cycle) - Cur cycle: ", $cycle);
+		$display("[Testbench] Done (In previous cycle) - Cur cycle: ", $cycle, " - Result = ", $dec, reg_T);
 	}
 }
 
 fsm fsm_testbench (testbench) {
 	initial init;
-	state start, run;
+	state start, run, idle;
 
-	@init (init, do_always) -> start;
-	@start (run, set_start, do_always) -> run;
-	@run	if (reg_ready == 1) then (init, do_always, end) -> start;
-			else	if (reg_cycle == 0) then (run, unset_start, do_always) -> run;
-					else (run, unset_start, do_always) -> run;
+	@init (init, do_always, print) -> start;
+	@start (set_start, do_always, print) -> run;
+	@run	if (reg_ready == 1) then (unset_start, do_always, end, print) -> idle;
+			else (run, unset_start, do_always, print) -> run;
+	@idle (do_always, unset_start) -> idle;
 }
 
 system S {
