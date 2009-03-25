@@ -18,8 +18,8 @@ public:
 	
 	mpz_t getMP() { return this->a; };
 	
-	void add(Element& B) { mpz_xor(this->a, this->a, B.getMP()); };
-	void multiply(Element& B);
+	static void add(Element& T, Element& A, Element& B) { mpz_xor(T.getMP(), A.getMP(), B.getMP()); };
+	static void multiply(Element& T, Element& Element& B);
 
 private:
 	mpz_t a;
