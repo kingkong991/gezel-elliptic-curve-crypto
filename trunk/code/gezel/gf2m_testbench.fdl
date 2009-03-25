@@ -13,12 +13,12 @@ dp testbench {
 
 	sig ready: ns(1);
 
-	reg reg_cycle: ns(const_m);	// Way too big, needs to be ns(log2(const_m)).
+	reg reg_cycle: ns(const_m_log);
 	reg reg_ready: ns(1);
 	
 	reg reg_T: ns(const_m);
 
-	use malu_wrapper(A, B, start, mode, T, ready);
+	use wrapper_gf2m(A, B, start, mode, T, ready);
 
 	sfg init {
 		reg_cycle = 0;
