@@ -1,0 +1,20 @@
+\tikzset{
+	reg/.style={draw, minimum height=6mm, minimum width=10mm},
+	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt}
+}
+\begin{tikzpicture}
+\matrix [column sep=1.5mm, row sep=4mm] {
+	\node[mux, xshift=-0.1mm] (m1) {}; &[5mm]
+	\node[mux, xshift=-2.2mm] (m2) {}; &[5mm]
+	\node[reg] (r1) {X$_v$}; \\
+};
+\begin{scope}[>=latex, very thick]
+	\draw [->] (m1.north) -- ($(m2.south east)$);
+	\draw [->] (m2.north) -- (r1.west);
+	\draw [->] ($(m1.south west) + (-10mm, 1.3mm)$) |- node [above, xshift=2mm] {Tmp$_B$} ($(m1.south west) + (0, 1.3mm)$);
+	\draw [->] ($(m1.south east) + (-10mm, -1.3mm)$) |- node [below, xshift=2mm] {Y$_v$} ($(m1.south east) + (0, -1.3mm)$);
+	\draw [->] (r1.east) -| ($(r1.north east) + (2mm, 5mm)$) -| ($(m2.south west) + (-4mm, 0)$) -- (m2.south west);
+\end{scope}
+\draw (m1.east) |- node [above, at end, anchor=base east, yshift=0.6mm, xshift=1mm] {select} ($(m1.east) + (20mm, -6mm)$);
+\draw (m2.east) |- node [above, at end, anchor=base east, yshift=0.6mm, xshift=1mm] {hold} ($(m2.east) + (9mm, -4mm)$);
+\end{tikzpicture}
