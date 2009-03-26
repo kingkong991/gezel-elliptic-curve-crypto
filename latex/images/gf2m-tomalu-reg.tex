@@ -1,0 +1,24 @@
+\tikzset{
+	reg/.style={draw, minimum height=6mm, minimum width=10mm},
+	lut/.style={draw, minimum height=10mm, minimum width=10mm},
+	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.15cm, fill, circle},
+	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt}
+}
+\begin{tikzpicture}
+\matrix [column sep=1.5mm, row sep=4mm] {
+	\node[mux, xshift=-2.2mm] (m1) {}; &[5mm]
+	\node[reg] (r1) {ToMALU}; \node[joint, xshift=10.6mm] (j1) {}; \node[joint, xshift=14.6mm] (j2) {}; &[12mm]
+	\node[reg] (r2) {X$_v$}; \\[-10mm]
+	
+	\node[lut, xshift=-15mm] (l1) {LUT}; \\
+};
+\begin{scope}[>=latex, very thick]
+	\draw [->] (r1.east) -- (r2.west);
+	\draw [->] (r2.east) -| ($(r2.north east) + (2mm, 5mm)$) -| ($(m1.south west) + (-6mm, 1.5mm)$) -- ($(m1.south west) + (0, 1.5mm)$);
+	\draw [->] ($(m1.south) + (-18mm, 1.3mm)$) |- node [above, xshift=1mm] {from MALU} ($(m1.south) + (0, 1.3mm)$);
+	\draw [->] ($(l1.north east) + (0, -1.25mm)$) -- ($(m1.south) + (0, -1.3mm)$);
+	\draw [->] ($(r1.east) + (2mm, 0)$) |- node [above, near end] {$\ll 1$ circular} ($(m1.south east) + (-6mm, -6mm)$) |- ($(m1.south east) + (0, -1.5mm)$);
+	\draw [->] (m1.north) -- (r1.west);
+	\draw [->] ($(r1.east) + (6mm, 0)$) |- node [above, very near end] {to MALU} ($(m1.south east) + (49mm, -6mm)$);
+\end{scope}
+\end{tikzpicture}

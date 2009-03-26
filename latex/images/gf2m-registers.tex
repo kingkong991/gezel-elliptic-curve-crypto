@@ -1,0 +1,22 @@
+\tikzset{reg/.style={draw, minimum height=6mm, minimum width=10mm}}
+\begin{tikzpicture}
+\matrix [column sep=1.5mm, row sep=1.5mm] {
+	\node[reg] (r1) {X$_v$}; &
+	\node[reg] (r2) {Y$_v$}; &
+	\node[reg] (r3) {X$_p$}; &
+	\node[reg, transparent] (e1) {}; &
+	\node[reg] (r4) {Tmp$_A$}; &
+	\node[reg] (r5) {Tmp$_B$}; \\
+};
+\begin{scope}[>=latex, very thick]
+	\draw [<->] ($(r1.south east) + (-3mm, 0)$) |- ($(r2.south west) + (3mm, -3mm)$) -| ($(r2.south west)  + (3mm, 0)$);
+	\draw [<->] ($(r2.south east) + (-3mm, 0)$) |- ($(r3.south west) + (3mm, -3mm)$) -| ($(r3.south west)  + (3mm, 0)$);
+	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r3.south east) + (-3mm, 0)$) |- ($(r3.south east) + (0, -3mm)$);
+	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r4.south west) + (3mm, 0)$) |- ($(r4.south west) + (0, -3mm)$);
+	\draw [<->] ($(r4.south east) + (-3mm, 0)$) |- ($(r5.south west) + (3mm, -3mm)$) -| ($(r5.south west)  + (3mm, 0)$);
+	\draw [<-] ($(r5.south east) + (-3mm, 0)$) |- ($(r5.south east) + (2mm, -3mm)$) |- ($(r4.north west)  + (0, 3mm)$);
+	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r4.north west)  + (-3mm, 3mm)$) -| ($(r4.north west) + (0, 3mm)$);
+	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r3.north east)  + (3mm, 3mm)$) -| ($(r3.north east) + (0, 3mm)$);
+	\draw [->] ($(r3.north east) + (0, 3mm)$) -- ($(r1.north west)  + (-2mm, 3mm)$) |- ($(r1.south west)  + (3mm, -3mm)$) -- ($(r1.south west)  + (3mm, 0)$);
+\end{scope}
+\end{tikzpicture}
