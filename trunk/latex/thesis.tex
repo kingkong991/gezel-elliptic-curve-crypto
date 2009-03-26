@@ -106,6 +106,13 @@
 %    \end{minipage}
 %\vspace{\textfloatsep}
 
+% Tikz packages
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.gates.logic.US}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.geometric}
+
 \begin{document}
 
 % Voeg voorblad toe
@@ -124,15 +131,15 @@
 %\include{inleiding}             % Inleiding
 %\include{encryptie-applicaties} % Encryptie - Applicaties van encryptie
 %\include{encryptie-wiskunde}    % Encryptie - Wiskundige achtergrond
-\include{malu}                  % Modular Aritmitic Logical Unit - Design
+\include{malu}                   % Modular Aritmitic Logical Unit - Design
 %\include{malu-pairings}         % MALU - Uitbreiding naar pairings
 %\include{malu-pairings-hw}      % MALU - Pairings hardware implementatie
-\include{optimalisatie}         % MALU - Optimalisatie (& parallellisatie)
+\include{optimalisatie}          % MALU - Optimalisatie (& parallellisatie)
 %\include{tests}                 % MALU - Oppervlakte/snelheids tests
 %\include{side-channel-attacks}  % Side channel attack weerstand
 %\include{conclusie}             % Conclusie
 
-\appendix                       % Start appendices
+\appendix                        % Start appendices
 
 %\include{code}                  % Implementatie code
 
