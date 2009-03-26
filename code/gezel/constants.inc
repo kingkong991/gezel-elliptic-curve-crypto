@@ -22,7 +22,6 @@
 // Reduction polynomial:
 // x^163 +  x^7  +  x^6  +  x^3  +   1
 // (na)   (bit 7) (bit 6) (bit 3) (bit 0)
-//#define XOR_P(a, b) a[8:162] CONCATENATION a[7] ^ b CONCATENATION a[6] ^ b CONCATENATION a[4:5] CONCATENATION a[3] ^ b CONCATENATION a[1:2] CONCATENATION a[0] ^ b
 #define XOR_P(a, b) ((ns(155)) a[8:162]) CONCATENATION ((ns(1)) a[7] ^ b) CONCATENATION ((ns(1)) a[6] ^ b) CONCATENATION ((ns(2)) a[4:5]) CONCATENATION ((ns(1)) a[3] ^ b) CONCATENATION ((ns(2)) a[1:2]) CONCATENATION ((ns(1)) a[0] ^ b)
 
 // Curve parameters
