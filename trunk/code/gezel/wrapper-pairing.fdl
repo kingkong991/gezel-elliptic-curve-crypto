@@ -1,0 +1,253 @@
+#ifndef WRAPPER_PAIRING_FDL
+#define WRAPPER_PAIRING_FDL
+
+#include "constants.inc"
+
+#include "wrapper_gf2m.fdl"
+
+// Calculate E(P, Q)
+// Output: f = E(P, Q)
+
+dp wrapper_pairing(in in_X:	ns(const_m);
+	in start:	ns(1);
+	in next:	ns(1);
+	out out_X:	ns(const_m);
+	out ready:	ns(1)) {
+
+	// Registers:
+	reg reg_Xv: ns(const_m);
+	reg reg_Yv: ns(const_m);
+
+	reg reg_Xp: ns(const_m);
+	reg reg_Yp: ns(const_m);
+
+	reg reg_Xfa: ns(const_m);
+	reg reg_Yfa: ns(const_m);
+	reg reg_Yfb: ns(const_m);
+
+	reg reg_Ga: ns(const_m);
+	reg reg_Gb: ns(const_m);
+
+	reg reg_Fa: ns(const_m);
+	reg reg_Fb: ns(const_m);
+	reg reg_Fc: ns(const_m);
+	reg reg_Fd: ns(const_m);
+
+	reg reg_TmpA: ns(const_m);
+	reg reg_TmpB: ns(const_m);
+
+	reg reg_ToMALU: ns(const_m);
+
+	// Lookup Table for s & t (distortion map)
+	lookup reg_LUT: ns(const_m) = {1, 2, 3, 4, 5, 6, 7, 8};
+
+	// Signals
+
+	// Update enable signals (allows for easy clock gating implementation in VHDL)
+	sig sig_en_Xv: ns(1);
+	sig sig_en_Yv: ns(1);
+
+	sig sig_en_Xp: ns(1);
+	sig sig_en_Yp: ns(1);
+
+	sig sig_en_Xfa: ns(1);
+	sig sig_en_Yfa: ns(1);
+	sig sig_en_Yfb: ns(1);
+
+	sig sig_en_Ga: ns(1);
+	sig sig_en_Gb: ns(1);
+
+	sig sig_en_Fa: ns(1);
+	sig sig_en_Fb: ns(1);
+	sig sig_en_Fc: ns(1);
+	sig sig_en_Fd: ns(1);
+
+	sig sig_en_TmpA: ns(1);
+	sig sig_en_TmpB: ns(1);
+
+	sig sig_en_ToMALU: ns(1);
+
+	// Input selection signals (for muxes)
+	sig sig_sel_Xv: ns(2);
+	sig sig_sel_Yv: ns(1);
+
+	sig sig_sel_Xp: ns(1);
+	sig sig_sel_Yp: ns(1);
+
+	sig sig_sel_Xfa: ns(1);
+	sig sig_sel_Yfa: ns(1);
+	sig sig_sel_Yfb: ns(1);
+
+	sig sig_sel_Ga: ns(1);
+	sig sig_sel_Gb: ns(1);
+
+	sig sig_sel_Fa: ns(1);
+	sig sig_sel_Fb: ns(1);
+	sig sig_sel_Fc: ns(1);
+	sig sig_sel_Fd: ns(1);
+
+	sig sig_sel_TmpA: ns(1);
+	sig sig_sel_TmpB: ns(1);
+
+	sig sig_sel_ToMALU: ns(2);
+
+	// Data signals - To registers
+	sig sig_to_Xv: ns(const_m);
+	sig sig_to_Yv: ns(const_m);
+
+	sig sig_to_Xp: ns(const_m);
+	sig sig_to_Yp: ns(const_m);
+
+	sig sig_to_Xfa: ns(const_m);
+	sig sig_to_Yfa: ns(const_m);
+	sig sig_to_Yfb: ns(const_m);
+
+	sig sig_to_Ga: ns(const_m);
+	sig sig_to_Gb: ns(const_m);
+
+	sig sig_to_Fa: ns(const_m);
+	sig sig_to_Fb: ns(const_m);
+	sig sig_to_Fc: ns(const_m);
+	sig sig_to_Fd: ns(const_m);
+
+	sig sig_to_TmpA: ns(const_m);
+	sig sig_to_TmpB: ns(const_m);
+
+	sig sig_to_ToMALU: ns(const_m);
+
+	// Data signals - From registers
+	sig sig_from_Xv: ns(const_m);
+	sig sig_from_Yv: ns(const_m);
+
+	sig sig_from_Xp: ns(const_m);
+	sig sig_from_Yp: ns(const_m);
+
+	sig sig_from_Xfa: ns(const_m);
+	sig sig_from_Yfa: ns(const_m);
+	sig sig_from_Yfb: ns(const_m);
+
+	sig sig_from_Ga: ns(const_m);
+	sig sig_from_Gb: ns(const_m);
+
+	sig sig_from_Fa: ns(const_m);
+	sig sig_from_Fb: ns(const_m);
+	sig sig_from_Fc: ns(const_m);
+	sig sig_from_Fd: ns(const_m);
+
+	sig sig_from_TmpA: ns(const_m);
+	sig sig_from_TmpB: ns(const_m);
+
+	sig sig_from_ToMALU: ns(const_m);
+	sig sig_from_ToMALUShift: ns(const_m);
+
+	sig_from_LUT: ns(const_m);
+
+	// SFG's
+	sfg do_always {
+		// Set registers to new value if their enable signal is high.
+		reg_Xv = sig_en_Xv == 0 ? reg_Xv : sig_to_Xv;
+		reg_Yv = sig_en_Yv == 0 ? reg_Yv : sig_to_Yv;
+	
+		reg_Xp = sig_en_Xv == 0 ? reg_Xp : sig_to_Xp;
+		reg_Yp = sig_en_Yv == 0 ? reg_Yp : sig_to_Yp;
+	
+		reg_Xfa = sig_en_Xfa == 0 ? reg_Xfa : sig_to_Xfa;
+		reg_Yfa = sig_en_Yfa == 0 ? reg_Yfa : sig_to_Yfa;
+		reg_Yfb = sig_en_Yfb == 0 ? reg_Yfb : sig_to_Yfb;
+	
+		reg_Ga = sig_en_Ga == 0 ? reg_Ga : sig_to_Ga;
+		reg_Gb = sig_en_Gb == 0 ? reg_Gb : sig_to_Gb;
+	
+		reg_Fa = sig_en_Fa == 0 ? reg_Fa : sig_to_Fa;
+		reg_Fb = sig_en_Fb == 0 ? reg_Fb : sig_to_Fb;
+		reg_Fc = sig_en_Fc == 0 ? reg_Fc : sig_to_Fc;
+		reg_Fd = sig_en_Fd == 0 ? reg_Fd : sig_to_Fd;
+	
+		reg_TmpA = sig_en_TmpA == 0 ? reg_TmpA : sig_to_TmpA;
+		reg_TmpB = sig_en_TmpB == 0 ? reg_TmpB : sig_to_TmpB;
+	
+		reg_ToMALU = sig_en_ToMALU == 0 ? reg_ToMALU : sig_to_ToMALU;
+
+		// Set from_register signals
+		sig_from_Xv = reg_Xv;
+		sig_from_Yv = reg_Yv;
+
+		sig_from_Xp = reg_Xp;
+		sig_from_Yp = reg_Yp;
+	
+		sig_from_Xfa = reg_Xfa;
+		sig_from_Yfa = reg_Yfa;
+		sig_from_Yfb = reg_Yfb;
+	
+		sig_from_Ga = reg_Ga;
+		sig_from_Gb = reg_Gb;
+	
+		sig_from_Fa = reg_Fa;
+		sig_from_Fb = reg_Fb;
+		sig_from_Fc = reg_Fc;
+		sig_from_Fd = reg_Fd;
+	
+		sig_from_TmpA = reg_TmpA;
+		sig_from_TmpB = reg_TmpB;
+	
+		sig_from_ToMALU = reg_ToMALU;
+		sig_from_ToMALUShift = ((ns(const_m - 1)) reg_ToMALU[0:const_m - 2]) # ((ns(1)) reg_ToMALU[const_m - 1]);	// Circular left shift of reg_ToMALU
+
+		// Set to_register signals
+		sig_to_Xv = sig_sel_Xv == 0b10 ? sig_from_ToMALU : (sig_sel_Xv = 0b00 ? sig_from_TmpB : sig_from_Yv);	// TODO: Is this ok? If sel_Xv = 0b11, Yv will be selected as well, shouldn't happen or matter, but still...
+		sig_to_Yv = sig_sel_Yv == 0 ? sig_from_Xv : sig_from_Xp;
+	
+		sig_to_Xp = sig_sel_Xp == 0 ? sig_from_Yv : sig_from_Yp;
+		sig_to_Yp = sig_sel_Yp == 0 ? sig_from_Xp : sig_from_Xfa;
+	
+		sig_to_Xfa = sig_sel_Xfa == 0 ? sig_from_Yp : sig_from_Yfa;
+		sig_to_Yfa = sig_sel_Yfa == 0 ? sig_from_Xfa : sig_from_Yfb;
+		sig_to_Yfb = sig_sel_Yfb == 0 ? sig_from_Yfa : sig_from_Ga;
+	
+		sig_to_Ga = sig_sel_Ga == 0 ? sig_from_Yfb : sig_from_Gb;
+		sig_to_Gb = sig_sel_Gb == 0 ? sig_from_Ga : sig_from_Fa;
+	
+		sig_to_Fa = sig_sel_Fa == 0 ? sig_from_Gb : sig_from_Fb;
+		sig_to_Fb = sig_sel_Fb == 0 ? sig_from_Fa : sig_from_Fc;
+		sig_to_Fc = sig_sel_Fc == 0 ? sig_from_Fb : sig_from_Fd;
+		sig_to_Fd = sig_sel_Fd == 0 ? sig_from_Fc : sig_from_TmpA;
+	
+		sig_to_TmpA = sig_sel_TmpA == 0 ? sig_from_Fd : sig_from_TmpB;
+		sig_to_TmpB = sig_sel_TmpB == 0 ? sig_from_TmpA : sig_from_Xv;
+	
+		sig_to_ToMALU = sig_sel_ToMALU == 0b00 ? sig_from_Xv : (sig_sel_ToMALU == 0b01 ? sig_MALU_result : (sig_sel_ToMALU == 0b10 ? sig_from_LUT : sig_from_ToMALUShift));
+	}
+
+	sfg idle_regs {
+		// Set all enable signals to 0.
+		sig_en_Xv = 0;
+		sig_en_Yv = 0;
+	
+		sig_en_Xp = 0;
+		sig_en_Yp = 0;
+	
+		sig_en_Xfa = 0;
+		sig_en_Yfa = 0;
+		sig_en_Yfb = 0;
+	
+		sig_en_Ga = 0;
+		sig_en_Gb = 0;
+	
+		sig_en_Fa = 0;
+		sig_en_Fb = 0;
+		sig_en_Fc = 0;
+		sig_en_Fd = 0;
+	
+		sig_en_TmpA = 0;
+		sig_en_TmpB = 0;
+	
+		sig_en_ToMALU = 0;
+	}
+
+	sfg idle_LUT {
+		sig_from_LUT = reg_LUT(0);
+	}
+	
+}
+
+#endif /* WRAPPER_PAIRING_FDL */
