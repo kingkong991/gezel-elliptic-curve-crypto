@@ -23,7 +23,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	reg reg_Xfa: ns(const_m);
 	reg reg_Yfa: ns(const_m);
-	reg reg_Yfb: ns(const_m);
 
 	reg reg_Ga: ns(const_m);
 	reg reg_Gb: ns(const_m);
@@ -38,35 +37,23 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	reg reg_ToMALU: ns(const_m);
 
-	// Lookup Table for s & t (distortion map)
-	// Needs to hold 5 values: Sa, Sb, S'a, Ta, Tb (see notebook)
-	lookup reg_LUT: ns(const_m) = {1, 2, 3, 4, 5};
+	reg reg_MALU_ready: ns(1);
+
+	reg reg_count_miller: ns(const_m_log);
+	reg reg_count_inverse: ns(const_m_log - 1);	// Max nr of consecutive squarings is +- half of const_m
+
+	// GF2m core
+	use wrapper_gf2m(sig_MALU_A, sig_MALU_B, sig_MALU_start, sig_MALU_mode, sig_MALU_result, sig_MALU_ready);
 
 	// Signals
+	// GF2m core signals
+	sig sig_MALU_A: ns(const_m);
+	sig sig_MALU_B: ns(const_m);
+	sig sig_MALU_start: ns(1);
+	sig sig_MALU_mode: ns(1);
 
-	// Update enable signals (allows for easy clock gating implementation in VHDL)
-	sig sig_en_Xv: ns(1);
-	sig sig_en_Yv: ns(1);
-
-	sig sig_en_Xp: ns(1);
-	sig sig_en_Yp: ns(1);
-
-	sig sig_en_Xfa: ns(1);
-	sig sig_en_Yfa: ns(1);
-	sig sig_en_Yfb: ns(1);
-
-	sig sig_en_Ga: ns(1);
-	sig sig_en_Gb: ns(1);
-
-	sig sig_en_Fa: ns(1);
-	sig sig_en_Fb: ns(1);
-	sig sig_en_Fc: ns(1);
-	sig sig_en_Fd: ns(1);
-
-	sig sig_en_TmpA: ns(1);
-	sig sig_en_TmpB: ns(1);
-
-	sig sig_en_ToMALU: ns(1);
+	sig sig_MALU_result: ns(const_m);
+	sig sig_MALU_ready: ns(1);
 
 	// Input selection signals (for muxes)
 	sig sig_sel_Xv: ns(2);
@@ -77,7 +64,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	sig sig_sel_Xfa: ns(1);
 	sig sig_sel_Yfa: ns(1);
-	sig sig_sel_Yfb: ns(1);
 
 	sig sig_sel_Ga: ns(1);
 	sig sig_sel_Gb: ns(1);
@@ -101,7 +87,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	sig sig_to_Xfa: ns(const_m);
 	sig sig_to_Yfa: ns(const_m);
-	sig sig_to_Yfb: ns(const_m);
 
 	sig sig_to_Ga: ns(const_m);
 	sig sig_to_Gb: ns(const_m);
@@ -125,7 +110,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	sig sig_from_Xfa: ns(const_m);
 	sig sig_from_Yfa: ns(const_m);
-	sig sig_from_Yfb: ns(const_m);
 
 	sig sig_from_Ga: ns(const_m);
 	sig sig_from_Gb: ns(const_m);
@@ -141,46 +125,24 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sig sig_from_ToMALU: ns(const_m);
 	sig sig_from_ToMALUShift: ns(const_m);
 
-	sig sig_from_LUT: ns(const_m);
-
 	// Misc signals
 	sig sig_from_Input: ns(const_m);
-	sig sig_ready: ns(1);
 
 	// SFG's
 	sfg do_always {
 		// Set misc registers
 		reg_start = start;
 		reg_next = next;
-		reg_ready = sig_ready;
 
 		// Set output - As long as not ready, set output to 0, else set to Xv.
 		ready = reg_ready;
 		output = reg_ready == 0 ? 0 : Xv;
 
-		// Set registers to new value if their enable signal is high.
-		reg_Xv = sig_en_Xv == 0 ? reg_Xv : sig_to_Xv;
-		reg_Yv = sig_en_Yv == 0 ? reg_Yv : sig_to_Yv;
-	
-		reg_Xp = sig_en_Xv == 0 ? reg_Xp : sig_to_Xp;
-		reg_Yp = sig_en_Yv == 0 ? reg_Yp : sig_to_Yp;
-	
-		reg_Xfa = sig_en_Xfa == 0 ? reg_Xfa : sig_to_Xfa;
-		reg_Yfa = sig_en_Yfa == 0 ? reg_Yfa : sig_to_Yfa;
-		reg_Yfb = sig_en_Yfb == 0 ? reg_Yfb : sig_to_Yfb;
-	
-		reg_Ga = sig_en_Ga == 0 ? reg_Ga : sig_to_Ga;
-		reg_Gb = sig_en_Gb == 0 ? reg_Gb : sig_to_Gb;
-	
-		reg_Fa = sig_en_Fa == 0 ? reg_Fa : sig_to_Fa;
-		reg_Fb = sig_en_Fb == 0 ? reg_Fb : sig_to_Fb;
-		reg_Fc = sig_en_Fc == 0 ? reg_Fc : sig_to_Fc;
-		reg_Fd = sig_en_Fd == 0 ? reg_Fd : sig_to_Fd;
-	
-		reg_TmpA = sig_en_TmpA == 0 ? reg_TmpA : sig_to_TmpA;
-		reg_TmpB = sig_en_TmpB == 0 ? reg_TmpB : sig_to_TmpB;
-	
-		reg_ToMALU = sig_en_ToMALU == 0 ? reg_ToMALU : sig_to_ToMALU;
+		// GF2m MALU core signals
+		sig_MALU_A = reg_ToMALU;
+		sig_MALU_B = reg_Xv;
+
+		reg_MALU_ready = sig_MALU_ready;
 
 		// Set from_register signals
 		sig_from_Xv = reg_Xv;
@@ -191,7 +153,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 	
 		sig_from_Xfa = reg_Xfa;
 		sig_from_Yfa = reg_Yfa;
-		sig_from_Yfb = reg_Yfb;
 	
 		sig_from_Ga = reg_Ga;
 		sig_from_Gb = reg_Gb;
@@ -217,10 +178,9 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_to_Yp = sig_sel_Yp == 0 ? sig_from_Xp : sig_from_Xfa;
 	
 		sig_to_Xfa = sig_sel_Xfa == 0 ? sig_from_Yp : sig_from_Yfa;
-		sig_to_Yfa = sig_sel_Yfa == 0 ? sig_from_Xfa : sig_from_Yfb;
-		sig_to_Yfb = sig_sel_Yfb == 0 ? sig_from_Yfa : sig_from_Ga;
+		sig_to_Yfa = sig_sel_Yfa == 0 ? sig_from_Xfa : sig_from_Ga;
 	
-		sig_to_Ga = sig_sel_Ga == 0 ? sig_from_Yfb : sig_from_Gb;
+		sig_to_Ga = sig_sel_Ga == 0 ? sig_from_Yfa : sig_from_Gb;
 		sig_to_Gb = sig_sel_Gb == 0 ? sig_from_Ga : sig_from_Fa;
 	
 		sig_to_Fa = sig_sel_Fa == 0 ? sig_from_Gb : sig_from_Fb;
@@ -231,7 +191,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_to_TmpA = sig_sel_TmpA == 0 ? sig_from_Fd : sig_from_TmpB;
 		sig_to_TmpB = sig_sel_TmpB == 0 ? sig_from_TmpA : sig_from_Xv;
 	
-		sig_to_ToMALU = sig_sel_ToMALU == 0b00 ? sig_from_Xv : (sig_sel_ToMALU == 0b01 ? sig_MALU_result : (sig_sel_ToMALU == 0b10 ? sig_from_LUT : sig_from_ToMALUShift));
+		sig_to_ToMALU = sig_sel_ToMALU == 0b00 ? sig_from_Xv : (sig_sel_ToMALU == 0b01 ? sig_MALU_result : sig_from_ToMALUShift);
 	}
 
 	sfg idle_regs {
@@ -244,7 +204,6 @@ dp wrapper_pairing(in input:	ns(const_m);
 	
 		sig_en_Xfa = 0;
 		sig_en_Yfa = 0;
-		sig_en_Yfb = 0;
 	
 		sig_en_Ga = 0;
 		sig_en_Gb = 0;
@@ -261,199 +220,249 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 		// Set all select signals to 0.
 		sig_sel_Xv = 0b00;
-		sig_sel_Yv = 0b0;
+		sig_sel_Yv = 0;
 	
-		sig_sel_Xp = 0b0;
-		sig_sel_Yp = 0b0;
+		sig_sel_Xp = 0;
+		sig_sel_Yp = 0;
 	
-		sig_sel_Xfa = 0b0;
-		sig_sel_Yfa = 0b0;
-		sig_sel_Yfb = 0b0;
+		sig_sel_Xfa = 0;
+		sig_sel_Yfa = 0;
 	
-		sig_sel_Ga = 0b0;
-		sig_sel_Gb = 0b0;
+		sig_sel_Ga = 0;
+		sig_sel_Gb = 0;
 	
-		sig_sel_Fa = 0b0;
-		sig_sel_Fb = 0b0;
-		sig_sel_Fc = 0b0;
-		sig_sel_Fd = 0b0;
+		sig_sel_Fa = 0;
+		sig_sel_Fb = 0;
+		sig_sel_Fc = 0;
+		sig_sel_Fd = 0;
 	
-		sig_sel_TmpA = 0b0;
-		sig_sel_TmpB = 0b0;
+		sig_sel_TmpA = 0;
+		sig_sel_TmpB = 0;
 	
 		sig_sel_ToMALU = 0b00;
-	}
-
-	sfg idle_LUT {
-		sig_from_LUT = reg_LUT(0);
 	}
 
 	// Idle sfg's for individual registers
 	sfg idle_Yv {
-		sig_en_Yv = 0;
 		sig_sel_Yv = 0;
 	}
 
-	sfg idle_Xp {	
-		sig_en_Xp = 0;
+	sfg idle_Xp {
 		sig_sel_Xp = 0;
 	}
 
 	sfg idle_Yp {
-		sig_en_Yp = 0;
 		sig_sel_Yp = 0;
 	}
 
 	sfg idle_Xfa {
-		sig_en_Xfa = 0;
 		sig_sel_Xfa = 0;
 	}
 
 	sfg idle_Yfa {
-		sig_en_Yfa = 0;
 		sig_sel_Yfa = 0;
 	}
 
-	sfg idle_Yfb {
-		sig_en_Yfb = 0;
-		sig_sel_Yfb = 0;
-	}
-
 	sfg idle_Ga {
-		sig_en_Ga = 0;
 		sig_sel_Ga = 0;
 	}
 
 	sfg idle_Gb {
-		sig_en_Gb = 0;
 		sig_sel_Gb = 0;
 	}
 
 	sfg idle_Fa {
-		sig_en_Fa = 0;
 		sig_sel_Fa = 0;
 	}
 
 	sfg idle_Fb {
-		sig_en_Fb = 0;
 		sig_sel_Fb = 0;
 	}
 
 	sfg idle_Fc {
-		sig_en_Fc = 0;
 		sig_sel_Fc = 0;
 	}
 
 	sfg idle_Fd {
-		sig_en_Fd = 0;
 		sig_sel_Fd = 0;
 	}
 
 	sfg idle_TmpA {	
-		sig_en_TmpA = 0;
 		sig_sel_TmpA = 0;
 	}
 
 	sfg idle_TmpB {
-		sig_en_TmpB = 0;
 		sig_sel_TmpB = 0;
 	}
 
 	sfg idle_ToMALU {
-		sig_en_ToMALU = 0;
 		sig_sel_ToMALU = 0b00;
 	}
 
-	// SFG's for LUT
-	sfg LUT_select_One {
-		sig_from_LUT = reg_LUT(0);
+	// SFG's for GF2m MALU core
+
+	sfg MALU_idle {
+		sig_MALU_start = 0;
+		sig_MALU_mode = 0;
 	}
 
-	sfg LUT_select_Two {
-		sig_from_LUT = reg_LUT(1);
+	sfg MALU_add {
+		sig_MALU_start = 1;
+		sig_MALU_mode = 0;
 	}
 
-	sfg LUT_select_Three {
-		sig_from_LUT = reg_LUT(2);
-	}
-
-	sfg LUT_select_Four {
-		sig_from_LUT = reg_LUT(3);
-	}
-
-	sfg LUT_select_Five {
-		sig_from_LUT = reg_LUT(4);
+	sfg MALU_mult {
+		sig_MALU_start = 1;
+		sig_MALU_mode = 1;
 	}
 
 	// SFG's for individual data transfer
 	sfg update_ToMALU_from_MALU {
-		sig_en_ToMALU = 1;
+		reg_ToMALU = sig_to_ToMALU;
 		sig_sel_ToMALU = 0b01;
 	}
 
-	sfg update_ToMALU_from_LUT {
-		sig_en_ToMALU = 1;
-		sig_sel_ToMALU = 0b10;
+	sfg update_ToMALU_from_Xv {
+		reg_ToMALU = sig_to_ToMALU;
+		sig_sel_ToMALU = 0b00;
 	}
 
-	sfg update_Xv_from_ToMALU {
-		sig_en_Xv = 1;
+	sfg update_Xv_from_Input {
+		reg_Xv = sig_to_Xv;
 		sig_sel_Xv = 0b11;
 	}
 
+	sfg update_Xv_from_ToMALU {
+		reg_Xv = sig_to_Xv;
+		sig_sel_Xv = 0b10;
+	}
+
+	sfg update_Xv_from_Right {
+		reg_Xv = sig_to_Xv;
+		sig_sel_Xv = 0b01;
+	}
+
 	sfg update_Yv_from_Left {
-		sig_en_Yv = 1;
+		reg_Yv = sig_to_Yv;
 		sig_sel_Xv = 0;
 	}
 
+	sfg update_Yv_from_Right {
+		reg_Yv = sig_to_Yv;
+		sig_sel_Xv = 1;
+	}
+
 	sfg update_Xp_from_Left {
-		sig_en_Xp = 1;
+		reg_Xp = sig_to_Xp;
 		sig_sel_Xp = 0;
 	}
 
+	sfg update_Xp_from_Right {
+		reg_Xp = sig_to_Xp;
+		sig_sel_Xp = 1;
+	}
+
 	sfg update_Yp_from_Left {
-		sig_en_Yp = 1;
+		reg_Yp = sig_to_Yp;
 		sig_sel_Yp = 0;
 	}
 
-	// SFG's for ready signals
-	sfg ready {
-		sig_ready = 1;
+	sfg update_Xfa_from_Left {
+		reg_Xfa = sig_to_Xfa;
+		sig_sel_Xfa = 0;
 	}
 
-	sfg not_ready {
-		sig_ready = 0;
+	sfg update_Yfa_from_Left {
+		reg_Yfa = sig_to_Yfa;
+		sig_sel_Yfa = 0;
+	}
+
+	// SFG's to set data in registers
+	sfg reset_F {
+		reg_Fa = 1;
+		reg_Fb = 0;
+		reg_Fc = 0;
+		reg_Fd = 0;
+	}
+
+	sfg reset_count_miller {
+		reg_count_miller = const_m - 1;
+	}
+
+	sfg reset_count_inverse {
+		reg_count_inverse = 0;
+	}
+
+	sfg inc_count_miller {
+		reg_count_miller = reg_count_miller + 1;
+	}
+
+	sfg inc_count_inverse {
+		reg_count_inverse = reg_count_inverse + 1;
+	}
+
+	// SFG's for ready signals
+	sfg set_ready {
+		reg_ready = 1;
+	}
+
+	sfg set_not_ready {
+		reg_ready = 0;
 	}
 	
 }
 
 fsm fsm_wrapper_pairing (wrapper_pairing) {
-	initial init;
+	initial init1;
 	state init2, init3, init4;
 
 	// If start goes high, start the input loading cycle (see notebook). If start goes high again after inital raising edge, reset (= go to step 2).
 
-	@init	if (reg_start == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init2;
-			else (do_always, idle_regs, idle_LUT, not_ready) -> init;
+	@init1	if (reg_start == 1) then (do_always, set_not_ready, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
+			else (do_always, idle_regs, not_ready, MALU_idle) -> init1;
 
-	@init2	if (reg_start == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init2;
-			else	if (reg_next == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init3;
-					else (do_always, idle_regs, idle_LUT, not_ready) -> init2;
+	@init2	if (reg_start == 1) then (do_always, not_ready, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
+			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init3;
+					else (do_always, idle_regs, MALU_idle) -> init2;
 
-	@init3	if (reg_start == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init2;
-			else	if (reg_next == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, update_Yv_from_Left, update_Xp_from_Left, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init4;
-					else (do_always, idle_regs, idle_LUT, not_ready) -> init3;
+	@init3	if (reg_start == 1) then (do_always, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
+			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Left, update_Xp_from_Left, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init4;
+					else (do_always, idle_regs, MALU_idle) -> init3;
 
-	@init4	if (reg_start == 1) then (do_always, idle_LUT, not_ready, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU) -> init2;
-			else	if (reg_next == 1) then (do_always, LUT_select_Three, not_ready, update_Xv_from_ToMALU, update_Yv_from_Left, update_Xp_from_Left, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, update_ToMALU_from_LUT) -> start;
-					else (do_always, idle_regs, idle_LUT, not_ready) -> init4;
+	@init4	if (reg_start == 1) then (do_always, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
+			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Left, update_Xp_from_Left, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, update_ToMALU_from_Xv, MALU_idle) -> start;
+					else (do_always, idle_regs, MALU_idle) -> init4;
 
 	// Start the calculations
 	
 	// First calculate distortion map coordinates
-	@start 
+	@start	(do_always, MALU_add, idle_regs) -> distort1;
+	
+	@distort1	if (reg_MALU_ready == 1) then (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort2;
+				else (do_always, idle_regs, MALU_idle) -> distort1;
+
+	// Swap registers around so that everything is in it's correct location.
+	@distort2	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort3;
+	@distort3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Right, update_Yv_from_Left, update_Xp_from_Right, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort4;
+	@distort4	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Right, update_Xp_from_Left, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort5;
+	@distort5	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Right, update_Yv_from_Left, update_Xp_from_Right, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort6;
+	@distort6	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Right, update_Xp_from_Left, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort7;
+	@distort7	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Left, update_Xp_from_Left, update_Yp_from_Left, update_Xfa_from_Left, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort8;
+	@distort8	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Left, update_Yp_from_Left, update_Xfa_from_Left, update_Yfa_from_Left, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller-init1;
+
+	// Start Miller's algorithm for Tate pairing
+	@miller-init1	(do_always, MALU_idle, reset_F, reset_count_miller, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Right, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller-init2;
+	@miller-init2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Right, update_Xp_from_Right, update_Yp_from_Left, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller1;
+
+	// Start of main loop
+	@miller1	if (reg_count_miller == 0) then (do_always, idle_regs, MALU_idle) -> final-exp1;
+				else (do_always, inc_count_miller, 
+	
+	
 }
 
-idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Yfb, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU
+idle all: idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB
+shift all left: idle_ToMALU, update_Xv_from_Left, update_Yv_from_Left, update_Xp_from_Left, update_Yp_from_Left, update_Xfa_from_Left, update_Yfa_from_Left, update_Ga_from_Left, update_Gb_from_Left, update_Fa_from_Left, update_Fb_from_Left, update_Fc_from_Left, update_Fd_from_Left, update_TmpA_from_Left, update_TmpB
+shift all right: idle_ToMALU, update_Xv_from_Right, update_Yv_from_Right, update_Xp_from_Right, update_Yp_from_Right, update_Xfa_from_Right, update_Yfa_from_Right, update_Ga_from_Right, update_Gb_from_Right, update_Fa_from_Right, update_Fb_from_Right, update_Fc_from_Right, update_Fd_from_Right, update_TmpA_from_Right, update_TmpB
 
 #endif /* WRAPPER_PAIRING_FDL */
