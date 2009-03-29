@@ -8,29 +8,352 @@
 
 \pgfrealjobname{malu}
 
-\begin{document}
 \tikzset{
 	reg/.style={draw, minimum height=6mm, minimum width=10mm},
 	lut/.style={draw, minimum height=10mm, minimum width=10mm},
 	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.15cm, fill, circle},
-	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt}
+	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt},
+	labeltextreg/.style={text centered},
+	labelboxreg/.style={draw, minimum height=8mm, minimum width=18mm, outer sep=0pt}
 }
-\beginpgfgraphicnamed{gf2m-reg-detail}
+
+\def\labelboxreg#1#2{\node[labeltextreg, xshift=0.5mm] {#2}; \node[labelboxreg] (#1) {}; \draw (#1.north west) -- ($(#1.north west)!0.5!(#1.south west) + (2mm, 0)$) -- (#1.south west);}
+
+\begin{document}
+\beginpgfgraphicnamed{gf2m-regs-empty}
 \begin{tikzpicture}
-\matrix [column sep=1.5mm, row sep=4mm] {
-	\node[mux, xshift=-0.1mm] (m1) {}; &[5mm]
-	\node[mux, xshift=-2.2mm] (m2) {}; &[5mm]
-	\node[reg] (r1) {X$_v$}; \\
+\matrix [column sep=1.0mm, row sep=1.5mm] {
+	\labelboxreg{r0}{ToMALU}; &[3mm]
+	\labelboxreg{r1}{X$_v$}; &
+	\labelboxreg{r2}{Y$_v$}; &
+	\labelboxreg{r3}{X$_p$}; &
+	\labelboxreg{r2}{Y$_p$}; &
+	\labelboxreg{r3}{X$_{\phi , a}$}; &
+	\labelboxreg{r2}{Y$_{\phi , a}$}; &
+	\labelboxreg{r3}{g$_a$}; &
+	\labelboxreg{r2}{g$_b$}; &
+	\labelboxreg{r3}{f$_a$}; &
+	\labelboxreg{r3}{f$_b$}; &
+	\labelboxreg{r3}{f$_c$}; &
+	\labelboxreg{r3}{f$_d$}; &
+	\labelboxreg{r4}{Tmp$_A$}; &
+	\labelboxreg{r5}{Tmp$_B$}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{a1}{}; &
+	\labelboxreg{a2}{}; &
+	\labelboxreg{a3}{}; &
+	\labelboxreg{a4}{}; &
+	\labelboxreg{a5}{}; &
+	\labelboxreg{a6}{}; &
+	\labelboxreg{a7}{}; &
+	\labelboxreg{a8}{}; &
+	\labelboxreg{a9}{}; &
+	\labelboxreg{a10}{}; &
+	\labelboxreg{a11}{}; &
+	\labelboxreg{a12}{}; &
+	\labelboxreg{a13}{}; &
+	\labelboxreg{a14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{b1}{}; &
+	\labelboxreg{b2}{}; &
+	\labelboxreg{b3}{}; &
+	\labelboxreg{b4}{}; &
+	\labelboxreg{b5}{}; &
+	\labelboxreg{b6}{}; &
+	\labelboxreg{b7}{}; &
+	\labelboxreg{b8}{}; &
+	\labelboxreg{b9}{}; &
+	\labelboxreg{b10}{}; &
+	\labelboxreg{b11}{}; &
+	\labelboxreg{b12}{}; &
+	\labelboxreg{b13}{}; &
+	\labelboxreg{b14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{c1}{}; &
+	\labelboxreg{c2}{}; &
+	\labelboxreg{c3}{}; &
+	\labelboxreg{c4}{}; &
+	\labelboxreg{c5}{}; &
+	\labelboxreg{c6}{}; &
+	\labelboxreg{c7}{}; &
+	\labelboxreg{c8}{}; &
+	\labelboxreg{c9}{}; &
+	\labelboxreg{c10}{}; &
+	\labelboxreg{c11}{}; &
+	\labelboxreg{c12}{}; &
+	\labelboxreg{c13}{}; &
+	\labelboxreg{c14}{}; \\
+	
+	\labelboxreg{a0}{}; &	
+	\labelboxreg{d1}{}; &
+	\labelboxreg{d2}{}; &
+	\labelboxreg{d3}{}; &
+	\labelboxreg{d4}{}; &
+	\labelboxreg{d5}{}; &
+	\labelboxreg{d6}{}; &
+	\labelboxreg{d7}{}; &
+	\labelboxreg{d8}{}; &
+	\labelboxreg{d9}{}; &
+	\labelboxreg{d10}{}; &
+	\labelboxreg{d11}{}; &
+	\labelboxreg{d12}{}; &
+	\labelboxreg{d13}{}; &
+	\labelboxreg{d14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{e1}{}; &
+	\labelboxreg{e2}{}; &
+	\labelboxreg{e3}{}; &
+	\labelboxreg{e4}{}; &
+	\labelboxreg{e5}{}; &
+	\labelboxreg{e6}{}; &
+	\labelboxreg{e7}{}; &
+	\labelboxreg{e8}{}; &
+	\labelboxreg{e9}{}; &
+	\labelboxreg{e10}{}; &
+	\labelboxreg{e11}{}; &
+	\labelboxreg{e12}{}; &
+	\labelboxreg{e13}{}; &
+	\labelboxreg{e14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{f1}{}; &
+	\labelboxreg{f2}{}; &
+	\labelboxreg{f3}{}; &
+	\labelboxreg{f4}{}; &
+	\labelboxreg{f5}{}; &
+	\labelboxreg{f6}{}; &
+	\labelboxreg{f7}{}; &
+	\labelboxreg{f8}{}; &
+	\labelboxreg{f9}{}; &
+	\labelboxreg{f10}{}; &
+	\labelboxreg{f11}{}; &
+	\labelboxreg{f12}{}; &
+	\labelboxreg{f13}{}; &
+	\labelboxreg{f14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{g1}{}; &
+	\labelboxreg{g2}{}; &
+	\labelboxreg{g3}{}; &
+	\labelboxreg{g4}{}; &
+	\labelboxreg{g5}{}; &
+	\labelboxreg{g6}{}; &
+	\labelboxreg{g7}{}; &
+	\labelboxreg{g8}{}; &
+	\labelboxreg{g9}{}; &
+	\labelboxreg{g10}{}; &
+	\labelboxreg{g11}{}; &
+	\labelboxreg{g12}{}; &
+	\labelboxreg{g13}{}; &
+	\labelboxreg{g14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{h1}{}; &
+	\labelboxreg{h2}{}; &
+	\labelboxreg{h3}{}; &
+	\labelboxreg{h4}{}; &
+	\labelboxreg{h5}{}; &
+	\labelboxreg{h6}{}; &
+	\labelboxreg{h7}{}; &
+	\labelboxreg{h8}{}; &
+	\labelboxreg{h9}{}; &
+	\labelboxreg{h10}{}; &
+	\labelboxreg{h11}{}; &
+	\labelboxreg{h12}{}; &
+	\labelboxreg{h13}{}; &
+	\labelboxreg{h14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
+	
+	\labelboxreg{a0}{}; &
+	\labelboxreg{i1}{}; &
+	\labelboxreg{i2}{}; &
+	\labelboxreg{i3}{}; &
+	\labelboxreg{i4}{}; &
+	\labelboxreg{i5}{}; &
+	\labelboxreg{i6}{}; &
+	\labelboxreg{i7}{}; &
+	\labelboxreg{i8}{}; &
+	\labelboxreg{i9}{}; &
+	\labelboxreg{i10}{}; &
+	\labelboxreg{i11}{}; &
+	\labelboxreg{i12}{}; &
+	\labelboxreg{i13}{}; &
+	\labelboxreg{i14}{}; \\
 };
 \begin{scope}[>=latex, very thick]
-	\draw [->] (m1.north) -- ($(m2.south east)$);
-	\draw [->] (m2.north) -- (r1.west);
-	\draw [->] ($(m1.south west) + (-10mm, 1.3mm)$) |- node [above, xshift=2mm] {Tmp$_B$} ($(m1.south west) + (0, 1.3mm)$);
-	\draw [->] ($(m1.south east) + (-10mm, -1.3mm)$) |- node [below, xshift=2mm] {Y$_v$} ($(m1.south east) + (0, -1.3mm)$);
-	\draw [->] (r1.east) -| ($(r1.north east) + (2mm, 5mm)$) -| ($(m2.south west) + (-4mm, 0)$) -- (m2.south west);
+%	\draw [<->] ($(r1.south east) + (-3mm, 0)$) |- ($(r2.south west) + (3mm, -3mm)$) -| ($(r2.south west)  + (3mm, 0)$);
+%	\draw [<->] ($(r2.south east) + (-3mm, 0)$) |- ($(r3.south west) + (3mm, -3mm)$) -| ($(r3.south west)  + (3mm, 0)$);
+%	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r3.south east) + (-3mm, 0)$) |- ($(r3.south east) + (0, -3mm)$);
+%	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r4.south west) + (3mm, 0)$) |- ($(r4.south west) + (0, -3mm)$);
+%	\draw [<->] ($(r4.south east) + (-3mm, 0)$) |- ($(r5.south west) + (3mm, -3mm)$) -| ($(r5.south west)  + (3mm, 0)$);
+%	\draw [<-] ($(r5.south east) + (-3mm, 0)$) |- ($(r5.south east) + (2mm, -3mm)$) |- ($(r4.north west)  + (0, 3mm)$);
+%	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r4.north west)  + (-3mm, 3mm)$) -| ($(r4.north west) + (0, 3mm)$);
+%	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r3.north east)  + (3mm, 3mm)$) -| ($(r3.north east) + (0, 3mm)$);
+%	\draw [->] ($(r3.north east) + (0, 3mm)$) -- ($(r1.north west)  + (-2mm, 3mm)$) |- ($(r1.south west)  + (3mm, -3mm)$) -- ($(r1.south west)  + (3mm, 0)$);
 \end{scope}
-\draw (m1.east) |- node [above, at end, anchor=base east, yshift=0.6mm, xshift=1mm] {select} ($(m1.east) + (20mm, -6mm)$);
-\draw (m2.east) |- node [above, at end, anchor=base east, yshift=0.6mm, xshift=1mm] {hold} ($(m2.east) + (9mm, -4mm)$);
 \end{tikzpicture}
 \endpgfgraphicnamed
 \end{document}
