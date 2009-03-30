@@ -606,7 +606,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@miller70	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Right) -> miller71;
 	@miller71	(do_always, MALU_mult, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller72;
 	@miller72	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller72;
-				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller73;	
+				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller73;
 
 	// Calculate Fd (Fd + Fc)
 	@miller73	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Right) -> miller74;
@@ -615,7 +615,41 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	// [Calculate F * G]
 
-	// Move registers around
+	// Calculate Fa' (Fa * Ga)
+	@miller76	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Right, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, update_TmpA_from_Right, update_TmpB_from_Left) -> miller77;
+	@miller77	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Right, update_TmpA_from_Left, update_TmpB_from_Right) -> miller78;
+	@miller78	(do_always, MALU_idle, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_Right, update_TmpB_from_Left) -> miller79;
+	@miller79	(do_always, MALU_mult, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Right) -> miller80;
+	@miller80	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller80;
+				else (do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Right, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller81;
+
+	// Calculate Fa' (Fa' + Fd)
+	@miller81	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, idle_TmpA, idle_TmpB) -> miller82;
+	@miller82	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Right, update_TmpA_from_Left, idle_TmpB) -> miller83;
+
+	// Move temporary registers to "front"
+	@miller83	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Right, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Right, update_Fc_from_Right, update_Fd_from_Right, update_TmpA_from_Right, update_TmpB_from_Right) -> miller84;
+	@miller84	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, update_Fa_from_Right, update_Fb_from_Right, update_Fc_from_Right, update_Fd_from_Right, update_TmpA_from_Right, update_TmpB_from_Right) -> miller85;
+
+	// Calculate Fb' (Fa + Fb)
+	@miller85	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, update_TmpA_from_Right, update_TmpB_from_Left) -> miller86;
+	@miller86	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Right, update_TmpA_from_Left, update_TmpB_from_Right) -> miller87;
+	@miller87	(do_always, MALU_idle, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, update_TmpA_from_Right, update_TmpB_from_Left) -> miller88;
+	@miller88	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Right, update_Fc_from_Left, update_Fd_from_Right, update_TmpA_from_Left, update_TmpB_from_Right) -> miller89;
+	@miller89	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, update_TmpA_from_Right, update_TmpB_from_Left) -> miller90;
+
+	// Calculate Tmp (Ga + Gb)
+	@miller90	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Right, update_TmpA_from_Left, idle_TmpB) -> miller91;
+	@miller91	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Right) -> miller92;
+	@miller92	(do_always, MALU_idle, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_Right, update_TmpB_from_Left) -> miller93;
+	@miller93	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Right) -> miller94;
+	@miller94	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Right, update_Fd_from_Left, update_TmpA_from_Right, update_TmpB_from_Left) -> miller95;
+
+	// Calculate Fb' (Fb' * Tmp)
+	@miller95	(do_always, MALU_mult, idle_ToMALU, update_Xv_from_Left, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Right, update_TmpA_from_Left, update_TmpB_from_Right) -> miller96;
+	@miller96	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller96;
+				else (do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Right, update_Yv_from_Left, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_Right, update_TmpB_from_Left) -> miller97;
+
 }
 
 idle all: (do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> 
