@@ -660,10 +660,10 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// Calculate Xn (lambda^2 or lambda^2 + Xv + Xu)
 	@coord1		(do_always, MALU_mult, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord2;
 	@coord2		if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord2;
-				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord3;
+					else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord3;
 	
 	@coord3		if (reg_add == 0) then (do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> coord7;
-				else (do_always, MALU_add, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> coord4;
+					else (do_always, MALU_add, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> coord4;
 	@coord4		(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord5;
 	@coord5		(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord6;
 	@coord6		(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord7;
