@@ -493,10 +493,17 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@distort8	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller-init1;
 
 	// Start Miller's algorithm for Tate pairing
-	@miller-init1	(do_always, MALU_idle, reset_F, reset_count_miller, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller-init2;
+	@miller-init1	(do_always, MALU_idle, unset_add, reset_F, reset_count_miller, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller-init2;
 	@miller-init2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> double1;
 
-	@startloop1		
+	// [Loop Control]
+	// If counter is 0, then go to ready state, else, when at x^7, x^6 or x^3 do "add" step, otherwise do "double" step.
+	// counter starts at const_m - 1 and loop ends when counter = 0 -> counter = 1 == 1, counter == 2 = x, etc
+	@startloop1		if (reg_count_miller == 0) then (do_always, MALU_idle, idle_regs) -> ready1;
+					else	if (reg_count_miller == 8 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
+							else	if (reg_count_miller == 7 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
+								else	if (reg_count_miller == 4 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
+										else (do_always, MALU_idle, idle_regs, unset_add, dec_count_miller) -> dlambda1;
 
 	// [Double Step]
 
@@ -505,9 +512,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@dlambda1	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_Yv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> dlambda2;
 	@dlambda2	(do_always, MALU_mult_plus_one, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> dlambda3;
 	@dlambda3	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> dlambda3;
-				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, update_Gb_from_Fa, update_Fa_from_Fb, update_Fb_from_Fc, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> dlambda4;
-
-	// TODO: Jump to coord part here.
+				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, update_Gb_from_Fa, update_Fa_from_Fb, update_Fb_from_Fc, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> coord1;
 
 	// [Calculate F^2]
 
@@ -687,14 +692,6 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@fg145	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, update_Yp_from_Xfa, idle_Xfa, update_Yfa_from_Ga, update_Ga_from_Gb, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> fg146;
 	@fg146	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yfa, update_Yfa_from_Ga, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> addtest;
 
-	// [Test if addition step is necessary]
-	// When at x^7, x^6 or x^3 do addition step:
-	// counter starts at const_m - 1 and loop ends when counter = 0 -> counter = 1 == 1, counter == 2 = x, etc
-	@addtest	if (reg_count_miller == 8) then (do_always, MALU_idle, idle_regs, set_add) -> startloop1;
-				else	if (reg_count_miller == 7) then (do_always, MALU_idle, idle_regs, set_add) -> startloop1;
-						else	if (reg_count_miller == 4) then (do_always, MALU_idle, idle_regs, set_add) -> startloop1;
-								else (do_always, MALU_idle, idle_regs, unset_add) -> startloop1;
-
 	// [Add Step]
 
 	// [Calculate lambda]
@@ -832,7 +829,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@alambda11	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda12;
 	@alambda12	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda13;
 	@alambda13	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda14;
-	@alambda14	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda15;
+	@alambda14	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> coord1;
 
 	// [Calculate coordinates]
 
