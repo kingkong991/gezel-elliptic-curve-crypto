@@ -444,43 +444,45 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	state miller-init1, miller-init2;
 
-	state double1,   double2,   double3,   double4,   double5,   double6,   double7,   double8,   double9;
-	state double10,  double11,  double12,  double13,  double14,  double15,  double16,  double17,  double18,  double19;
-	state double20,  double21,  double22,  double23,  double24,  double25,  double26,  double27,  double28,  double29;
-	state double30,  double31,  double32,  double33,  double34,  double35,  double36,  double37,  double38,  double39;
-	state double40,  double41,  double42,  double43,  double44,  double45,  double46,  double47,  double48,  double49;
-	state double50,  double51,  double52,  double53,  double54,  double55,  double56,  double57,  double58,  double59;
-	state double60,  double61,  double62,  double63,  double64,  double65,  double66,  double67,  double68,  double69;
-	state double70,  double71,  double72,  double73,  double74,  double75,  double76,  double77,  double78,  double79;
-	state double80,  double81,  double82,  double83,  double84,  double85,  double86,  double87,  double88,  double89;
-	state double90,  double91,  double92,  double93,  double94,  double95,  double96,  double97,  double98,  double99;
-	state double100, double101, double102, double103, double104, double105, double106, double107, double108, double109;
-	state double110, double111, double112, double113, double114, double115, double116, double117, double118, double119;
-	state double120, double121, double122, double123, double124, double125, double126, double127, double128, double129;
-	state double130, double131, double132, double133, double134, double135, double136, double137, double138, double139;
-	state double140, double141, double142, double143, double144, double145, double146;
 
 	// If start goes high, start the input loading cycle (see notebook). If start goes high again after inital raising edge, reset (= go to step 2).
 
-	@init1	if (reg_start == 1) then (do_always, set_not_ready, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
-			else (do_always, idle_regs, not_ready, MALU_idle) -> init1;
+	@init1	if (reg_start == 1) then (do_always, set_not_ready, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+			else (do_always, MALU_idle, idle_regs) -> init1;
 
-	@init2	if (reg_start == 1) then (do_always, not_ready, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
-			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init3;
-					else (do_always, idle_regs, MALU_idle) -> init2;
+	@init2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+			else	if (reg_next == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init3;
+					else (do_always, MALU_idle, idle_regs) -> init2;
 
-	@init3	if (reg_start == 1) then (do_always, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
-			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init4;
-					else (do_always, idle_regs, MALU_idle) -> init3;
+	@init3	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+			else	if (reg_next == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init4;
+					else (do_always, MALU_idle, idle_regs) -> init3;
 
-	@init4	if (reg_start == 1) then (do_always, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, idle_ToMALU, MALU_idle) -> init2;
-			else	if (reg_next == 1) then (do_always, update_Xv_from_Input, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB, update_ToMALU_from_Xv, MALU_idle) -> start;
-					else (do_always, idle_regs, MALU_idle) -> init4;
+	@init4	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+			else	if (reg_next == 1) then (do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_Input, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> start;
+					else (do_always, MALU_idle, idle_regs) -> init4;
+
+	// [Ready]
+
+	// Shift F to Xv, once nothing remains in Fd, reset F, so after 4x next, we can output 0.
+	@ready1		(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> ready2;
+	@ready2		(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> ready3;
+	@ready3		(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> ready4;
+	@ready4		(do_always, reset_F, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> ready5;
+	@ready5		(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> ready6;
+	@ready6		(do_always, set_ready, reset_counter_inverse, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_TmpA) -> ready7;
+
+	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
+	@ready7		if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+				else	if (reg_next == 1) 
+							if (reg_count_inverse == 3) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init1;
+							else (do_always, inc_counter_inverse, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xp, update_Xp_from_Yp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> ready7;
+						else (do_always, MALU_idle, idle_regs) -> ready7;
 
 	// Start the calculations
 	
 	// Calculate distortion map coordinates (Yfa = Xq + Yq)
-	@start	(do_always, MALU_add, idle_regs) -> distort1;
+	@start		(do_always, MALU_add, idle_regs) -> distort1;
 	@distort1	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort2;
 
 	// Swap registers around so that everything is in it's correct location.
@@ -512,7 +514,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@dlambda1	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_Yv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> dlambda2;
 	@dlambda2	(do_always, MALU_mult_plus_one, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> dlambda3;
 	@dlambda3	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> dlambda3;
-				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, update_Gb_from_Fa, update_Fa_from_Fb, update_Fb_from_Fc, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> coord1;
+				else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, update_Gb_from_Fa, update_Fa_from_Fb, update_Fb_from_Fc, update_Fc_from_Fd, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> coord1;
 
 	// [Add Step]
 
