@@ -408,7 +408,9 @@ dp wrapper_pairing(in input:	ns(const_m);
 	}
 
 	sfg reset_count_miller {
-		reg_count_miller = const_m - 1;
+		// t = ceil(log2(l)) = ceil(log2(2^163 + 2^82 + 1)) = 164
+		// i goes from t - 2 to 0 (= 162 to 0) -> 163 to 1
+		reg_count_miller = const_m;
 	}
 
 	sfg reset_count_inverse {
@@ -499,13 +501,11 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@miller-init2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> double1;
 
 	// [Loop Control]
-	// If counter is 0, then go to ready state, else, when at x^7, x^6 or x^3 do "add" step, otherwise do "double" step.
+	// If counter is 0, then go to ready state, else, when at 2^82 do "add" step, otherwise do "double" step.
 	// counter starts at const_m - 1 and loop ends when counter = 0 -> counter = 1 == 1, counter == 2 = x, etc
 	@startloop1		if (reg_count_miller == 0) then (do_always, MALU_idle, idle_regs) -> ready1;
-					else	if (reg_count_miller == 8 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
-							else	if (reg_count_miller == 7 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
-								else	if (reg_count_miller == 4 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
-										else (do_always, MALU_idle, idle_regs, unset_add, dec_count_miller) -> dlambda1;
+					else	if (reg_count_miller == 83 & reg_add == 0) then (do_always, MALU_idle, idle_regs, set_add) -> alambda1;
+							else (do_always, MALU_idle, idle_regs, unset_add, dec_count_miller) -> dlambda1;
 
 	// [Double Step]
 
