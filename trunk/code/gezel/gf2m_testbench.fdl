@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-#include "wrapper-gf2m.fdl"
+#include "wrapper_gf2m.fdl"
 
 $option "vcd"
 
@@ -37,7 +37,7 @@ dp testbench {
 		reg_A = 0x00000002FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8;
 		reg_B = 0x0000000289070FB05D38FF58321F2E800536D538CCDAA3D9;
 
-		//reg_A = 1;
+		//reg_A = 3;
 		//reg_B = 2;
 	}
 
@@ -77,7 +77,11 @@ dp testbench {
 	}
 
 	sfg print {
-		$display("[Cycle ", $cycle, "] - A = ", $bin, A, " - B: ", B, " - T: ", T);
+		$display("[Cycle ", $cycle, "] - A = ", $dec, A, " - B: ", B, " - T: ", T);
+	}
+
+	sfg done {
+		$display("[[Done]] Final result = ", $dec, T);
 	}
 
 //	sfg end {
@@ -91,13 +95,13 @@ fsm fsm_testbench (testbench) {
 
 	@init (init, do_always, MALU_idle, print) -> start;
 
-//	@start (MALU_mult, do_always, print) -> run;
-//	@run	if (reg_ready == 0) then (MALU_idle, run, do_always, print) -> run;
-//			else (MALU_idle, do_always, print) -> idle;
+	@start (MALU_mult, do_always, print) -> run;
+	@run	if (reg_ready == 0) then (MALU_idle, run, do_always, print) -> run;
+			else (MALU_idle, do_always, print, done) -> idle;
 
-	@start (MALU_add, do_always, print) -> run;
-	@run	if (reg_ready == 0) then (MALU_idle, do_always, print) -> run;
-			else (MALU_idle, do_always, print) -> idle;
+//	@start (MALU_add, do_always, print) -> run;
+//	@run	if (reg_ready == 0) then (MALU_idle, do_always, print) -> run;
+//			else (MALU_idle, do_always, print) -> idle;
 
 	@idle (do_always, MALU_idle) -> idle;
 }

@@ -24,11 +24,6 @@
 // (na)   (bit 7) (bit 6) (bit 3) (bit 0)
 #define XOR_P(a, b) ((ns(155)) a[8:162]) CONCATENATION ((ns(1)) a[7] ^ b) CONCATENATION ((ns(1)) a[6] ^ b) CONCATENATION ((ns(2)) a[4:5]) CONCATENATION ((ns(1)) a[3] ^ b) CONCATENATION ((ns(2)) a[1:2]) CONCATENATION ((ns(1)) a[0] ^ b)
 
-// Curve parameters
-#define curve_A 1
-#define curve_B 0
-#define curve_C 0		// c = b^(2^(m - 1)) (c^2 = b)
-
 /* AND m-bit register (b) with 1-bit register (a): */
 // See Boost manual for explanation
 // From num - 1 to 0 (MSB first)
