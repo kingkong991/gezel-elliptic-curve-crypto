@@ -2,6 +2,18 @@
 
 #include "wrapper_pairing.fdl"
 
+/*
+ * Some random test points:
+ *
+ * P:
+ *		0x18239FA96047C449DBF0D78A2A596E5A7D67D209F
+ *		0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2
+ *
+ * Q:
+ *		0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3
+ *		0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75
+ */
+
 dp testbench {
 	reg reg_in: ns(const_m);
 	sig sig_in: ns(const_m);
