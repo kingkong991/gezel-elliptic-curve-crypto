@@ -25,20 +25,36 @@ dp testbench {
 
 	sig ready: ns(1);
 
-	reg reg_cycle: ns(const_m_log);
 	reg reg_ready: ns(1);
 	
 	use wrapper_pairing(sig_in, start, next, sig_out, ready);
 
-	sfg reset {
-		reg_cycle = 0;
+	sfg init1 {
+		start = 1;
+		next = 0;
 
-		//reg_A = 0x00000002FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8;
-		//reg_B = 0x0000000289070FB05D38FF58321F2E800536D538CCDAA3D9;
+		reg_in = 0x18239FA96047C449DBF0D78A2A596E5A7D67D209F;
 	}
 
-	sfg run {
-		reg_cycle = reg_cycle + 1;
+	sfg init2 {
+		start = 0;
+		next = 1;
+
+		reg_in = 0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2;
+	}
+
+	sfg init3 {
+		start = 0;
+		next = 1;
+
+		reg_in = 0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3;
+	}
+
+	sfg init4 {
+		start = 0;
+		next = 1;
+
+		reg_in = 0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75;
 	}
 
 	sfg do_always {
@@ -53,19 +69,24 @@ dp testbench {
 	}
 
 	sfg print {
-		$display("[Cycle ", $cycle, "] - out = ", $dec, sig_out);
+		$display("[Cycle ", $cycle, "] - out = ", $hex, sig_out);
 	}
 }
 
 fsm fsm_testbench (testbench) {
 	initial init;
-	state start, run, idle;
+	state start, init2, init3, init4;
+	state wait, idle;
 
-	@init (reset, do_always, idle_sigs) -> start;
+	@init	(do_always, idle_sigs) -> start;
 
-	@start (do_always, print) -> run;
-	@run	if (reg_ready == 0) then (run, do_always, idle_sigs) -> run;
-			else (do_always, print) -> idle;
+	@start	(do_always, init1, print) -> init2;
+	@init2	(do_always, init2, print) -> init3;
+	@init3	(do_always, init3, print) -> init4;
+	@init4	(do_always, init4, print) -> wait;
+
+	@wait	if (reg_ready == 0) then (do_always, idle_sigs) -> wait;
+			else (do_always, idle_sigs, print) -> idle;
 
 	@idle (do_always, idle_sigs) -> idle;
 }
