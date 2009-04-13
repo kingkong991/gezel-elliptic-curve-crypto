@@ -40,10 +40,10 @@ dp wrapper_gf2m (in A: ns(const_m);
 
 	sig sig_ready: ns(1);
 
-	$trace(B_in, "gf2m-B_in.txt");
-	$trace(T_out, "gf2m-T_out.txt");
-	$trace(B_mux, "gf2m-B_mux.txt");
-	$trace(sig_ready, "gf2m-ready.txt");
+	//$trace(B_in, "gf2m-B_in.txt");
+	//$trace(T_out, "gf2m-T_out.txt");
+	//$trace(B_mux, "gf2m-B_mux.txt");
+	//$trace(sig_ready, "gf2m-ready.txt");
 
 	use malu(T_in, B_in, m_in, T_out, m_out);
 

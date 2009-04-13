@@ -76,6 +76,10 @@ dp testbench {
 		start = 0;
 		next = 1;
 	}
+
+	sfg end {
+		$finish;
+	}
 }
 
 fsm fsm_testbench (testbench) {
@@ -104,7 +108,7 @@ fsm fsm_testbench (testbench) {
 	@output6 (do_always, idle_sigs, print) -> idle;
 
 
-	@idle (do_always, idle_sigs) -> idle;
+	@idle (end, do_always, idle_sigs) -> idle;
 }
 
 system S {

@@ -171,7 +171,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_from_TmpB = reg_TmpB;
 	
 		sig_from_ToMALU = reg_ToMALU;
-		sig_from_ToMALUShift = ((ns(const_m - 1)) reg_ToMALU[0:const_m - 2]) # ((ns(1)) reg_ToMALU[const_m - 1]);	// Circular left shift of reg_ToMALU
+		sig_from_ToMALUShift = ((ns(const_m - malu_width)) reg_ToMALU[0:const_m - malu_width - 1]) # ((ns(malu_width)) reg_ToMALU[const_m - malu_width:const_m - 1]);	// Circular left shift of reg_ToMALU
 
 		sig_from_Input = input;
 
@@ -566,6 +566,10 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sfg disp_debug {
 		$display("[Debug] Cycle: ", $cycle, " - Count Miller: ", $dec, reg_counter_miller, " - Count Misc: ", reg_counter_misc);
 	}
+	
+	sfg disp_regdump {
+		$display($hex, "[RegDump] ToMALU: ", sig_from_ToMALU, " - Xv: ", sig_from_Xv, " - Yv: ", sig_from_Yv, " - Xp: ", sig_from_Xp, " - Yp: ", sig_from_Yp, " - Xfa: ", sig_from_Xfa, " - Yfa: ", sig_from_Yfa, " - Ga: ", sig_from_Ga, " - Gb: ", sig_from_Gb, " - Fa: ", sig_from_Fa, " - Fb: ", sig_from_Fb, " - Fc: ", sig_from_Fc, " - Fd: ", sig_from_Fd, " - TmpA: ", sig_from_TmpA, " - TmpB: ", sig_from_TmpB);
+	}
 }
 
 fsm fsm_wrapper_pairing (wrapper_pairing) {
@@ -673,7 +677,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Ready]
 
 	// Set TmpB to 0, F should be in Xv to Yp.
-	@ready1	(do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
+	@ready1	($trace, disp_regdump, do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
 
 	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
 	@ready2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
@@ -683,7 +687,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// Start the calculations
 	
 	// Calculate distortion map coordinates (Yfa = Xq + Yq)
-	@start		(do_always, MALU_add, idle_regs) -> distort1;
+	@start		(disp_regdump, do_always, MALU_add, idle_regs) -> distort1;
 	@distort1	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> distort2;
 
 	// Swap registers around so that everything is in it's correct location.
@@ -697,14 +701,14 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	// Start Miller's algorithm for Tate pairing
 	@miller_init1	(do_always, MALU_idle, unset_add, reset_F, reset_counter_miller, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> miller_init2;
-	@miller_init2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> startloop1;
+	@miller_init2	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> startloop1;
 
 	// [Loop Control]
 	// If counter is 0, then go to ready state, else, when at 2^82 do "add" step, otherwise do "double" step.
 	// counter starts at const_m - 1 and loop ends when counter = 0 -> counter = 1 == 1, counter == 2 = x, etc
 	@startloop1		if (reg_counter_miller == 0) then (do_always, MALU_idle, idle_regs) -> finalexp1;
 						else	if (reg_counter_miller == 83 & reg_add == 0) then (disp_debug, $trace, do_always, MALU_idle, idle_regs, set_add) -> alambda1;
-								else (disp_debug, $trace, do_always, MALU_idle, idle_regs, unset_add, dec_counter_miller) -> dlambda1;
+								else (do_always, MALU_idle, idle_regs, unset_add, dec_counter_miller) -> dlambda1;
 
 	// [Double Step]
 
@@ -730,7 +734,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@alambda6	(disp_debug, $trace, do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, idle_TmpA, idle_TmpB) -> inv1;
 
 	// Calculate Yv + Yp
-	@alambda7	(disp_debug, $trace, do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda8;
+	@alambda7	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda8;
 	@alambda8	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, idle_Yv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> alambda9;
 	@alambda9	(do_always, MALU_idle, update_ToMALU_from_Xv, idle_Xv, update_Yv_from_Xp, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda10;
 	@alambda10	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> alambda11;
@@ -1362,7 +1366,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	
 	// Check loop condition
 	@f4msqrt2	if (reg_counter_misc == 82) then (disp_debug, $trace, do_always, MALU_idle, idle_regs, reset_counter_misc) -> f4mmult1;
-					else (disp_debug, $trace, do_always, inc_counter_misc, MALU_idle, idle_regs) -> f4msqrt3;
+					else (do_always, inc_counter_misc, MALU_idle, idle_regs) -> f4msqrt3;
 	
 	// Calculate m0, m1, m2 & m3
 	@f4msqrt3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> f4msqrt4;
@@ -1588,7 +1592,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	@f2mmult1	(disp_debug, $trace, do_always, reset_counter_misc, MALU_idle, idle_regs) -> f2mmult2;
 	@f2mmult2	if (reg_counter_misc == 3) then (disp_debug, $trace, do_always, reset_counter_misc, MALU_idle, idle_regs) -> f4mpow1;
-					else (disp_debug, $trace, do_always, inc_counter_misc, MALU_idle, idle_regs) -> f2mmult3;
+					else (do_always, inc_counter_misc, MALU_idle, idle_regs) -> f2mmult3;
 
 	// Calculate a0 (Aa + Ab)
 	@f2mmult3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f2mmult4;
