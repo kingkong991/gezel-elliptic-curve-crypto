@@ -3,3 +3,6 @@ F2x<x> := PolynomialRing(F2);  // veeltermen over F_2
 f := x^163 + x^7 + x^6 + x^3 + 1;
 Fq<z> := ext<F2 | f>; // definieert modulo f rekenen
 E := EllipticCurve([Fq ! 0,0,1,1,1]);
+
+ZX<X> := PolynomialRing(Integers());
+printf "%h", Evaluate(ZX ! [Integers() ! c : c in Eltseq(P[1])], 2);
