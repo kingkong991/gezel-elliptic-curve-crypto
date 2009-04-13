@@ -71,12 +71,18 @@ dp testbench {
 	sfg print {
 		$display("[Cycle ", $cycle, "] - out = ", $hex, sig_out);
 	}
+
+	sfg raise_next {
+		start = 0;
+		next = 1;
+	}
 }
 
 fsm fsm_testbench (testbench) {
 	initial init;
 	state start, init2, init3, init4;
 	state wait, idle;
+	state output1, output2, output3, output4, output5, output6;
 
 	@init	(do_always, idle_sigs) -> start;
 
@@ -86,7 +92,17 @@ fsm fsm_testbench (testbench) {
 	@init4	(do_always, init4, print) -> wait;
 
 	@wait	if (reg_ready == 0) then (do_always, idle_sigs) -> wait;
-			else (do_always, idle_sigs, print) -> idle;
+			else (do_always, idle_sigs, print) -> output1;
+
+	@output1	(do_always, raise_next) -> output2;
+	@output2 (do_always, idle_sigs, print) -> output3;
+
+	@output3	(do_always, raise_next) -> output4;
+	@output4 (do_always, idle_sigs, print) -> output5;
+
+	@output5	(do_always, raise_next) -> output6;
+	@output6 (do_always, idle_sigs, print) -> idle;
+
 
 	@idle (do_always, idle_sigs) -> idle;
 }
