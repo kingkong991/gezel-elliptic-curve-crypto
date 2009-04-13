@@ -1,14 +1,36 @@
 F2 := GF(2);  // maakt F_2
-F2X<X> := PolynomialRing(F2);  // veeltermen over F_2
-f := X^163 + X^7 + X^6 + X^3 + 1;
-Fq<x> := ext<F2 | f>; // definieert modulo f rekenen
+F2X<Z> := PolynomialRing(F2);  // veeltermen over F_2
+f := Z^163 + Z^7 + Z^6 + Z^3 + 1;
+Fq<z> := ext<F2 | f>; // definieert modulo f rekenen
 
-F4<s> := ext<Fq | S^2 + S + 1>;
-F4Y<T> := PolynomialRing(F4);
-F16<t> := ext<F4 | T^2 + (s+1)*T + 1>;
+F4<x> := ext<Fq | Z^2 + Z + 1>;
+F4Y<Y> := PolynomialRing(F4);
+F16<y> := ext<F4 | Y^2 + (x+1)*Y + 1>;
 
 E := EllipticCurve([F16 ! 0,0,1,1,1]);
 
+// Get random output ((a*s + b)*t + c*s + d : (e*s + f)*t + g*s + h : 1)
+//P := Random(E);
+
+// Set points
+xP := 0x18239FA96047C449DBF0D78A2A596E5A7D67D209F;
+yP := 0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2;
+xQ := 0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3;
+yQ := 0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75;
+
+// Calculate distortion map
+xDQ := x + xQ;
+yDQ := x*y + xQ*x + yQ;
+
+// Set P & Q
+P := E ! [xP, yP];
+Q := E ! [xDQ, yDQ];
+
+// Set m
+m :=  163;
+
+// Calculate Tate pairing
+TatePairing(E ! P, E ! Q, m);
+
 ZX<X> := PolynomialRing(Integers());
-P := Random(E);
 printf "%h", Evaluate(ZX ! [Integers() ! c : c in Eltseq(P[1])], 2);
