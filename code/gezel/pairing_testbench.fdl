@@ -1,0 +1,64 @@
+#include "constants.inc"
+
+#include "wrapper_pairing.fdl"
+
+dp testbench {
+	reg reg_in: ns(const_m);
+	sig sig_in: ns(const_m);
+
+	sig sig_out: ns(const_m);
+
+	sig start: ns(1);
+	sig next: ns(1);
+
+	sig ready: ns(1);
+
+	reg reg_cycle: ns(const_m_log);
+	reg reg_ready: ns(1);
+	
+	use wrapper_pairing(sig_in, start, next, sig_out, ready);
+
+	sfg reset {
+		reg_cycle = 0;
+
+		//reg_A = 0x00000002FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8;
+		//reg_B = 0x0000000289070FB05D38FF58321F2E800536D538CCDAA3D9;
+	}
+
+	sfg run {
+		reg_cycle = reg_cycle + 1;
+	}
+
+	sfg do_always {
+		sig_in = reg_in;
+
+		reg_ready = start == 1 ? 0 : ready;
+	}
+
+	sfg idle_sigs {
+		start = 0;
+		next = 0;
+	}
+
+	sfg print {
+		$display("[Cycle ", $cycle, "] - out = ", $dec, sig_out);
+	}
+}
+
+fsm fsm_testbench (testbench) {
+	initial init;
+	state start, run, idle;
+
+	@init (reset, do_always, idle_sigs) -> start;
+
+	@start (do_always, print) -> run;
+	@run	if (reg_ready == 0) then (run, do_always, idle_sigs) -> run;
+			else (do_always, print) -> idle;
+
+	@idle (do_always, idle_sigs) -> idle;
+}
+
+system S {
+	testbench;
+}
+

@@ -532,15 +532,15 @@ dp wrapper_pairing(in input:	ns(const_m);
 	// On next raising edge, shift F 1 position to the left and increase counter.
 	// Unless counter is 3, then set Xv to 0.
 	sfg ready_regs {
-		reg_counter_misc = sig_next == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
+		reg_counter_misc = next == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
 		
-		sig_sel_Xv = reg_counter == 3 ? 0b00 : 0b01;
+		sig_sel_Xv = reg_counter_misc == 3 ? 0b00 : 0b01;
 		sig_sel_Yv = 1;
 		sig_sel_Xp = 1;
 	
-		reg_Xv = sig_next == 1 & reg_next == 0 ? sig_to_Xv : reg_Xv;
-		reg_Yv = sig_next == 1 & reg_next == 0  ? sig_to_Yv : reg_Yv;
-		reg_Xp = sig_next == 1 & reg_next == 0  ? sig_to_Xp : reg_Xp;
+		reg_Xv = next == 1 & reg_next == 0 ? sig_to_Xv : reg_Xv;
+		reg_Yv = next == 1 & reg_next == 0  ? sig_to_Yv : reg_Yv;
+		reg_Xp = next == 1 & reg_next == 0  ? sig_to_Xp : reg_Xp;
 		
 		// Set other signals to default value
 		sig_sel_Yp = 0;
@@ -573,7 +573,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	
 	state startloop1;
 	
-	state ready1, ready2, ready3, ready4, ready5, ready6, ready7;
+	state ready1, ready2;
 	
 	state dlambda1, dlambda2, dlambda3;
 	state alambda1, alambda2, alambda3, alambda4, alambda5, alambda6, alambda7, alambda8, alambda9;
@@ -629,6 +629,17 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	state f4msqrt10, f4msqrt11, f4msqrt12, f4msqrt13, f4msqrt14, f4msqrt15, f4msqrt16, f4msqrt17, f4msqrt18, f4msqrt19;
 	state f4msqrt20, f4msqrt21, f4msqrt22, f4msqrt23, f4msqrt24, f4msqrt25, f4msqrt26, f4msqrt27, f4msqrt28, f4msqrt29;
 	state f4msqrt30, f4msqrt31, f4msqrt32;
+	
+	state f4mmult1, f4mmult2, f4mmult3, f4mmult4, f4mmult5, f4mmult6, f4mmult7, f4mmult8, f4mmult9;
+	state f4mmult10, f4mmult11, f4mmult12, f4mmult13, f4mmult14, f4mmult15, f4mmult16, f4mmult17, f4mmult18, f4mmult19;
+	state f4mmult20, f4mmult21, f4mmult22, f4mmult23, f4mmult24, f4mmult25, f4mmult26, f4mmult27, f4mmult28, f4mmult29;
+	state f4mmult30, f4mmult31, f4mmult32, f4mmult33, f4mmult34, f4mmult35, f4mmult36, f4mmult37, f4mmult38, f4mmult39;
+	state f4mmult40, f4mmult41, f4mmult42, f4mmult43, f4mmult44, f4mmult45, f4mmult46, f4mmult47, f4mmult48, f4mmult49;
+	state f4mmult50, f4mmult51, f4mmult52, f4mmult53, f4mmult54, f4mmult55, f4mmult56, f4mmult57, f4mmult58, f4mmult59;
+	state f4mmult60, f4mmult61, f4mmult62, f4mmult63, f4mmult64, f4mmult65, f4mmult66, f4mmult67, f4mmult68, f4mmult69;
+	state f4mmult70, f4mmult71, f4mmult72, f4mmult73, f4mmult74, f4mmult75, f4mmult76, f4mmult77, f4mmult78, f4mmult79;
+	state f4mmult80, f4mmult81, f4mmult82, f4mmult83, f4mmult84, f4mmult85, f4mmult86, f4mmult87, f4mmult88, f4mmult89;
+	state f4mmult90, f4mmult91, f4mmult92, f4mmult93, f4mmult94, f4mmult95, f4mmult96;
 
 	state f2mmult1, f2mmult2, f2mmult3, f2mmult4, f2mmult5, f2mmult6, f2mmult7, f2mmult8, f2mmult9;
 	state f2mmult10, f2mmult11, f2mmult12, f2mmult13, f2mmult14, f2mmult15, f2mmult16, f2mmult17, f2mmult18, f2mmult19;
@@ -1277,7 +1288,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f4mpow25	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow26;
 	@f4mpow26	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow27;
 	@f4mpow27	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow28;
-	@ff4mpow28	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow29;
+	@f4mpow28	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow29;
 	
 	// Calculate m0'' (u2 + u3)
 	@f4mpow29	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow30;
@@ -1309,7 +1320,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// Calculate r0' (r2 + m0)
 	@f4mpow43	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> f4mpow44;
 	@f4mpow44	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow45;
-	@f4mpow45	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> fm4pow46;
+	@f4mpow45	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow46;
 	
 	// Calculate r1 (r0' + m4)
 	@f4mpow46	(do_always, MALU_add, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow47;
