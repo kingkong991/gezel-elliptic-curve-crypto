@@ -13,16 +13,30 @@ class Element {
 public:
 	Element() { mpz_init(this->a); };
 	Element(mpz_t& a) { mpz_init_set(this->a, a); };
+	Element(unsigned long a) { mpz_init_set_ui(this->a, a); };
 	
 	virtual ~Element();
 	
-	mpz_t getMP() { return this->a; };
+	mpz_t& getMP() { return this->a; };
+
+	void set(unsigned long a) { mpz_set_ui(this->a, a); };	
+	void set(Element& A) { mpz_set(this->a, A.getMP()); };
+	void set(mpz_t& a) { mpz_set(this->a, a); };
 	
-	static void add(Element& T, Element& A, Element& B) { mpz_xor(T.getMP(), A.getMP(), B.getMP()); };
-	static void multiply(Element& T, Element& Element& B);
+	void add(Element& A, Element& B) { mpz_xor(this->a, A.getMP(), B.getMP()); };
+	void addOne() { if (mpz_tstbit(this->a, 0) == 0) { mpz_setbit(this->a, 0); } else { mpz_clrbit(this->a, 0); } };
+	
+	void multiply(Element& A, Element& B);
+	void square(Element& A) { this->multiply(A, A); };
+	
+	void inverse(Element& A);
+	
+	bool isZero() { if (mpz_sgn(this->a) == 0) { return true; } return false; };
+	
+	void print() { gmp_printf("0x%Zx\n", this->a); };
 
 private:
 	mpz_t a;
-}
+};
 
 #endif
