@@ -1,0 +1,700 @@
+[Miller]  i: 163
+   Xv: 0x32c335140620447c34b883203f02afa7616b8285f
+   Yv: 0x1a863cc8db58a7fccacef083d3ddd1315b811a89f
+
+[Miller]  i: 162
+   Xv: 0x4bae74c8a2960b020cd4bfebe3157068859be9dbc
+   Yv: 0x2898878caaea2a9491f5e02c1b9ad76b1454cb09
+
+[Miller]  i: 161
+   Xv: 0x966514924d9caf8df9a695e7edd79af3caf25f8c
+   Yv: 0x5ce641d6c12c430d6bde9faabc6ee58df6375d9a9
+
+[Miller]  i: 160
+   Xv: 0x59d3baeb7f1b8aa8e3419ef0b6101cf259ae55d69
+   Yv: 0x597b05f373825c44450b5995afc8fec8a4cec1d11
+
+[Miller]  i: 159
+   Xv: 0x665f7e1021957368497c29fa240628055ab9c1deb
+   Yv: 0x41c599f0c0487d98d22a12d6ef6dc8a4a603d8a64
+
+[Miller]  i: 158
+   Xv: 0x599125c22bb2514cb47f887614d32b7c6c1d34bd3
+   Yv: 0x3759b2d8795545239747373f4b723dff979de9c1
+
+[Miller]  i: 157
+   Xv: 0x31d5f56477702f6825ead2fb5529bdb2036419c68
+   Yv: 0x81faae07e0ced332df3102061daa6a31bb18e495
+
+[Miller]  i: 156
+   Xv: 0x779aa04d1cd260df8ad2774c3b13faf5fbc2b63a
+   Yv: 0x31292fa07d4d91707712f4669419eb0babcb9b92f
+
+[Miller]  i: 155
+   Xv: 0x5c0803dedbb6b7d0eebc6bb8514f0dea260a79280
+   Yv: 0x2aa50922df5b11c3f42699014eeb2b99815cb03f3
+
+[Miller]  i: 154
+   Xv: 0x63316777db7180d3ddd910a65c89ad69eb6370e44
+   Yv: 0x43ab5a97f9461a52e585e2346e0e9d099684b1f29
+
+[Miller]  i: 153
+   Xv: 0x5553172271b598ae3eb4b92bfd2410199a68aa828
+   Yv: 0x77825ccd2970ae15656d7c4dd84ea96cfcb45ed86
+
+[Miller]  i: 152
+   Xv: 0x10ce38e33bb2bbc1063cd1f53b77a8428b616bda7
+   Yv: 0x1e6811a8fd34c61a434edb282d6e165d8662c19fc
+
+[Miller]  i: 151
+   Xv: 0x135649b4b7a35144cabeaafa35dcb12c5661ba883
+   Yv: 0x4479b43a60794aeb7a95213f9f898b4dfc049c4c
+
+[Miller]  i: 150
+   Xv: 0x37b39ed45f50dfd2df2e752cbc347babca50f1a24
+   Yv: 0x57eb158079850c48dfd0dc1b418959622895e15b3
+
+[Miller]  i: 149
+   Xv: 0x5b96a102f3e2380de6c55b2e8ccefb763ff295511
+   Yv: 0x70e570b5cf8c0fb01565b91211ee90389de6b7d49
+
+[Miller]  i: 148
+   Xv: 0x6dfd173600cc4a8598c509ef4684e5f8697d3e22f
+   Yv: 0x1a1e5d16ade7da5e0642ed924c4f52deebb1c7ada
+
+[Miller]  i: 147
+   Xv: 0x160c9a2b26813b39f9443e3ff96b413e75984ca57
+   Yv: 0x1497d43328f461d22e0cb70308b3d117e4e8603aa
+
+[Miller]  i: 146
+   Xv: 0x47833d8368e41612150d0c75063a797bf8fbaf8f6
+   Yv: 0x470bf371513d7f2d7770469aaa39d86e1b3435189
+
+[Miller]  i: 145
+   Xv: 0x782e390339049955d6fb980130ebd87982fbcafea
+   Yv: 0x18665df1cce1ad73289d4447d3e1e1641135d4b07
+
+[Miller]  i: 144
+   Xv: 0x67bd8f7e8cf10554c73f98b363aff5b3ae4ac1972
+   Yv: 0x4727b68c289f009ecbd372968f9aad0e9545576fe
+
+[Miller]  i: 143
+   Xv: 0x2a786f6df07d5acd7d9fce79ec191364e5dccebcb
+   Yv: 0x7ce304b4deea45e7198319877131ac62b8a1bc026
+
+[Miller]  i: 142
+   Xv: 0x334f49d3d2b8a2d5a8f534a60048c6cf5fc04b412
+   Yv: 0x22ac82c304314482bcbac429d5cad30b23414b213
+
+[Miller]  i: 141
+   Xv: 0x2989eeaee50d0fd37ce802699ff48b8c82e853f84
+   Yv: 0x66a0d04dcaf32d3071541e4b101ff3a7b3e1e66d8
+
+[Miller]  i: 140
+   Xv: 0x602595d99dcd8607cf014915ff7909c5775ee672f
+   Yv: 0x5b70d2ff016af3a59508ba4aee2ffd3d263d500b4
+
+[Miller]  i: 139
+   Xv: 0xb08c2424aff240cc4a683e139522b41ad5c5e54
+   Yv: 0xd56d4ac7045194836d3952f3f654097f185eb8e6
+
+[Miller]  i: 138
+   Xv: 0x796f6fdb3e7c405bc45938543503806993c71e57d
+   Yv: 0x294f962cf3b56c3444a4bdb056503269db0ba4242
+
+[Miller]  i: 137
+   Xv: 0x430e38b057c475be37dadc24f6933165c8b964849
+   Yv: 0x5ccb84ca3518cd02d92dab49f25c61efecf16b45d
+
+[Miller]  i: 136
+   Xv: 0x834149af9f69ba2c30d83a743c544bb17c05d02d
+   Yv: 0x3b5ead43531ae1d4175e2d6b7f139e27c0ea9b0e4
+
+[Miller]  i: 135
+   Xv: 0x214d20afc657bf71e61bc31aabb5cb9abcf704e0e
+   Yv: 0x76e0d4547e0caa014ac61b537b2e96d57197309e7
+
+[Miller]  i: 134
+   Xv: 0x116b4452158fba1439e39106be9ad12f694d0106f
+   Yv: 0x2fe572355f4c9b38a98389ad3d2819963f7ff02c9
+
+[Miller]  i: 133
+   Xv: 0x52ee6a3337cd0ae110fed6969d5129d035f0fa4dd
+   Yv: 0x1283e1f2341c2826f9a04fdd574ad2217a0b5bec8
+
+[Miller]  i: 132
+   Xv: 0x55acb4ded67f1c9fbc1258d0dd0f8806817005333
+   Yv: 0x3747af8965147a4b2a0678c47dfaba6b1a568d40
+
+[Miller]  i: 131
+   Xv: 0x21847f85959aae70f97149a91c99f0132c1df40aa
+   Yv: 0x4ecc68af27b10b6b9e19af136ba0eecd7d19b0057
+
+[Miller]  i: 130
+   Xv: 0x1c4cba711f7162c84fe2b5fdf89da35585e039b55
+   Yv: 0x609d02ee9279e0291e51b4bfd0de78534116370c8
+
+[Miller]  i: 129
+   Xv: 0x65cea1b121ac6d7314d8202396cc8f8cf9d7868c8
+   Yv: 0x5f939c21dce90ac8ccb6f57b5ddd1231889a6b102
+
+[Miller]  i: 128
+   Xv: 0xa798e5e71261d8113e7466ccdcd06184d86c102a
+   Yv: 0x687bf4ee118bde629b484eaa160317b99498b071f
+
+[Miller]  i: 127
+   Xv: 0x6fee48831487fde40196e18bcccfa70749f06b7c9
+   Yv: 0x5bd048764eafc5aba99f54a499679831deceb1541
+
+[Miller]  i: 126
+   Xv: 0x211c9ac70cd9c43d61f9a9e78738bb46d6d98b021
+   Yv: 0x415ac4d5b4163b0396dc06fa030faaacd8c739f1c
+
+[Miller]  i: 125
+   Xv: 0x6d16db4ef78c53c8aba9a4d8cfa655ee3827bc2a2
+   Yv: 0x216a45142bc7244995fe9c2fe9a8cd4c33879de31
+
+[Miller]  i: 124
+   Xv: 0x7eb091083707d2deaa35ddbea5f461c1a6d6a2294
+   Yv: 0x652138236d080ef12cf74b696add3b0c952d62335
+
+[Miller]  i: 123
+   Xv: 0x1e01783b2b6d199ba0299bb886929a58980e873af
+   Yv: 0x3d4e8988137f8081edd83d6b0732a4b3e905a92f8
+
+[Miller]  i: 122
+   Xv: 0x65176edea87b5b43906f2bda902e7c6f46a59600
+   Yv: 0x6b8dca710380ab6bc825f0a3fa5e4a48cf63e94db
+
+[Miller]  i: 121
+   Xv: 0x4f28d65be75866e2c8c346fb4f707d8cd6700f20f
+   Yv: 0x1f742fa485b9874ec19f1a3edce05907c0d50b39e
+
+[Miller]  i: 120
+   Xv: 0x4109ab4ddfa3a47079c618e381800d778ee465433
+   Yv: 0x13efba5a8f918aed2b79f7a0d31f74f1263891952
+
+[Miller]  i: 119
+   Xv: 0x579249f941b50516ff12b9b7daf80eb509733174b
+   Yv: 0x6e9d6a7335a9bae5d3f669ca366118e1a76984a6b
+
+[Miller]  i: 118
+   Xv: 0xeb0a3032db6597da685346a535b2719504216e24
+   Yv: 0x673e948d73740d1326bf2cb32410ba573c467d6e7
+
+[Miller]  i: 117
+   Xv: 0x3abda2dce8be4ab2495ef35e94fff9abf6b7518df
+   Yv: 0x375cedb4d74054dd1a8bdf150119c1081ac18c556
+
+[Miller]  i: 116
+   Xv: 0x4dee59cfcd8ece0c4d6ddb92e1bceed153ff65a3d
+   Yv: 0x3f1f11ffd14b19224314bb4d1c4beed03664483a4
+
+[Miller]  i: 115
+   Xv: 0xd5ef5383ed17c748e1dd3eef6a523c660280e18
+   Yv: 0x73a2d1b456810de9d2a3402cb607f3ad96465b54b
+
+[Miller]  i: 114
+   Xv: 0xabd45fb850bfc8879b99cf17aed555b4894bdae4
+   Yv: 0xde87a5e234622931292822a1cbb15465beb6b12e
+
+[Miller]  i: 113
+   Xv: 0x35c9e3e6e53ab8d244d0e86fcbe7730fb1309f966
+   Yv: 0x6729c3d83587a55fa88ac76fb5b707ef79a5eeca2
+
+[Miller]  i: 112
+   Xv: 0x4a008eddc542e2daca2172530071222a882aa5828
+   Yv: 0x3acd3ee4c8c10ebeab3a2b0e5ae34eb86ec163346
+
+[Miller]  i: 111
+   Xv: 0x546db446d647925a083a5aa7e9a5dc411aff8e468
+   Yv: 0x2a254d8d40e74590ae063f9f667a489ff1ab4683
+
+[Miller]  i: 110
+   Xv: 0x75209c12aab208341fe8212dc1fd00d1ea9bfa073
+   Yv: 0x1f035c598b2274f90770de5e1d31fc0aa555be6d7
+
+[Miller]  i: 109
+   Xv: 0x4b2bc4303c29fa4a03481259f494b8beafafa3b7f
+   Yv: 0x495e6d2fe844782e56a2bffc6e259613bf8e391e9
+
+[Miller]  i: 108
+   Xv: 0x61dbab34b569dd238dd25aa6c20e16f06cbcde57f
+   Yv: 0x37d2276edee6a8136f1ae99d6bc5886216b2cd140
+
+[Miller]  i: 107
+   Xv: 0x1341ef99964ed650bf1fba1afb780292f4a19d9c7
+   Yv: 0x4275ff938ad11f3e2a20e01b7e05c6dee8e3d8f5f
+
+[Miller]  i: 106
+   Xv: 0x25a397cc97d1e4d8ef300abe1ed5a1af2925c7a85
+   Yv: 0x13962b9ab7ddc7d7058e9695c0d20eded285f96bb
+
+[Miller]  i: 105
+   Xv: 0x7a015f5121a3057be63ae371cd8c779f48840453b
+   Yv: 0x770b424e8b589c6788721ef7a0f2fd883c3ea681c
+
+[Miller]  i: 104
+   Xv: 0x42a1735aa6f32c03c82ca51e144c4ff7b2f7900e6
+   Yv: 0x291512372efef5b6ff091a7a367e9ec3a296291b9
+
+[Miller]  i: 103
+   Xv: 0x33f9bcb50ec89cca8498f7f33bd4aa6664443ebbb
+   Yv: 0xce609c1071ef07c2d2b9c3f2924d0a163400207c
+
+[Miller]  i: 102
+   Xv: 0x7cce23ab1f395c89fdeb4875b0b9457fe0436f009
+   Yv: 0x342672c38537e75bb533893409dd1885df902a5ee
+
+[Miller]  i: 101
+   Xv: 0x43e75a90e7e719dca90973cb003356a7894c149cf
+   Yv: 0x7c0e8efdb8c5ad8bb79f6fb85d5cb42e708b1a353
+
+[Miller]  i: 100
+   Xv: 0x35d4260f2c7a09653627b46f734e3bf2a696bcd6d
+   Yv: 0x46f2553c5f65e569e4fa77a5f689840fe097eb9b0
+
+[Miller]  i: 99
+   Xv: 0x11a3df6552f7e0eb5ee8ef18907ce3ee68bd9f374
+   Yv: 0x5346f50ea4d89c3352c8c1ec0ed45373a8a5eed89
+
+[Miller]  i: 98
+   Xv: 0x6d1fc87814399b05c3de606345d5b255762b23bd9
+   Yv: 0x2e95b51ec8a44f06a05b15d31f680177c7ad1a8cb
+
+[Miller]  i: 97
+   Xv: 0x6e669d6aec98b954add2f66bbb4a5a8e4450264e1
+   Yv: 0x204aaeea08647d9f15130c041a1c4544ec0a5fa25
+
+[Miller]  i: 96
+   Xv: 0x767f052f8882d341ec8787e52a82797cd1f7c0d80
+   Yv: 0x7a4ca671af6b68ba7f01e61e57d0fd24b0343f7e0
+
+[Miller]  i: 95
+   Xv: 0x61761fb7e0981b919fde2f03cd45c80d5e2e768e4
+   Yv: 0x32400c2db179dc6764a571e75775ee95b9ded037b
+
+[Miller]  i: 94
+   Xv: 0x65885fdeb1b4f28a857635d96cc60b1a90ab25e8b
+   Yv: 0x1d7032a1cc6a0546d0f8113d5c7c327f792ab40c2
+
+[Miller]  i: 93
+   Xv: 0x58bfb2e13f64a172bd7752c650e9975688199dd9a
+   Yv: 0x4c040132881b78362c3269f87f63510860058c3c9
+
+[Miller]  i: 92
+   Xv: 0x7f0ad62b4c9ed39c19a7905ae406d5e40b81827e4
+   Yv: 0x596a959505ee9b43b3fb7d5fdbbc12f86cc480d45
+
+[Miller]  i: 91
+   Xv: 0x561a8844b5073fdc50eb42fb7b984f655d992750b
+   Yv: 0x510762e50c06201df8239028a695523d3d6dcb994
+
+[Miller]  i: 90
+   Xv: 0x216170c6804a16104e299831647b62152ac1ff90b
+   Yv: 0x6a9f31d645e9ef80381c69a099cebd912acd43df5
+
+[Miller]  i: 89
+   Xv: 0x5e03e820bb672b55290482db8e069a0ff508975cb
+   Yv: 0x1099832186b8a06ef2148ac3f7c449a7b5138d4d1
+
+[Miller]  i: 88
+   Xv: 0x1524f022c1e17292a02bef71101556ac312208b81
+   Yv: 0x4d1ee978310d38648d720b3b00fe26374538e0ded
+
+[Miller]  i: 87
+   Xv: 0x1f05f5b6448b17c61bc95b35cd7c51020f32e554b
+   Yv: 0xc8bdb0b3790b528a6ea3e4e5b5bab883b87d51b6
+
+[Miller]  i: 86
+   Xv: 0x47f63e85417b5f7833d7e505c21eab433c0abe19e
+   Yv: 0x7a53e61ca749699b4e71d71427a4ce61a93369043
+
+[Miller]  i: 85
+   Xv: 0x140f025b642fd9aeddaadd90f84cd32524db5f52c
+   Yv: 0x70699628b17c510fd8d56b805e8c2ce64536d45e9
+
+[Miller]  i: 84
+   Xv: 0x39bfd27f1b97d176f505b2ff3f69200b3dc9a4749
+   Yv: 0x190bc53137ff345f47d2986013559ac0810004191
+
+[Miller]  i: 83
+   Xv: 0x1678d27fa3eeb96229821fc7f96b5b685f81b17bb
+   Yv: 0x79a213b6ec62abff8178aeca6e93dbc62dfc4ccd0
+
+[Coord Add]
+Xv =      0x1678d27fa3eeb96229821fc7f96b5b685f81b17bb
+Xp =      0x1678d27fa3eeb96229821fc7f96b5b685f81b17bb
+Xv + Xp = 0x0
+
+
+	a^3 =           0x0
+	b^4 =           0x0
+	a^(2^4 - 1) =   0x0
+	a^(2^5 - 1) =   0x0
+	a^(2^10 - 1) =  0x0
+	a^(2^20 - 1) =  0x0
+	a^(2^40 - 1) =  0x0
+	a^(2^80 - 1) =  0x0
+	a^(2^81 - 1) =  0x0
+	a^(2^162 - 1) = 0x0
+	a^-1 =          0x0
+Yv =      0x79a213b6ec62abff8178aeca6e93dbc62dfc4ccd0
+Yp =      0x79a213b6ec62abff8178aeca6e93dbc62dfc4ccd0
+Yv + Yp = 0x0
+
+[Miller]  i: 82
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 81
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 80
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 79
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 78
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 77
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 76
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 75
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 74
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 73
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 72
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 71
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 70
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 69
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 68
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 67
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 66
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 65
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 64
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 63
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 62
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 61
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 60
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 59
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 58
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 57
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 56
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 55
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 54
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 53
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 52
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 51
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 50
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 49
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 48
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 47
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 46
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 45
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 44
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 43
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 42
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 41
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 40
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 39
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 38
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 37
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 36
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 35
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 34
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 33
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 32
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 31
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 30
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 29
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 28
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 27
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 26
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 25
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 24
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 23
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 22
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 21
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 20
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 19
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 18
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 17
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 16
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 15
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 14
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 13
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 12
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 11
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 10
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 9
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 8
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 7
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 6
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 5
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 4
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 3
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6b
+
+[Miller]  i: 2
+   Xv: 0x0
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+[Miller]  i: 1
+   Xv: 0x1
+   Yv: 0x6fdac1c94f8c129da8fab10d97f880ae727dfdb6a
+
+F (before final exp):
+
+	A = 0x5e751a63bd0849f7ab6b4d33b2ce4075c7930dbec
+	B = 0x2f6c4ad199bc63721f1530c570e1861ce73b10e2f
+	C = 0x64865e7e2cf7f3482ab0732e9fc238498a1cb8ae3
+	D = 0x7807cde8adf81b1131dfacd77e4562f3a580e05c
+[w inverse]
+
+	a^3 =           0xfa32fe66f0fafaf0be68386fecb3ef6a1439c97c
+	b^4 =           0x5c8048d88bcd731926a37c1b2c9c17f67fbcb56f5
+	a^(2^4 - 1) =   0x1171badd991463cbd8049e3dcbea33a93687963c5
+	a^(2^5 - 1) =   0x6f1bd85724ef65a3ed5e3ef42a550b4cbaee7ee57
+	a^(2^10 - 1) =  0x2b14cfc76915c6e74927157bae8c0d7a02ad4614
+	a^(2^20 - 1) =  0x4e78c85a3da02ad33ff79c37a33f2d818774e65a9
+	a^(2^40 - 1) =  0x34e8266aa04b007a0949a8e26f1d727a7e8563420
+	a^(2^80 - 1) =  0x7f674f9d3a3eacb8bbb6abf0b32475909796cc423
+	a^(2^81 - 1) =  0x7ab46175200f847d80afe2dcddef78d2a58b39ddf
+	a^(2^162 - 1) = 0x61d8d54265d8326cdddd4588762295edf4d9302e3
+	a^-1 =          0x68fa52fd7beb661361db13928d5201cc1e4e0a7f9
+F:
+
+	A = 0x43571712e3963c8fddb7de55ac36b04f10586cc3c
+	B = 0x2636afb7f7c957765d51b7e7e8802db4cd2562e91
+	C = 0x5e7361fcedcb2eef8c4e5687b6ddea7a1770ef085
+	D = 0x17f4a636bed455a219f4ada949607705b5eb20632
+
+Time elapsed: 0.078s
