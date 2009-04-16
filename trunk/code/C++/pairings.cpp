@@ -118,7 +118,7 @@ int main () {
 	printf("F:\n");
 	F.print();
 		
-	printf("\nTime elapsed: %.3fs", ((double)clock() - start) / CLOCKS_PER_SEC);
+	printf("\nTime elapsed: %.3fs\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 
 	exit(0);
 }
