@@ -570,6 +570,10 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sfg disp_regdump {
 		$display($hex, "[RegDump] ToMALU: ", sig_from_ToMALU, " - Xv: ", sig_from_Xv, " - Yv: ", sig_from_Yv, " - Xp: ", sig_from_Xp, " - Yp: ", sig_from_Yp, " - Xfa: ", sig_from_Xfa, " - Yfa: ", sig_from_Yfa, " - Ga: ", sig_from_Ga, " - Gb: ", sig_from_Gb, " - Fa: ", sig_from_Fa, " - Fb: ", sig_from_Fb, " - Fc: ", sig_from_Fc, " - Fd: ", sig_from_Fd, " - TmpA: ", sig_from_TmpA, " - TmpB: ", sig_from_TmpB);
 	}
+	
+	sfg disp_V { 
+		$display($dec, "[V] i: ", reg_counter_miller, " - Xv: ", $hex, sig_from_Xv, " - Yv: ", sig_from_Yv);
+	}
 }
 
 fsm fsm_wrapper_pairing (wrapper_pairing) {
@@ -707,8 +711,8 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// If counter is 0, then go to ready state, else, when at 2^82 do "add" step, otherwise do "double" step.
 	// counter starts at const_m - 1 and loop ends when counter = 0 -> counter = 1 == 1, counter == 2 = x, etc
 	@startloop1		if (reg_counter_miller == 0) then (do_always, MALU_idle, idle_regs) -> finalexp1;
-						else	if (reg_counter_miller == 83 & reg_add == 0) then (disp_debug, $trace, do_always, MALU_idle, idle_regs, set_add) -> alambda1;
-								else (do_always, MALU_idle, idle_regs, unset_add, dec_counter_miller) -> dlambda1;
+						else	if (reg_counter_miller == 83 & reg_add == 0) then (disp_V, disp_debug, $trace, do_always, MALU_idle, idle_regs, set_add) -> alambda1;
+								else (disp_V, do_always, MALU_idle, idle_regs, unset_add, dec_counter_miller) -> dlambda1;
 
 	// [Double Step]
 
@@ -772,7 +776,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@inv10	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> inv10;
 			else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> inv11;
 
-	// Calculate b^4 * a^3 (= c)
+	// Calculate b^4 * b (= c)
 	@inv11	(do_always, MALU_mult, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> inv12;
 	@inv12	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> inv12;
 			else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> inv13;
@@ -1119,7 +1123,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Final Exponentiation]
 	
 	// Calculate m0, m1, m2 & m3
-	@finalexp1	(disp_debug, $trace, do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> finalexp2;
+	@finalexp1	($trace, disp_regdump, disp_debug, do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> finalexp2;
 	@finalexp2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fd, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> finalexp3;
 	@finalexp3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> finalexp4;
 

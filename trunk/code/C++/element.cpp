@@ -3,7 +3,7 @@
 #include <gmp.h>
 
 Element::~Element() {
-	delete(this->a);
+	//delete(this->a);
 }
 
 

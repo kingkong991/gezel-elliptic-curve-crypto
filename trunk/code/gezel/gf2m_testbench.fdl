@@ -2,7 +2,7 @@
 
 #include "wrapper_gf2m.fdl"
 
-$option "vcd"
+//$option "vcd"
 
 dp testbench {
 	reg reg_A: ns(const_m);
@@ -25,20 +25,19 @@ dp testbench {
 	
 	reg reg_T: ns(const_m);
 
-	$trace(A, "gf2m-A.txt");
-	$trace(B, "gf2m-B.txt");
-	$trace(T, "gf2m-T.txt");
+	//$trace(A, "gf2m-A.txt");
+	//$trace(B, "gf2m-B.txt");
+	//$trace(T, "gf2m-T.txt");
 
 	use wrapper_gf2m(A, B, start, mode, plus_one, T, ready);
 
 	sfg init {
 		reg_cycle = 0;
 
-		reg_A = 0x00000002FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8;
-		reg_B = 0x0000000289070FB05D38FF58321F2E800536D538CCDAA3D9;
-
-		//reg_A = 3;
-		//reg_B = 2;
+		//reg_A = 0x18239FA96047C449DBF0D78A2A596E5A7D67D209F;
+		//reg_B = 0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2;
+		reg_A = 0x2ade1d7a4dbacde234f2a2672638e5dd699180dfe;
+		reg_B = 0x318a4c6e93e748f6c83d3eb7bd34f0849af8ec503;
 	}
 
 	sfg run {
@@ -53,6 +52,15 @@ dp testbench {
 
 		$display("[[Start]]");
 	}
+
+	sfg MALU_mult_one {
+		start = 1;
+		mode = 1;
+		plus_one = 1;
+
+		$display("[[Start]]");
+	}
+
 
 	sfg MALU_add {
 		start = 1;
@@ -77,33 +85,37 @@ dp testbench {
 	}
 
 	sfg print {
-		$display("[Cycle ", $cycle, "] - A = ", $dec, A, " - B: ", B, " - T: ", T);
+		$display("[Cycle ", $cycle, "] - A = ", $hex, A, " - B: ", B, " - T: ", T);
 	}
 
 	sfg done {
-		$display("[[Done]] Final result = ", $dec, T);
+		$display("[[Done]] Final result = ", $hex, T);
 	}
 
-//	sfg end {
-//		$display("[Testbench] Done (In previous cycle) - Cur cycle: ", $cycle, " - Result = ", $dec, reg_T);
-//	}
+	sfg end {
+		$finish;
+	}
+
+	sfg printT {
+		$display("[Mult] i = ", $cycle, " - T = ", T);
+	}
 }
 
 fsm fsm_testbench (testbench) {
 	initial init;
 	state start, run, idle;
 
-	@init (init, do_always, MALU_idle, print) -> start;
+	@init (init, do_always, MALU_idle) -> start;
 
-	@start (MALU_mult, do_always, print) -> run;
-	@run	if (reg_ready == 0) then (MALU_idle, run, do_always, print) -> run;
+	@start (MALU_mult, do_always) -> run;
+	@run	if (reg_ready == 0) then (MALU_idle, run, do_always) -> run;
 			else (MALU_idle, do_always, print, done) -> idle;
 
 //	@start (MALU_add, do_always, print) -> run;
 //	@run	if (reg_ready == 0) then (MALU_idle, do_always, print) -> run;
 //			else (MALU_idle, do_always, print) -> idle;
 
-	@idle (do_always, MALU_idle) -> idle;
+	@idle (do_always, MALU_idle, end) -> idle;
 }
 
 system S {
