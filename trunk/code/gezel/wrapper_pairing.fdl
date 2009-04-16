@@ -572,7 +572,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 	}
 	
 	sfg disp_V { 
-		$display($dec, "[V] i: ", reg_counter_miller, " - Xv: ", $hex, sig_from_Xv, " - Yv: ", sig_from_Yv);
+		$display($dec, "[V] i: ", reg_counter_miller, " - Xv: ", $dec, sig_from_Xv, " - Yv: ", sig_from_Yv);
 	}
 }
 
@@ -757,7 +757,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	// [Inversion]
 	// Move F 1 place to the left (to create 1 extra temporary register) & Xv 3 places
-	@inv1	(do_always, reset_counter_misc, MALU_idle, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> inv2;
+	@inv1	($trace, disp_regdump, do_always, reset_counter_misc, MALU_idle, update_ToMALU_from_Xv, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> inv2;
 	@inv2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, idle_TmpB) -> inv3;
 	
 	// Calculate a^3 (= b)
@@ -870,7 +870,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 
 	// Jump back to where ever we need to go
 	@inv54	if (reg_counter_miller == 0) then (disp_debug, $trace, do_always, MALU_idle, idle_regs) -> f2minv14;
-				else (disp_debug, $trace, do_always, MALU_idle, idle_regs) -> alambda7;
+				else (disp_regdump, disp_debug, $trace, do_always, MALU_idle, idle_regs) -> alambda7;
 
 	// [Calculate coordinates]
 

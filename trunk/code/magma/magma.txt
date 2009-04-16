@@ -9,12 +9,6 @@ F16<y> := ext<F4 | Y^2 + (x+1)*Y + 1>;
 
 E := EllipticCurve([F16 ! 0,0,1,1,1]);
 
-//E := EllipticCurve([F16 ! 0,0,1,1,1]);
-
-// Get random output ((a*x + b)*y + c*x + d : (e*x + f)*y + g*x + h : 1)
-//P := Random(E);
-
-// Set points
 xP := 0x18239FA96047C449DBF0D78A2A596E5A7D67D209F;
 yP := 0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2;
 xQ := 0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3;
@@ -25,19 +19,27 @@ yPFq := Fq ! [F2 ! ((yP div 2^i) mod 2) : i in [0..162]];
 xQFq := Fq ! [F2 ! ((xQ div 2^i) mod 2) : i in [0..162]];
 yQFq := Fq ! [F2 ! ((yQ div 2^i) mod 2) : i in [0..162]];
 
+
 // Calculate distortion map
-xDQ := 1*x + xQ;
-yDQ := 1*x*y + xQ*x + yQ;
+xDQ := 1*x + xQFq;
+yDQ := 1*x*y + xQFq*x + (yQFq + xQFq);
 
 // Set P & Q
-P := E ! [xP, yP];
+P := E ! [xPFq, yPFq];
 Q := E ! [xDQ, yDQ];
 
+
 // Set m
-m :=  163;
+m :=  2^163 + 2^82 + 1;
 
 // Calculate Tate pairing
-TatePairing(E ! P, E ! Q, m);
-
+A := ReducedTatePairing(E ! P, E ! Q, m);
 ZX<Z> := PolynomialRing(Integers());
-printf "%h", Evaluate(ZX ! [Integers() ! c : c in Eltseq(Yfa)], 2);
+B := Eltseq(Eltseq(A)[1])[1];
+
+Ev := Evaluate(ZX ! [Integers() ! c : c in Eltseq(B)], 2);
+Ev;
+
+
+
+
