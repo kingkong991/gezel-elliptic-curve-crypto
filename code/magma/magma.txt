@@ -7,10 +7,7 @@ F4<x> := ext<Fq | Z^2 + Z + 1>;
 F4Y<Y> := PolynomialRing(F4);
 F16<y> := ext<F4 | Y^2 + (x+1)*Y + 1>;
 
-Zero := F16 ! 0;
-One := F16 ! 1;
-E := EllipticCurve([F16 ! Zero,Zero,One,One,One]);
-
+E := EllipticCurve([F16 ! 0,0,1,1,1]);
 
 //E := EllipticCurve([F16 ! 0,0,1,1,1]);
 
@@ -22,6 +19,11 @@ xP := 0x18239FA96047C449DBF0D78A2A596E5A7D67D209F;
 yP := 0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2;
 xQ := 0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3;
 yQ := 0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75;
+
+xPFq := Fq ! [F2 ! ((xP div 2^i) mod 2) : i in [0..162]];
+yPFq := Fq ! [F2 ! ((yP div 2^i) mod 2) : i in [0..162]];
+xQFq := Fq ! [F2 ! ((xQ div 2^i) mod 2) : i in [0..162]];
+yQFq := Fq ! [F2 ! ((yQ div 2^i) mod 2) : i in [0..162]];
 
 // Calculate distortion map
 xDQ := 1*x + xQ;
