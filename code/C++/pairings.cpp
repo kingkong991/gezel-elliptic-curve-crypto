@@ -28,8 +28,8 @@ int main () {
 	mpz_set_str(tmp, "0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75", 0);
 	Element Yq = Element(tmp);
 	
-	
-	/*mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
+	//						0x219c4dd67bd0153f2ef5657515304e5140ae767d6
+	mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
 	Element test = Element(tmp);
 	Element test2 = Element(tmp);
 	Element test3 = Element(tmp);
@@ -44,11 +44,11 @@ int main () {
 	test.print();
 	
 	printf("\n\nGEZEL result:\n\tG =   ");
-	mpz_set_str(tmp, "0x2ade1d7a4dbacde234f2a2672638e5dd699180dfe", 0);
+	mpz_set_str(tmp, "0x67ab00236214988b20c3289879d2767fa86f947b6", 0);
 	test2.set(tmp);
 	test2.print();
 		
-	mpz_set_str(tmp, "0x318a4c6e93e748f6c83d3eb7bd34f0849af8ec503", 0);
+	mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
 	test3.set(tmp);
 	printf("\tA =   ");
 	test3.print();
@@ -57,7 +57,7 @@ int main () {
 	printf("\tA*G = ");
 	test.print();
 	
-	exit(0);*/
+	//exit(0);*/
 	
 	// Set modulus
 	// Reduction polynomial: x^163 +  x^7  +  x^6  +  x^3  +   1
@@ -70,10 +70,10 @@ int main () {
 	size_t mod_len = 163;
 	
 	// Calculate distortion map
-	Element Xfa = Element(Xq);
+	Element Xfa = Element(Xq.getMP());
 	
 	Element Yfa = Element();
-	Element Yfb = Element(Xq);
+	Element Yfb = Element(Xq.getMP());
 	
 	Yfa.add(Xq, Yq);
 	
@@ -83,14 +83,18 @@ int main () {
 	
 	Extension F = Extension(One, Zero, Zero, Zero);
 		
-	Element Xv = Element(Xp);
-	Element Yv = Element(Yp);
+	Element Xv = Element(Xp.getMP());
+	Element Yv = Element(Yp.getMP());
 	
 	// Create G
 	Extension G = Extension();
 	
+	printf("Xp = ");
+	Xp.print();
+	printf("\n");
+	
 	// Start Miller loop
-	for (unsigned long i = (unsigned long) mod_len; i > 0; i--) {
+	for (int i = 162; i >= 0; i--) {
 		F.square(F);
 		calcCoordDouble(G, Xv, Yv, Xfa, Yfa, Yfb);
 		F.multiply(F, G);
@@ -103,7 +107,7 @@ int main () {
 		F.print();*/
 		printf("\n");
 		
-		if (i == 83) {
+		if (i == 82) {
 			calcCoordAdd(G, Xv, Yv, Xp, Yp, Xfa, Yfa, Yfb);
 			F.multiply(F, G);
 		}

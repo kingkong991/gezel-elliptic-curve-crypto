@@ -78,7 +78,8 @@ dp wrapper_gf2m (in A: ns(const_m);
 		// Set B input of mux
 		// If ready: AND 0, else if addition and 1 cycle after starting: AND 1, else if multiplication: AND last A bit 		
 		B_mux = reg_start == 1 & start == 0 & reg_mode == 0 ? 1 : (sig_ready == 1 & reg_prev_ready == 1 ? 0 : ((ns(1)) A[const_m - 1]));
-		B_in = ANDMBITS(B_mux, B);
+		B_in = B & (B_mux == 1 ? ((ns(const_m)) 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) : 0);
+		//B_in = ANDMBITS(B_mux, B);
 		
 		// Set reg_m
 		// If start or sig_ready or reg_ready is high, set m to 0, otherwise set to output from MALU

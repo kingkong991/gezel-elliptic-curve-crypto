@@ -12,6 +12,8 @@
 class Element {
 public:
 	Element() { mpz_init(this->a); };
+	//Element(Element& A) { Element(A.getMP()); };
+
 	Element(mpz_t& a) { mpz_init_set(this->a, a); };
 	Element(unsigned long a) { mpz_init_set_ui(this->a, a); };
 	
@@ -33,7 +35,7 @@ public:
 	
 	bool isZero() { if (mpz_sgn(this->a) == 0) { return true; } return false; };
 	
-	void print() { gmp_printf("0x%Zx\n", this->a); };
+	void print() { gmp_printf("%Zu\n", this->a); };
 
 private:
 	mpz_t a;

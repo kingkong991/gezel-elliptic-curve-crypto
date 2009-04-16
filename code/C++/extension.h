@@ -37,7 +37,7 @@ public:
 	void multiply(Extension& extA, Extension& extB);
 	void square(Extension& ext);
 	
-	void print() { gmp_printf("\n\tA = 0x%Zx\n\tB = 0x%Zx\n\tC = 0x%Zx\n\tD = 0x%Zx\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
+	void print() { gmp_printf("\n\tA = %Zu\n\tB = %Zu\n\tC = %Zu\n\tD = %Zu\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
 
 private:
 	Element a, b, c, d;
