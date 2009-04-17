@@ -2,18 +2,6 @@
 
 #include "extension.h"
 
-Extension::Extension() {
-	Element zero = Element();	
-	Extension(zero, zero, zero, zero);
-}
-
-Extension::~Extension() { 
-	/*delete(this->a);
-	delete(this->b);
-	delete(this->c);
-	delete(this->d);*/
-}
-
 void Extension::multiply(Extension& extA, Extension& extB) {	
 	// Calculate m's
 	Element m0, m1, m2, m3;

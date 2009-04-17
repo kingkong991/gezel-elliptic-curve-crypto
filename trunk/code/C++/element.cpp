@@ -2,11 +2,6 @@
 
 #include <gmp.h>
 
-Element::~Element() {
-	//delete(this->a);
-}
-
-
 void Element::multiply(Element& A, Element& B) {
 	// Emulate hardware implementation.
 	
@@ -70,27 +65,27 @@ void Element::inverse(Element& A) {
 	
 	tempB.set(tempA);
 	
-	printf("\n\ta^3 =           ");
-	tempA.print();
+	//printf("\n\ta^3 =           ");
+	//tempA.print();
 	
 	// Calculate a^(2^4 - 1)
 	tempA.square(tempA);
 	tempA.square(tempA);
 	
-	printf("\tb^4 =           ");
-	tempA.print();
+	//printf("\tb^4 =           ");
+	//tempA.print();
 	
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^4 - 1) =   ");
-	tempA.print();
+	//printf("\ta^(2^4 - 1) =   ");
+	//tempA.print();
 	
 	// Calculate a^(2^5 - 1)
 	tempA.square(tempA);
 	tempA.multiply(tempA, A);
 	
-	printf("\ta^(2^5 - 1) =   ");
-	tempA.print();
+	//printf("\ta^(2^5 - 1) =   ");
+	//tempA.print();
 	
 	// Calculate a^(2^10 - 1)
 	tempB.set(tempA);
@@ -99,8 +94,8 @@ void Element::inverse(Element& A) {
 	}
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^10 - 1) =  ");
-	tempA.print();
+	//printf("\ta^(2^10 - 1) =  ");
+	//tempA.print();
 	
 	// Calculate a^(2^20 - 1)
 	tempB.set(tempA);
@@ -109,8 +104,8 @@ void Element::inverse(Element& A) {
 	}
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^20 - 1) =  ");
-	tempA.print();
+	//printf("\ta^(2^20 - 1) =  ");
+	//tempA.print();
 	
 	// Calculate a^(2^40 - 1)
 	tempB.set(tempA);
@@ -119,8 +114,8 @@ void Element::inverse(Element& A) {
 	}
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^40 - 1) =  ");
-	tempA.print();
+	//printf("\ta^(2^40 - 1) =  ");
+	//tempA.print();
 	
 	// Calculate a^(2^80 - 1)
 	tempB.set(tempA);
@@ -129,15 +124,15 @@ void Element::inverse(Element& A) {
 	}
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^80 - 1) =  ");
-	tempA.print();
+	//printf("\ta^(2^80 - 1) =  ");
+	//tempA.print();
 	
 	// Calculate a^(2^81 - 1)
 	tempA.square(tempA);
 	tempA.multiply(tempA, A);
 	
-	printf("\ta^(2^81 - 1) =  ");
-	tempA.print();
+	//printf("\ta^(2^81 - 1) =  ");
+	//tempA.print();
 	
 	// Calculate a^(2^162 - 1)
 	tempB.set(tempA);
@@ -146,14 +141,14 @@ void Element::inverse(Element& A) {
 	}
 	tempA.multiply(tempA, tempB);
 	
-	printf("\ta^(2^162 - 1) = ");
-	tempA.print();
+	//printf("\ta^(2^162 - 1) = ");
+	//tempA.print();
 	
 	// Calculate a^-1
 	tempA.square(tempA);
 	
-	printf("\ta^-1 =          ");
-	tempA.print();
+	//printf("\ta^-1 =          ");
+	//tempA.print();
 	
 	// Set result
 	this->set(tempA);

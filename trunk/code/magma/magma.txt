@@ -35,11 +35,18 @@ m :=  2^163 + 2^82 + 1;
 // Calculate Tate pairing
 A := ReducedTatePairing(E ! P, E ! Q, m);
 ZX<Z> := PolynomialRing(Integers());
-B := Eltseq(Eltseq(A)[1])[1];
 
-Ev := Evaluate(ZX ! [Integers() ! c : c in Eltseq(B)], 2);
-Ev;
+Fa := Eltseq(Eltseq(A)[1])[1];
+Fb := Eltseq(Eltseq(A)[1])[2];
+Fc := Eltseq(Eltseq(A)[2])[1];
+Fd := Eltseq(Eltseq(A)[2])[2];
 
+Ea := Evaluate(ZX ! [Integers() ! c : c in Eltseq(Fa)], 2);
+Eb := Evaluate(ZX ! [Integers() ! c : c in Eltseq(Fb)], 2);
+Ec := Evaluate(ZX ! [Integers() ! c : c in Eltseq(Fc)], 2);
+Ed := Evaluate(ZX ! [Integers() ! c : c in Eltseq(Fd)], 2);
 
-
-
+Ea;
+Eb;
+Ec;
+Ed;

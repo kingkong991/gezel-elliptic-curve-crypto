@@ -14,4 +14,8 @@ void calcF4mFinalPow(Extension& R, Extension& E);
 void calcF2mMult(Element& Ra, Element& Rb, Element& Aa, Element& Ab, Element& Ba, Element& Bb);
 void calcF2mInverse(Element& Ea, Element& Eb);
 
+void testCases();
+void calcDouble(Element& Ra, Element& Rb, Element& Sa, Element& Sb);
+void calcAdd(Element& Ra, Element& Rb, Element& Sa, Element& Sb, Element& Ta, Element& Tb);
+
 #endif

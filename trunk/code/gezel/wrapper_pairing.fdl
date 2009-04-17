@@ -57,6 +57,29 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sig sig_MALU_result: ns(const_m);
 	sig sig_MALU_ready: ns(1);
 
+	// Input enable signals
+	sig sig_en_Xv: ns(1);
+	sig sig_en_Yv: ns(1);
+
+	sig sig_en_Xp: ns(1);
+	sig sig_en_Yp: ns(1);
+
+	sig sig_en_Xfa: ns(1);
+	sig sig_en_Yfa: ns(1);
+
+	sig sig_en_Ga: ns(1);
+	sig sig_en_Gb: ns(1);
+
+	sig sig_en_Fa: ns(1);
+	sig sig_en_Fb: ns(1);
+	sig sig_en_Fc: ns(1);
+	sig sig_en_Fd: ns(1);
+
+	sig sig_en_TmpA: ns(1);
+	sig sig_en_TmpB: ns(1);
+
+	sig sig_en_ToMALU: ns(1);
+
 	// Input selection signals (for muxes)
 	sig sig_sel_Xv: ns(2);
 	sig sig_sel_Yv: ns(1);
@@ -200,6 +223,29 @@ dp wrapper_pairing(in input:	ns(const_m);
 	}
 
 	sfg idle_regs {
+		// Set all enable signals to 0.
+		sig_en_Xv = 0;
+		sig_en_Yv = 0;
+	
+		sig_en_Xp = 0;
+		sig_en_Yp = 0;
+	
+		sig_en_Xfa = 0;
+		sig_en_Yfa = 0;
+	
+		sig_en_Ga = 0;
+		sig_en_Gb = 0;
+	
+		sig_en_Fa = 0;
+		sig_en_Fb = 0;
+		sig_en_Fc = 0;
+		sig_en_Fd = 0;
+	
+		sig_en_TmpA = 0;
+		sig_en_TmpB = 0;
+	
+		sig_en_ToMALU = 0;
+
 		// Set all select signals to 0.
 		sig_sel_Xv = 0b00;
 		sig_sel_Yv = 0;
@@ -226,62 +272,77 @@ dp wrapper_pairing(in input:	ns(const_m);
 
 	// Idle sfg's for individual registers
 	sfg idle_Xv {
+		sig_en_Xv = 0;
 		sig_sel_Xv = 0b00;
 	}
 	
 	sfg idle_Yv {
+		sig_en_Yv = 0;
 		sig_sel_Yv = 0;
 	}
 
 	sfg idle_Xp {
+		sig_en_Xp = 0;
 		sig_sel_Xp = 0;
 	}
 
 	sfg idle_Yp {
+		sig_en_Yp = 0;
 		sig_sel_Yp = 0;
 	}
 
 	sfg idle_Xfa {
+		sig_en_Xfa = 0;
 		sig_sel_Xfa = 0;
 	}
 
 	sfg idle_Yfa {
+		sig_en_Yfa = 0;
 		sig_sel_Yfa = 0;
 	}
 
 	sfg idle_Ga {
+		sig_en_Ga = 0;
 		sig_sel_Ga = 0;
 	}
 
 	sfg idle_Gb {
+		sig_en_Gb = 0;
 		sig_sel_Gb = 0;
 	}
 
 	sfg idle_Fa {
+		sig_en_Fa = 0;
 		sig_sel_Fa = 0;
 	}
 
 	sfg idle_Fb {
+		sig_en_Fb = 0;
 		sig_sel_Fb = 0;
 	}
 
 	sfg idle_Fc {
+		sig_en_Fc = 0;
 		sig_sel_Fc = 0;
 	}
 
 	sfg idle_Fd {
+		sig_en_Fd = 0;
 		sig_sel_Fd = 0;
 	}
 
 	sfg idle_TmpA {	
+		sig_en_TmpA = 0;
 		sig_sel_TmpA = 0;
 	}
 
 	sfg idle_TmpB {
+		sig_en_TmpB = 0;
 		sig_sel_TmpB = 0;
 	}
 
 	sfg idle_ToMALU {
+		sig_en_ToMALU = 0;
 		sig_sel_ToMALU = 0b00;
 	}
 
@@ -321,171 +382,207 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sfg update_ToMALU_from_Xv {
 		reg_ToMALU = sig_to_ToMALU;
 		sig_sel_ToMALU = 0b00;
+		sig_en_ToMALU = 1;
 	}
 
 	sfg update_ToMALU_from_MALU {
 		reg_ToMALU = sig_to_ToMALU;
 		sig_sel_ToMALU = 0b01;
+		sig_en_ToMALU = 1;
 	}
 
 	sfg update_ToMALU_from_ToMALUShift {
 		reg_ToMALU = sig_to_ToMALU;
 		sig_sel_ToMALU = 0b11;
+		sig_en_ToMALU = 1;
 	}
 
 	sfg update_Xv_from_Input {
 		reg_Xv = sig_to_Xv;
 		sig_sel_Xv = 0b11;
+		sig_en_Xv = 1;
 	}
 
 	sfg update_Xv_from_ToMALU {
 		reg_Xv = sig_to_Xv;
 		sig_sel_Xv = 0b10;
+		sig_en_Xv = 1;
 	}
 
 	sfg update_Xv_from_Yv {
 		reg_Xv = sig_to_Xv;
 		sig_sel_Xv = 0b01;
+		sig_en_Xv = 1;
 	}
 	
 	sfg update_Xv_from_TmpB {
 		reg_Xv = sig_to_Xv;
 		sig_sel_Xv = 0b00;
+		sig_en_Xv = 1;
 	}
 
 	sfg update_Yv_from_Xv {
 		reg_Yv = sig_to_Yv;
 		sig_sel_Yv = 0;
+		sig_en_Yv = 1;
 	}
 
 	sfg update_Yv_from_Xp {
 		reg_Yv = sig_to_Yv;
 		sig_sel_Yv = 1;
+		sig_en_Yv = 1;
 	}
 
 	sfg update_Xp_from_Yv {
 		reg_Xp = sig_to_Xp;
 		sig_sel_Xp = 0;
+		sig_en_Xp = 1;
 	}
 
 	sfg update_Xp_from_Yp {
 		reg_Xp = sig_to_Xp;
 		sig_sel_Xp = 1;
+		sig_en_Xp = 1;
 	}
 
 	sfg update_Yp_from_Xp {
 		reg_Yp = sig_to_Yp;
 		sig_sel_Yp = 0;
+		sig_en_Yp = 1;
 	}
 
 	sfg update_Yp_from_Xfa {
 		reg_Yp = sig_to_Yp;
 		sig_sel_Yp = 1;
+		sig_en_Yp = 1;
 	}
 
 	sfg update_Xfa_from_Yp {
 		reg_Xfa = sig_to_Xfa;
 		sig_sel_Xfa = 0;
+		sig_en_Xfa = 1;
 	}
 
 	sfg update_Xfa_from_Yfa {
 		reg_Xfa = sig_to_Xfa;
 		sig_sel_Xfa = 1;
+		sig_en_Xfa = 1;
 	}
 
 	sfg update_Yfa_from_Xfa {
 		reg_Yfa = sig_to_Yfa;
 		sig_sel_Yfa = 0;
+		sig_en_Yfa = 1;
 	}
 
 	sfg update_Yfa_from_Ga {
 		reg_Yfa = sig_to_Yfa;
 		sig_sel_Yfa = 1;
+		sig_en_Yfa = 1;
 	}
 
 	sfg update_Ga_from_Yfa {
 		reg_Ga = sig_to_Ga;
 		sig_sel_Ga = 0;
+		sig_en_Ga = 1;
 	}
 
 	sfg update_Ga_from_Gb {
 		reg_Ga = sig_to_Ga;
 		sig_sel_Ga = 1;
+		sig_en_Ga = 1;
 	}
 
 	sfg update_Gb_from_Ga {
 		reg_Gb = sig_to_Gb;
 		sig_sel_Gb = 0;
+		sig_en_Gb = 1;
 	}
 
 	sfg update_Gb_from_Fa {
 		reg_Gb = sig_to_Gb;
 		sig_sel_Gb = 1;
+		sig_en_Gb = 1;
 	}
 
 	sfg update_Fa_from_Gb {
 		reg_Fa = sig_to_Fa;
 		sig_sel_Fa = 0;
+		sig_en_Fa = 1;
 	}
 
 	sfg update_Fa_from_Fb {
 		reg_Fa = sig_to_Fa;
 		sig_sel_Fa = 1;
+		sig_en_Fa = 1;
 	}
 
 	sfg update_Fb_from_Fa {
 		reg_Fb = sig_to_Fb;
 		sig_sel_Fb = 0;
+		sig_en_Fb = 1;
 	}
 
 	sfg update_Fb_from_Fc {
 		reg_Fb = sig_to_Fb;
 		sig_sel_Fb = 1;
+		sig_en_Fb = 1;
 	}
 
 	sfg update_Fc_from_Fb {
 		reg_Fc = sig_to_Fc;
 		sig_sel_Fc = 0;
+		sig_en_Fc = 1;
 	}
 
 	sfg update_Fc_from_Fd {
 		reg_Fc = sig_to_Fc;
 		sig_sel_Fc = 1;
+		sig_en_Fc = 1;
 	}
 
 	sfg update_Fd_from_Fc {
 		reg_Fd = sig_to_Fd;
 		sig_sel_Fd = 0;
+		sig_en_Fd = 1;
 	}
 
 	sfg update_Fd_from_TmpA {
 		reg_Fd = sig_to_Fd;
 		sig_sel_Fd = 1;
+		sig_en_Fd = 1;
 	}
 
 	sfg update_TmpA_from_Fd {
 		reg_TmpA = sig_to_TmpA;
 		sig_sel_TmpA = 0;
+		sig_en_TmpA = 1;
 	}
 
 	sfg update_TmpA_from_TmpB {
 		reg_TmpA = sig_to_TmpA;
 		sig_sel_TmpA = 1;
+		sig_en_TmpA = 1;
 	}
 
 	sfg update_TmpB_from_TmpA {
 		reg_TmpB = sig_to_TmpB;
 		sig_sel_TmpB = 0;
+		sig_en_TmpB = 1;
 	}
 
 	sfg update_TmpB_from_Xv {
 		reg_TmpB = sig_to_TmpB;
 		sig_sel_TmpB = 1;
+		sig_en_TmpB = 1;
 	}
 
 	// SFG's to set data in registers
+	// TODO: What about enable signals in reset_F & set_ready for example?
+
 	sfg reset_F {
 		reg_Fa = 1;
+
 		reg_Fb = 0;
 		reg_Fc = 0;
 		reg_Fd = 0;
@@ -512,6 +609,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 	// SFG's for ready signals
 	sfg set_ready {
 		reg_ready = 1;
+
 		reg_TmpB = 0;
 	}
 
@@ -534,15 +632,38 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sfg ready_regs {
 		reg_counter_misc = next == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
 		
+		sig_en_Xv = 1;
+		sig_en_Yv = 1;
+		sig_en_Xp = 1;
+
 		sig_sel_Xv = reg_counter_misc == 3 ? 0b00 : 0b01;
 		sig_sel_Yv = 1;
 		sig_sel_Xp = 1;
-	
+		
 		reg_Xv = next == 1 & reg_next == 0 ? sig_to_Xv : reg_Xv;
 		reg_Yv = next == 1 & reg_next == 0  ? sig_to_Yv : reg_Yv;
 		reg_Xp = next == 1 & reg_next == 0  ? sig_to_Xp : reg_Xp;
 		
-		// Set other signals to default value
+		// Set other enable signals to 0
+		sig_en_Yp = 0;
+		
+		sig_en_Xfa = 0;
+		sig_en_Yfa = 0;
+	
+		sig_en_Ga = 0;
+		sig_en_Gb = 0;
+	
+		sig_en_Fa = 0;
+		sig_en_Fb = 0;
+		sig_en_Fc = 0;
+		sig_en_Fd = 0;
+	
+		sig_en_TmpA = 0;
+		sig_en_TmpB = 0;
+	
+		sig_en_ToMALU = 0b00;
+
+		// Set other selection signals to default value
 		sig_sel_Yp = 0;
 		
 		sig_sel_Xfa = 0;
