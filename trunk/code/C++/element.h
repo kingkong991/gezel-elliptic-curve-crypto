@@ -4,9 +4,8 @@
 #include <gmp.h>
 
 /*
- *	Element of field GF((2^m)^4)
- *	Modulus:	x^159 + x^17 + 1 (wordlength 159)
- *			x^163 + x^7 + x^6 + x^3 + 1 (wordlength 163)
+ *	Element of field GF(2^m)
+ *	Modulus: x^163 + x^7 + x^6 + x^3 + 1 (wordlength 163)
  */
 
 class Element {
@@ -35,7 +34,7 @@ public:
 	
 	bool isZero() { if (mpz_sgn(this->a) == 0) { return true; } return false; };
 	
-	void print() { gmp_printf("%Zu\n", this->a); };
+	void print() { gmp_printf("0x%Zx\n", this->a); };
 
 private:
 	mpz_t a;
