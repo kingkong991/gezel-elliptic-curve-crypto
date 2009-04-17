@@ -143,24 +143,6 @@ void testCases() {
 	Yq.print();
 	printf("\n");
 	
-	// Addition test
-	Element add = Element();
-	
-	add.add(Xp, Yp);
-	
-	printf("[Add]\n   R:\t");
-	add.print();
-	printf("\n");
-	
-	// Multiplication test
-	Element mult = Element();
-	
-	mult.multiply(Xp, Yp);
-	
-	printf("[Mult]\n   R:\t");
-	mult.print();
-	printf("\n");
-	
 	// Doubling test
 	Element DblA = Element();
 	Element DblB = Element();
@@ -183,6 +165,97 @@ void testCases() {
 	AddA.print();
 	printf("   Yn:\t");
 	AddB.print();
+	printf("\n");
+
+	// F(2^m) Addition test
+	Element add = Element();
+	
+	add.add(Xp, Yp);
+	
+	printf("[Fm Add]\n   R:\t");
+	add.print();
+	printf("\n");
+	
+	// F(2^m) Multiplication test
+	Element mult = Element();
+	
+	mult.multiply(Xp, Yp);
+	
+	printf("[Fm Mult]\n   R:\t");
+	mult.print();
+	printf("\n");
+
+	// F(2^m) Inverse test
+	Element inv = Element();
+	
+	inv.inverse(Xp);
+	
+	printf("[Fm Inv]\n   R:\t");
+	inv.print();
+	printf("\n");
+	
+	// F(2^(2*m)) Multiplication test
+	Element F2mMa = Element();
+	Element F2mMb = Element();
+	
+	F2mMa.set(Xp);
+	F2mMb.set(Yp);
+	
+	calcF2mMult(F2mMa, F2mMb, Xp, Yp, Xq, Yq);
+	
+	printf("[F2m Mult]\n  F2mX:\t");
+	F2mMa.print();
+	printf("  F2mY:\t");
+	F2mMb.print();
+	printf("\n");
+	
+	// F(2^(2*m)) Square test
+	Element F2mSa = Element();
+	Element F2mSb = Element();
+	
+	F2mSa.set(Xp);
+	F2mSb.set(Yp);
+	
+	calcF2mMult(F2mSa, F2mSb, Xp, Yp, Xp, Yp);
+	
+	printf("[F2m Square]\n  F2mX:\t");
+	F2mSa.print();
+	printf("  F2mY:\t");
+	F2mSb.print();
+	printf("\n");
+	
+	// F(2^(2*m)) Inverse test
+	Element F2mIa = Element();
+	Element F2mIb = Element();
+	
+	F2mIa.set(Xp);
+	F2mIb.set(Yp);
+	
+	calcF2mInverse(F2mIa, F2mIb);
+	
+	printf("[F2m Inv]\n  F2mX:\t");
+	F2mIa.print();
+	printf("  F2mY:\t");
+	F2mIb.print();
+	printf("\n");
+
+	// F(2^(4*m)) Multiplication test
+	Extension F4mMa = Extension(Xp, Yp, Xq, Yq);	
+	Extension F4mMb = Extension(Xq, Yq, Xp, Yp);	
+	
+	F4mMa.multiply(F4mMa, F4mMb);
+	
+	printf("[F4m Mult]\n   F4mM:");
+	F4mMa.print();
+	printf("\n");	
+
+	// F(2^(4*m)) Square test
+	Extension F4mS = Extension(Xp, Yp, Xq, Yq);	
+	
+	F4mS.square(F4mS);
+	
+	printf("[F4m Square]\n   F4mS:");
+	F4mS.print();
 	printf("\n");
 }
 

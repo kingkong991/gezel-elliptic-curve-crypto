@@ -6,7 +6,7 @@
 #include <gmp.h>
 
 /*
- *	Extension field number in GF((2^m)^4)
+ *	Extension field element in GF(n^4)
  *	Modulos are: x² + x + 1 and y² + (x+1)*y + 1
  *	
  *	Representation: (a + b*x) + (c + d*x)*y
@@ -38,7 +38,7 @@ public:
 	void multiply(Extension& extA, Extension& extB);
 	void square(Extension& ext);
 	
-	void print() { gmp_printf("\n\tA = %Zu\n\tB = %Zu\n\tC = %Zu\n\tD = %Zu\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
+	void print() { gmp_printf("\n\tA = 0x%Zx\n\tB = 0x%Zx\n\tC = 0x%Zx\n\tD = 0x%Zx\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
 
 private:
 	Element a, b, c, d;
