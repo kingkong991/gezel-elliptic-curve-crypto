@@ -12,12 +12,12 @@
 class Element {
 public:
 	Element() { mpz_init(this->a); };
-	//Element(Element& A) { Element(A.getMP()); };
+	//Element(Element& A) { mpz_init_set(this->a, A.getMP()); };
 
 	Element(mpz_t& a) { mpz_init_set(this->a, a); };
 	Element(unsigned long a) { mpz_init_set_ui(this->a, a); };
 	
-	virtual ~Element();
+	~Element() { };
 	
 	mpz_t& getMP() { return this->a; };
 

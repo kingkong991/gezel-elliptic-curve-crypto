@@ -8,6 +8,9 @@
 
 #define malu_width 1
 
+// Set this to the hexadecimal representation of the number of ones equal or greater to const_m
+#define all_ones 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
 // Boost preprocessor libraries to allow for efficient XOR & AND implementations
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/control/if.hpp>

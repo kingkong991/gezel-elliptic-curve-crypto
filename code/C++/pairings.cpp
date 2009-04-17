@@ -11,6 +11,9 @@
 int main () {
 	// Start measuring time
 	clock_t start = clock();
+	
+	testCases();
+	exit(0);
 		
 	// Initialize P & Q values
 	mpz_t tmp;
@@ -28,7 +31,7 @@ int main () {
 	mpz_set_str(tmp, "0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75", 0);
 	Element Yq = Element(tmp);
 	
-	//						0x219c4dd67bd0153f2ef5657515304e5140ae767d6
+	// 0x219c4dd67bd0153f2ef5657515304e5140ae767d6
 	mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
 	Element test = Element(tmp);
 	Element test2 = Element(tmp);
@@ -42,21 +45,7 @@ int main () {
 	printf("\tA*A^-1 = ");
 	test.multiply(test, test2);
 	test.print();
-	
-	printf("\n\nGEZEL result:\n\tG =   ");
-	mpz_set_str(tmp, "0x67ab00236214988b20c3289879d2767fa86f947b6", 0);
-	test2.set(tmp);
-	test2.print();
 		
-	mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
-	test3.set(tmp);
-	printf("\tA =   ");
-	test3.print();
-	
-	test.multiply(test2, test3);
-	printf("\tA*G = ");
-	test.print();
-	
 	//exit(0);*/
 	
 	// Set modulus
@@ -78,23 +67,16 @@ int main () {
 	Yfa.add(Xq, Yq);
 	
 	// Init f & V
-	Element One = Element((unsigned long) 1);
-	Element Zero = Element();
-	
-	Extension F = Extension(One, Zero, Zero, Zero);
+	Extension F = Extension(1, 0, 0, 0);
 		
 	Element Xv = Element(Xp.getMP());
 	Element Yv = Element(Yp.getMP());
 	
 	// Create G
 	Extension G = Extension();
-	
-	printf("Xp = ");
-	Xp.print();
-	printf("\n");
-	
+		
 	// Start Miller loop
-	for (int i = 162; i >= 0; i--) {
+	/*for (int i = 162; i >= 0; i--) {
 		F.square(F);
 		calcCoordDouble(G, Xv, Yv, Xfa, Yfa, Yfb);
 		F.multiply(F, G);
@@ -103,21 +85,27 @@ int main () {
 		Xv.print();
 		printf("   Yv: ");
 		Yv.print();
-		/*printf("   F: ");
-		F.print();*/
+		//printf("   F: ");
+		//F.print();
 		printf("\n");
 		
 		if (i == 82) {
 			calcCoordAdd(G, Xv, Yv, Xp, Yp, Xfa, Yfa, Yfb);
 			F.multiply(F, G);
+			
+			printf("[Coord Add]  i: %d\n   Xv: ", i);
+			Xv.print();
+			printf("   Yv: ");
+			Yv.print();
+			printf("\n");
 		}
-	}
+	}*/
 	
 	printf("F (before final exp):\n");
 	F.print();
 		
 	// Calculate final exponentiation
-	calcFinalExp(F);
+	//calcFinalExp(F);
 	
 	printf("F:\n");
 	F.print();
@@ -125,6 +113,129 @@ int main () {
 	printf("\nTime elapsed: %.3fs\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 
 	exit(0);
+}
+
+void testCases() {
+	// Initialize P & Q values
+	mpz_t tmp;
+	mpz_init(tmp);
+	
+	mpz_set_str(tmp, "0x18239FA96047C449DBF0D78A2A596E5A7D67D209F", 0);
+	Element Xp = Element(tmp);
+	
+	mpz_set_str(tmp, "0x421655A1B0BA910F5A1AB8E0C46C3B45F9EE48FC2", 0);
+	Element Yp = Element(tmp);
+	
+	mpz_set_str(tmp, "0x18B05983CBE4AD54B2EA7597DD441ABD8CFD5B3D3", 0);
+	Element Xq = Element(tmp);
+	
+	mpz_set_str(tmp, "0x3D6CB2B7F2C7CDE41B82A65E92D105C2269D1CC75", 0);
+	Element Yq = Element(tmp);
+	
+	// Base points
+	printf("[Base Points]\n   P:\n     X: ");
+	Xp.print();
+	printf("     Y: ");
+	Yp.print();
+	printf("   Q:\n     X: ");
+	Xq.print();
+	printf("     Y: ");
+	Yq.print();
+	printf("\n");
+	
+	// Addition test
+	Element add = Element();
+	
+	add.add(Xp, Yp);
+	
+	printf("[Add]\n   R:\t");
+	add.print();
+	printf("\n");
+	
+	// Multiplication test
+	Element mult = Element();
+	
+	mult.multiply(Xp, Yp);
+	
+	printf("[Mult]\n   R:\t");
+	mult.print();
+	printf("\n");
+	
+	// Doubling test
+	Element DblA = Element();
+	Element DblB = Element();
+	
+	calcDouble(DblA, DblB, Xp, Yp);
+	
+	printf("[2*P]\n   Xn:\t");
+	DblA.print();
+	printf("   Yn:\t");
+	DblB.print();
+	printf("\n");
+	
+	// Add test
+	Element AddA = Element();
+	Element AddB = Element();
+	
+	calcAdd(AddA, AddB, Xp, Yp, Xq, Yq);
+	
+	printf("[P+Q]\n   Xn:\t");
+	AddA.print();
+	printf("   Yn:\t");
+	AddB.print();
+	printf("\n");
+}
+
+void calcDouble(Element& Ra, Element& Rb, Element& Sa, Element& Sb) {
+	Element lambda = Element();
+	
+	lambda.square(Sa);
+	lambda.addOne();
+	
+	// Calculate new X & Y coords
+	Element Xnew = Element();
+	Element Ynew = Element();
+	
+	Xnew.square(lambda);
+	
+	Ynew.add(Xnew, Sa);
+	Ynew.multiply(Ynew, lambda);
+	Ynew.add(Ynew, Sb);
+	Ynew.addOne();
+	
+	// Set new coords
+	Ra.set(Xnew);
+	Rb.set(Ynew);	
+}
+
+void calcAdd(Element& Ra, Element& Rb, Element& Sa, Element& Sb, Element& Ta, Element& Tb) {
+	Element lambda = Element();
+	
+	lambda.add(Sa, Ta);
+		
+	lambda.inverse(lambda);
+	
+	Element temp = Element();
+	temp.add(Sb, Tb);
+	
+	lambda.add(lambda, temp);
+	
+	// Calculate new X & Y coords
+	Element Xnew = Element();
+	Element Ynew = Element();
+	
+	Xnew.square(lambda);
+	Xnew.add(Xnew, Sa);
+	Xnew.add(Xnew, Ta);
+	
+	Ynew.add(Xnew, Ta);
+	Ynew.multiply(Ynew, lambda);
+	Ynew.add(Ynew, Tb);
+	Ynew.addOne();
+	
+	// Set new coords
+	Ra.set(Xnew);
+	Rb.set(Ynew);
 }
 
 void calcCoordDouble(Extension& G, Element& Xv, Element& Yv, Element& Xfa, Element& Yfa, Element& Yfb) {
@@ -164,34 +275,28 @@ void calcCoordDouble(Extension& G, Element& Xv, Element& Yv, Element& Xfa, Eleme
 void calcCoordAdd(Extension& G, Element& Xv, Element& Yv, Element& Xp, Element& Yp, Element& Xfa, Element& Yfa, Element& Yfb) {
 	Element lambda = Element();
 	
-	printf("[Coord Add]\n");
-	
 	lambda.add(Xv, Xp);
 	
-	printf("Xv =      ");
+	/*printf("Xv =      ");
 	Xv.print();
 	printf("Xp =      ");
 	Xp.print();
 	printf("Xv + Xp = ");
 	lambda.print();
-	printf("\n");
+	printf("\n");*/
 	
 	lambda.inverse(lambda);
-	
-	if (lambda.isZero() == true) {
-		lambda.set(1);
-	}
 	
 	Element temp = Element();
 	temp.add(Yv, Yp);
 	
-	printf("Yv =      ");
+	/*printf("Yv =      ");
 	Yv.print();
 	printf("Yp =      ");
 	Yp.print();
 	printf("Yv + Yp = ");
 	temp.print();
-	printf("\n");
+	printf("\n");*/
 	
 	lambda.add(lambda, temp);
 	
@@ -397,9 +502,7 @@ void calcF2mInverse(Element& Ea, Element& Eb) {
 	w.add(Ea, Eb);
 	w.multiply(w, Eb);
 	w.add(w, temp);
-	
-	printf("[w inverse]\n");
-	
+		
 	w.inverse(w);
 	
 	// Calculate result

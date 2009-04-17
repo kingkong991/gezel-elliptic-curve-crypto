@@ -14,10 +14,11 @@
 
 class Extension {
 public:
-	Extension();
+	Extension() { this->a = Element(); this->b = Element(); this->c = Element(); this->d = Element(); };
 	Extension(Element& a, Element& b, Element& c, Element& d) { this->a.set(a); this->b.set(b); this->c.set(c); this->d.set(d); };
+	Extension(unsigned long a, unsigned long b, unsigned long c, unsigned long d) { this->a = Element(a); this->b = Element(b); this->c = Element(c); this->d = Element(d); };
 	
-	virtual ~Extension();
+	~Extension() { };
 	
 	void setA(unsigned long a) { this->a.set(a); };
 	void setB(unsigned long b) { this->b.set(b); };
