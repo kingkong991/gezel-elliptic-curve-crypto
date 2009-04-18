@@ -1,1 +1,2 @@
-reset; time cpp -P pairing_testbench.fdl | gezel 1000000
+reset
+time cpp -P pairing_testbench.fdl | gezel 1000000 | sed -f sedscript | sed -f sedreplace-cresults

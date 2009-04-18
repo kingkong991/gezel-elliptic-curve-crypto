@@ -78,4 +78,23 @@ void Extension::square(Extension& ext) {
 	
 	this->d.multiply(ext.getD(), ext.getD());
 	this->d.add(this->d, this->c);
+
+/*
+	Element m0, m1, m2, m3;
+	
+	m0.square(ext.getA());
+	m1.square(ext.getB());
+	m2.square(ext.getC());
+	m3.square(ext.getD());
+
+	this->a.add(m0, m1);
+	this->a.add(this->a, m2);
+	this->a.add(this->a, m3);
+
+	this->b.add(m1, m3);
+
+	this->c.set(m2);
+
+	this->d.add(m2, m3);
+*/
 }

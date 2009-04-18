@@ -4,6 +4,8 @@
 #include "element.h"
 #include "extension.h"
 
+void calcPairing(Extension& F, Element& Xp, Element& Yp, Element& Xfa, Element& Yfa);
+
 void calcCoordDouble(Extension& G, Element& Xv, Element& Yv, Element& Xfa, Element& Yfa, Element& Yfb);
 void calcCoordAdd(Extension& G, Element& Xv, Element& Yv, Element& Xp, Element& Yp, Element& Xfa, Element& Yfa, Element& Yfb);
 

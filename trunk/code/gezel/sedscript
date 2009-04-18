@@ -1,0 +1,8 @@
+# Replace known coordinates with their variable name
+s/18239fa96047c449dbf0d78a2a596e5a7d67d209f/colorstart_Xp_colorend/g
+s/421655a1b0ba910f5a1ab8e0c46c3b45f9ee48fc2/colorstart_Yp_colorend/g
+s/18b05983cbe4ad54b2ea7597dd441abd8cfd5b3d3/colorstart_Xfa_colorend/g
+s/25dceb34392360b0a968d3c94f951f7faa6047fa6/colorstart_Yfa_colorend/g 
+
+s/colorstart_/\x1B[32;1m/g
+s/_colorend/\x1B[m/g
