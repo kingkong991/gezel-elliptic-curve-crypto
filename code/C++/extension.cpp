@@ -55,7 +55,9 @@ void Extension::multiply(Extension& extA, Extension& extB) {
 	this->b.add(q1, m2);
 	
 	// Calculate r2
-	this->c.add(q0, q3);
+//	this->c.add(q0, q3);
+	this->c.add(q0, m1);
+	this->c.add(this->c, m2);
 	this->c.add(this->c, l2);
 	this->c.add(this->c, l3);
 	
