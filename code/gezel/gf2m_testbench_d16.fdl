@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-#include "wrapper_gf2m.fdl"
+#include "wrapper_gf2m_d16.fdl"
 
 //$option "vcd"
 
@@ -38,7 +38,7 @@ dp testbench {
 	}
 
 	sfg run {
-		reg_A = ((ns(const_m - 1)) reg_A[0:const_m - 2]) # ((ns(1)) reg_A[const_m - 1]);
+		reg_A = ((ns(const_m - 16)) reg_A[const_m - 17:0]) # ((ns(16)) reg_A[const_m - 1:const_m - 16]);
 	}
 
 	sfg MALU_mult {
