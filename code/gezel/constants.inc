@@ -24,7 +24,7 @@
 #elif malu_width == 16
 	#define const_m_malu 11
 #elif malu_width == 32
-	#define const_m_malu 5
+	#define const_m_malu 6
 #endif
 
 // Set this to the hexadecimal representation of the number of ones equal or greater to const_m

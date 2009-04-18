@@ -69,7 +69,7 @@ dp testbench {
 	}
 
 	sfg print {
-		$display("[Cycle ", $cycle, "] - out = ", $dec, sig_out);
+		$display("[Cycle ", $cycle, "] - out: ", $dec, sig_out, " = ", $hex, sig_out);
 	}
 
 	sfg raise_next {

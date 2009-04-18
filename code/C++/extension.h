@@ -40,6 +40,8 @@ public:
 	
 	void print() { gmp_printf("\n\tA = 0x%Zx\n\tB = 0x%Zx\n\tC = 0x%Zx\n\tD = 0x%Zx\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
 
+	void printL() { gmp_printf("A = 0x%Zx - B = 0x%Zx - C = 0x%Zx - D = 0x%Zx\n", this->a.getMP(), this->b.getMP(), this->c.getMP(), this->d.getMP()); };
+
 private:
 	Element a, b, c, d;
 };

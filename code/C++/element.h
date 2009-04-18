@@ -35,6 +35,7 @@ public:
 	bool isZero() { if (mpz_sgn(this->a) == 0) { return true; } return false; };
 	
 	void print() { gmp_printf("0x%Zx\n", this->a); };
+	void printNNL() { gmp_printf("%Zx", this->a); };
 
 private:
 	mpz_t a;

@@ -8,12 +8,15 @@
 #include "element.h"
 #include "extension.h"
 
+bool debug = true;
+
 int main () {
 	// Start measuring time
 	clock_t start = clock();
 	
-	testCases();
-	exit(0);
+	if (!debug)
+		testCases();
+	//exit(0);
 		
 	// Initialize P & Q values
 	mpz_t tmp;
@@ -32,7 +35,7 @@ int main () {
 	Element Yq = Element(tmp);
 	
 	// 0x219c4dd67bd0153f2ef5657515304e5140ae767d6
-	mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
+	/*mpz_set_str(tmp, "0x219c4dd67bd0153f2ef5657515304e5140ae767d6", 0);
 	Element test = Element(tmp);
 	Element test2 = Element(tmp);
 	Element test3 = Element(tmp);
@@ -44,7 +47,7 @@ int main () {
 	test.print();
 	printf("\tA*A^-1 = ");
 	test.multiply(test, test2);
-	test.print();
+	test.print();*/
 		
 	//exit(0);*/
 	
@@ -60,59 +63,115 @@ int main () {
 	
 	// Calculate distortion map
 	Element Xfa = Element(Xq.getMP());
-	
 	Element Yfa = Element();
-	Element Yfb = Element(Xq.getMP());
 	
 	Yfa.add(Xq, Yq);
-	
-	// Init f & V
-	Extension F = Extension(1, 0, 0, 0);
+
+	Extension F = Extension();
+
+	if (!debug) printf("e(P, Q) = ");
+	calcPairing(F, Xp, Yp, Xfa, Yfa);	
+	if (!debug) F.print();	
+	/*printf("\ne(P, Q)^2 = ");
+	F.square(F);	F.print();
+
+	printf("\ne(2P, Q) = ");
+	calcDouble(Xp, Yp, Xp, Yp);
+	calcPairing(F, Xp, Yp, Xfa, Yfa);		F.print();*/
 		
+	if (!debug) printf("\nTime elapsed: %.3fs\n", ((double)clock() - start) / CLOCKS_PER_SEC);
+
+	exit(0);
+}
+
+void calcPairing(Extension& F, Element& Xp, Element& Yp, Element& Xfa, Element& Yfa) {
+	// Init f & V
+	F.setA(1);
+	F.setB(0);
+	F.setC(0);
+	F.setD(0);
+
+	
 	Element Xv = Element(Xp.getMP());
 	Element Yv = Element(Yp.getMP());
 	
+	Element Yfb = Element(Xfa.getMP());
+
 	// Create G
 	Extension G = Extension();
 		
 	// Start Miller loop
-	/*for (int i = 162; i >= 0; i--) {
+	for (int i = 162; i >= 0; i--) {
 		F.square(F);
 		calcCoordDouble(G, Xv, Yv, Xfa, Yfa, Yfb);
 		F.multiply(F, G);
 		
-		printf("[Miller]  i: %d\n   Xv: ", i);
-		Xv.print();
-		printf("   Yv: ");
-		Yv.print();
-		//printf("   F: ");
-		//F.print();
-		printf("\n");
-		
-		if (i == 82) {
-			calcCoordAdd(G, Xv, Yv, Xp, Yp, Xfa, Yfa, Yfb);
-			F.multiply(F, G);
-			
-			printf("[Coord Add]  i: %d\n   Xv: ", i);
+		if (debug) {
+			printf("s/%s/colorstart_Xv_%d_colorend/g\n", mpz_get_str(NULL, 16, Xv.getMP()), i);
+			printf("s/%s/colorstart_Yv_%d_colorend/g\n", mpz_get_str(NULL, 16, Yv.getMP()), i);
+
+			printf("s/%s/colorstart_Ga_%d_colorend/g\n", mpz_get_str(NULL, 16, G.getA().getMP()), i);
+			printf("s/%s/colorstart_Gb_%d_colorend/g\n", mpz_get_str(NULL, 16, G.getB().getMP()), i);
+
+			if (mpz_sizeinbase(F.getA().getMP(), 16) > 1)
+				printf("s/%s/colorstart_Fa_%d_colorend/g\n", mpz_get_str(NULL, 16, F.getA().getMP()), i);
+			if (mpz_sizeinbase(F.getB().getMP(), 16) > 1)
+				printf("s/%s/colorstart_Fb_%d_colorend/g\n", mpz_get_str(NULL, 16, F.getB().getMP()), i);
+
+			if (mpz_sizeinbase(F.getC().getMP(), 16) > 1)
+				printf("s/%s/colorstart_Fc_%d_colorend/g\n", mpz_get_str(NULL, 16, F.getC().getMP()), i);
+
+			if (mpz_sizeinbase(F.getD().getMP(), 16) > 1)
+				printf("s/%s/colorstart_Fd_%d_colorend/g\n", mpz_get_str(NULL, 16, F.getD().getMP()), i);
+		} else {
+			printf("[Miller]  i: %d\n   Xv: ", i);
 			Xv.print();
 			printf("   Yv: ");
 			Yv.print();
+			printf("   G: ");
+			G.printL();
+			printf("   F: ");
+			F.printL();
 			printf("\n");
 		}
-	}*/
-	
-	printf("F (before final exp):\n");
-	F.print();
+
+		if (i == 82) {
+			calcCoordAdd(G, Xv, Yv, Xp, Yp, Xfa, Yfa, Yfb);
+			F.multiply(F, G);
+
+			if (debug) {
+				printf("s/%s/colorstart_Xv_%dA_colorend/g\n", mpz_get_str(NULL, 16, Xv.getMP()), i);
+				printf("s/%s/colorstart_Yv_%dA_colorend/g\n", mpz_get_str(NULL, 16, Yv.getMP()), i);
+
+			printf("s/%s/colorstart_Ga_%dA_colorend/g\n", mpz_get_str(NULL, 16, G.getA().getMP()), i);
+			printf("s/%s/colorstart_Gb_%dA_colorend/g\n", mpz_get_str(NULL, 16, G.getB().getMP()), i);
+
+				printf("s/%s/colorstart_Fa_%dA_colorend/g\n", mpz_get_str(NULL, 16, F.getA().getMP()), i);
+				printf("s/%s/colorstart_Fb_%dA_colorend/g\n", mpz_get_str(NULL, 16, F.getB().getMP()), i);
+				printf("s/%s/colorstart_Fc_%dA_colorend/g\n", mpz_get_str(NULL, 16, F.getC().getMP()), i);
+				printf("s/%s/colorstart_Fd_%dA_colorend/g\n", mpz_get_str(NULL, 16, F.getD().getMP()), i);
+			} else {			
+				printf("[Coord Add]  i: %d\n   Xv: ", i);
+				Xv.print();
+				printf("   Yv: ");
+				Yv.print();
+				printf("   F: ");
+				F.printL();
+				printf("\n");
+			}
+		}
+	}
+
+	if (debug) {
+		printf("s/colorstart_/\\x1B[34;1m/g\n");
+		printf("s/_colorend/\\x1B[m/g\n");
+	}
+
+	//printf("F (before final exp):\n");
+	//F.print();
 		
 	// Calculate final exponentiation
-	//calcFinalExp(F);
-	
-	printf("F:\n");
-	F.print();
-		
-	printf("\nTime elapsed: %.3fs\n", ((double)clock() - start) / CLOCKS_PER_SEC);
-
-	exit(0);
+	calcFinalExp(F);
 }
 
 void testCases() {
@@ -170,7 +229,7 @@ void testCases() {
 	// F(2^m) Addition test
 	Element add = Element();
 	
-	add.add(Xp, Yp);
+	add.add(Xq, Yq);
 	
 	printf("[Fm Add]\n   R:\t");
 	add.print();
@@ -350,7 +409,7 @@ void calcCoordAdd(Extension& G, Element& Xv, Element& Yv, Element& Xp, Element& 
 	
 	lambda.add(Xv, Xp);
 	
-	/*printf("Xv =      ");
+/*	printf("Xv =      ");
 	Xv.print();
 	printf("Xp =      ");
 	Xp.print();
@@ -360,18 +419,32 @@ void calcCoordAdd(Extension& G, Element& Xv, Element& Yv, Element& Xp, Element& 
 	
 	lambda.inverse(lambda);
 	
+/*	printf("inv =     ");
+	lambda.print();
+	printf("\n");*/
+
 	Element temp = Element();
 	temp.add(Yv, Yp);
 	
-	/*printf("Yv =      ");
+/*	printf("Yv =      ");
 	Yv.print();
 	printf("Yp =      ");
 	Yp.print();
 	printf("Yv + Yp = ");
 	temp.print();
-	printf("\n");*/
+	printf("\n");
 	
-	lambda.add(lambda, temp);
+	printf("final lambda calc: ");
+	lambda.print();
+	temp.print();
+
+	printf(" product = ");*/
+
+	lambda.multiply(lambda, temp);
+
+//	printf("lambda =  ");
+//	lambda.print();
+//	printf("\n");
 	
 	// Calculate new X & Y coords
 	Element Xnew = Element();
