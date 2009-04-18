@@ -1,0 +1,539 @@
+#ifndef WRAPPER_GF2M_FDL
+#define WRAPPER_GF2M_FDL
+
+#include "constants.inc"
+
+#include "malu.fdl"
+
+// Mode:	0 = addition
+//			1 = multiplication
+
+dp malu2: malu
+dp malu3: malu
+dp malu4: malu
+dp malu5: malu
+dp malu6: malu
+dp malu7: malu
+dp malu8: malu
+dp malu9: malu
+dp malu10: malu
+dp malu11: malu
+dp malu12: malu
+dp malu13: malu
+dp malu14: malu
+dp malu15: malu
+dp malu16: malu
+dp malu17: malu
+dp malu18: malu
+dp malu19: malu
+dp malu20: malu
+dp malu21: malu
+dp malu22: malu
+dp malu23: malu
+dp malu24: malu
+dp malu25: malu
+dp malu26: malu
+dp malu27: malu
+dp malu28: malu
+dp malu29: malu
+dp malu30: malu
+dp malu31: malu
+dp malu32: malu
+
+dp wrapper_gf2m (in A: ns(const_m);
+	in B: ns(const_m);
+	in start: ns(1);
+	in mode: ns(1);
+	in plus_one: ns(1);
+	out T: ns(const_m);
+	out ready: ns(1)) {
+
+	reg reg_start: ns(1);
+	reg reg_mode: ns(1);
+	reg reg_plus_one: ns(1);
+
+	reg reg_T: ns(const_m);
+	reg reg_m: ns(1);
+
+	reg reg_cycle: ns(const_m_log);
+	
+	reg reg_prev_ready:	ns(1);
+
+	sig B1_in: ns(const_m);
+	sig B1_mux: ns(1);
+	sig T1_in: ns(const_m);
+	sig T1_out: ns(const_m);
+	sig m1_in: ns(1);
+	sig m1_out: ns(1);
+
+	sig B2_in: ns(const_m);
+	sig B2_mux: ns(1);
+	sig T2_in: ns(const_m);
+	sig T2_out: ns(const_m);
+	sig m2_in: ns(1);
+	sig m2_out: ns(1);
+
+	sig B3_in: ns(const_m);
+	sig B3_mux: ns(1);
+	sig T3_in: ns(const_m);
+	sig T3_out: ns(const_m);
+	sig m3_in: ns(1);
+	sig m3_out: ns(1);
+
+	sig B4_in: ns(const_m);
+	sig B4_mux: ns(1);
+	sig T4_in: ns(const_m);
+	sig T4_out: ns(const_m);
+	sig m4_in: ns(1);
+	sig m4_out: ns(1);
+
+	sig B5_in: ns(const_m);
+	sig B5_mux: ns(1);
+	sig T5_in: ns(const_m);
+	sig T5_out: ns(const_m);
+	sig m5_in: ns(1);
+	sig m5_out: ns(1);
+
+	sig B6_in: ns(const_m);
+	sig B6_mux: ns(1);
+	sig T6_in: ns(const_m);
+	sig T6_out: ns(const_m);
+	sig m6_in: ns(1);
+	sig m6_out: ns(1);
+
+	sig B7_in: ns(const_m);
+	sig B7_mux: ns(1);
+	sig T7_in: ns(const_m);
+	sig T7_out: ns(const_m);
+	sig m7_in: ns(1);
+	sig m7_out: ns(1);
+
+	sig B8_in: ns(const_m);
+	sig B8_mux: ns(1);
+	sig T8_in: ns(const_m);
+	sig T8_out: ns(const_m);
+	sig m8_in: ns(1);
+	sig m8_out: ns(1);
+
+	sig B9_in: ns(const_m);
+	sig B9_mux: ns(1);
+	sig T9_in: ns(const_m);
+	sig T9_out: ns(const_m);
+	sig m9_in: ns(1);
+	sig m9_out: ns(1);
+
+	sig B10_in: ns(const_m);
+	sig B10_mux: ns(1);
+	sig T10_in: ns(const_m);
+	sig T10_out: ns(const_m);
+	sig m10_in: ns(1);
+	sig m10_out: ns(1);
+
+	sig B11_in: ns(const_m);
+	sig B11_mux: ns(1);
+	sig T11_in: ns(const_m);
+	sig T11_out: ns(const_m);
+	sig m11_in: ns(1);
+	sig m11_out: ns(1);
+
+	sig B12_in: ns(const_m);
+	sig B12_mux: ns(1);
+	sig T12_in: ns(const_m);
+	sig T12_out: ns(const_m);
+	sig m12_in: ns(1);
+	sig m12_out: ns(1);
+
+	sig B13_in: ns(const_m);
+	sig B13_mux: ns(1);
+	sig T13_in: ns(const_m);
+	sig T13_out: ns(const_m);
+	sig m13_in: ns(1);
+	sig m13_out: ns(1);
+
+	sig B14_in: ns(const_m);
+	sig B14_mux: ns(1);
+	sig T14_in: ns(const_m);
+	sig T14_out: ns(const_m);
+	sig m14_in: ns(1);
+	sig m14_out: ns(1);
+
+	sig B15_in: ns(const_m);
+	sig B15_mux: ns(1);
+	sig T15_in: ns(const_m);
+	sig T15_out: ns(const_m);
+	sig m15_in: ns(1);
+	sig m15_out: ns(1);
+
+	sig B16_in: ns(const_m);
+	sig B16_mux: ns(1);
+	sig T16_in: ns(const_m);
+	sig T16_out: ns(const_m);
+	sig m16_in: ns(1);
+	sig m16_out: ns(1);
+
+	sig B17_in: ns(const_m);
+	sig B17_mux: ns(1);
+	sig T17_in: ns(const_m);
+	sig T17_out: ns(const_m);
+	sig m17_in: ns(1);
+	sig m17_out: ns(1);
+
+	sig B18_in: ns(const_m);
+	sig B18_mux: ns(1);
+	sig T18_in: ns(const_m);
+	sig T18_out: ns(const_m);
+	sig m18_in: ns(1);
+	sig m18_out: ns(1);
+
+	sig B19_in: ns(const_m);
+	sig B19_mux: ns(1);
+	sig T19_in: ns(const_m);
+	sig T19_out: ns(const_m);
+	sig m19_in: ns(1);
+	sig m19_out: ns(1);
+
+	sig B20_in: ns(const_m);
+	sig B20_mux: ns(1);
+	sig T20_in: ns(const_m);
+	sig T20_out: ns(const_m);
+	sig m20_in: ns(1);
+	sig m20_out: ns(1);
+
+	sig B21_in: ns(const_m);
+	sig B21_mux: ns(1);
+	sig T21_in: ns(const_m);
+	sig T21_out: ns(const_m);
+	sig m21_in: ns(1);
+	sig m21_out: ns(1);
+
+	sig B22_in: ns(const_m);
+	sig B22_mux: ns(1);
+	sig T22_in: ns(const_m);
+	sig T22_out: ns(const_m);
+	sig m22_in: ns(1);
+	sig m22_out: ns(1);
+
+	sig B23_in: ns(const_m);
+	sig B23_mux: ns(1);
+	sig T23_in: ns(const_m);
+	sig T23_out: ns(const_m);
+	sig m23_in: ns(1);
+	sig m23_out: ns(1);
+
+	sig B24_in: ns(const_m);
+	sig B24_mux: ns(1);
+	sig T24_in: ns(const_m);
+	sig T24_out: ns(const_m);
+	sig m24_in: ns(1);
+	sig m24_out: ns(1);
+
+	sig B25_in: ns(const_m);
+	sig B25_mux: ns(1);
+	sig T25_in: ns(const_m);
+	sig T25_out: ns(const_m);
+	sig m25_in: ns(1);
+	sig m25_out: ns(1);
+
+	sig B26_in: ns(const_m);
+	sig B26_mux: ns(1);
+	sig T26_in: ns(const_m);
+	sig T26_out: ns(const_m);
+	sig m26_in: ns(1);
+	sig m26_out: ns(1);
+
+	sig B27_in: ns(const_m);
+	sig B27_mux: ns(1);
+	sig T27_in: ns(const_m);
+	sig T27_out: ns(const_m);
+	sig m27_in: ns(1);
+	sig m27_out: ns(1);
+
+	sig B28_in: ns(const_m);
+	sig B28_mux: ns(1);
+	sig T28_in: ns(const_m);
+	sig T28_out: ns(const_m);
+	sig m28_in: ns(1);
+	sig m28_out: ns(1);
+
+	sig B29_in: ns(const_m);
+	sig B29_mux: ns(1);
+	sig T29_in: ns(const_m);
+	sig T29_out: ns(const_m);
+	sig m29_in: ns(1);
+	sig m29_out: ns(1);
+
+	sig B30_in: ns(const_m);
+	sig B30_mux: ns(1);
+	sig T30_in: ns(const_m);
+	sig T30_out: ns(const_m);
+	sig m30_in: ns(1);
+	sig m30_out: ns(1);
+
+	sig B31_in: ns(const_m);
+	sig B31_mux: ns(1);
+	sig T31_in: ns(const_m);
+	sig T31_out: ns(const_m);
+	sig m31_in: ns(1);
+	sig m31_out: ns(1);
+
+	sig B32_in: ns(const_m);
+	sig B32_mux: ns(1);
+	sig T32_in: ns(const_m);
+	sig T32_out: ns(const_m);
+	sig m32_in: ns(1);
+	sig m32_out: ns(1);
+
+	sig T_mux: ns(const_m);
+	sig m_mux: ns(1);
+	
+	sig sig_T_last: ns(1);
+
+	// Signal for clock gating reg_T
+	sig sig_en_T: ns(1);
+	
+	// Signal for final result (addition: from MALU 1, mult: from MALU 3)
+	sig sig_final_T: ns(const_m);
+
+	sig sig_ready: ns(1);
+
+	use malu(T1_in, B1_in, m1_in, T1_out, m1_out);
+	use malu2(T2_in, B2_in, m2_in, T2_out, m2_out);
+	use malu3(T3_in, B3_in, m3_in, T3_out, m3_out);
+	use malu4(T4_in, B4_in, m4_in, T4_out, m4_out);
+	use malu5(T5_in, B5_in, m5_in, T5_out, m5_out);
+	use malu6(T6_in, B6_in, m6_in, T6_out, m6_out);
+	use malu7(T7_in, B7_in, m7_in, T7_out, m7_out);
+	use malu8(T8_in, B8_in, m8_in, T8_out, m8_out);
+	use malu9(T9_in, B9_in, m9_in, T9_out, m9_out);
+	use malu10(T10_in, B10_in, m10_in, T10_out, m10_out);
+	use malu11(T11_in, B11_in, m11_in, T11_out, m11_out);
+	use malu12(T12_in, B12_in, m12_in, T12_out, m12_out);
+	use malu13(T13_in, B13_in, m13_in, T13_out, m13_out);
+	use malu14(T14_in, B14_in, m14_in, T14_out, m14_out);
+	use malu15(T15_in, B15_in, m15_in, T15_out, m15_out);
+	use malu16(T16_in, B16_in, m16_in, T16_out, m16_out);
+	use malu17(T17_in, B17_in, m17_in, T17_out, m17_out);
+	use malu18(T18_in, B18_in, m18_in, T18_out, m18_out);
+	use malu19(T19_in, B19_in, m19_in, T19_out, m19_out);
+	use malu20(T20_in, B20_in, m20_in, T20_out, m20_out);
+	use malu21(T21_in, B21_in, m21_in, T21_out, m21_out);
+	use malu22(T22_in, B22_in, m22_in, T22_out, m22_out);
+	use malu23(T23_in, B23_in, m23_in, T23_out, m23_out);
+	use malu24(T24_in, B24_in, m24_in, T24_out, m24_out);
+	use malu25(T25_in, B25_in, m25_in, T25_out, m25_out);
+	use malu26(T26_in, B26_in, m26_in, T26_out, m26_out);
+	use malu27(T27_in, B27_in, m27_in, T27_out, m27_out);
+	use malu28(T28_in, B28_in, m28_in, T28_out, m28_out);
+	use malu29(T29_in, B29_in, m29_in, T29_out, m29_out);
+	use malu30(T30_in, B30_in, m30_in, T30_out, m30_out);
+	use malu31(T31_in, B31_in, m31_in, T31_out, m31_out);
+	use malu32(T32_in, B32_in, m32_in, T32_out, m32_out);
+
+	sfg do_always {
+		reg_start = start;
+
+		// Update settings regs as long as start is high
+		reg_mode = start == 1 ? mode : reg_mode;
+		reg_plus_one = start == 1 ? plus_one : reg_plus_one;
+		
+		// When start is low, increase cycle counter, otherwise reset
+		reg_cycle = start == 1 ? 0 : (sig_ready == 1 ? reg_cycle : reg_cycle + 1);
+
+		// Store data in reg_T:
+		// When start is high, either set reg_T to 0 (multiplication) or A (addition)
+		// Otherwise set reg_T to MALU_output or MALU_output shifted 1 to the left (so the result stays the same)
+		sig_final_T = reg_mode == 0 | reg_prev_ready == 1 ? m1_out # m2_out # m3_out # T3_out[(const_m - 1):3] : m3_out # T3_out[(const_m - 1):1];
+		T_mux = start == 1 ? (mode == 0 ? A : 0) : (sig_ready == 1 ? sig_final_T : T32_out);
+
+		// As long as final result isn't stored in reg_T or if start is high, enable updating of it's value
+		sig_en_T = start == 1 | reg_prev_ready == 0 ? 1 : 0;
+
+		reg_T = sig_en_T == 1 ? T_mux : reg_T;
+
+		T1_in = reg_T;
+		T2_in = T1_out;
+		T3_in = T2_out;
+		T4_in = T3_out;
+		T5_in = T4_out;
+		T6_in = T5_out;
+		T7_in = T6_out;
+		T8_in = T7_out;
+		T9_in = T8_out;
+		T10_in = T9_out;
+		T11_in = T10_out;
+		T12_in = T11_out;
+		T13_in = T12_out;
+		T14_in = T13_out;
+		T15_in = T14_out;
+		T16_in = T15_out;
+		T17_in = T16_out;
+		T18_in = T17_out;
+		T19_in = T18_out;
+		T20_in = T19_out;
+		T21_in = T20_out;
+		T22_in = T21_out;
+		T23_in = T22_out;
+		T24_in = T23_out;
+		T25_in = T24_out;
+		T26_in = T25_out;
+		T27_in = T26_out;
+		T28_in = T27_out;
+		T29_in = T28_out;
+		T30_in = T29_out;
+		T31_in = T30_out;
+		T32_in = T31_out;
+
+		// Set output to input of reg_T
+		sig_T_last = T_mux[0] ^ reg_plus_one;
+		T = T_mux[(const_m - 1):1] # sig_T_last;
+		
+		// Set B input of mux
+		// If ready: AND 0, else if addition and 1 cycle after starting: AND 1, else if multiplication: AND last A bit 		
+		B1_mux = ~reg_prev_ready & (~reg_mode | A[const_m - 1]);
+		B1_in = B & (B1_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+		
+		B2_mux = reg_mode & (~reg_prev_ready & A[const_m - 2]);
+		B2_in = B & (B2_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B3_mux = reg_mode & (~reg_prev_ready & A[const_m - 3]);
+		B3_in = B & (B3_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B4_mux = A[const_m - 4];
+		B4_in = B & (B4_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B5_mux = A[const_m - 5];
+		B5_in = B & (B5_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B6_mux = A[const_m - 6];
+		B6_in = B & (B6_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B7_mux = A[const_m - 7];
+		B7_in = B & (B7_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+		
+		B8_mux = A[const_m - 8];
+		B8_in = B & (B8_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B9_mux = A[const_m - 9];
+		B9_in = B & (B9_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B10_mux = A[const_m - 10];
+		B10_in = B & (B10_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B11_mux = A[const_m - 11];
+		B11_in = B & (B11_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B12_mux = A[const_m - 12];
+		B12_in = B & (B12_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B13_mux = A[const_m - 13];
+		B13_in = B & (B13_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B14_mux = A[const_m - 14];
+		B14_in = B & (B14_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B15_mux = A[const_m - 15];
+		B15_in = B & (B15_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B16_mux = A[const_m - 16];
+		B16_in = B & (B16_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B17_mux = A[const_m - 17];
+		B17_in = B & (B17_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B18_mux = A[const_m - 18];
+		B18_in = B & (B18_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B19_mux = A[const_m - 19];
+		B19_in = B & (B19_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B20_mux = A[const_m - 20];
+		B20_in = B & (B20_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B21_mux = A[const_m - 21];
+		B21_in = B & (B21_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B22_mux = A[const_m - 22];
+		B22_in = B & (B22_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B23_mux = A[const_m - 23];
+		B23_in = B & (B23_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B24_mux = A[const_m - 24];
+		B24_in = B & (B24_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B25_mux = A[const_m - 25];
+		B25_in = B & (B25_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B26_mux = A[const_m - 26];
+		B26_in = B & (B26_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B27_mux = A[const_m - 27];
+		B27_in = B & (B27_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B28_mux = A[const_m - 28];
+		B28_in = B & (B28_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B29_mux = A[const_m - 29];
+		B29_in = B & (B29_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B30_mux = A[const_m - 30];
+		B30_in = B & (B30_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B31_mux = A[const_m - 31];
+		B31_in = B & (B31_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		B32_mux = A[const_m - 32];
+		B32_in = B & (B32_mux == 1 ? ((ns(const_m)) all_ones) : 0);
+
+		// Set reg_m
+		// If start or sig_ready or reg_ready is high, set m to 0, otherwise set to output from MALU
+		m1_in = reg_m;
+		m2_in = reg_mode & ~reg_prev_ready & m1_out;
+		m3_in	= reg_mode & ~reg_prev_ready & m2_out;
+		m4_in = m3_out;
+		m5_in = m4_out;
+		m6_in = m5_out;
+		m7_in = m6_out;
+		m8_in = m7_out;
+		m9_in = m8_out;
+		m10_in = m9_out;
+		m11_in = m10_out;
+		m12_in = m11_out;
+		m13_in = m12_out;
+		m14_in = m13_out;
+		m15_in = m14_out;
+		m16_in = m15_out;
+		m17_in = m16_out;
+		m18_in = m17_out;
+		m19_in = m18_out;
+		m20_in = m19_out;
+		m21_in = m20_out;
+		m22_in = m21_out;
+		m23_in = m22_out;
+		m24_in = m23_out;
+		m25_in = m24_out;
+		m26_in = m25_out;
+		m27_in = m26_out;
+		m28_in = m27_out;
+		m29_in = m28_out;
+		m30_in = m29_out;
+		m31_in = m30_out;
+		m32_in = m31_out;
+
+		m_mux = ~(sig_ready | start) & m32_out;
+		reg_m = m_mux;
+
+		// Set ready register and output:
+		// If start = 1 then ready = 0. Else, if doing addition, set ready to 1; when doing multiplication, set to zero as long as reg_cycle <= const_m - 2.
+		sig_ready = start == 1 ? 0 : (reg_mode == 0 ? 1 : (reg_cycle <= (const_m_malu - 2) ? 0 : 1));
+		ready = sig_ready;
+		//ready = reg_prev_ready;
+		reg_prev_ready = sig_ready;
+		
+		//$display("[Wrapper] B_in = ", $dec, B_in, " - T_in = ", T_in, " - m_in = ", m_in, " - T_out = ", T_out, " - sig_ready = ", sig_ready, " - reg_T = ", reg_T, " - T_mux = ", T_mux, " - B_mux = ", B_mux, " - start = ", start);
+		//$display("[Wrapper] Cycle: ", $cycle, " - T_in: ", T1_in, " - T: ", T, " - B1m: ", B1_mux, " - B2m: ", B2_mux, " - B3m: ", B3_mux, " - ready:", ready);
+	}
+} hardwired fsm_wrapper_gf2m (wrapper_gf2m) { do_always; }
+
+#endif /* WRAPPER_GF2M_FDL */
+

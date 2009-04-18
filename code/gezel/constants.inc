@@ -6,7 +6,7 @@
 #define const_m 163
 #define const_m_log 8
 
-#define malu_width 16
+#define malu_width 6
 
 // ceil(const_m / malu_width)
 #if malu_width == 1
@@ -24,7 +24,7 @@
 #elif malu_width == 16
 	#define const_m_malu 11
 #elif malu_width == 32
-	#define const_m_malu 6
+	#define const_m_malu 5
 #endif
 
 // Set this to the hexadecimal representation of the number of ones equal or greater to const_m

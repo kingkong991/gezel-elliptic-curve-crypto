@@ -46,7 +46,7 @@ dp testbench {
 		mode = 1;
 		plus_one = 0;
 
-		$display("[[Start]]");
+		$display("[[Start]] Cycle: ", $cycle);
 	}
 
 	sfg MALU_mult_one {
@@ -54,7 +54,7 @@ dp testbench {
 		mode = 1;
 		plus_one = 1;
 
-		$display("[[Start]]");
+		$display("[[Start]] Cycle: ", $cycle);
 	}
 
 	sfg MALU_add {
@@ -62,7 +62,7 @@ dp testbench {
 		mode = 0;
 		plus_one = 0;
 
-		$display("[[Start]]");
+		$display("[[Start]] Cycle: ", $cycle);
 	}
 
 	sfg MALU_add_one {

@@ -30,6 +30,8 @@ dp wrapper_pairing(in input:	ns(const_m);
 	out output:	ns(const_m);
 	out ready:	ns(1)) {
 
+	//reg reg_count_mult: ns(const_m);
+
 	// Registers:
 	reg reg_Xv: ns(const_m);
 	reg reg_Yv: ns(const_m);
@@ -386,12 +388,16 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_start = 1;
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 0;
+
+		//reg_count_mult = reg_count_mult + 1;
 	}
 
 	sfg MALU_mult_plus_one {
 		sig_MALU_start = 1;
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 1;
+
+		//reg_count_mult = reg_count_mult + 1;
 	}	
 
 	// SFG's for individual data transfer
@@ -711,6 +717,10 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sfg disp_V { 
 		$display($dec, "[V] i: ", reg_counter_miller, " - Xv: ", $dec, sig_from_Xv, " - Yv: ", sig_from_Yv);
 	}
+
+	//sfg disp_counter {
+	//	$display("[Mult Counter] ", reg_count_mult);
+	//}
 }
 
 fsm fsm_wrapper_pairing (wrapper_pairing) {
