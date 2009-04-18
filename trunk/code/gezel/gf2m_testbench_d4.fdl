@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-#include "wrapper_gf2m.fdl"
+#include "wrapper_gf2m_d4.fdl"
 
 //$option "vcd"
 
@@ -38,7 +38,7 @@ dp testbench {
 	}
 
 	sfg run {
-		reg_A = ((ns(const_m - 1)) reg_A[0:const_m - 2]) # ((ns(1)) reg_A[const_m - 1]);
+		reg_A = ((ns(const_m - 4)) reg_A[0:(const_m - 5)]) # ((ns(4)) reg_A[(const_m - 4):(const_m - 1)]);
 	}
 
 	sfg MALU_mult {
@@ -88,13 +88,7 @@ dp testbench {
 	}
 
 	sfg print {
-		$display("[Cycle ", $cycle, "] - A: ", $hex, A, " - B: ", B, " - T: ", T);
-	}
-
-	sfg print_bin {
-		$display("A: ", $bin, A);
-		$display("B: ", $bin, B);
-		$display("T: ", $bin, T);
+		$display("[Cycle ", $cycle, "] - A = ", $hex, A, " - B: ", B, " - T: ", T);
 	}
 
 	sfg done {
