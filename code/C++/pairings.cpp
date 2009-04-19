@@ -92,7 +92,7 @@ int main () {
 
 	if (debug) {
 		printf("s/colorstartB_/\\x1B[34;1m/g\n");
-		printf("s/colorstartF_/\\x1B[31;7;1m/g\n");
+		printf("s/colorstartF_/\\x1B[31;1m/g\n");
 		printf("s/colorstartR_/\\x1B[31;1m/g\n");
 		printf("s/colorstart_/\\x1B[34;1m/g\n");
 
