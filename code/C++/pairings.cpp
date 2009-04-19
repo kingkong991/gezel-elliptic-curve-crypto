@@ -91,8 +91,9 @@ int main () {
 	}
 
 	if (debug) {
-		printf("s/colorstartE_/\\x1B[34;1m/g\n");
+		printf("s/colorstartB_/\\x1B[34;1m/g\n");
 		printf("s/colorstartF_/\\x1B[31;7;1m/g\n");
+		printf("s/colorstartR_/\\x1B[31;1m/g\n");
 		printf("s/colorstart_/\\x1B[34;1m/g\n");
 
 		printf("s/_colorend/\\x1B[m/g\n");
@@ -619,30 +620,32 @@ void calcFinalExp(Extension& F) {
 	Db.add(T3b, T4b);
 	
 	if (debug) {
-		//printf("s/ %s / colorstartE_m0_colorend /g\n", mpz_get_str(NULL, 16, m0.getMP()));
-		//printf("s/ %s / colorstartE_m1_colorend /g\n", mpz_get_str(NULL, 16, m1.getMP()));
-		//printf("s/ %s / colorstartE_m2_colorend /g\n", mpz_get_str(NULL, 16, m2.getMP()));
-		//printf("s/ %s / colorstartE_m3_colorend /g\n", mpz_get_str(NULL, 16, m3.getMP()));
+		//printf("s/ %s / colorstartB_m0_colorend /g\n", mpz_get_str(NULL, 16, m0.getMP()));
+		//printf("s/ %s / colorstartB_m1_colorend /g\n", mpz_get_str(NULL, 16, m1.getMP()));
+		//printf("s/ %s / colorstartB_m2_colorend /g\n", mpz_get_str(NULL, 16, m2.getMP()));
+		//printf("s/ %s / colorstartB_m3_colorend /g\n", mpz_get_str(NULL, 16, m3.getMP()));
 
-		//printf("s/ %s / colorstartE_T6a_colorend /g\n", mpz_get_str(NULL, 16, T6a.getMP()));
-		//printf("s/ %s / colorstartE_T6b_colorend /g\n", mpz_get_str(NULL, 16, T6b.getMP()));
+		//printf("s/ %s / colorstartB_T6a_colorend /g\n", mpz_get_str(NULL, 16, T6a.getMP()));
+		//printf("s/ %s / colorstartB_T6b_colorend /g\n", mpz_get_str(NULL, 16, T6b.getMP()));
 
-		//printf("s/ %s / colorstartE_T7a_colorend /g\n", mpz_get_str(NULL, 16, T7a.getMP()));
-		//printf("s/ %s / colorstartE_T7b_colorend /g\n", mpz_get_str(NULL, 16, T7b.getMP()));
+		//printf("s/ %s / colorstartB_T7a_colorend /g\n", mpz_get_str(NULL, 16, T7a.getMP()));
+		//printf("s/ %s / colorstartB_T7b_colorend /g\n", mpz_get_str(NULL, 16, T7b.getMP()));
 
-		//printf("s/ %s / colorstartE_T8a_colorend /g\n", mpz_get_str(NULL, 16, T8a.getMP()));
-		//printf("s/ %s / colorstartE_T8b_colorend /g\n", mpz_get_str(NULL, 16, T8b.getMP()));
+		//printf("s/ %s / colorstartB_T8a_colorend /g\n", mpz_get_str(NULL, 16, T8a.getMP()));
+		//printf("s/ %s / colorstartB_T8b_colorend /g\n", mpz_get_str(NULL, 16, T8b.getMP()));
 
-		//printf("s/ %s / colorstartE_Da_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
-		//printf("s/ %s / colorstartE_Db_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
+		//printf("s/ %s / colorstartB_Da_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
+		//printf("s/ %s / colorstartB_Db_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
 	}
 		
 	// Calculate inverse of D
 	calcF2mInverse(Da, Db);
 	
 	if (debug) {
-		printf("s/ %s / colorstartE_DaI_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
-		printf("s/ %s / colorstartE_DbI_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
+		/*
+		printf("s/ %s / colorstartB_DaI_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
+		printf("s/ %s / colorstartB_DbI_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
+		*/
 	}
 	
 	// Calculate V & W
@@ -663,26 +666,16 @@ void calcFinalExp(Extension& F) {
 	W1b.set(T6b);
 
 	if (debug) {
-		printf("s/ %s / colorstartE_V0a_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
-		printf("s/ %s / colorstartE_V0b_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
+		/*
+		printf("s/ %s / colorstartB_V0a_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
+		printf("s/ %s / colorstartB_V0b_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
 
-		printf("s/ %s / colorstartE_V1a_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
-		printf("s/ %s / colorstartE_V1b_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
+		printf("s/ %s / colorstartB_V1a_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
+		printf("s/ %s / colorstartB_V1b_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
 
-		printf("s/ %s / colorstartE_W0a_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
-		printf("s/ %s / colorstartE_W0b_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
-
-		// a2's
-		Element a2;
-
-		a2.multiply(V0b, Db);
-		printf("s/ %s / colorstartE_V0_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
-
-		a2.multiply(V1b, Db);
-		printf("s/ %s / colorstartE_V1_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
-
-		a2.multiply(W0b, Db);
-		printf("s/ %s / colorstartE_W0_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
+		printf("s/ %s / colorstartB_W0a_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
+		printf("s/ %s / colorstartB_W0b_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
+		*/
 	}
 
 	calcF2mMult(V0a, V0b, V0a, V0b, Da, Db);
@@ -692,14 +685,14 @@ void calcFinalExp(Extension& F) {
 	calcF2mMult(W1a, W1b, W1a, W1b, Da, Db);
 
 	if (debug) {
-		printf("s/ %s / colorstartE_V0aD_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
-		printf("s/ %s / colorstartE_V0bD_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
+		//printf("s/ %s / colorstartB_u0_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
+		//printf("s/ %s / colorstartB_u1_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
 
-		printf("s/ %s / colorstartE_V1aD_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
-		printf("s/ %s / colorstartE_V1bD_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
+		printf("s/ %s / colorstartB_W1aD_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
+		printf("s/ %s / colorstartB_W1bD_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
 
-		printf("s/ %s / colorstartE_W0aD_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
-		printf("s/ %s / colorstartE_W0bD_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
+		printf("s/ %s / colorstartB_W0aD_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
+		printf("s/ %s / colorstartB_W0bD_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
 	}
 		
 	Extension V = Extension(V0a, V0b, V1a, V1b);
@@ -707,10 +700,54 @@ void calcFinalExp(Extension& F) {
 		
 	// Calculate V^(2^m + 1)
 	calcF4mFinalPow(V, V);
+
+	if (debug) {
+		printf("s/ %s / colorstartB_Va_colorend /g\n", mpz_get_str(NULL, 16, V.getA().getMP()));
+		printf("s/ %s / colorstartB_Vb_colorend /g\n", mpz_get_str(NULL, 16, V.getB().getMP()));
+		printf("s/ %s / colorstartB_Vc_colorend /g\n", mpz_get_str(NULL, 16, V.getC().getMP()));
+		printf("s/ %s / colorstartB_Vd_colorend /g\n", mpz_get_str(NULL, 16, V.getD().getMP()));
+	}
 	
 	// Calculate W^(2^82)
 	for (int i = 0; i < 82; i++) {
+	/*
+		if (debug & i == 0) {
+			Element m0, m1, m2, m3;
+
+			m0.square(W.getA());
+			m1.square(W.getB());
+			m2.square(W.getC());
+			m3.square(W.getD());
+
+			Element s0a;
+
+			s0a.add(m0, m1);
+
+			printf("s/ %s / colorstartB_s0'_colorend /g\n", mpz_get_str(NULL, 16, s0a.getMP()));
+
+			printf("s/ %s / colorstartB_m0_colorend /g\n", mpz_get_str(NULL, 16, m0.getMP()));
+			printf("s/ %s / colorstartB_m1_colorend /g\n", mpz_get_str(NULL, 16, m1.getMP()));
+			printf("s/ %s / colorstartB_m3_colorend /g\n", mpz_get_str(NULL, 16, m3.getMP()));
+		}
+		*/
+
 		W.square(W);
+
+		if (debug & i == 0) {
+			/*
+			printf("s/ %s / colorstartB_s0_colorend /g\n", mpz_get_str(NULL, 16, W.getA().getMP()));
+			printf("s/ %s / colorstartB_s1_colorend /g\n", mpz_get_str(NULL, 16, W.getB().getMP()));
+			printf("s/ %s / colorstartB_s2_colorend /g\n", mpz_get_str(NULL, 16, W.getC().getMP()));
+			printf("s/ %s / colorstartB_s3_colorend /g\n", mpz_get_str(NULL, 16, W.getD().getMP()));
+			*/
+		}
+	}
+
+	if (debug) {
+		printf("s/ %s / colorstartB_WaS_colorend /g\n", mpz_get_str(NULL, 16, W.getA().getMP()));
+		printf("s/ %s / colorstartB_WbS_colorend /g\n", mpz_get_str(NULL, 16, W.getB().getMP()));
+		printf("s/ %s / colorstartB_WcS_colorend /g\n", mpz_get_str(NULL, 16, W.getC().getMP()));
+		printf("s/ %s / colorstartB_WdS_colorend /g\n", mpz_get_str(NULL, 16, W.getD().getMP()));
 	}
 	
 	// Calculate F = V*W
@@ -724,6 +761,11 @@ void calcF4mFinalPow(Extension& R, Extension& E) {
 	
 	s0.add(E.getC(), E.getD());
 	s1.add(E.getA(), E.getB());
+
+	if (debug) {
+		//printf("s/ %s / colorstartR_m0\"_colorend /g\n", mpz_get_str(NULL, 16, s0.getMP()));
+		//printf("s/ %s / colorstartR_m0'_colorend /g\n", mpz_get_str(NULL, 16, s1.getMP()));
+	}	
 	
 	m0.multiply(s0, s1);
 	m1.multiply(E.getC(), E.getD());
@@ -733,12 +775,29 @@ void calcF4mFinalPow(Extension& R, Extension& E) {
 	
 	s0.square(s0);
 	s1.square(s1);
+
+	if (debug) {
+		/*
+		printf("s/ %s / colorstartR_m0_colorend /g\n", mpz_get_str(NULL, 16, m0.getMP()));
+		printf("s/ %s / colorstartR_m1_colorend /g\n", mpz_get_str(NULL, 16, m1.getMP()));
+		printf("s/ %s / colorstartR_m2_colorend /g\n", mpz_get_str(NULL, 16, m2.getMP()));
+		printf("s/ %s / colorstartR_m3_colorend /g\n", mpz_get_str(NULL, 16, m3.getMP()));
+		printf("s/ %s / colorstartR_m4_colorend /g\n", mpz_get_str(NULL, 16, m4.getMP()));
+
+		printf("s/ %s / colorstartR_s0_colorend /g\n", mpz_get_str(NULL, 16, s0.getMP()));
+		printf("s/ %s / colorstartR_s1_colorend /g\n", mpz_get_str(NULL, 16, s1.getMP()));
+		*/
+	}
 	
 	// Calculate result
 	R.getC().add(m1, s0);
 	
 	R.getB().add(R.getC(), m0);
-	
+
+	if (debug) {
+		//printf("s/ %s / colorstartR_r0'_colorend /g\n", mpz_get_str(NULL, 16, R.getB().getMP()));
+	}
+
 	R.getA().add(R.getB(), s1);
 	R.getA().add(R.getA(), m2);
 	R.getA().add(R.getA(), m3);

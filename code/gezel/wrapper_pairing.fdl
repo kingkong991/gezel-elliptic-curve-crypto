@@ -788,10 +788,14 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	state f4mpow50, f4mpow51, f4mpow52, f4mpow53, f4mpow54, f4mpow55, f4mpow56, f4mpow57, f4mpow58, f4mpow59;
 	state f4mpow60, f4mpow61, f4mpow62;
 
+	state f4mpow47fix;
+
 	state f4msqrt1, f4msqrt2, f4msqrt3, f4msqrt4, f4msqrt5, f4msqrt6, f4msqrt7, f4msqrt8, f4msqrt9;
 	state f4msqrt10, f4msqrt11, f4msqrt12, f4msqrt13, f4msqrt14, f4msqrt15, f4msqrt16, f4msqrt17, f4msqrt18, f4msqrt19;
 	state f4msqrt20, f4msqrt21, f4msqrt22, f4msqrt23, f4msqrt24, f4msqrt25, f4msqrt26, f4msqrt27, f4msqrt28, f4msqrt29;
 	state f4msqrt30, f4msqrt31, f4msqrt32;
+
+	state f4msqrt27fix;
 	
 	state f4mmult1, f4mmult2, f4mmult3, f4mmult4, f4mmult5, f4mmult6, f4mmult7, f4mmult8, f4mmult9;
 	state f4mmult10, f4mmult11, f4mmult12, f4mmult13, f4mmult14, f4mmult15, f4mmult16, f4mmult17, f4mmult18, f4mmult19;
@@ -1409,7 +1413,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@finalexp74	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> finalexp75;
 
 	// Put everything in it's correct position & calculate V0, V1, W0 & W1
-	@finalexp75	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yp, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, idle_TmpA, idle_TmpB) -> finalexp76;
+	@finalexp75	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yp, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, idle_TmpA, idle_TmpB) -> finalexp76;
 	@finalexp76	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yv, update_Yp_from_Xp, idle_Xfa, update_Yfa_from_Xfa, update_Ga_from_Yfa, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fd, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> finalexp77;
 	@finalexp77	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Yfa, update_Gb_from_Ga, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> finalexp78;
 	@finalexp78	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Gb, update_Gb_from_Ga, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> finalexp79;
@@ -1419,14 +1423,14 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Calculate V^(2^m + 1)]
 
 	// Move everything to it's correct position
-	@f4mpow1	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, update_Gb_from_Fa, update_Fa_from_Gb, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow2;
+	@f4mpow1	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, update_Gb_from_Fa, update_Fa_from_Gb, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow2;
 	@f4mpow2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Gb, update_Gb_from_Ga, update_Fa_from_Fb, update_Fb_from_Fa, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow3;
 	@f4mpow3	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, update_Yfa_from_Ga, update_Ga_from_Yfa, update_Gb_from_Fa, update_Fa_from_Gb, idle_Fb, update_Fc_from_Fb, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow4;
 	@f4mpow4	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yfa, update_Yfa_from_Xfa, update_Ga_from_Gb, update_Gb_from_Ga, update_Fa_from_Fb, update_Fb_from_Fa, idle_Fc, update_Fd_from_Fc, idle_TmpA, idle_TmpB) -> f4mpow5;
 	@f4mpow5	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, update_Yfa_from_Ga, update_Ga_from_Yfa, idle_Gb, update_Fa_from_Fb, update_Fb_from_Fa, update_Fc_from_Fb, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow6;
 	@f4mpow6	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, update_Gb_from_Fa, update_Fa_from_Gb, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow7;
 	@f4mpow7	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Gb, update_Gb_from_Ga, update_Fa_from_Fb, update_Fb_from_Fa, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow8;
-	@f4mpow8	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Gb, update_Gb_from_Ga, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow9;
+	@f4mpow8	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, update_Gb_from_Fa, update_Fa_from_Gb, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow9;
 
 	// Calculate m3 (u0 * u1)
 	@f4mpow9	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow10;
@@ -1449,16 +1453,18 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f4mpow21	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow21;
 					else (do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> f4mpow22;
 	
-	// Calculate m2 (u0 + u3)
+	// Calculate m2 (u0 * u3)
 	@f4mpow22	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, update_Xp_from_Yp, update_Yp_from_Xfa, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow23;
-	@f4mpow23	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow24;
-	@f4mpow24	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow25;
+	@f4mpow23	(do_always, MALU_mult, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow24;
+	@f4mpow24	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow24;
+					else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow25;
 	
-	// Calculate m4 (u1 + u2)
+	// Calculate m4 (u1 * u2)
 	@f4mpow25	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow26;
 	@f4mpow26	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow27;
-	@f4mpow27	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow28;
-	@f4mpow28	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow29;
+	@f4mpow27	(do_always, MALU_mult, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow28;
+	@f4mpow28	if (reg_MALU_ready == 0) then (do_always, MALU_idle, update_ToMALU_from_ToMALUShift, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow28;
+					else (do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow29;
 	
 	// Calculate m0'' (u2 + u3)
 	@f4mpow29	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow30;
@@ -1493,7 +1499,8 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f4mpow45	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow46;
 	
 	// Calculate r1 (r0' + m4)
-	@f4mpow46	(do_always, MALU_add, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow47;
+	@f4mpow46	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow47fix;
+	@f4mpow47fix	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow47;
 	@f4mpow47	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_TmpB, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> f4mpow48;
 	
 	// Calculate r3 (m0 + m2)
@@ -1519,7 +1526,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f4mpow59	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, update_Ga_from_Gb, update_Gb_from_Ga, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow60;
 	@f4mpow60	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mpow61;
 	@f4mpow61	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> f4mpow62;
-	@f4mpow62	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yp, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> f4msqrt2;
+	@f4mpow62	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yp, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> f4msqrt1;
 	
 	// [Calculate W^(2^82)]
 	
@@ -1567,10 +1574,11 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// Calculate s0 (s0' + s3)
 	@f4msqrt23	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4msqrt24;
 	@f4msqrt24	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4msqrt25;
-	@f4msqrt25	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xp, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_Xv) -> f4msqrt26;
-	@f4msqrt26	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> f4msqrt27;
+	@f4msqrt25	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4msqrt26;
+	@f4msqrt26	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_Yv, update_Yv_from_Xp, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> f4msqrt27fix;
 	
 	// Rearange registers
+	@f4msqrt27fix	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> f4msqrt27;
 	@f4msqrt27	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> f4msqrt28;
 	@f4msqrt28	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fd, update_Fd_from_TmpA, update_TmpA_from_TmpB, update_TmpB_from_Xv) -> f4msqrt29;
 	@f4msqrt29	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fd, update_Fd_from_Fc, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4msqrt30;
@@ -1581,7 +1589,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Calculate V*W]
 	
 	// Calculate k3 (b2 + b3)
-	@f4mmult1	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, update_Ga_from_Gb, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult2;
+	@f4mmult1	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, update_Ga_from_Gb, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult2;
 	@f4mmult2	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_TmpB, update_Yv_from_Xv, update_Xp_from_Yp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_Fd, idle_TmpB) -> f4mmult3;
 	@f4mmult3	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yfa, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult4;
 	@f4mmult4	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yp, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult5;
@@ -1762,8 +1770,8 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Calculate F(2^2m) * F(2^2m)]
 
 	@f2mmult1	(do_always, reset_counter_misc, MALU_idle, idle_regs) -> f2mmult2;
-	@f2mmult2	if (reg_counter_misc == 3) then ($trace, disp_regdump, do_always, reset_counter_misc, MALU_idle, idle_regs) -> f4mpow1;
-					else ($trace, disp_regdump, do_always, inc_counter_misc, MALU_idle, idle_regs) -> f2mmult3;
+	@f2mmult2	if (reg_counter_misc == 3) then (do_always, reset_counter_misc, MALU_idle, idle_regs) -> f4mpow1;
+					else (do_always, inc_counter_misc, MALU_idle, idle_regs) -> f2mmult3;
 
 	// Calculate a0 (Aa + Ab)
 	@f2mmult3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f2mmult4;
@@ -1805,7 +1813,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f2mmult24	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f2mmult25;
 
 	// Shift everything to it's correct position
-	@f2mmult25	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f2mmult26;
+	@f2mmult25	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_ToMALU, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f2mmult26;
 	@f2mmult26	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, update_Xp_from_Yp, update_Yp_from_Xp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f2mmult27;
 	@f2mmult27	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f2mmult28;
 	@f2mmult28	(do_always, MALU_idle, idle_ToMALU, idle_Xv, update_Yv_from_Xv, update_Xp_from_Yv, update_Yp_from_Xp, update_Xfa_from_Yp, update_Yfa_from_Xfa, update_Ga_from_Yfa, update_Gb_from_Ga, update_Fa_from_Gb, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> f2mmult29;

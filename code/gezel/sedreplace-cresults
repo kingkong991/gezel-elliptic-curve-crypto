@@ -1,25 +1,21 @@
-s/ 4e07f1ee7281337b277de148c4da0ea006b0b11c6 / colorstartE_DaI_colorend /g
-s/ 1b9db7d8bf89c3941f9c00398e6551049b3e8bee1 / colorstartE_DbI_colorend /g
-s/ a93d5a2d5334cd3c646edb9810d3c264d1b2fe65 / colorstartE_V0a_colorend /g
-s/ 6b8a3f1455e600639dbb59b4bf208d837608cbd1b / colorstartE_V0b_colorend /g
-s/ 62d0526795548ccf6f9297031210153f7e2724ee6 / colorstartE_V1a_colorend /g
-s/ 736105380a9d09ee5206b1535f9ec421f7eb98f42 / colorstartE_V1b_colorend /g
-s/ 1b2282fd4afac9f2fbd2cbe9cc83ed38c4d793fc1 / colorstartE_W0a_colorend /g
-s/ 95a6d73c0b28cacf229ceb7ad3098bc082fef3fd / colorstartE_W0b_colorend /g
-s/ 164deab98b97999e18e9d54d5f0742e9769f68691 / colorstartE_V0_a2_colorend /g
-s/ 42e21e5ecb2daef130d6b6a34106b251c1f361d80 / colorstartE_V1_a2_colorend /g
-s/ 5d1548d83d4bdeeda27068206ca82b3cff5318135 / colorstartE_W0_a2_colorend /g
-s/ 6ea54ab6fcc10b6229842fce4b98d1aa855dc4e4f / colorstartE_V0aD_colorend /g
-s/ 64a460ed5a188265d0e9d41e983590ae0f81ab3e / colorstartE_V0bD_colorend /g
-s/ 17948093ede1af71749cc5ca948e9a091465085c7 / colorstartE_V1aD_colorend /g
-s/ 3c8c8c3a77a8745d8ab1c55bc156dbb1e9316da12 / colorstartE_V1bD_colorend /g
-s/ 45bd461f6688d04ed7a92f5f1e4090127809a119a / colorstartE_W0aD_colorend /g
-s/ 11dec69d384027572992588b7d0dc303f49d12ef9 / colorstartE_W0bD_colorend /g
+s/ 17948093ede1af71749cc5ca948e9a091465085c7 / colorstartB_W1aD_colorend /g
+s/ 3c8c8c3a77a8745d8ab1c55bc156dbb1e9316da12 / colorstartB_W1bD_colorend /g
+s/ 45bd461f6688d04ed7a92f5f1e4090127809a119a / colorstartB_W0aD_colorend /g
+s/ 11dec69d384027572992588b7d0dc303f49d12ef9 / colorstartB_W0bD_colorend /g
+s/ 5e16d7dbf28bd8333964ba146a178c3e98d5e0a71 / colorstartB_Va_colorend /g
+s/ 4aca0c56866ec6f79bf8f48d1042ed80ca727ee25 / colorstartB_Vb_colorend /g
+s/ 5bf00489d76a2730ed74da94a0d1588838dc34047 / colorstartB_Vc_colorend /g
+s/ 4e62b2d215f1e1199a661dc518aefd96332f11202 / colorstartB_Vd_colorend /g
+s/ 4a1efaf51169c281454a21ebdf400655c77ed9c23 / colorstartB_WaS_colorend /g
+s/ 377fbed201e920ea94ffb87eb28e463eb5dbf5164 / colorstartB_WbS_colorend /g
+s/ a32f3c4966dcd77a488793e60cc35a41398d95eb / colorstartB_WcS_colorend /g
+s/ 3d45fc1a7cf1d33e3ef6fc66380429e370e196cf2 / colorstartB_WdS_colorend /g
 s/ 17329047c77bfc372b3c9d698e1cb7c119827d544 / colorstartF_e(Fa)_colorend /g
 s/ 3f9d5fc1eb6058e93a909b0c405200bcff935a0f2 / colorstartF_e(Fb)_colorend /g
 s/ 5141c023cc229a65d2dea6f9a9e6b62ff20aab2f5 / colorstartF_e(Fc)_colorend /g
 s/ 7ee90a93f706c54856ed61919cd52c334becb5de / colorstartF_e(Fd)_colorend /g
-s/colorstartE_/\x1B[34;1m/g
+s/colorstartB_/\x1B[34;1m/g
 s/colorstartF_/\x1B[31;7;1m/g
+s/colorstartR_/\x1B[31;1m/g
 s/colorstart_/\x1B[34;1m/g
 s/_colorend/\x1B[m/g
