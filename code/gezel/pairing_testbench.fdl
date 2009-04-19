@@ -90,10 +90,10 @@ fsm fsm_testbench (testbench) {
 
 	@init	(do_always, idle_sigs) -> start;
 
-	@start	(do_always, init1, print) -> init2;
-	@init2	(do_always, init2, print) -> init3;
-	@init3	(do_always, init3, print) -> init4;
-	@init4	(do_always, init4, print) -> wait;
+	@start	(do_always, init1) -> init2;
+	@init2	(do_always, init2) -> init3;
+	@init3	(do_always, init3) -> init4;
+	@init4	(do_always, init4) -> wait;
 
 	@wait	if (reg_ready == 0) then (do_always, idle_sigs) -> wait;
 			else (do_always, idle_sigs, print) -> output1;

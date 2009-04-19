@@ -8,14 +8,14 @@
 #include "element.h"
 #include "extension.h"
 
-bool debug = false;
+bool debug = true;
 
 int main () {
 	// Start measuring time
 	clock_t start = clock();
 	
-	if (!debug)
-		testCases();
+	//if (!debug)
+	//	testCases();
 	//exit(0);
 		
 	// Initialize P & Q values
@@ -70,15 +70,34 @@ int main () {
 	Extension F = Extension();
 
 	if (!debug) printf("e(P, Q) = ");
-	calcPairing(F, Xp, Yp, Xfa, Yfa);	
-	if (!debug) F.print();	
-	printf("\ne(P, Q)^2 = ");
-	F.square(F);	F.print();
 
-	printf("\ne(2P, Q) = ");
-	calcDouble(Xp, Yp, Xp, Yp);
-	calcPairing(F, Xp, Yp, Xfa, Yfa);		F.print();
-		
+	calcPairing(F, Xp, Yp, Xfa, Yfa);	
+
+	if (!debug) {
+		F.print();
+	} else {
+		printf("s/ %s / colorstartF_e(Fa)_colorend /g\n", mpz_get_str(NULL, 16, F.getA().getMP()));
+		printf("s/ %s / colorstartF_e(Fb)_colorend /g\n", mpz_get_str(NULL, 16, F.getB().getMP()));
+		printf("s/ %s / colorstartF_e(Fc)_colorend /g\n", mpz_get_str(NULL, 16, F.getC().getMP()));
+		printf("s/ %s / colorstartF_e(Fd)_colorend /g\n", mpz_get_str(NULL, 16, F.getD().getMP()));
+	}	
+	if (!debug) {
+		printf("\ne(P, Q)^2 = ");
+		F.square(F);		F.print();
+
+		printf("\ne(2P, Q) = ");
+		calcDouble(Xp, Yp, Xp, Yp);
+		calcPairing(F, Xp, Yp, Xfa, Yfa);			F.print();
+	}
+
+	if (debug) {
+		printf("s/colorstartE_/\\x1B[34;1m/g\n");
+		printf("s/colorstartF_/\\x1B[31;7;1m/g\n");
+		printf("s/colorstart_/\\x1B[34;1m/g\n");
+
+		printf("s/_colorend/\\x1B[m/g\n");
+	}
+
 	if (!debug) printf("\nTime elapsed: %.3fs\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 
 	exit(0);
@@ -106,7 +125,7 @@ void calcPairing(Extension& F, Element& Xp, Element& Yp, Element& Xfa, Element& 
 		calcCoordDouble(G, Xv, Yv, Xfa, Yfa, Yfb);
 		F.multiply(F, G);
 		
-		if (debug) {
+		if (debug & 0) {
 			printf("s/ %s / colorstart_Xv_%d_colorend /g\n", mpz_get_str(NULL, 16, Xv.getMP()), i);
 			printf("s/ %s / colorstart_Yv_%d_colorend /g\n", mpz_get_str(NULL, 16, Yv.getMP()), i);
 
@@ -143,7 +162,7 @@ void calcPairing(Extension& F, Element& Xp, Element& Yp, Element& Xfa, Element& 
 
 	//exit(0);
 
-			if (debug) {
+			if (debug & 0) {
 				printf("s/ %s / colorstart_Xv_%dA_colorend /g\n", mpz_get_str(NULL, 16, Xv.getMP()), i);
 				printf("s/ %s / colorstart_Yv_%dA_colorend /g\n", mpz_get_str(NULL, 16, Yv.getMP()), i);
 
@@ -164,11 +183,6 @@ void calcPairing(Extension& F, Element& Xp, Element& Yp, Element& Xfa, Element& 
 				printf("\n");*/
 			}
 		}
-	}
-
-	if (debug) {
-		printf("s/colorstart_/\\x1B[34;1m/g\n");
-		printf("s/_colorend/\\x1B[m/g\n");
 	}
 
 	//printf("F (before final exp):\n");
@@ -604,24 +618,32 @@ void calcFinalExp(Extension& F) {
 	Da.add(T3a, T4a);
 	Db.add(T3b, T4b);
 	
-	/*printf("\nD:\n\tDa = ");
-	Da.print();
-	
-	printf("\tDb = ");
-	Db.print();
+	if (debug) {
+		//printf("s/ %s / colorstartE_m0_colorend /g\n", mpz_get_str(NULL, 16, m0.getMP()));
+		//printf("s/ %s / colorstartE_m1_colorend /g\n", mpz_get_str(NULL, 16, m1.getMP()));
+		//printf("s/ %s / colorstartE_m2_colorend /g\n", mpz_get_str(NULL, 16, m2.getMP()));
+		//printf("s/ %s / colorstartE_m3_colorend /g\n", mpz_get_str(NULL, 16, m3.getMP()));
 
-	printf("\n");*/
+		//printf("s/ %s / colorstartE_T6a_colorend /g\n", mpz_get_str(NULL, 16, T6a.getMP()));
+		//printf("s/ %s / colorstartE_T6b_colorend /g\n", mpz_get_str(NULL, 16, T6b.getMP()));
+
+		//printf("s/ %s / colorstartE_T7a_colorend /g\n", mpz_get_str(NULL, 16, T7a.getMP()));
+		//printf("s/ %s / colorstartE_T7b_colorend /g\n", mpz_get_str(NULL, 16, T7b.getMP()));
+
+		//printf("s/ %s / colorstartE_T8a_colorend /g\n", mpz_get_str(NULL, 16, T8a.getMP()));
+		//printf("s/ %s / colorstartE_T8b_colorend /g\n", mpz_get_str(NULL, 16, T8b.getMP()));
+
+		//printf("s/ %s / colorstartE_Da_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
+		//printf("s/ %s / colorstartE_Db_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
+	}
 		
 	// Calculate inverse of D
 	calcF2mInverse(Da, Db);
 	
-	/*printf("\nD^-1:\n\tDa = ");
-	Da.print();
-	
-	printf("\tDb = ");
-	Db.print();
-
-	printf("\n");*/
+	if (debug) {
+		printf("s/ %s / colorstartE_DaI_colorend /g\n", mpz_get_str(NULL, 16, Da.getMP()));
+		printf("s/ %s / colorstartE_DbI_colorend /g\n", mpz_get_str(NULL, 16, Db.getMP()));
+	}
 	
 	// Calculate V & W
 	
@@ -639,12 +661,46 @@ void calcFinalExp(Extension& F) {
 	
 	W1a.set(T6a);
 	W1b.set(T6b);
-	
+
+	if (debug) {
+		printf("s/ %s / colorstartE_V0a_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
+		printf("s/ %s / colorstartE_V0b_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
+
+		printf("s/ %s / colorstartE_V1a_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
+		printf("s/ %s / colorstartE_V1b_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
+
+		printf("s/ %s / colorstartE_W0a_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
+		printf("s/ %s / colorstartE_W0b_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
+
+		// a2's
+		Element a2;
+
+		a2.multiply(V0b, Db);
+		printf("s/ %s / colorstartE_V0_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
+
+		a2.multiply(V1b, Db);
+		printf("s/ %s / colorstartE_V1_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
+
+		a2.multiply(W0b, Db);
+		printf("s/ %s / colorstartE_W0_a2_colorend /g\n", mpz_get_str(NULL, 16, a2.getMP()));
+	}
+
 	calcF2mMult(V0a, V0b, V0a, V0b, Da, Db);
 	calcF2mMult(V1a, V1b, V1a, V1b, Da, Db);
 	
 	calcF2mMult(W0a, W0b, W0a, W0b, Da, Db);
 	calcF2mMult(W1a, W1b, W1a, W1b, Da, Db);
+
+	if (debug) {
+		printf("s/ %s / colorstartE_V0aD_colorend /g\n", mpz_get_str(NULL, 16, V0a.getMP()));
+		printf("s/ %s / colorstartE_V0bD_colorend /g\n", mpz_get_str(NULL, 16, V0b.getMP()));
+
+		printf("s/ %s / colorstartE_V1aD_colorend /g\n", mpz_get_str(NULL, 16, V1a.getMP()));
+		printf("s/ %s / colorstartE_V1bD_colorend /g\n", mpz_get_str(NULL, 16, V1b.getMP()));
+
+		printf("s/ %s / colorstartE_W0aD_colorend /g\n", mpz_get_str(NULL, 16, W0a.getMP()));
+		printf("s/ %s / colorstartE_W0bD_colorend /g\n", mpz_get_str(NULL, 16, W0b.getMP()));
+	}
 		
 	Extension V = Extension(V0a, V0b, V1a, V1b);
 	Extension W = Extension(W0a, W0b, W1a, W1b);
