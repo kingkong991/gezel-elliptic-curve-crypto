@@ -652,13 +652,16 @@ dp wrapper_pairing(in input:	ns(const_m);
 	// On next raising edge, shift F 1 position to the left and increase counter.
 	// Unless counter is 3, then set Xv to 0.
 	sfg ready_regs {
+		//$display("[Ready Regs] Counter: ", $dec, reg_counter_misc, " - sig_to_Xv: ", $hex, sig_to_Xv, " - Update Xv: ", next == 1 & reg_next == 0);
+
 		reg_counter_misc = next == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
 		
 		sig_en_Xv = 1;
 		sig_en_Yv = 1;
 		sig_en_Xp = 1;
 
-		sig_sel_Xv = reg_counter_misc == 3 ? 0b00 : 0b01;
+		//sig_sel_Xv = reg_counter_misc == 3 ? 0b00 : 0b01;
+		sig_sel_Xv = 0b01;
 		sig_sel_Yv = 1;
 		sig_sel_Xp = 1;
 		
