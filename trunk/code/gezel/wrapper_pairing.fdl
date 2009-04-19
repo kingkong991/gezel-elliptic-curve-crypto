@@ -837,7 +837,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Ready]
 
 	// Set TmpB to 0, F should be in Xv to Yp.
-	@ready1	($trace, disp_regdump, do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
+	@ready1	(do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
 
 	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
 	@ready2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
@@ -1589,7 +1589,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Calculate V*W]
 	
 	// Calculate k3 (b2 + b3)
-	@f4mmult1	($trace, disp_regdump, do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, update_Ga_from_Gb, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult2;
+	@f4mmult1	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, update_Ga_from_Gb, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult2;
 	@f4mmult2	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_TmpB, update_Yv_from_Xv, update_Xp_from_Yp, update_Yp_from_Xfa, update_Xfa_from_Yfa, update_Yfa_from_Ga, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_TmpA, update_TmpA_from_Fd, idle_TmpB) -> f4mmult3;
 	@f4mmult3	(do_always, MALU_add, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, update_Xfa_from_Yfa, update_Yfa_from_Xfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, update_TmpA_from_TmpB, update_TmpB_from_TmpA) -> f4mmult4;
 	@f4mmult4	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, update_Yp_from_Xfa, update_Xfa_from_Yp, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult5;
