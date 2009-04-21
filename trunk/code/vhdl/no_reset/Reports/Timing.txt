@@ -1,0 +1,97 @@
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : wrapper_pairing
+Version: Y-2006.06
+Date   : Tue Apr 21 16:12:48 2009
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: TCCOM   Library: fsc0l_d_sc_tc
+Wire Load Model Mode: enclosed
+
+  Startpoint: STATE_reg[4]
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: reg_ToMALU_reg[3]
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  wrapper_pairing    enG50K                fsc0l_d_sc_tc
+  wrapper_gf2m       enG5K                 fsc0l_d_sc_tc
+  malu               enG5K                 fsc0l_d_sc_tc
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  STATE_reg[4]/CK (DFERBCLD)                              0.00 #     0.00 r
+  STATE_reg[4]/QB (DFERBCLD)                              0.81       0.81 f
+  U3131/O (NR2BLD)                                        0.47       1.28 r
+  U10365/O (ND2DLD)                                       0.67       1.95 f
+  U10364/O (INVDLD)                                       0.84       2.79 r
+  U10363/O (BUFDLD)                                       0.79       3.58 r
+  U3029/O (ND2DLD)                                        0.62       4.21 f
+  U3028/O (INVDLD)                                        0.61       4.82 r
+  U2377/O (ND2DLD)                                        0.22       5.03 f
+  U8951/O (OAI112BLD)                                     0.19       5.23 r
+  U8952/O (NR3BLD)                                        0.14       5.37 f
+  U8954/O (AN4B1BLD)                                      0.34       5.71 f
+  U8957/O (OAI112BLD)                                     0.18       5.89 r
+  U8959/O (NR6ELD)                                        0.35       6.24 f
+  U8961/O (OAI112BLD)                                     0.18       6.42 r
+  U9014/O (NR3BLD)                                        0.30       6.72 f
+  U2202/O (INVDLD)                                        0.39       7.11 r
+  U1851/O (ND2DLD)                                        0.47       7.58 f
+  U9974/O (NR2ELD)                                        0.58       8.16 r
+  U10334/O (BUFDLD)                                       0.67       8.83 r
+  U10333/O (INVDLD)                                       0.47       9.31 f
+  U10332/O (BUFDLD)                                       0.49       9.80 f
+  U1740/O (NR2CLD)                                        0.71      10.51 r
+  U1739/O (INVDLD)                                        0.43      10.94 f
+  U1738/O (ND3CLD)                                        0.30      11.24 r
+  U8269/O (NR3BLD)                                        0.16      11.40 f
+  U1719/O (ND3CLD)                                        0.20      11.60 r
+  U8266/O (NR6ELD)                                        0.35      11.95 f
+  U1588/O (AN4B1BLD)                                      0.26      12.21 f
+  U1522/O (AN4B1BLD)                                      0.36      12.57 f
+  U8256/O (ND6ELD)                                        0.63      13.20 r
+  U10315/O (BUFDLD)                                       0.60      13.80 r
+  U10278/O (INVDLD)                                       0.48      14.28 f
+  U10277/O (INVDLD)                                       0.57      14.84 r
+  U696/O (AN2ELD)                                         0.43      15.27 r
+  label_wrapper_gf2m/A[162] (wrapper_gf2m)                0.00      15.27 r
+  label_wrapper_gf2m/U344/O (INVDLD)                      0.10      15.37 f
+  label_wrapper_gf2m/U348/O (AOI12ELD)                    0.83      16.20 r
+  label_wrapper_gf2m/U368/O (BUFDLD)                      0.98      17.18 r
+  label_wrapper_gf2m/U247/O (AN2ELD)                      0.32      17.50 r
+  label_wrapper_gf2m/label_malu/B[3] (malu)               0.00      17.50 r
+  label_wrapper_gf2m/label_malu/U61/O (XOR2ELD)           0.31      17.81 f
+  label_wrapper_gf2m/label_malu/U60/O (MUX2CLD)           0.25      18.05 f
+  label_wrapper_gf2m/label_malu/T_n[4] (malu)             0.00      18.05 f
+  label_wrapper_gf2m/U82/O (AO222ELD)                     0.48      18.54 f
+  label_wrapper_gf2m/T[3] (wrapper_gf2m)                  0.00      18.54 f
+  U8991/O (AOI22BLD)                                      0.29      18.82 r
+  U8992/O (AOI22BLD)                                      0.18      19.01 f
+  U8993/O (AO22CLD)                                       0.31      19.32 f
+  reg_ToMALU_reg[3]/D (DFECLD)                            0.00      19.32 f
+  data arrival time                                                 19.32
+
+  clock CLK (rise edge)                               100000.00  100000.00
+  clock network delay (ideal)                             0.00   100000.00
+  reg_ToMALU_reg[3]/CK (DFECLD)                           0.00   100000.00 r
+  library setup time                                     -0.36   99999.64
+  data required time                                             99999.64
+  --------------------------------------------------------------------------
+  data required time                                             99999.64
+  data arrival time                                                -19.32
+  --------------------------------------------------------------------------
+  slack (MET)                                                    99980.32
+
+
