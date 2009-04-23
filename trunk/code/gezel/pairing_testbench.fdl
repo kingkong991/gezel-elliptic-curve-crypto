@@ -27,7 +27,23 @@ dp testbench {
 
 	reg reg_ready: ns(1);
 	
-	use wrapper_pairing(sig_in, start, next, sig_out, ready);
+	sig sig_en_out_Xv: ns(1);
+	sig sig_en_out_Yv: ns(1);
+	sig sig_en_out_Xp: ns(1);
+	sig sig_en_out_Yp: ns(1);
+	sig sig_en_out_Xfa: ns(1);
+	sig sig_en_out_Yfa: ns(1);
+	sig sig_en_out_Ga: ns(1);
+	sig sig_en_out_Gb: ns(1);
+	sig sig_en_out_Fa: ns(1);
+	sig sig_en_out_Fb: ns(1);
+	sig sig_en_out_Fc: ns(1);
+	sig sig_en_out_Fd: ns(1);
+	sig sig_en_out_TmpA: ns(1);
+	sig sig_en_out_TmpB: ns(1);
+	sig sig_en_out_ToMALU: ns(1);
+
+	use wrapper_pairing(sig_in, start, next, sig_out, ready, sig_en_out_Xv, sig sig_en_out_Yv, sig_en_out_Xp, sig sig_en_out_Yp, sig_en_out_Xfa, sig_en_out_Yfa, sig_en_out_Ga, sig_en_out_Gb, sig_en_out_Fa, sig_en_out_Fb, sig_en_out_Fc, sig_en_out_Fd, sig_en_out_TmpA, sig_en_out_TmpB, sig_en_out_ToMALU);
 
 	sfg init1 {
 		start = 1;

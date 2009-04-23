@@ -28,7 +28,22 @@ dp wrapper_pairing(in input:	ns(const_m);
 	in start:	ns(1);
 	in next:	ns(1);
 	out output:	ns(const_m);
-	out ready:	ns(1)) {
+	out ready:	ns(1);
+	sig sig_en_out_Xv: ns(1);
+	sig sig_en_out_Yv: ns(1);
+	sig sig_en_out_Xp: ns(1);
+	sig sig_en_out_Yp: ns(1);
+	sig sig_en_out_Xfa: ns(1);
+	sig sig_en_out_Yfa: ns(1);
+	sig sig_en_out_Ga: ns(1);
+	sig sig_en_out_Gb: ns(1);
+	sig sig_en_out_Fa: ns(1);
+	sig sig_en_out_Fb: ns(1);
+	sig sig_en_out_Fc: ns(1);
+	sig sig_en_out_Fd: ns(1);
+	sig sig_en_out_TmpA: ns(1);
+	sig sig_en_out_TmpB: ns(1);
+	sig sig_en_out_ToMALU: ns(1)) {
 
 	//reg reg_count_mult: ns(const_m);
 
@@ -189,6 +204,23 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_B = reg_Xv;
 
 		reg_MALU_ready = sig_MALU_ready;
+
+		// Set enable signals so they don't get discarded by GEZEL
+		sig_en_out_Xv = sig_en_Xv;
+		sig_en_out_Yv = sig_en_Yv;
+		sig_en_out_Xp = sig_en_Xp;
+		sig_en_out_Yp = sig_en_Yp;
+		sig_en_out_Xfa = sig_en_Xfa;
+		sig_en_out_Yfa = sig_en_Yfa;
+		sig_en_out_Ga = sig_en_Ga;
+		sig_en_out_Gb = sig_en_Gb;
+		sig_en_out_Fa = sig_en_Fa;
+		sig_en_out_Fb = sig_en_Fb;
+		sig_en_out_Fc = sig_en_Fc;
+		sig_en_out_Fd = sig_en_Fd;
+		sig_en_out_TmpA = sig_en_TmpA;
+		sig_en_out_TmpB = sig_en_TmpB;
+		sig_en_out_ToMALU = sig_en_ToMALU;
 
 		// Set from_register signals
 		sig_from_Xv = reg_Xv;
