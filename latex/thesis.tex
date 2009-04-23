@@ -12,10 +12,22 @@
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
 
+\usepackage[ruled,vlined]{algorithm2e}	% Algorithm typesetting
+
 \input{kmapmacros}	% Karnaugh map macros
 
 \usepackage{tikz}
 \pgfrealjobname{thesis}
+
+% Math stuff
+\newcommand{\xor}{\otimes}
+
+% Citatie commando's
+\newcommand{\reffig}[1]{Figuur~\ref{#1}}
+\newcommand{\reftbl}[1]{Tabel~\ref{#1}}
+\newcommand{\refalg}[1]{Algoritme~\ref{#1}}
+\newcommand{\refsect}[1]{Sectie~\ref{#1}}
+\newcommand{\refhfdst}[1]{Hoofdstuk~\ref{#1}}
 
 % Substring macro
 \def\substring#1#2#3{%
@@ -41,8 +53,11 @@
 \renewcommand{\thefigure}{\thechapter.\arabic{figure}}
 \newcommand{\Chapter}[1]{\chapter{#1} \setcounter{figure}{0}}
 
-% Citatie commando voor figuren
-\newcommand{\reffig}[1]{Fig.~\ref{#1}}
+% Algorithm2e setup
+\renewcommand{\listalgorithmcfname}{Lijst van algoritmes}
+\renewcommand{\algorithmcfname}{Algoritme}
+\renewcommand{\thealgocf}{\thechapter.\arabic{algocf}}
+%\renewcommand{\KwIn}[1]{\dontprintsemicolon \KwIn{#1}}
 
 % Listings setup
 \definecolor{darkkeyword}{rgb}{0,0.08,0.40} %Requires the color package.
@@ -130,13 +145,15 @@
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
 
+\include{implementatie}		% Hardware implementatie
+
 %\include{inleiding}             % Inleiding
 %\include{encryptie-applicaties} % Encryptie - Applicaties van encryptie
 %\include{encryptie-wiskunde}    % Encryptie - Wiskundige achtergrond
-\include{malu}                   % Modular Aritmitic Logical Unit - Design
+%\include{malu}                   % Modular Aritmitic Logical Unit - Design
 %\include{malu-pairings}         % MALU - Uitbreiding naar pairings
 %\include{malu-pairings-hw}      % MALU - Pairings hardware implementatie
-\include{optimalisatie}          % MALU - Optimalisatie (& parallellisatie)
+%\include{optimalisatie}          % MALU - Optimalisatie (& parallellisatie)
 %\include{tests}                 % MALU - Oppervlakte/snelheids tests
 %\include{side-channel-attacks}  % Side channel attack weerstand
 %\include{conclusie}             % Conclusie
