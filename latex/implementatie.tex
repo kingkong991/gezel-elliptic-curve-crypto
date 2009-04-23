@@ -1,33 +1,40 @@
 \Chapter{Implementatie}\label{hfdst-implementatie}
 
-In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van Tate pairings uit de doeken gedaan. Zo zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het veld $\mathbb{F}_{2^m}$. Ten slotte is er dan nog de schakeling die alle berekeningen voor de Tate pairing in goede banen leidt. Allereerst wordt echter gekeken welke beperkingen aan de implementatie opgelegd moeten worden.
+In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van de Tate pairing uit de doeken gedaan. Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het veld $\mathbb{F}_{2^m}$. Ten slotte is er dan nog de schakeling die alle berekeningen voor de pairing in goede banen leidt. Allereerst wordt echter gekeken welke beperkingen aan de implementatie opgelegd moeten worden.
 
 \section{Beperkingen}
 
-Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of smartcards. Stroomverbruik is een tweede belangrijke factor, maar is helaas zeer moeilijk te berekenen. Het verbruik hangt echter samen met de oppervlakte, dus het beperken daarvan zal ook het verbruik ten goede komen. Het verbruik kan ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De uiteindelijk maximale kloksnelheid zal sowieso echter hoger zijn dan gewenst, dus kan dit aspect bij het ontwerp van de schakelingen genegeerd worden. Hier zal verder op ingegaan worden in \refhfdst{hfdst-resultaten}
+Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of smartcards. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is stroomverbruik, maar dat is helaas zeer moeilijk te berekenen. Het verbruik hangt echter samen met de oppervlakte, dus het beperken daarvan zal ook het verbruik ten goede komen. Het verbruik kan ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus kan dit aspect bij het ontwerp van de schakelingen genegeerd worden. Op dit alles zal dieper ingegaan worden in \refhfdst{hfdst-resultaten}
 
-Algemeen kan gesteld worden dat hoe kleiner het uiteindelijke resultaat, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van een $0.13 nm$ technologie. De relatieve volgorde van de elementen blijft echter behouden voor andere technologi\"en. Uit de tabel blijkt dat het gebruik van zowel flip-flops (registers) als MUXs zoveel mogelijk beperkt moet worden.
+Algemeen kan gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0.13 nm$ low leakage technologie. De ordening van de elementen blijft echter behouden voor andere technologi\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
 
 \begin{table}[h]
-	\caption{Grootte van elementen in een ASIC schakeling ($0.13 nm$ technologie)}
+	\caption{Grootte van elementen in een ASIC schakeling in gates$/$bit ($0.13 nm$ low leakage technologie)\cite{cell-databook}}
 	\label{tabel-implementatie-beperkingen-elementen-gatecount}
 	\begin{tabular}{|l|r|}
 		\hline
-		Element		& Gates$/$bit\\
+		Element			& Gates$/$bit\\
 		\hline
-		flip-flop	& 6-7\\
-		MUX			& ??\\
-		AND			& ??\\
-		XOR			& 2.75\\
-		OR				& ??\\
-		NOT			& ??\\
+		D flip-flop met reset	& 6\\
+		D flip-flop zonder reset	& 5.5\\
+		D latch			& 4.25\\
+		full adder		& 5.5\\
+		3 ingang MUX	& 4\\
+		2 ingang XNOR	& 3.75\\
+		2 ingang XOR	& 3.75\\
+		2 ingang MUX	& 2.25\\
+		2 ingang OR		& 1.25\\
+		2 ingang AND	& 1.25\\
+		2 ingang NOR	& 1\\
+		2 ingang NAND	& 1\\
+		NOT				& 0.75\\
 		\hline		
 	\end{tabular}
 \end{table}
 
 \section{Modular Arithmetic Logical Unit}
 
-De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU)\cite{sakiyama}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later worden met behulp daarvan elke andere nodige berekening verwezenlijkt.
+De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU)\cite{sakiyama}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
 Aangezien er in het veld $\mathbb{F}_{2^m}$ gewerkt wordt, is een optelling equivalent aan een XOR bewerking. De bewerking die moet uitgevoerd kunnen worden is:
 
@@ -44,13 +51,15 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 \label{algoritme-implementatie-malu-modulo}
 \KwIn{$B \in \mathbb{F}_{2^m}$, $T \in \mathbb{F}_{2^{m + 1}}$}
 \KwOut{$R \mod P \in \mathbb{F}_{2^m}$}
+
 $R \leftarrow T \xor B$\;
-\If{$\text{degree}(T) = m$}{
+
+\If{degree$(T) = m$}{
 	$R \leftarrow R \xor P$\;
 }
 \end{algorithm}
 
-Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic-noshift}. Ingang $P_{\text{in}}$ dient afhankelijk van $T_{\text{MSB}}$ ingesteld te worden op $0$ of $P$. $P_{\text{MSB}}$ (graad $m$) kan genegeerd worden, aangezien in het resultaat de graad $\leq m$ is.
+Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic-noshift}. Ingang $P_{\text{in}}$ dient afhankelijk van $T_{m}$ ingesteld te worden op $0$ of $P$. $P_{m}$ kan genegeerd worden, aangezien in het resultaat de graad $< m$ is.
 
 \begin{figure}[h]
 	\begin{center}
@@ -59,7 +68,7 @@ Een voor de hand liggende schakeling die dit alles implementeert, is te zien in 
 	\end{center}
 \end{figure}
 
-In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Indien die bewerking wordt toegevoegd, bekomt men de schakeling uit \reffig{figuur-implementatie-malu-basic}. Net als de vorige implementatie), bestaat deze uit $2m$ XOR poorten.
+In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Indien die bewerking wordt toegevoegd, bekomt men de schakeling uit \reffig{figuur-implementatie-malu-basic}. Net als de vorige implementatie bestaat deze uit $2m$ XOR poorten.
 
 \begin{figure}[h]
 	\begin{center}
@@ -68,9 +77,9 @@ In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn o
 	\end{center}
 \end{figure}
 
-Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. Het is immers niet nodig dat de ingang $P_{\text{in}}$ $m$ bits breed is, aangezien $P$ gekend is. De ingang en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod$ en enkel XOR porten voor de bits $i$ waarvoor $P_i = 1$. Hierdoor worden 
+Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{in}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
 \[\Delta = m - (\text{hamm}(P) - 1)\]
-XOR poorten uitgespaard, met hamm$(P)$ gelijk aan het Hamming gewicht van de binaire represenatie van $P$.
+XOR poorten uitgespaard, met hamm$(P)$ gelijk aan het Hamming gewicht van de binaire representatie van $P$.
 
 In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\text{hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ kleiner dan de oorsponkelijke grootte).
 
@@ -87,14 +96,15 @@ De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optim
 
 De eerder ontworpen MALU schakeling laat toe optellingen te doen, maar het Miller algoritme vereist dat er ook vermenigvuldigingen worden uitgerekend. Delingen en machtsverheffingen kunnen met behulp van vermenigvuldiging berekend worden en dienen dus niet rechtstreeks ge\"implementeerd te worden. Indien dus zowel optellingen als vermenigvuldigingen berekend kunnen worden, is alles voorhanden om de Tate pairing te berekenen.
 
-Door toepassing van een ``shift and add'' algoritme, kan de waarde van $A \cdot B = R$ berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Op het einde van elke iteratie is de graad van $T$ gelijk aan $m + mod$. Door de modulo operatie telkens op het tussenresultaat uit te voeren, is het maximum van graad $m$ en kan het steeds opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld te worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
+Door toepassing van een ``shift and add'' algoritme, kan de waarde van $A \cdot B = R$ berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Door de modulo operatie telkens op het tussenresultaat uit te voeren, is het steeds van graad $\leq m$ en kan het steeds opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld te worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
 
 \begin{algorithm}[h]
 \dontprintsemicolon
-\caption{``Shift and add'' vermenigvuldiging}\label{algoritme-implementatie-gf2m-multiply}
+\caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}\label{algoritme-implementatie-gf2m-multiply}
 \KwIn{$A, B \in \mathbb{F}_{2^m}/[P]$}
 \KwOut{$R \in \mathbb{F}_{2^m}/[P]$}
 \KwData{$T \in \mathbb{F}_{2^{m + 1}}$}
+
 $T \leftarrow 0$\;
 \For{$i \leftarrow m - 1$ \KwTo $0$}{
 	\eIf{$A_i = 1$}{
@@ -105,7 +115,7 @@ $T \leftarrow 0$\;
 	
 	$T \leftarrow T \xor b$\;
 	
-	\If{$T_{m} = 1$}{
+	\If{degree$(T) = m$}{
 		$T \leftarrow T \xor P$\;
 	}
 	$T \leftarrow T \ll 1$\;

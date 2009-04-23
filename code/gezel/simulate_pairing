@@ -1,2 +1,2 @@
 reset
-time cpp -P pairing_testbench.fdl | gezel 1000000 | sed -f sedscript | sed -f sedreplace-cresults
+time cpp -P pairing_testbench.fdl | sed -f sed-replace-calcs | gezel 1000000 | sed -f sed-varnames
