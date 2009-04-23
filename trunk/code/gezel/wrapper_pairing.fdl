@@ -25,8 +25,8 @@
 // Output: f = E(P, Q)
 
 dp wrapper_pairing(in input:	ns(const_m);
-	in start:	ns(1);
-	in next:	ns(1);
+	in start_in:	ns(1);
+	in next_in:	ns(1);
 	out output:	ns(const_m);
 	out ready:	ns(1);
 	sig sig_en_out_Xv: ns(1);
@@ -45,7 +45,8 @@ dp wrapper_pairing(in input:	ns(const_m);
 	sig sig_en_out_TmpB: ns(1);
 	sig sig_en_out_ToMALU: ns(1)) {
 
-	//reg reg_count_mult: ns(const_m);
+	reg reg_count_mult: ns(const_m);
+	reg reg_count_add: ns(const_m);
 
 	// Registers:
 	reg reg_Xv: ns(const_m);
@@ -192,8 +193,8 @@ dp wrapper_pairing(in input:	ns(const_m);
 	// SFG's
 	sfg do_always {
 		// Set misc registers
-		reg_start = start;
-		reg_next = next;
+		reg_start = start_in;
+		reg_next = next_in;
 
 		// Set output - As long as not ready, set output to 0, else set to Xv.
 		ready = reg_ready;
@@ -408,12 +409,16 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_start = 1;
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 0;
+
+		reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_add_plus_one {
 		sig_MALU_start = 1;
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 1;
+
+		reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_mult {
@@ -421,7 +426,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 0;
 
-		//reg_count_mult = reg_count_mult + 1;
+		reg_count_mult = reg_count_mult + 1;
 	}
 
 	sfg MALU_mult_plus_one {
@@ -429,7 +434,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 1;
 
-		//reg_count_mult = reg_count_mult + 1;
+		reg_count_mult = reg_count_mult + 1;
 	}	
 
 	// SFG's for individual data transfer
@@ -681,12 +686,12 @@ dp wrapper_pairing(in input:	ns(const_m);
 	}
 	
 	// SFG for ready state
-	// On next raising edge, shift F 1 position to the left and increase counter.
+	// On _in raising edge, shift F 1 position to the left and increase counter.
 	// Unless counter is 3, then set Xv to 0.
 	sfg ready_regs {
-		//$display("[Ready Regs] Counter: ", $dec, reg_counter_misc, " - sig_to_Xv: ", $hex, sig_to_Xv, " - Update Xv: ", next == 1 & reg_next == 0);
+		//$display("[Ready Regs] Counter: ", $dec, reg_counter_misc, " - sig_to_Xv: ", $hex, sig_to_Xv, " - Update Xv: ", next_in == 1 & reg_next == 0);
 
-		reg_counter_misc = next == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
+		reg_counter_misc = next_in == 1 & reg_next == 0 ? reg_counter_misc + 1 : reg_counter_misc;
 		
 		sig_en_Xv = 1;
 		sig_en_Yv = 1;
@@ -697,9 +702,9 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_sel_Yv = 1;
 		sig_sel_Xp = 1;
 		
-		reg_Xv = next == 1 & reg_next == 0 ? sig_to_Xv : reg_Xv;
-		reg_Yv = next == 1 & reg_next == 0  ? sig_to_Yv : reg_Yv;
-		reg_Xp = next == 1 & reg_next == 0  ? sig_to_Xp : reg_Xp;
+		reg_Xv = next_in == 1 & reg_next == 0 ? sig_to_Xv : reg_Xv;
+		reg_Yv = next_in == 1 & reg_next == 0  ? sig_to_Yv : reg_Yv;
+		reg_Xp = next_in == 1 & reg_next == 0  ? sig_to_Xp : reg_Xp;
 		
 		// Set other enable signals to 0
 		sig_en_Yp = 0;
@@ -757,9 +762,10 @@ dp wrapper_pairing(in input:	ns(const_m);
 		$finish;
 	}
 
-	//sfg disp_counter {
-	//	$display("[Mult Counter] ", reg_count_mult);
-	//}
+	sfg disp_counter {
+		$display("[Mult Counter] ", $dec, reg_count_mult);
+		$display("[Add Counter] ", $dec, reg_count_add);
+	}
 }
 
 fsm fsm_wrapper_pairing (wrapper_pairing) {
@@ -872,7 +878,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Ready]
 
 	// Set TmpB to 0, F should be in Xv to Yp.
-	@ready1	(do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
+	@ready1	(disp_counter, do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
 
 	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
 	@ready2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
