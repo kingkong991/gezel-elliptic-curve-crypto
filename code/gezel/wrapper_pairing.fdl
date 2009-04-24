@@ -29,24 +29,24 @@ dp wrapper_pairing(in input:	ns(const_m);
 	in next_in:	ns(1);
 	out output:	ns(const_m);
 	out ready:	ns(1);
-	sig sig_en_out_Xv: ns(1);
-	sig sig_en_out_Yv: ns(1);
-	sig sig_en_out_Xp: ns(1);
-	sig sig_en_out_Yp: ns(1);
-	sig sig_en_out_Xfa: ns(1);
-	sig sig_en_out_Yfa: ns(1);
-	sig sig_en_out_Ga: ns(1);
-	sig sig_en_out_Gb: ns(1);
-	sig sig_en_out_Fa: ns(1);
-	sig sig_en_out_Fb: ns(1);
-	sig sig_en_out_Fc: ns(1);
-	sig sig_en_out_Fd: ns(1);
-	sig sig_en_out_TmpA: ns(1);
-	sig sig_en_out_TmpB: ns(1);
-	sig sig_en_out_ToMALU: ns(1)) {
+	out sig_en_out_Xv: ns(1);
+	out sig_en_out_Yv: ns(1);
+	out sig_en_out_Xp: ns(1);
+	out sig_en_out_Yp: ns(1);
+	out sig_en_out_Xfa: ns(1);
+	out sig_en_out_Yfa: ns(1);
+	out sig_en_out_Ga: ns(1);
+	out sig_en_out_Gb: ns(1);
+	out sig_en_out_Fa: ns(1);
+	out sig_en_out_Fb: ns(1);
+	out sig_en_out_Fc: ns(1);
+	out sig_en_out_Fd: ns(1);
+	out sig_en_out_TmpA: ns(1);
+	out sig_en_out_TmpB: ns(1);
+	out sig_en_out_ToMALU: ns(1)) {
 
-	reg reg_count_mult: ns(const_m);
-	reg reg_count_add: ns(const_m);
+	//reg reg_count_mult: ns(const_m);
+	//reg reg_count_add: ns(const_m);
 
 	// Registers:
 	reg reg_Xv: ns(const_m);
@@ -410,7 +410,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 0;
 
-		reg_count_add = reg_count_add + 1;
+		//reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_add_plus_one {
@@ -418,7 +418,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 1;
 
-		reg_count_add = reg_count_add + 1;
+		//reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_mult {
@@ -426,7 +426,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 0;
 
-		reg_count_mult = reg_count_mult + 1;
+		//reg_count_mult = reg_count_mult + 1;
 	}
 
 	sfg MALU_mult_plus_one {
@@ -434,7 +434,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 1;
 
-		reg_count_mult = reg_count_mult + 1;
+		//reg_count_mult = reg_count_mult + 1;
 	}	
 
 	// SFG's for individual data transfer
@@ -878,7 +878,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Ready]
 
 	// Set TmpB to 0, F should be in Xv to Yp.
-	@ready1	(disp_counter, do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
+	@ready1	(do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
 
 	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
 	@ready2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;

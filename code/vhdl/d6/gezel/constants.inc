@@ -6,7 +6,7 @@
 #define const_m 163
 #define const_m_log 8
 
-#define malu_width 1
+#define malu_width 6
 
 // ceil(const_m / malu_width)
 #if malu_width == 1

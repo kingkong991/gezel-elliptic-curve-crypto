@@ -43,7 +43,7 @@ dp testbench {
 	sig sig_en_out_TmpB: ns(1);
 	sig sig_en_out_ToMALU: ns(1);
 
-	use wrapper_pairing(sig_in, start, next, sig_out, ready, sig_en_out_Xv, sig sig_en_out_Yv, sig_en_out_Xp, sig sig_en_out_Yp, sig_en_out_Xfa, sig_en_out_Yfa, sig_en_out_Ga, sig_en_out_Gb, sig_en_out_Fa, sig_en_out_Fb, sig_en_out_Fc, sig_en_out_Fd, sig_en_out_TmpA, sig_en_out_TmpB, sig_en_out_ToMALU);
+	use wrapper_pairing(sig_in, start, next, sig_out, ready, sig_en_out_Xv, sig_en_out_Yv, sig_en_out_Xp, sig_en_out_Yp, sig_en_out_Xfa, sig_en_out_Yfa, sig_en_out_Ga, sig_en_out_Gb, sig_en_out_Fa, sig_en_out_Fb, sig_en_out_Fc, sig_en_out_Fd, sig_en_out_TmpA, sig_en_out_TmpB, sig_en_out_ToMALU);
 
 	sfg init1 {
 		start = 1;
