@@ -1,0 +1,161 @@
+****************************************
+Report : area
+Design : wrapper_pairing
+Version: Y-2006.06
+Date   : Sat Apr 25 00:32:11 2009
+****************************************
+
+Library(s) Used:
+
+    fsc0l_d_sc_tc (File: /users/cosic/mknezevi/design_compiler/0.13/LL/fsc0l_d_sc_tc.db)
+
+Number of ports:              331
+Number of nets:             14036
+Number of cells:            11731
+Number of references:          85
+
+Combinational area:       64709.000000
+Noncombinational area:    68176.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:          132885.000000
+Total area:                 undefined
+
+
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : wrapper_pairing
+Version: Y-2006.06
+Date   : Sat Apr 25 00:32:30 2009
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: TCCOM   Library: fsc0l_d_sc_tc
+Wire Load Model Mode: enclosed
+
+  Startpoint: STATE_reg[0]
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: reg_ToMALU_reg[3]
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  wrapper_pairing    enG50K                fsc0l_d_sc_tc
+  wrapper_gf2m       enG5K                 fsc0l_d_sc_tc
+  malu               enG5K                 fsc0l_d_sc_tc
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  STATE_reg[0]/CK (DFERBCLD)                              0.00 #     0.00 r
+  STATE_reg[0]/QB (DFERBCLD)                              0.78       0.78 f
+  U9992/O (NR3BLD)                                        0.76       1.54 r
+  U3057/O (INVDLD)                                        0.51       2.05 f
+  U10205/O (NR2ELD)                                       0.86       2.91 r
+  U10552/O (BUFDLD)                                       0.96       3.86 r
+  U3053/O (ND2DLD)                                        0.75       4.61 f
+  U8767/O (OAI112BLD)                                     0.46       5.07 r
+  U9501/O (NR6ELD)                                        0.36       5.44 f
+  U9503/O (OAI112BLD)                                     0.18       5.62 r
+  U8340/O (NR6ELD)                                        0.35       5.97 f
+  U9319/O (OAI112BLD)                                     0.19       6.16 r
+  U9320/O (NR3BLD)                                        0.15       6.31 f
+  U9321/O (ND3CLD)                                        0.16       6.46 r
+  U9322/O (AOI112BLD)                                     0.14       6.60 f
+  U9327/O (AN4B1BLD)                                      0.34       6.94 f
+  U2104/O (AN4B1BLD)                                      0.34       7.28 f
+  U8303/O (OAI112BLD)                                     0.68       7.96 r
+  U10013/O (OR2B1ELD)                                     0.41       8.37 f
+  U2084/O (INVDLD)                                        0.29       8.67 r
+  U2083/O (ND2DLD)                                        0.31       8.98 f
+  U2080/O (NR2CLD)                                        0.82       9.80 r
+  U2079/O (INVDLD)                                        0.33      10.13 f
+  U1682/O (NR2CLD)                                        0.69      10.83 r
+  U1681/O (NR2CLD)                                        0.31      11.13 f
+  U1677/O (ND3CLD)                                        0.24      11.37 r
+  U1665/O (NR2CLD)                                        0.15      11.52 f
+  U8268/O (OR3B2CLD)                                      0.22      11.74 r
+  U8267/O (NR6ELD)                                        0.38      12.12 f
+  U1588/O (AN4B1BLD)                                      0.26      12.38 f
+  U1522/O (AN4B1BLD)                                      0.36      12.74 f
+  U8257/O (ND6ELD)                                        0.63      13.37 r
+  U10483/O (BUFDLD)                                       0.65      14.01 r
+  U696/O (AN2ELD)                                         0.44      14.46 r
+  label_wrapper_gf2m/A[162] (wrapper_gf2m)                0.00      14.46 r
+  label_wrapper_gf2m/U344/O (INVDLD)                      0.10      14.55 f
+  label_wrapper_gf2m/U348/O (AOI12ELD)                    0.92      15.47 r
+  label_wrapper_gf2m/U349/O (BUFELD)                      0.93      16.40 r
+  label_wrapper_gf2m/U247/O (AN2ELD)                      0.31      16.71 r
+  label_wrapper_gf2m/label_malu/B[3] (malu)               0.00      16.71 r
+  label_wrapper_gf2m/label_malu/U61/O (XOR2ELD)           0.30      17.02 f
+  label_wrapper_gf2m/label_malu/U60/O (MUX2CLD)           0.25      17.26 f
+  label_wrapper_gf2m/label_malu/T_n[4] (malu)             0.00      17.26 f
+  label_wrapper_gf2m/U82/O (AO222ELD)                     0.48      17.74 f
+  label_wrapper_gf2m/T[3] (wrapper_gf2m)                  0.00      17.74 f
+  U9267/O (AOI22BLD)                                      0.28      18.03 r
+  U9268/O (AOI22BLD)                                      0.15      18.17 f
+  U9269/O (AO22CLD)                                       0.31      18.49 f
+  reg_ToMALU_reg[3]/D (DFECLD)                            0.00      18.49 f
+  data arrival time                                                 18.49
+
+  clock CLK (rise edge)                               100000.00  100000.00
+  clock network delay (ideal)                             0.00   100000.00
+  reg_ToMALU_reg[3]/CK (DFECLD)                           0.00   100000.00 r
+  library setup time                                     -0.36   99999.64
+  data required time                                             99999.64
+  --------------------------------------------------------------------------
+  data required time                                             99999.64
+  data arrival time                                                -18.49
+  --------------------------------------------------------------------------
+  slack (MET)                                                    99981.16
+
+
+****************************************
+Report : power
+        -analysis_effort low
+Design : wrapper_pairing
+Version: Y-2006.06
+Date   : Sat Apr 25 00:33:53 2009
+****************************************
+
+
+Library(s) Used:
+
+    fsc0l_d_sc_tc (File: /users/cosic/mknezevi/design_compiler/0.13/LL/fsc0l_d_sc_tc.db)
+
+Information: The library cell 'TIE0DLD' in the library 'fsc0l_d_sc_tc' is not characterized for internal power. (PWR-227)
+Information: The library cell 'TIE1DLD' in the library 'fsc0l_d_sc_tc' is not characterized for internal power. (PWR-227)
+Information: The design contains cells, other than constants and black boxes, that are not characterized for internal power. (PWR-228)
+
+Operating Conditions: TCCOM   Library: fsc0l_d_sc_tc
+Wire Load Model Mode: enclosed
+
+Design        Wire Load Model            Library
+------------------------------------------------
+wrapper_pairing        enG50K            fsc0l_d_sc_tc
+wrapper_gf2m           enG5K             fsc0l_d_sc_tc
+malu                   enG5K             fsc0l_d_sc_tc
+
+
+Global Operating Voltage = 1.2  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1pW
+
+
+  Cell Internal Power  = 373.3779 nW   (79%)
+  Net Switching Power  = 100.0271 nW   (21%)
+                         ---------
+Total Dynamic Power    = 473.4050 nW  (100%)
+
+Cell Leakage Power     = 133.8642 nW
