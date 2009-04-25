@@ -3,6 +3,8 @@
 \usepackage{graphicx}
 \usepackage{color}
 
+\usepackage{colortbl}  % Use colors in table
+
 \usepackage{url}                % Opmaak van URLs
 %\usepackage[official]{eurosym}  % Euro symbool
 %\usepackage{colortbl}           % Kleur tabellen
@@ -12,7 +14,7 @@
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
 
-\usepackage[ruled,vlined]{algorithm2e}	% Algorithm typesetting
+\usepackage[ruled,vlined,linesnumbered,nofillcomment]{algorithm2e}	% Algorithm typesetting
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -28,6 +30,9 @@
 \newcommand{\refalg}[1]{Algoritme~\ref{#1}}
 \newcommand{\refsect}[1]{Sectie~\ref{#1}}
 \newcommand{\refhfdst}[1]{Hoofdstuk~\ref{#1}}
+
+% Misc commando's
+\newcommand{\nr}{n$^{\circ}$~}
 
 % Substring macro
 \def\substring#1#2#3{%
@@ -53,11 +58,16 @@
 \renewcommand{\thefigure}{\thechapter.\arabic{figure}}
 \newcommand{\Chapter}[1]{\chapter{#1} \setcounter{figure}{0}}
 
+% Cell coloring
+\newcommand{\shadecell}{\cellcolor{black!65}}
+
 % Algorithm2e setup
 \renewcommand{\listalgorithmcfname}{Lijst van algoritmes}
 \renewcommand{\algorithmcfname}{Algoritme}
 \renewcommand{\thealgocf}{\thechapter.\arabic{algocf}}
-%\renewcommand{\KwIn}[1]{\dontprintsemicolon \KwIn{#1}}
+\SetCommentSty{textsf}
+\SetKwComment{Comment}{}{}
+\newcommand{\comm}[1]{\Comment*[f]{#1}}
 
 % Listings setup
 \definecolor{darkkeyword}{rgb}{0,0.08,0.40} %Requires the color package.
@@ -130,8 +140,8 @@
 \usetikzlibrary{shapes.geometric}
 
 \begin{document}
-
-\selectlanguage{dutch}
+\dontprintsemicolon   % Don't print ; after each line in algorithms
+\selectlanguage{dutch}  % Set hypenation patterns
 
 % Voeg voorblad toe
 %\includepdf{voorblad.pdf}
