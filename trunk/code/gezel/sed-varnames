@@ -1,0 +1,7 @@
+s/ 17329047c77bfc372b3c9d698e1cb7c119827d544 / colorstartF_e(Fa)_colorend /g
+s/ 3f9d5fc1eb6058e93a909b0c405200bcff935a0f2 / colorstartF_e(Fb)_colorend /g
+s/ 5141c023cc229a65d2dea6f9a9e6b62ff20aab2f5 / colorstartF_e(Fc)_colorend /g
+s/ 7ee90a93f706c54856ed61919cd52c334becb5de / colorstartF_e(Fd)_colorend /g
+s/colorstartF_/\x1B[31;1m/g
+s/colorstart_/\x1B[34;1m/g
+s/_colorend/\x1B[m/g
