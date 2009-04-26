@@ -225,50 +225,52 @@ Merk op dat op lijn~\ref{lijn-implementatie-miller-algemeen-add-if} slechts \'e\
 
 Om \refalg{algoritme-implementatie-miller-algemeen} te kunnen implementeren, moeten eerst de verschillende berekeningen uitgewerkt worden. Vervolgens zal aan de hand van die uitwerkingen bepaald worden welke registers de uiteindelijke schakeling ten minste nodig heeft en ten slotte zal een FSM ontworpen worden.
 
-\subsection{Uitwerking berekeningen}\label{subsectie-implementatie-miller-uitwerking}
+Grofweg kan het algoritme opgedeeld worden in de for-lus  en een finale exponentiatie. De for-lus kan verder onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet kunnen worden, wat ook verder uitgediept zal worden.
 
-Grofweg kan het algoritme opgedeeld worden in een verdubbelingsstap, een optellingstap, de vermenigvuldiging $F \cdot G$ en een finale exponentiatie. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat voor de optellingstap een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet worden. Uiteraard wordt ook dit verder onderzocht.
+Bij elk van de volgende algoritmen zal aangegeven worden hoeveel en welke bewerkingen juist nodig zijn. Daarbij staat \textsf{A} voor een optelling, \textsf{M} voor een vermenigvuldiging, \textsf{S} voor een kwadratering en \textsf{I} voor een inversie. Aangezien er echter geen afzonderlijke schakeling voor kwadrateren ontworpen is, zijn \textsf{S} en \textsf{M} qua rekentijd in dit geval equivalent aan elkaar. De bewerking $a + 1$ neemt geen extra tijd in beslag, omdat die functie parallel met een optelling of vermenigvuldiging kan uitgevoerd worden door de $plus\_one$ van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ hoog te maken bij de start van een berekening.
 
-Bij elk van de volgende algoritmen zal aangegeven worden hoeveel en welke bewerkingen juist nodig zijn. Daarbij staat \textsf{A} voor een optelling, \textsf{M} voor een vermenigvuldiging, \textsf{S} voor een kwadratering en \textsf{I} voor een inversie. Aangezien er echter geen afzonderlijke schakeling voor kwadrateren ontworpen is, zijn \textsf{S} en \textsf{M} qua rekentijd in dit geval equivalent aan elkaar. De bewerking $a + 1$ neemt geen extra tijd in beslag, omdat die functie parallel met een optelling of vermenigvuldiging kan uitgevoerd worden door de $plus\_one$ van de vorige schakeling hoog te maken bij de start van een berekening.
+\subsection{For-lus}\label{subsectie-implementatie-miller-forlus}
+
+Zoals reeds eerder vermeld kan de for-lus onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze onderdelen zal in de volgende paragrafen in detail aan bod komen.
 
 \subsubsection{Verdubbelingsstap}
 
-De verdubbelingstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algemeen-double-1} en \ref{lijn-implementatie-miller-algemeen-double-2} in \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme worden de berekeningen gegeven in \refalg{algoritme-implementatie-miller-double}\cite{bertoni}.
+De verdubbelingstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algemeen-double-1} en \ref{lijn-implementatie-miller-algemeen-double-2} in \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme zijn de berekeningen als volgt\cite{bertoni}:
 
-\begin{algorithm}[h]
-	\dontprintsemicolon
-	\caption{Verdubbelingstap voor hyperelliptische krommen in het Miller algoritme}
-	\label{algoritme-implementatie-miller-double}
-	\KwIn{$x_V, y_V \in E(\mathbb{F}_{2^m})$}
-	\KwOut{$x_{2V}, y_{2V} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
-	\KwData{$\lambda \in \mathbb{F}_{2^m}$}
-	$\lambda \leftarrow x_V^2 + 1$\comm{1 S}\;
-	$x_{2V} \leftarrow \lambda ^2$\comm{1 S}\;
-	$y_{2V} \leftarrow \lambda (x_{2V} + x_V) + y_V + 1$\comm{2 A, 1 M}\;\nllabel{lijn-implementatie-miller-double-yv}
-	$G_{V,V}(\phi(Q)) \leftarrow \lambda (x_{\phi} + x_V) + (y_{\phi} + y_V)$\comm{4 A, 1 M}\;\nllabel{lijn-implementatie-miller-double-g}
-\end{algorithm}
+\[\begin{aligned}
+	\lambda &= x_V^2 + 1\\
+	x_{2V} &= \lambda ^2\\
+	y_{2V} &= \lambda (x_{2V} + x_V) + y_V + 1\\
+	G_{V,V}(\phi(Q)) &= \lambda (x_{\phi} + x_V) + (y_{\phi} + y_V)\\
+\end{aligned}\]
 
-Lijn \ref{lijn-implementatie-miller-double-yv} in dit algoritme kan ook berekend worden als
+In dit geval kan $y_{2V}$ ook berekend worden als:
 
 \[\begin{aligned}
 y_{2V}	&= y_V^4 + x_V^4\\
-			&= (y_V + x_V)^4	
+			&= (y_V + x_V)^4\\	
 \end{aligned}\]
 
-Aangezien dit echter 2 kwadrateringen en 1 optelling kost, wordt de voorkeur gegeven aan de eerste methode.
+Aangezien dit echter twee kwadrateringen en een optelling kost tegenover een vermenigvuldiging en twee optellingen, wordt de voorkeur gegeven aan de eerste methode.
 
-Door de specifieke vorm van $\phi(Q)$ kan lijn~\ref{lijn-implementatie-miller-double-g} uitgeschreven worden als
+Door de specifieke vorm van $\phi(Q)$ kan $G$ uitgeschreven worden als:
 
 \[\begin{aligned}
-	G_a	&=	\lambda (x_{\phi_a} + x_V) + (y_{\phi_a} + y_V)\qquad&	G_c	&= \lambda \cdot x_{\phi_c} + y_{\phi_c}\\
-	G_b	&=	\lambda \cdot x_{\phi_b} + y_{\phi_b}&									&= 0\\
-			&= \lambda + y_{\phi_b}&												G_d	&= \lambda \cdot x_{\phi_d} + y_{\phi_d}\\
-			&=	\lambda + x_{\phi_a}&														&= 1\\
+	G_a	&=	\lambda (x_{\phi_a} + x_V) + (y_{\phi_a} + y_V)\qquad&
+				G_c	&= \lambda \cdot x_{\phi_c} + y_{\phi_c}\\
+	G_b	&=	\lambda \cdot x_{\phi_b} + y_{\phi_b}&
+						&= 0\\
+			&= \lambda + y_{\phi_b}&
+				G_d	&= \lambda \cdot x_{\phi_d} + y_{\phi_d}\\
+			&=	\lambda + x_{\phi_a}&
+						&= 1\\
 \end{aligned}\]
 
-De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in plaats van in vier.
+De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in plaats van in vier. De vorm van $G$ zal ook toelaten de vermenigvuldiging $F \cdot G$ grotendeels te vereenvoudigen, zoals later gezien zal worden.
 
 Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
+
+Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er ook een register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
 
 %Om te achterhalen in welke volgorde de bewerkingen best worden uitgevoerd om zo weinig mogelijk tussenresultaten te moeten opslaan. Het resultaat hiervan staat in \reftbl{tabel-implementatie-miller-double}. Een gearceerde cel betekend dat de aangeduide variabele op dat moment ingelezen moet worden. Indien er voor een variabele onder een bepaald niveau geen gearceerde cellen meer staan, kan deze verwijderd worden.
 
@@ -281,9 +283,9 @@ Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt
 	\KwData{$\lambda \in \mathbb{F}_{2^m}$}
 	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
 	$\lambda \leftarrow G_a^2 + 1$; $x_{2V} \leftarrow \lambda ^2$\comm{2 S}\;
-	$y_{2V} \leftarrow x_{2V} + G_a$; $y_{2V} \leftarrow y_{2V} \cdot \lambda$\comm{1 A, 1 M}\;
+	$y_{2V} \leftarrow x_{2V} + G_a$; $y_{2V} \leftarrow y_{2V} \cdot \lambda$\comm{1 M, 1 A}\;
 	$y_{2V} \leftarrow y_{2V} + G_b + 1$\comm{1 A}\;
-	$G_a \leftarrow G_a + x_{\phi_a}$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 A, 1 M}\;
+	$G_a \leftarrow G_a + x_{\phi_a}$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 M, 1 A}\;
 	$G_a \leftarrow G_a + y_{\phi_a}$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;
 	$G_b \leftarrow \lambda + x_{\phi_a}$\comm{1 A}\;
 \end{algorithm}
@@ -308,25 +310,20 @@ Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt
 %	\end{tabular}}
 %\end{minipage}
 
-Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er dus ook nog een register nodig om $\lambda$ in op te slaan.
-
 \subsubsection{Optellingstap}
 
-De optellingstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} en \ref{lijn-implementatie-miller-algemeen-add-2} van \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme dienen de bewerkingen in \refalg{algoritme-implementatie-miller-add} uitgevoerd te worden\cite{bertoni}.
+De optellingstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} en \ref{lijn-implementatie-miller-algemeen-add-2} van \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme dienen de volgende bewerkingen uitgevoerd te worden\cite{bertoni}:
 
-\begin{algorithm}[h]
-	\caption{Optellingstap voor hyperelliptische krommen in het Miller algoritme}
-	\label{algoritme-implementatie-miller-add}
-	\KwIn{$x_V, y_V, x_P, y_P \in E(\mathbb{F}_{2^m})$}
-	\KwOut{$x_{V + P}, y_{V + P} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
-	\KwData{$\lambda \in \mathbb{F}_{2^m}$}
-	$\lambda \leftarrow \frac{y_V + y_P}{x_V + x_P}$\comm{2 A, 1 I, 1 M}\;
-	$x_{V + P} \leftarrow \lambda ^2 + x_V + x_P$\comm{2 A, 1 S}\;
-	$y_{V + P} \leftarrow \lambda (x_{V+P} + x_P) + y_P + 1$\comm{2 A, 1 M}\;
-	$G_{V,V}(\phi(Q)) \leftarrow \lambda (x_{\phi} + x_P) + (y_{\phi} + y_P)$\comm{4 A, 1 M}\;
-\end{algorithm}
+\[\begin{aligned}
+	\lambda &= \frac{y_V + y_P}{x_V + x_P}\\
+	x_{V + P} &= \lambda ^2 + x_V + x_P\\
+	y_{V + P} &= \lambda (x_{V+P} + x_P) + y_P + 1\\
+	G_{V,V}(\phi(Q)) &= \lambda (x_{\phi} + x_P) + (y_{\phi} + y_P)\\
+\end{aligned}\]
 
-Net zoals bij de verdubbelingstap kan $G$ hier in 2 variabelen opgeslagen worden. Hoewel de optellingstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}. De meest tijdrovende stap hier is de inversie, waar in het volgende deel verder op ingegaan zal worden.
+Net zoals bij de verdubbelingstap kan $G$ hier in 2 variabelen opgeslagen worden. Hoewel de optellingstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}.
+
+In tegenstelling tot de verdubbelingstap zijn hier twee tijdelijke registers nodig, een voor $\lambda$ en een voor $a$. Verder zijn er twee registers nodig voor $x_P$ en $y_P$. Alles samen dienen er tien optellingen, drie vermenigvuldigingen, twee kwadrateringen en een inversie uitgerekend te worden.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van de optellingstap voor hyperelliptische krommen in het Miller algoritme}
@@ -335,21 +332,19 @@ Net zoals bij de verdubbelingstap kan $G$ hier in 2 variabelen opgeslagen worden
 	\KwOut{$x_{V + P}, y_{V + P} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$\lambda, a \in \mathbb{F}_{2^m}$}
 	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
-	$\lambda \leftarrow G_a + x_P$; $\lambda \leftarrow \lambda^{-1}$\comm{1 A, 1 I}\;
-	$a \leftarrow G_b + y_P$; $\lambda \leftarrow \lambda \cdot a$\comm{1 A, 1 M}\;
-	$x_{V + P} \leftarrow \lambda ^2 + G_a$; $x_{V + P} \leftarrow x_{V + P} + x_P$\comm{2 A, 1 S}\;
-	$y_{V + P} \leftarrow x_{V + P} + x_P$; $y_{V + P} \leftarrow y_{V + P} \cdot \lambda$\comm{1 A, 1 M}\;
+	$\lambda \leftarrow G_a + x_P$; $\lambda \leftarrow \lambda^{-1}$\comm{1 I, 1 A}\;
+	$a \leftarrow G_b + y_P$; $\lambda \leftarrow \lambda \cdot a$\comm{1 M, 1 A}\;
+	$x_{V + P} \leftarrow \lambda ^2 + G_a$; $x_{V + P} \leftarrow x_{V + P} + x_P$\comm{1 S, 2 A}\;
+	$y_{V + P} \leftarrow x_{V + P} + x_P$; $y_{V + P} \leftarrow y_{V + P} \cdot \lambda$\comm{1 M, 1 A}\;
 	$y_{V + P} \leftarrow y_{V + P} + y_P + 1$\comm{1 A}\;
-	$G_a \leftarrow x_{\phi_a} + x_P$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 A, 1 M}\;
+	$G_a \leftarrow x_{\phi_a} + x_P$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 M, 1 A}\;
 	$G_a \leftarrow G_a + y_{\phi_a}$; $G_a \leftarrow G_a + y_P$\comm{2 A}\;
 	$G_b \leftarrow \lambda + x_{\phi_a}$\comm{1 A}\;
 \end{algorithm}
 
-In tegenstelling tot de verdubbelingstap zijn hier twee tijdelijke registers nodig, een voor $\lambda$ en een voor $a$. Verder zijn er twee registers nodig voor $x_P$ en $y_P$.
-
 \subsubsection{Inversie}
 
-Zoals reeds vermeld in \refsect{sectie-cryptografie-gf}, kan een inversie in een Galois veld berekend worden door toepassing van Fermats kleine theorema:
+De meest tijdrovende stap in de optellingstap is de inversie.  Zoals reeds vermeld in \refsect{sectie-cryptografie-gf}, kan een inversie in een Galois veld berekend worden door toepassing van Fermats kleine theorema:
 
 \[\begin{aligned}
 a^{2^m}		&= a\\
@@ -361,11 +356,11 @@ De naieve manier om dit te berekenen zou zijn om $a$ $2^m - 2$ keer met zichzelf
 
 Een tweede manier bestaat er in de exponent te ontbinden in machten van 2 en 3. In dat geval zouden er nog 237 vermenigvuldigen nodig zijn.
 
-Er is echter een derde, optimale manier die toegepast kan worden indien de exponent van de vorm $2^m - 2$ is. Dit gaat als volgt in zijn werk:
+Er is echter een derde, optimale manier die toegepast kan worden indien de exponent van de vorm $2^m - 2$ is \cite{batina-pkc}\cite{itoh}. Dit gaat als volgt in zijn werk:
 
 \[a^{2^m - 2} = (a^{2^{m - 1} - 1})^2\]
 
-Als wordt aangenomen dat $m$ oneven is, is de macht van twee na het gelijkheidsteken dus even. Zolang de macht van twee even is, kan recursief volgende formule toegepast worden:
+Als wordt aangenomen dat $m$ oneven is, is de macht van twee na het gelijkheidsteken dus even. Zolang de exponent even is, kan recursief volgende formule toegepast worden:
 
 \[a^{2^i - 1} = (a^{2^{\frac{i}{2}} - 1})^{2^{\frac{i}{2}}} \cdot a^{2^{\frac{i}{2}} - 1}\]
 
@@ -373,9 +368,9 @@ Indien $a$ oneven is, dient volgende formule toegepast te worden:
 
 \[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a\]
 
-Uiteindelijk eindigd men dan bij $a^2$ of $a^3$. Het totaal aantal bewerkingen is $m + 1$ kwadrateringen en $\lceil\log_2(m)\rceil + 1$ vermenigvuldigingen.
+Uiteindelijk eindigd men dan bij $a^2$ of $a^3$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \text{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\text{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
 
-In het geval van $m = 163$ is de uiteindelijke keten zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}.
+In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}. Het aantal berekeningen in dat geval is 9 vermenigvuldigingen en 162 kwadrateringen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
 
 \begin{algorithm}[h]
 	\caption{Inversie in $\mathbb{F}_{2^{163}}$}
@@ -394,4 +389,125 @@ In het geval van $m = 163$ is de uiteindelijke keten zoals gegeven in \refalg{al
 	$a^{-1} \leftarrow (a^{2^{162} - 1})^2$\comm{1 S}\;
 \end{algorithm}
 
-Het aantal berekeningen in dit geval is 162 kwadrateringen en 9 vermenigvuldigingen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
+\subsubsection{Kwadratering van $F$}
+
+Bij het uitvoeren van lijn~\ref{lijn-implementatie-miller-algemeen-double-1} van \refalg{algoritme-implementatie-miller-algemeen} moet ook telkens het kwadraat van $F$ berekend worden. De afleiding van de formule daarvoor gaat als volgt:
+
+\[\begin{aligned}
+F^2	&= (F_a + F_b x + F_c y + F_d xy) \cdot (F_a + F_b x + F_c y + F_d xy)\\
+		&= F_a^2 + F_a F_b x + F_a F_c y + F_a F_d xy + F_b F_a x + F_b^2 x^2 + F_b F_c xy\\
+			&\quad + F_b F_d x^2y + F_c F_a y + F_c F_b xy + F_c^2 y^2 + F_c F_d xy^2 + F_d F_a xy\\
+			&\quad + F_d F_b x^2y + F_d F_c xy^2 + F_d^2 x^2 y^2\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2)\\
+			&\quad + (F_a F_b + F_b F_a + F_b^2 + F_c F_d + F_d F_c + F_d^2)x\\
+			&\quad + (F_a F_c + F_b F_d + F_c F_a + F_c^2 + F_c F_d + F_d F_b + F_d F_c)y\\
+			&\quad + (F_a F_d + F_b F_c + F_b F_d + F_c F_b + F_c^2 + F_d F_a + F_d F_b + F_d^2)xy\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x + F_c^2 y + (F_c^2 + F_d^2)xy\\
+\end{aligned}\]
+
+Het is mogelijk dit te berekenen zonder gebruik van tijdelijke variabelen. Er zijn dus enkel registers nodig voor $F_a$, $F_b$, $F_c$ en $F_d$. Hoe dat in z'n werk gaat is te zien in \refalg{algoritme-implementatie-miller-f-square}. E\'en kwadratering van $F$ vraagt vier optellingen en vier kwadrateringen.
+
+\begin{algorithm}[h]
+	\caption{Uitwerking van de kwadratering van $F$ in het Miller algoritme}
+	\label{algoritme-implementatie-miller-f-square}
+	\KwIn{$F \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$F \in \mathbb{F}_{2^{4m}}$}
+	$F_a \leftarrow F_a + F_c$\comm{1 A}\;
+	$F_a \leftarrow F_a^2$\comm{1 S}\;
+	$F_b \leftarrow F_b + F_d$\comm{1 A}\;
+	$F_b \leftarrow F_b^2$\comm{1 S}\;
+	$F_a \leftarrow F_a + F_b$\comm{1 A}\;
+	$F_c \leftarrow F_c^2$\comm{1 S}\;
+	$F_d \leftarrow F_d^2$\comm{1 S}\;
+	$F_d \leftarrow F_d + F_c$\comm{1 A}\;
+\end{algorithm}
+
+\subsubsection{Vermenigvuldiging $F \cdot G$}
+
+Zoals eerder opgemerkt, is $G$ in zowel de verdubbeling- als optellingstap niet van volledige rang in het extensieveld. De vermenigvuldiging van F met G kan daardoor vereenvoudigd worden, namelijk als volgt:
+
+\[\begin{aligned}
+F \cdot G	&= (F_a + F_b x + F_c y + F_d xy) \cdot (G_a + G_b x + xy)\\
+	&= F_a G_a + F_a G_b x + F_a xy + F_b G_a x + F_b G_b x^2 + F_b x^2y + F_c G_a y\\
+		&\quad + F_c G_b xy + F_c xy^2 + F_d G_a xy + F_d G_b x^2y + F_d x^2 y^2\\
+	&= (F_a G_a + F_b G_b + F_d)\\
+		&\quad + (F_a G_b + F_b G_a + F_b G_b + F_c + F_d)x\\
+		&\quad + (F_b + F_c G_a + F_c + F_d G_b)y\\
+		&\quad + (F_a + F_b + F_c G_b + F_d G_a + F_d G_b + F_d)xy\\
+\end{aligned}\]
+
+Indien hier nu de Karatsuba techniek op wordt toegepast, bekomt men:
+
+\[\begin{aligned}
+F \cdot G &= (F_a G_a + F_b G_b + F_d)\\
+				&\quad + ((F_a + F_b) \cdot (G_a + G_b) + F_a G_a + F_c + F_d)x\\
+				&\quad + (F_c G_a + F_d G_b + F_b + F_c)y\\
+				&\quad + ((F_c + F_d) \cdot (G_a + G_b) + F_c G_a + F_a + F_b + F_d)xy\\
+\end{aligned}\]
+
+Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a$, $b$ en $c$). In totaal zijn er zes vermenigvuldigingen en veertien optellingen nodig. \refalg{algoritme-implementatie-miller-fg} beschrijft hoe de berekeningen juist gedaan moeten worden. Mist het gebruik van een vierde tijdelijk register zou het mogelijk zijn de berekening $G_a + G_b$ op te slaan. Die nu zowel in lijn~\ref{lijn-implementatie-miller-fg-gagb-1} als \ref{lijn-implementatie-miller-fg-gagb-2} berekend. Er zouden dan slechts dertien optellingen moeten berekend worden, \'e\'en minder dan \cite{beuchat}, waar $y^2 + y +x$ gebruikt wordt als modulo veelterm voor het extensieveld. Aangezien een extra tijdelijk register echter tegen de doelstellingen ingaat, wordt voor de iets langere berekening gekozen.
+
+\begin{algorithm}[h]
+	\caption{Uitwerking van de vermenigvuldiging $F \cdot G$ in het Miller algoritme}
+	\label{algoritme-implementatie-miller-fg}
+	\KwIn{$F, G \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$F \in \mathbb{F}_{2^{4m}}$}
+	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
+	$a \leftarrow F_a \cdot G_a$; $a \leftarrow a + F_d$\comm{1 M, 1 A}\;
+	$b \leftarrow F_a + F_b$; $c \leftarrow G_a + G_b$\comm{2 A}\;
+	$b \leftarrow b \cdot c$; $b \leftarrow b + a$; $b \leftarrow b + F_c$\comm{1 M, 2 A}\;
+	$c \leftarrow F_b \cdot G_b$; $a \leftarrow a + c$\comm{1 M, 1 A}\;
+	$c \leftarrow F_c \cdot G_a$;	$c \leftarrow c + F_b$\comm{1 M, 1 A}\;
+	$F_b \leftarrow b$; $b \leftarrow c$\;
+	$c \leftarrow F_c + F_d$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;
+	$c \leftarrow c \cdot G_a$; $c \leftarrow c + b$; $c \leftarrow c + F_a$\comm{1 M, 2 A}\;
+	$F_a \leftarrow a$\;
+	$c \leftarrow c + F_d$; $b \leftarrow b + F_c$; $a \leftarrow F_d \cdot G_b$\comm{1 M, 2 A}\;
+	$F_c \leftarrow b + a$; $F_d \leftarrow c$\comm{1 A}\;
+\end{algorithm}
+
+\subsection{Finale exponentiatie}\label{subsectie-implementatie-miller-finale-exp}
+
+Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $e(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen
+
+De reductie op het einde van het Miller algoritme bestaat uit de exponentiatie $e(P, Q) = F^M$, met
+
+\[\begin{aligned}
+M	&= \frac{2^{4m} - 1}{l}\\
+	&= \frac{(2^{2m} + 1)(2^{2m} - 1)}{l}\\
+	&= (2^{2m} - 1)(2^m - \nu 2^{\frac{m + 1}{2}} + 1)\\
+	&= (2^{2m} - 1)(2^m + 1) + \nu(1 - 2^{2m})2^{\frac{m + 1}{2}}\\
+\end{aligned}\]
+
+De exponentiatie kan dus berekend worden als
+
+\[e(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}\]
+
+Er zal onderzocht worden hoe elk van deze termen berekend kan worden. De methode uit \cite{beuchat} wordt hier aangepast aan het gekozen extensieveld. Stel $F = U_0 + U_1y$, met $U_0, U_1 \in \mathbb{F}_{2^{2m}}$. Met $y^{2^{2m}} = y + x + 1$ is $F^{2^{2m}} = U_0 + U_1 + U_1x + U_1y$. Men vindt dus 
+
+\[\begin{aligned}
+F^{2^{2m} - 1} = V &= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
+	&= \frac{(U_0 + U_1 + U_1x + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
+%	&= \frac{U_0^2 + U_1^2 + U_1^2x + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
+	&= \frac{U_0^2 + U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
+\end{aligned}\]
+
+en
+
+\[\begin{aligned}
+F^{1 - 2^{2m}}	= W &= \frac{U_0 + U_1y}{U_0 + U_1 + U_1x + U_1y}\\
+	&= \frac{(U_0 + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
+%	&= \frac{U_0^2 + U_1^2 + + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
+	&= \frac{U_0^2 + U_1^2}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
+\end{aligned}\]
+
+Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk verder op dat de noemers van alle breuken in zowel $V$ als $W$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ten slotte zijn de tweede termen van $V$ en $W$ identiek. Er moeten in totaal dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden voor de uiteindelijke vermenigvuldiging van beide resultaten. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
+
+Het kwadraat van een element $U \in \mathbb{F}_{2^{2m}}$ is
+
+\[\begin{aligned}
+U^2	&= u_0^2 + u_1^2 x^2\\
+		&= (u_0^2 + u_1^2) + u_1^2 x\\
+\end{aligned}\]
+
+

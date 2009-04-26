@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <library>
 <manage_target braces="true" utf8="true">file:///home/anthony/thesis/latex/references.bib</manage_target>
+<library_folder monitor="true"></library_folder>
 <taglist>
 </taglist>
 <doclist>
@@ -8,6 +9,7 @@
     <filename>file:///home/anthony/thesis/references/Hankerson%20et%20Al%20-%20Software%20Implementation%20of%20Pairings.pdf</filename>
     <relative_filename>Hankerson%20et%20Al%20-%20Software%20Implementation%20of%20Pairings.pdf</relative_filename>
     <key>hankerson</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Software Implementation of Pairings</bib_title>
@@ -22,6 +24,7 @@
     <filename>file:///home/anthony/thesis/references/K%20Sakiyama%20-%20Secure%20Design%20Methodology%20and%20Implementation%20for%20Embedded%20Public-key%20Cryptosystems.pdf</filename>
     <relative_filename>K%20Sakiyama%20-%20Secure%20Design%20Methodology%20and%20Implementation%20for%20Embedded%20Public-key%20Cryptosystems.pdf</relative_filename>
     <key>sakiyama</key>
+    <notes></notes>
     <bib_type>phdthesis</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Secure Design Methodology and Implementation for Embedded Public-key Cryptosystems</bib_title>
@@ -39,6 +42,7 @@
     <filename>file:///home/anthony/thesis/references/M%20Maas%20-%20Pairing-Based%20Cryptography.pdf</filename>
     <relative_filename>M%20Maas%20-%20Pairing-Based%20Cryptography.pdf</relative_filename>
     <key>maas</key>
+    <notes></notes>
     <bib_type>mastersthesis</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Pairing-Based Cryptography</bib_title>
@@ -55,6 +59,7 @@
     <filename>file:///home/anthony/thesis/references/JP%20Deschamps%20ea.%20-%20Synthesis%20Of%20Arithmetic%20Circuits%20-%20FPGA,%20ASIC%20and%20Embedded%20Systems.pdf</filename>
     <relative_filename>JP%20Deschamps%20ea.%20-%20Synthesis%20Of%20Arithmetic%20Circuits%20-%20FPGA,%20ASIC%20and%20Embedded%20Systems.pdf</relative_filename>
     <key>synthesis-arithmetic</key>
+    <notes></notes>
     <bib_type>book</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Synthesis of arithmetic circuits: FPGA, ASIC and embedded systems</bib_title>
@@ -71,6 +76,7 @@
     <filename>file:///home/anthony/thesis/references/M%20Gagne%20-%20Applications%20of%20Bilinear%20Maps%20in%20Cryptography.pdf</filename>
     <relative_filename>M%20Gagne%20-%20Applications%20of%20Bilinear%20Maps%20in%20Cryptography.pdf</relative_filename>
     <key>gagne</key>
+    <notes></notes>
     <bib_type>mastersthesis</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Applications of Bilinear Maps in Cryptography</bib_title>
@@ -87,6 +93,7 @@
     <filename>file:///home/anthony/thesis/references/Tom%20St%20Denis%20-%20BigNum%20Math%20-%20Implementing%20Cryptographic%20Multiple%20Precision%20Arithmetic.pdf</filename>
     <relative_filename>Tom%20St%20Denis%20-%20BigNum%20Math%20-%20Implementing%20Cryptographic%20Multiple%20Precision%20Arithmetic.pdf</relative_filename>
     <key>bignum</key>
+    <notes></notes>
     <bib_type>book</bib_type>
     <bib_doi></bib_doi>
     <bib_title>BigNum Math: Implementing Cryptographic Multiple Precision Arithmetic</bib_title>
@@ -104,6 +111,7 @@
     <filename>file:///home/anthony/thesis/references/N%20Mentens%20-%20Secure%20And%20Efficient%20Corprocessor%20Design%20For%20Cryptographic%20Applications%20On%20FPGAs.pdf</filename>
     <relative_filename>N%20Mentens%20-%20Secure%20And%20Efficient%20Corprocessor%20Design%20For%20Cryptographic%20Applications%20On%20FPGAs.pdf</relative_filename>
     <key>mentens</key>
+    <notes></notes>
     <bib_type>phdthesis</bib_type>
     <bib_doi></bib_doi>
     <bib_title>Secure And Efficient Corprocessor Design for Cryptographic Applications on FPGAs</bib_title>
@@ -121,6 +129,7 @@
     <filename></filename>
     <relative_filename></relative_filename>
     <key>diffie-hellman</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>New Directions in Cryptography</bib_title>
@@ -136,6 +145,7 @@
     <filename>file:///home/anthony/thesis/references/Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</filename>
     <relative_filename>Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</relative_filename>
     <key>lee</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>A Compact Architecture for Montgomery Elliptic Curve Scalar Multiplication Processor</bib_title>
@@ -148,8 +158,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/JL.%20Beuchat%20-%20A%20Comparison%20Between%20Hardware%20Accelerators%20For%20The%20Modified%20Tate%20Pairing%20Over%20F2m%20And%20F3m.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>JL.%20Beuchat%20-%20A%20Comparison%20Between%20Hardware%20Accelerators%20For%20The%20Modified%20Tate%20Pairing%20Over%20F2m%20And%20F3m.pdf</relative_filename>
     <key>beuchat</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>JL. Beuchat - A Comparison Between Hardware Accelerators For The Modified Tate Pairing Over F2m And F3m</bib_title>
@@ -162,8 +173,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/G.%20Bertoni%20et%20al%20-%20Software%20Implementation%20of%20Tate%20Pairing%20over%20GF(2m).pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>G.%20Bertoni%20et%20al%20-%20Software%20Implementation%20of%20Tate%20Pairing%20over%20GF(2m).pdf</relative_filename>
     <key>bertoni</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>G. Bertoni et al - Software Implementation of Tate Pairing over GF(2m)</bib_title>
@@ -176,8 +188,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/D%20Bernstein%20et%20Al%20-%20Performance%20Evaluation%20Of%20A%20New%20Side-Channel-Resistant%20Coordinate%20Sytem%20For%20Elliptic%20Curves.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>D%20Bernstein%20et%20Al%20-%20Performance%20Evaluation%20Of%20A%20New%20Side-Channel-Resistant%20Coordinate%20Sytem%20For%20Elliptic%20Curves.pdf</relative_filename>
     <key>bernstein</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>D Bernstein et Al - Performance Evaluation Of A New Side-Channel-Resistant Coordinate Sytem For Elliptic Curves</bib_title>
@@ -190,8 +203,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/J.%20Huang%20-%20FPGA%20Implementations%20Of%20Elliptic%20Curve%20Cryptography%20And%20Tate%20Pairing%20Over%20Binary%20Field.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>J.%20Huang%20-%20FPGA%20Implementations%20Of%20Elliptic%20Curve%20Cryptography%20And%20Tate%20Pairing%20Over%20Binary%20Field.pdf</relative_filename>
     <key>huang</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>J. Huang - FPGA Implementations Of Elliptic Curve Cryptography And Tate Pairing Over Binary Field</bib_title>
@@ -204,8 +218,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Batina%20-%20Arithmetic%20And%20Architectures%20For%20Secure%20Hardware%20Implementations%20Of%20Public-Key%20Cryptography.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>L.%20Batina%20-%20Arithmetic%20And%20Architectures%20For%20Secure%20Hardware%20Implementations%20Of%20Public-Key%20Cryptography.pdf</relative_filename>
     <key>batina-pkc</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>L. Batina - Arithmetic And Architectures For Secure Hardware Implementations Of Public-Key Cryptography</bib_title>
@@ -218,8 +233,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/J%20Lopez%20et%20Al%20-%20Fast%20Multiplication%20on%20Elliptic%20Curves%20over%20GF2m%20without%20Precomputation.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>J%20Lopez%20et%20Al%20-%20Fast%20Multiplication%20on%20Elliptic%20Curves%20over%20GF2m%20without%20Precomputation.pdf</relative_filename>
     <key>lopez</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>J Lopez et Al - Fast Multiplication on Elliptic Curves over GF2m without Precomputation</bib_title>
@@ -232,8 +248,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Batina%20et%20Al%20-%20Low-Cost%20Elliptic%20Curve%20Cryptography%20For%20Wireless%20Sensor%20Networks.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>L.%20Batina%20et%20Al%20-%20Low-Cost%20Elliptic%20Curve%20Cryptography%20For%20Wireless%20Sensor%20Networks.pdf</relative_filename>
     <key>batina-lowcost</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>L. Batina et Al - Low-Cost Elliptic Curve Cryptography For Wireless Sensor Networks</bib_title>
@@ -246,8 +263,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</relative_filename>
     <key>oliviera-tinypbc</key>
+    <notes></notes>
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>L. Oliviera et Al - TinyPBC</bib_title>
@@ -260,8 +278,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyTate.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>L.%20Oliviera%20et%20Al%20-%20TinyTate.pdf</relative_filename>
     <key>L.Olivieraet</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>L. Oliviera et Al - TinyTate</bib_title>
@@ -275,8 +294,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Scott%20-%20Computing%20The%20Tate%20Pairing.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>M.%20Scott%20-%20Computing%20The%20Tate%20Pairing.pdf</relative_filename>
     <key>M.Scott-Com</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>M. Scott - Computing The Tate Pairing</bib_title>
@@ -290,8 +310,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Scott%20et%20Al%20-%20Implementing%20Cryptographic%20Pairings%20On%20Smartcards.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>M.%20Scott%20et%20Al%20-%20Implementing%20Cryptographic%20Pairings%20On%20Smartcards.pdf</relative_filename>
     <key>M.ScottetAl</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>M. Scott et Al - Implementing Cryptographic Pairings On Smartcards</bib_title>
@@ -305,8 +326,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Scott%20-%20Faster%20Identity%20Based%20Encryption.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>M.%20Scott%20-%20Faster%20Identity%20Based%20Encryption.pdf</relative_filename>
     <key>M.Scott-Fas</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>M. Scott - Faster Identity Based Encryption</bib_title>
@@ -320,8 +342,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Scott%20-%20Implementing%20Cryptographic%20Pairings.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>M.%20Scott%20-%20Implementing%20Cryptographic%20Pairings.pdf</relative_filename>
     <key>M.Scott-Imp</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>M. Scott - Implementing Cryptographic Pairings</bib_title>
@@ -335,8 +358,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M%20Baldwin%20-%20Identity%20Based%20Encryption%20From%20The%20Tate%20Pairing%20To%20Secure%20Email%20Communications.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>M%20Baldwin%20-%20Identity%20Based%20Encryption%20From%20The%20Tate%20Pairing%20To%20Secure%20Email%20Communications.pdf</relative_filename>
     <key>MBaldwin-Id</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>M Baldwin - Identity Based Encryption From The Tate Pairing To Secure Email Communications</bib_title>
@@ -350,8 +374,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/P.%20Barreto%20et%20Al%20-%20Efficient%20Algortihms%20For%20Pairing-Based%20Cryptosystems.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>P.%20Barreto%20et%20Al%20-%20Efficient%20Algortihms%20For%20Pairing-Based%20Cryptosystems.pdf</relative_filename>
     <key>P.Barretoet</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>P. Barreto et Al - Efficient Algortihms For Pairing-Based Cryptosystems</bib_title>
@@ -365,8 +390,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/P.%20Barreto%20et%20Al%20-%20Efficient%20Pairing%20Computation%20On%20Supersingular%20Abelian%20Varieties.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>P.%20Barreto%20et%20Al%20-%20Efficient%20Pairing%20Computation%20On%20Supersingular%20Abelian%20Varieties.pdf</relative_filename>
     <key>P.Barretoet-1</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>P. Barreto et Al - Efficient Pairing Computation On Supersingular Abelian Varieties</bib_title>
@@ -380,8 +406,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/S.%20Galbraith%20et%20Al%20-%20Implementing%20The%20Tate%20Pairing.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>S.%20Galbraith%20et%20Al%20-%20Implementing%20The%20Tate%20Pairing.pdf</relative_filename>
     <key>S.Galbraithe</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>S. Galbraith et Al - Implementing The Tate Pairing</bib_title>
@@ -395,8 +422,9 @@
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/SEC%202%20-%20Recommended%20Elliptic%20Curve%20Domain%20Parameters.pdf</filename>
-    <relative_filename></relative_filename>
+    <relative_filename>SEC%202%20-%20Recommended%20Elliptic%20Curve%20Domain%20Parameters.pdf</relative_filename>
     <key>SEC2-Recomm</key>
+    <notes></notes>
     <bib_type>Article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>SEC 2 - Recommended Elliptic Curve Domain Parameters</bib_title>
@@ -407,6 +435,21 @@
     <bib_pages></bib_pages>
     <bib_year>2000</bib_year>
     <bib_extra key="key">sec2</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>itoh</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>10.1016/0890-5401(88)90024-7</bib_doi>
+    <bib_title>A fast algorithm for computing multiplicative inverses in GF($2^m$) using normal bases</bib_title>
+    <bib_authors>Itoh, Toshiya and Tsujii, Shigeo</bib_authors>
+    <bib_journal>Information and Computation</bib_journal>
+    <bib_volume>78</bib_volume>
+    <bib_number>3</bib_number>
+    <bib_pages>171--177</bib_pages>
+    <bib_year>1988</bib_year>
   </doc>
 </doclist>
 </library>
