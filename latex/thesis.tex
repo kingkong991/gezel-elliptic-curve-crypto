@@ -14,6 +14,8 @@
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
 
+\usepackage{tocloft}		% Lijsten van willekeurige dingen
+
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}	% Algorithm typesetting
 
 \input{kmapmacros}	% Karnaugh map macros
@@ -34,6 +36,12 @@
 
 % Misc commando's
 \newcommand{\nr}{n$^{\circ}$~}
+
+% List of equations
+\newcommand{\listequationsname}{List of vergelijkingen}
+\newlistof{myequations}{equ}{\listequationsname}
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
 
 % Substring macro
 \def\substring#1#2#3{%
@@ -156,6 +164,8 @@
 
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
+
+%\listofmyequations
 
 \include{implementatie}		% Hardware implementatie
 
