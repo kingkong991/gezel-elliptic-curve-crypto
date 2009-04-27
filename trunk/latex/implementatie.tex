@@ -4,7 +4,7 @@ In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening va
 
 \section{Beperkingen}\label{sectie-implementatie-beperkingen}
 
-Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of smartcards. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is stroomverbruik, maar dat is helaas zeer moeilijk te berekenen. Het verbruik hangt echter samen met de oppervlakte, dus het beperken daarvan zal ook het verbruik ten goede komen. Het verbruik kan ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus kan dit aspect bij het ontwerp van de schakelingen genegeerd worden. Op dit alles zal dieper ingegaan worden in \refhfdst{hfdst-resultaten}
+Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of een smartcard. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is stroomverbruik, maar dat is helaas zeer moeilijk te berekenen. Het verbruik hangt echter samen met de oppervlakte, dus het beperken daarvan zal ook het verbruik ten goede komen. Het verbruik kan ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus kan dit aspect bij het ontwerp van de schakelingen genegeerd worden. Op dit alles zal dieper ingegaan worden in \refhfdst{hfdst-resultaten}
 
 Algemeen kan gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0.13 nm$ low leakage technologie. De ordening van de elementen blijft echter behouden voor andere technologi\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
 
@@ -34,7 +34,7 @@ Algemeen kan gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe 
 
 \section{Modular Arithmetic Logical Unit}\label{sectie-implementatie-malu}
 
-De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU)\cite{sakiyama}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
+De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU) \cite{sakiyama}\cite{batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
 Aangezien er in het veld $\mathbb{F}_{2^m}$ gewerkt wordt, is een optelling equivalent aan een XOR bewerking. De bewerking die moet uitgevoerd kunnen worden is:
 
@@ -78,10 +78,10 @@ In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn o
 \end{figure}
 
 Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{in}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
-\[\Delta = m - (\text{hamm}(P) - 1)\]
-XOR poorten uitgespaard, met hamm$(P)$ gelijk aan het Hamming gewicht van de binaire representatie van $P$.
+\[\Delta = m - (\textsf{Hamm}(P) - 1)\]
+XOR poorten uitgespaard, met \textsf{Hamm}$(P)$ gelijk aan het Hamming gewicht van de binaire representatie van $P$.
 
-In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\text{hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ kleiner dan de oorsponkelijke grootte).
+In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\textsf{Hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ minder dan het oorsponkelijk aantal).
 
 De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optimized}.
 
@@ -274,7 +274,6 @@ Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $
 
 %Om te achterhalen in welke volgorde de bewerkingen best worden uitgevoerd om zo weinig mogelijk tussenresultaten te moeten opslaan. Het resultaat hiervan staat in \reftbl{tabel-implementatie-miller-double}. Een gearceerde cel betekend dat de aangeduide variabele op dat moment ingelezen moet worden. Indien er voor een variabele onder een bepaald niveau geen gearceerde cellen meer staan, kan deze verwijderd worden.
 
-%\begin{minipage}[t]{10cm}
 \begin{algorithm}[h]
 	\caption{Uitwerking van de verdubbelingstap voor hyperelliptische krommen in het Miller algoritme}
 	\label{algoritme-implementatie-miller-double-detail}
@@ -289,26 +288,6 @@ Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $
 	$G_a \leftarrow G_a + y_{\phi_a}$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;
 	$G_b \leftarrow \lambda + x_{\phi_a}$\comm{1 A}\;
 \end{algorithm}
-%\end{minipage}
-%\begin{minipage}[b]{3cm}
-%	{\renewcommand{\arraystretch}{0.9}
-%	\begin{tabular}{|c|c|c|}
-%		\hline
-%		$x_V$	& $y_V$	& $\lambda$\\
-%		\hline
-%		\shadecell & \shadecell & \\
-%		& & \shadecell \\
-%		& & \\
-%		& & \shadecell \\
-%		& & \\
-%		& & \\
-%		& & \shadecell \\
-%		& & \\
-%		& & \\
-%		& & \shadecell \\
-%		\hline
-%	\end{tabular}}
-%\end{minipage}
 
 \subsubsection{Optellingstap}
 
@@ -368,7 +347,7 @@ Indien $a$ oneven is, dient volgende formule toegepast te worden:
 
 \[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a\]
 
-Uiteindelijk eindigd men dan bij $a^2$ of $a^3$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \text{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\text{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
+Uiteindelijk eindigd men dan bij $a^2$ of $a^3$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\textsf{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
 
 In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}. Het aantal berekeningen in dat geval is 9 vermenigvuldigingen en 162 kwadrateringen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
 
@@ -405,13 +384,13 @@ F^2	&= (F_a + F_b x + F_c y + F_d xy) \cdot (F_a + F_b x + F_c y + F_d xy)\\
 		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x + F_c^2 y + (F_c^2 + F_d^2)xy\\
 \end{aligned}\]
 
-Het is mogelijk dit te berekenen zonder gebruik van tijdelijke variabelen. Er zijn dus enkel registers nodig voor $F_a$, $F_b$, $F_c$ en $F_d$. Hoe dat in z'n werk gaat is te zien in \refalg{algoritme-implementatie-miller-f-square}. E\'en kwadratering van $F$ vraagt vier optellingen en vier kwadrateringen.
+Mist de originele waarde van $F$ overschreven mag worden, is het mogelijk dit te berekenen zonder gebruik van tijdelijke variabelen. Er zijn dus enkel vier registers nodig voor $F$. Hoe dat in z'n werk gaat is te zien in \refalg{algoritme-implementatie-miller-f-square}. E\'en kwadratering van $F$ vraagt vier optellingen en vier kwadrateringen in $\mathbb{F}_{2^m}$.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van de kwadratering van $F$ in het Miller algoritme}
 	\label{algoritme-implementatie-miller-f-square}
-	\KwIn{$F \in \mathbb{F}_{2^{4m}}$}
-	\KwOut{$F \in \mathbb{F}_{2^{4m}}$}
+	\KwIn{$F = F_a + F_b x + F_c y + F_d xy \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$F = F^2 \in \mathbb{F}_{2^{4m}}$}
 	$F_a \leftarrow F_a + F_c$\comm{1 A}\;
 	$F_a \leftarrow F_a^2$\comm{1 S}\;
 	$F_b \leftarrow F_b + F_d$\comm{1 A}\;
@@ -445,13 +424,15 @@ F \cdot G &= (F_a G_a + F_b G_b + F_d)\\
 				&\quad + ((F_c + F_d) \cdot (G_a + G_b) + F_c G_a + F_a + F_b + F_d)xy\\
 \end{aligned}\]
 
-Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a$, $b$ en $c$). In totaal zijn er zes vermenigvuldigingen en veertien optellingen nodig. \refalg{algoritme-implementatie-miller-fg} beschrijft hoe de berekeningen juist gedaan moeten worden. Mist het gebruik van een vierde tijdelijk register zou het mogelijk zijn de berekening $G_a + G_b$ op te slaan. Die nu zowel in lijn~\ref{lijn-implementatie-miller-fg-gagb-1} als \ref{lijn-implementatie-miller-fg-gagb-2} berekend. Er zouden dan slechts dertien optellingen moeten berekend worden, \'e\'en minder dan \cite{beuchat}, waar $y^2 + y +x$ gebruikt wordt als modulo veelterm voor het extensieveld. Aangezien een extra tijdelijk register echter tegen de doelstellingen ingaat, wordt voor de iets langere berekening gekozen.
+Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a$, $b$ en $c$). Verder zijn er vier registers nodig voor $F$ en twee voor $G$. Merk op dat de oude waarde van $F$ overschreven wordt door het resultaat. In totaal zijn er zes vermenigvuldigingen en veertien optellingen nodig. \refalg{algoritme-implementatie-miller-fg} beschrijft welke berekeningen juist uitgevoerd moeten worden.
+
+Mist het gebruik van een vierde tijdelijk register zou het mogelijk zijn de berekening $G_a + G_b$ op te slaan. Die wordt nu zowel in lijn~\ref{lijn-implementatie-miller-fg-gagb-1} als \ref{lijn-implementatie-miller-fg-gagb-2} berekend. Er zouden dan slechts dertien optellingen moeten berekend worden, \'e\'en minder dan \cite{beuchat}, waar $y^2 + y +x$ gebruikt wordt als modulo veelterm voor het extensieveld. Aangezien een extra tijdelijk register echter tegen de doelstellingen ingaat, wordt voor de iets langere berekening gekozen.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van de vermenigvuldiging $F \cdot G$ in het Miller algoritme}
 	\label{algoritme-implementatie-miller-fg}
-	\KwIn{$F, G \in \mathbb{F}_{2^{4m}}$}
-	\KwOut{$F \in \mathbb{F}_{2^{4m}}$}
+	\KwIn{$F = F_a + F_b x + F_c y + F_d xy, G = G_a + G_b x + xy \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$F = F \cdot G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
 	$a \leftarrow F_a \cdot G_a$; $a \leftarrow a + F_d$\comm{1 M, 1 A}\;
 	$b \leftarrow F_a + F_b$; $c \leftarrow G_a + G_b$\comm{2 A}\;\nllabel{lijn-implementatie-miller-fg-gagb-1}
@@ -512,9 +493,14 @@ W  &= F^{1 - 2^{2m}} = \frac{F}{F^{2^{2m}}}\\
 
 Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk verder op dat de noemers van alle breuken in zowel $V$ als $W$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ten slotte zijn de tweede termen van $V$ en $W$ identiek. Er moeten in totaal dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden voor de uiteindelijke vermenigvuldiging van beide resultaten. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
 
-\subsubsection{Noemers van de deelbreuken}
+\subsubsection{Termen van de deelbreuken}
 
-Ten eerste worden de drie te berekenen tellers $V_t$, $W_t$ en $G_t$ uitgewerkt. Hierbij staan $V_t$ en $W_t$ voor de teller van de eerste breuk van respectievelijk $V$ en $W$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk.
+Ten eerste worden de drie te berekenen tellers $V_t$, $W_t$ en $G_t$ uitgewerkt. Hierbij staan $V_t$ en $W_t$ voor de teller van de eerste breuk van respectievelijk $V$ en $W$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk. Met andere woorden:
+
+\[\begin{aligned}
+V = \frac{V_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y\\
+W = \frac{W_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y\\
+\end{aligned}\]
 
 Het kwadraat van een element $A \in \mathbb{F}_{2^{2m}}$ is
 
@@ -541,21 +527,41 @@ G_t	&= [(F_c^2 + F_d^2) + F_d^2x] + [F_d^2 + F_c^2x]\\
 		&= F_c^2 + (F_c^2 + F_d^2)x\\
 \end{aligned}\]
 
-\subsubsection{Inversie in $\mathbb{F}_{2^m}$}
-
 Voor de gemeenschappelijke noemer $G_n$ vind men:
 
 \[\begin{aligned}
 G_n	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
-		&\quad + [(F_a F_c + F_b F_d) + (F_a F_d + F_b F_c + F_b F_d)x]\\
-		&\quad + [F_a F_d + F_b F_c + F_b F_d) + (F_a F_c + F_a F_d + F_b F_c)x]\\
-		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + F_a F_c + F_a F_d + F_b F_c) + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
-		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + (F_a + F_b) \cdot (F_c + F_d) + F_b F_d) + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
+			&\quad + [(F_a F_c + F_b F_d) + (F_a F_d + F_b F_c + F_b F_d)x]\\
+			&\quad + [F_a F_d + F_b F_c + F_b F_d) + (F_a F_c + F_a F_d + F_b F_c)x]\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + F_a F_c + F_a F_d + F_b F_c)\\
+			&\quad + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + (F_a + F_b) \cdot (F_c + F_d) + F_b F_d)\\
+			&\quad + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
 \end{aligned}\]
 
-Vervolgens moet de inverse van $G_n$ berekend worden. Hiertoe dient een inversie in $\mathbb{F}_{2^{2m}}$ berekend te worden\cite{beuchat}.
+Een algoritme om deze vier resultaten uit te rekenen is te zien in \refalg{algoritme-implementatie-miller-final-noemers}. Er zijn vier registers nodig voor $F$ en acht voor $V_t$, $W_t$, $G_t$ en $G_n$. Tevens moet er nog \'e\'en tijdelijk register voorzien worden voor $a$. De uitkomsten kunnen bepaald worden na twaalf optellingen, drie vermenigvuldigingen en vier kwadrateringen.
 
-Stel $A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$ met multiplicatieve inverse $B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$. Volgens de definitie is $A \cdot B = 1$, met andere woorden:
+\begin{algorithm}[h]
+	\caption{Uitwerking van berekening van noemers voor de finale exponentiate in het Miller algoritme}
+	\label{algoritme-implementatie-miller-final-noemers}
+	\KwIn{$F = F_a + F_b x + F_c y + F_d xy \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$V_t = V_{t_a} + V_{t_b} x, W_t = W_{t_a} + W_{t_b} x, G_t = G_{t_a} + G_{t_b} x$, \mbox{$G_n = G_{n_a} + G_{n_b} x$} $\in \mathbb{F}_{2^{2m}}$}
+	\KwData{$a \in \mathbb{F}_{2^m}$}
+	$V_{t_a} \leftarrow F_a^2$; $V_{t_b} \leftarrow F_b^2$; $G_{t_a} \leftarrow F_c^2$; $G_{t_b} \leftarrow F_d^2$\comm{4 S}\;
+	$V_{t_a} \leftarrow V_{t_a} + V_{t_b}$; $W_{t_b} \leftarrow V_{t_b} + G_{t_b}$\comm{2 A}\;
+	$G_{t_b} \leftarrow V_{t_b} + G_{t_b}$; $W_{t_a} \leftarrow V_{t_a} + G_{t_b}$\comm{2 A}\;
+	$V_{t_a} \leftarrow V_{t_a} + G_{t_a}$; $V_{t_b} \leftarrow V_{t_b} + G_{t_b}$\comm{2 A}\;
+	$G_{n_a} \leftarrow F_a + F_b$; $G_{n_b} \leftarrow T_a \cdot T_c$\comm{1 M, 1 A}\;
+	$a \leftarrow F_c + F_d$; $G_{n_a} \leftarrow G_{n_a} \cdot a$; $a \leftarrow F_b \cdot F_d$\comm{2 M, 1 A}\;
+	$G_{n_a} \leftarrow G_{n_a} + a$; $G_{n_b} \leftarrow G_{n_b} + a$\comm{2 A}\;
+	$G_{n_a} \leftarrow G_{n_a} + W_{t_a}$; $G_{n_b} \leftarrow G_{n_b} + W_{t_b}$\comm{2 A}\;
+\end{algorithm}
+
+\subsubsection{Inversie in $\mathbb{F}_{2^m}$}
+
+Vervolgens moet de inverse van $G_n$ berekend worden, wat een inversie in $\mathbb{F}_{2^{2m}}$ is \cite{beuchat}.
+
+Stel $A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$ met multiplicatieve inverse $B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$. Volgens de definitie is $A \cdot B = 1$. Gegeven $x^2 = x + 1$, geldt dus de vergelijkingen:
 
 \[\left\{\begin{array}{l}
 A_a B_a + A_b B_b = 1\\
@@ -569,11 +575,11 @@ B_a	&= w^{-1} \cdot (A_a + A_b)\\
 B_b	&= w^{-1} \cdot A_b\\
 \end{aligned}\]
 
-met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ kan dus berekend worden via een inversie in $\mathbb{F}_{2^m}$. Uitgewerkt geeft dit \refalg{algoritme-implementatie-miller-inverse-f2m}. De inversie kost in totaal drie vermenigvuldigingen, \'e\'en kwadratering, twee optellingen en \'e\'en inversie in $\mathbb{F}_{2^m}$. Er zijn twee registers nodig om $B$ in op te slaan en drie tijdelijke registers voor $a$, $b$ en $c$.
+met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ kan dus berekend worden via een inversie in $\mathbb{F}_{2^m}$. Uitgewerkt geeft dit \refalg{algoritme-implementatie-miller-f2m-inverse}, waarbij de oorspronkelijk $A$ wordt overschreven door zijn inverse. Het algoritme kost in totaal drie vermenigvuldigingen, \'e\'en kwadratering, twee optellingen en \'e\'en inversie in $\mathbb{F}_{2^m}$. Er zijn twee registers nodig om $A$ in op te slaan en drie tijdelijke registers voor $a$, $b$ en $c$.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van multiplicatieve inversie in $\mathbb{F}_{2^{2m}}$}
-	\label{algoritme-implementatie-miller-inverse-f2m}
+	\label{algoritme-implementatie-miller-f2m-inverse}
 	\KwIn{$A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$}
 	\KwOut{$B = A^{-1} = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
 	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
@@ -581,4 +587,30 @@ met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ k
 	$c \leftarrow a \cdot A_b$; $c \leftarrow c + b$\comm{1 M, 1 A}\;
 	$c \leftarrow c^{-1}$\comm{1 I}\;
 	$B_a \leftarrow a \cdot c$; $B_b \leftarrow A_b \cdot c$\comm{2 M}\;
+\end{algorithm}
+
+\subsubsection{Berekening van $V$ en $W$}
+
+Gewapend met al deze waarden is het mogelijk $V = V_0 + V_1 y$ en $W = W_0 + W_1 y$ te berekenen. In totaal zijn hier zes vermenigvuldigingen in $\mathbb{F}_{2^m}$ nodig. 
+
+Stel $A = A_a + A_b x, B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$, de vermenigvuldiging kan dan geschreven worden als:
+
+\[\begin{aligned}
+C	&= (A_a + A_b x) + (B_a + B_b x)\\
+	&= (A_a B_a + A_b B_b) + (A_a B_b + A_b B_a + A_b B_b)x\\
+	&= (A_a B_a + A_b B_b) + \bigl( (A_a + A_b) \cdot (B_a + B_b) + A_a B_a \bigr) x\\
+\end{aligned}\]
+
+In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n$ vermenigvuldigd te worden. Vooropgesteld dat de tellers na vermenigvuldiging met $G_n$ niet meer nodig zijn en dus overschreven mogen worden, kan \refalg{algoritme-implementatie-miller-f2m-mult} gebruikt worden. Er zijn dan zes registers nodig voor de uitkomsten, twee voor $G_n$ en twee tijdelijke register voor $a$ en $b$. De vermenigvuldiging in $\mathbb{F}_{2^{2m}}$ kan berekend worden in drie vermenigvuldigingen en vier optellingen.
+
+\begin{algorithm}[h]
+	\caption{Uitwerking van vermenigvuldiging in $\mathbb{F}_{2^{2m}}$}
+	\label{algoritme-implementatie-miller-f2m-mult}
+	\KwIn{$A = A_a + A_b x, B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
+	\KwOut{$A = A \cdot B \in \mathbb{F}_{2^{2m}}$}
+	\KwData{$a, b \in \mathbb{F}_{2^m}$}
+	$a \leftarrow A_b \cdot B_b$; $b \leftarrow A_a + A_b$\comm{1 M, 1 A}\;
+	$A_a \leftarrow A_a \cdot B_a$; $A_b \leftarrow B_a + B_b$\comm{1 M, 1 A}\;
+	$A_b \leftarrow A_b \cdot b$\comm{1 M}\;
+	$A_b \leftarrow A_a + A_b$; $A_a \leftarrow A_a + a$\comm{2 A}\;
 \end{algorithm}
