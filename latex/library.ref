@@ -436,6 +436,37 @@
     <bib_year>2000</bib_year>
     <bib_extra key="key">sec2</bib_extra>
   </doc>
+<<<<<<< .mine
+  <doc>
+    <filename>file:///home/anthony/thesis/references/0.13nm%20Standard%20Cell%20Databook.pdf</filename>
+    <relative_filename></relative_filename>
+    <key>0.13nmStandar</key>
+    <bib_type>Article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>0.13nm Standard Cell Databook</bib_title>
+    <bib_authors></bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2004</bib_year>
+    <bib_extra key="key">cell-databook</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/M.%20Mueller%20et%20Al%20-%20The%20Impact%20Of%20Clock%20Gating%20Schemes%20On%20The%20Power%20Dissipation%20Of%20Synthesizable%20Register%20Files</filename>
+    <relative_filename></relative_filename>
+    <key>mueller</key>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>The Impact of Clock Gating Schemes On The Power Dissipation Of Synthesizable Register Files</bib_title>
+    <bib_authors>M. Mueller and A. Wortmann and S. Simon and M. Kugel and T. Schoenauer</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2004</bib_year>
+  </doc>
+=======
   <doc>
     <filename></filename>
     <relative_filename></relative_filename>
@@ -451,5 +482,6 @@
     <bib_pages>171--177</bib_pages>
     <bib_year>1988</bib_year>
   </doc>
+>>>>>>> .r149
 </doclist>
 </library>
