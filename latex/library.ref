@@ -32,9 +32,8 @@
     <bib_number></bib_number>
     <bib_pages></bib_pages>
     <bib_year>2007</bib_year>
-    <bib_extra key="address">Kasteelpark Arenberg 10, 3001 Heverlee</bib_extra>
     <bib_extra key="month">december</bib_extra>
-    <bib_extra key="school">Katholieke Universiteit Leuven</bib_extra>
+    <bib_extra key="school">KU Leuven</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M%20Maas%20-%20Pairing-Based%20Cryptography.pdf</filename>
@@ -151,29 +150,41 @@
     <filename>file:///home/anthony/thesis/references/JL.%20Beuchat%20-%20A%20Comparison%20Between%20Hardware%20Accelerators%20For%20The%20Modified%20Tate%20Pairing%20Over%20F2m%20And%20F3m.pdf</filename>
     <relative_filename>JL.%20Beuchat%20-%20A%20Comparison%20Between%20Hardware%20Accelerators%20For%20The%20Modified%20Tate%20Pairing%20Over%20F2m%20And%20F3m.pdf</relative_filename>
     <key>beuchat</key>
-    <bib_type>article</bib_type>
-    <bib_doi></bib_doi>
-    <bib_title>JL. Beuchat - A Comparison Between Hardware Accelerators For The Modified Tate Pairing Over F2m And F3m</bib_title>
-    <bib_authors></bib_authors>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>http://dx.doi.org/10.1007/978-3-540-85538-5_20</bib_doi>
+    <bib_title>A Comparison Between Hardware Accelerators for the Modified Tate Pairing over  $\mathbb{F}^{2^m}$ and $\mathbb{F}^{3^m}$</bib_title>
+    <bib_authors>Beuchat, Jean-Luc and Brisebarre, Nicolas and Detrey, Jérémie and Okamoto, Eiji and Rodríguez-Henríquez, Francisco</bib_authors>
     <bib_journal></bib_journal>
-    <bib_volume></bib_volume>
+    <bib_volume>5209</bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
+    <bib_pages>297-315</bib_pages>
     <bib_year>2008</bib_year>
+    <bib_extra key="booktitle">Lecture Notes in Computer Science</bib_extra>
+    <bib_extra key="Date">2008-09-01</bib_extra>
+    <bib_extra key="Ee">http://dx.doi.org/10.1007/978-3-540-85538-5_20</bib_extra>
+    <bib_extra key="Interhash">93c88e9f14c8be79815b386d0987e520</bib_extra>
+    <bib_extra key="Intrahash">d62aa9722bc9e333af694470560da301</bib_extra>
+    <bib_extra key="Isbn">978-3-540-85503-3</bib_extra>
+    <bib_extra key="publisher">Springer</bib_extra>
+    <bib_extra key="Url">http://dblp.uni-trier.de/db/conf/pairing/pairing2008.html#BeuchatBDOR08</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/G.%20Bertoni%20et%20al%20-%20Software%20Implementation%20of%20Tate%20Pairing%20over%20GF(2m).pdf</filename>
     <relative_filename>G.%20Bertoni%20et%20al%20-%20Software%20Implementation%20of%20Tate%20Pairing%20over%20GF(2m).pdf</relative_filename>
     <key>bertoni</key>
-    <bib_type>article</bib_type>
+    <bib_type>inproceedings</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>G. Bertoni et al - Software Implementation of Tate Pairing over GF(2m)</bib_title>
-    <bib_authors></bib_authors>
+    <bib_title>Software implementation of Tate pairing over GF(2m)</bib_title>
+    <bib_authors>Bertoni, G. and Breveglieri, L. and Fragneto, P. and Pelosi, G. and Sportiello, L.</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
-    <bib_year>2004</bib_year>
+    <bib_pages>7-11</bib_pages>
+    <bib_year>2006</bib_year>
+    <bib_extra key="booktitle">DATE ’06: Proceedings of the conference on Design, automation and test in Europe</bib_extra>
+    <bib_extra key="Isbn">3-9810801-0-6</bib_extra>
+    <bib_extra key="Location">Munich, Germany</bib_extra>
+    <bib_extra key="publisher">European Design and Automation Association</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/D%20Bernstein%20et%20Al%20-%20Performance%20Evaluation%20Of%20A%20New%20Side-Channel-Resistant%20Coordinate%20Sytem%20For%20Elliptic%20Curves.pdf</filename>
@@ -182,7 +193,7 @@
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>D Bernstein et Al - Performance Evaluation Of A New Side-Channel-Resistant Coordinate Sytem For Elliptic Curves</bib_title>
-    <bib_authors></bib_authors>
+    <bib_authors>Bernstein, Daniel and Lange, Tanja</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
@@ -207,15 +218,16 @@
     <filename>file:///home/anthony/thesis/references/L.%20Batina%20-%20Arithmetic%20And%20Architectures%20For%20Secure%20Hardware%20Implementations%20Of%20Public-Key%20Cryptography.pdf</filename>
     <relative_filename>L.%20Batina%20-%20Arithmetic%20And%20Architectures%20For%20Secure%20Hardware%20Implementations%20Of%20Public-Key%20Cryptography.pdf</relative_filename>
     <key>batina-pkc</key>
-    <bib_type>article</bib_type>
+    <bib_type>phdthesis</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>L. Batina - Arithmetic And Architectures For Secure Hardware Implementations Of Public-Key Cryptography</bib_title>
-    <bib_authors></bib_authors>
+    <bib_title>Arithmetic And Architectures For Secure Hardware Implementations Of Public-Key Cryptography</bib_title>
+    <bib_authors>Batina, Lejla</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
     <bib_pages></bib_pages>
     <bib_year>2005</bib_year>
+    <bib_extra key="school">KU Leuven</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/J%20Lopez%20et%20Al%20-%20Fast%20Multiplication%20on%20Elliptic%20Curves%20over%20GF2m%20without%20Precomputation.pdf</filename>
@@ -236,14 +248,22 @@
     <relative_filename>L.%20Batina%20et%20Al%20-%20Low-Cost%20Elliptic%20Curve%20Cryptography%20For%20Wireless%20Sensor%20Networks.pdf</relative_filename>
     <key>batina-lowcost</key>
     <bib_type>article</bib_type>
-    <bib_doi></bib_doi>
-    <bib_title>L. Batina et Al - Low-Cost Elliptic Curve Cryptography For Wireless Sensor Networks</bib_title>
-    <bib_authors></bib_authors>
-    <bib_journal></bib_journal>
-    <bib_volume></bib_volume>
+    <bib_doi>http://dx.doi.org/10.1007/11964254_3</bib_doi>
+    <bib_title>Low-Cost Elliptic Curve Cryptography for Wireless Sensor Networks</bib_title>
+    <bib_authors>Batina, Lejla and Mentens, Nele and Sakiyama, Kazuo and Preneel, Bart and Verbauwhede, Ingrid</bib_authors>
+    <bib_journal>Security and Privacy in Ad-Hoc and Sensor Networks</bib_journal>
+    <bib_volume>4357</bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
+    <bib_pages>6-17</bib_pages>
     <bib_year>2006</bib_year>
+    <bib_extra key="Abstract">This work describes a low-cost Public-Key Cryptography (PKC) based solution for security services such as key-distribution and authentication as required for wireless sensor networks. We propose a custom hardware assisted approach to implement Elliptic Curve Cryptography (ECC) in order to obtain stronger cryptography as well as to minimize the power. Our compact and low-power ECC processor contains a Modular Arithmetic Logic Unit (MALU) for ECC field arithmetic. The best solution features 6718 gates for the MALU and control unit (data memory not included) in 0.13 Œºm CMOS technology over the field</bib_extra>
+    <bib_extra key="booktitle">Third European Workshop Security and Privacy in Ad Hoc and Sensor Networks (ESAS &apos;06)</bib_extra>
+    <bib_extra key="Citeulike-article-id">4001338</bib_extra>
+    <bib_extra key="Doi">http://dx.doi.org/10.1007/11964254\_3</bib_extra>
+    <bib_extra key="Keywords">cryptography, curve, elliptic, embedded, security</bib_extra>
+    <bib_extra key="Posted-at">2009-02-03 16:16:40</bib_extra>
+    <bib_extra key="Priority">0</bib_extra>
+    <bib_extra key="Url">http://dx.doi.org/http://dx.doi.org/10.1007/11964254\_3</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</filename>
@@ -413,15 +433,16 @@
     <filename>file:///home/anthony/thesis/references/0.13nm%20Standard%20Cell%20Databook.pdf</filename>
     <relative_filename>0.13nm%20Standard%20Cell%20Databook.pdf</relative_filename>
     <key>cell-databook</key>
-    <bib_type>article</bib_type>
+    <bib_type>book</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>0.13nm Standard Cell Databook</bib_title>
+    <bib_title>0.13 $\mu$m Platinum Standard Cell Databook</bib_title>
     <bib_authors></bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
     <bib_pages></bib_pages>
     <bib_year>2004</bib_year>
+    <bib_extra key="publisher">Faraday</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Mueller%20et%20Al%20-%20The%20Impact%20Of%20Clock%20Gating%20Schemes%20On%20The%20Power%20Dissipation%20Of%20Synthesizable%20Register%20Files</filename>
