@@ -454,12 +454,12 @@ Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a
 	\KwOut{$F \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
 	$a \leftarrow F_a \cdot G_a$; $a \leftarrow a + F_d$\comm{1 M, 1 A}\;
-	$b \leftarrow F_a + F_b$; $c \leftarrow G_a + G_b$\comm{2 A}\;
+	$b \leftarrow F_a + F_b$; $c \leftarrow G_a + G_b$\comm{2 A}\;\nllabel{lijn-implementatie-miller-fg-gagb-1}
 	$b \leftarrow b \cdot c$; $b \leftarrow b + a$; $b \leftarrow b + F_c$\comm{1 M, 2 A}\;
 	$c \leftarrow F_b \cdot G_b$; $a \leftarrow a + c$\comm{1 M, 1 A}\;
 	$c \leftarrow F_c \cdot G_a$;	$c \leftarrow c + F_b$\comm{1 M, 1 A}\;
 	$F_b \leftarrow b$; $b \leftarrow c$\;
-	$c \leftarrow F_c + F_d$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;
+	$c \leftarrow F_c + F_d$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;\nllabel{lijn-implementatie-miller-fg-gagb-2}
 	$c \leftarrow c \cdot G_a$; $c \leftarrow c + b$; $c \leftarrow c + F_a$\comm{1 M, 2 A}\;
 	$F_a \leftarrow a$\;
 	$c \leftarrow c + F_d$; $b \leftarrow b + F_c$; $a \leftarrow F_d \cdot G_b$\comm{1 M, 2 A}\;
@@ -468,7 +468,7 @@ Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a
 
 \subsection{Finale exponentiatie}\label{subsectie-implementatie-miller-finale-exp}
 
-Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $e(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen
+Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $e(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen.
 
 De reductie op het einde van het Miller algoritme bestaat uit de exponentiatie $e(P, Q) = F^M$, met
 
@@ -483,10 +483,18 @@ De exponentiatie kan dus berekend worden als
 
 \[e(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}\]
 
-Er zal onderzocht worden hoe elk van deze termen berekend kan worden. De methode uit \cite{beuchat} wordt hier aangepast aan het gekozen extensieveld. Stel $F = U_0 + U_1y$, met $U_0, U_1 \in \mathbb{F}_{2^{2m}}$. Met $y^{2^{2m}} = y + x + 1$ is $F^{2^{2m}} = U_0 + U_1 + U_1x + U_1y$. Men vindt dus 
+Er zal onderzocht worden hoe elk van deze termen berekend kan worden. De methode uit \cite{beuchat} wordt hier aangepast aan het gekozen extensieveld. Stel
 
 \[\begin{aligned}
-F^{2^{2m} - 1} = V &= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
+F	&= (F_a + F_b x) + (F_c + F_d x)y\\
+	&= U_0 + U_1y,\\
+\end{aligned}\]
+
+met $U_0, U_1 \in \mathbb{F}_{2^{2m}}$. Met $y^{2^{2m}} = y + x + 1$ is $F^{2^{2m}} = U_0 + U_1 + U_1x + U_1y$. Men vindt dus 
+
+\[\begin{aligned}
+V  &= F^{1 - 2^{2m}} = \frac{F^{2^{2m}}}{F}\\
+	&= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
 	&= \frac{(U_0 + U_1 + U_1x + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
 %	&= \frac{U_0^2 + U_1^2 + U_1^2x + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
 	&= \frac{U_0^2 + U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
@@ -495,7 +503,8 @@ F^{2^{2m} - 1} = V &= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
 en
 
 \[\begin{aligned}
-F^{1 - 2^{2m}}	= W &= \frac{U_0 + U_1y}{U_0 + U_1 + U_1x + U_1y}\\
+W  &= F^{1 - 2^{2m}} = \frac{F}{F^{2^{2m}}}\\
+	&= \frac{U_0 + U_1y}{U_0 + U_1 + U_1x + U_1y}\\
 	&= \frac{(U_0 + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
 %	&= \frac{U_0^2 + U_1^2 + + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
 	&= \frac{U_0^2 + U_1^2}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
@@ -503,11 +512,73 @@ F^{1 - 2^{2m}}	= W &= \frac{U_0 + U_1y}{U_0 + U_1 + U_1x + U_1y}\\
 
 Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk verder op dat de noemers van alle breuken in zowel $V$ als $W$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ten slotte zijn de tweede termen van $V$ en $W$ identiek. Er moeten in totaal dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden voor de uiteindelijke vermenigvuldiging van beide resultaten. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
 
-Het kwadraat van een element $U \in \mathbb{F}_{2^{2m}}$ is
+\subsubsection{Noemers van de deelbreuken}
+
+Ten eerste worden de drie te berekenen tellers $V_t$, $W_t$ en $G_t$ uitgewerkt. Hierbij staan $V_t$ en $W_t$ voor de teller van de eerste breuk van respectievelijk $V$ en $W$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk.
+
+Het kwadraat van een element $A \in \mathbb{F}_{2^{2m}}$ is
 
 \[\begin{aligned}
-U^2	&= u_0^2 + u_1^2 x^2\\
-		&= (u_0^2 + u_1^2) + u_1^2 x\\
+A^2	&= a_0^2 + a_1^2 x^2\\
+		&= (a_0^2 + a_1^2) + a_1^2 x\\
 \end{aligned}\]
 
+en de vermenigvuldiging van $A, B \in \mathbb{F}_{2^{2m}}$:
 
+\[\begin{aligned}
+A \cdot B	&= a_0 b_0 + a_0 b_1 x + a_1 b_0 x + a_1 b_1 x^2\\
+				&= (a_0 b_0 + a_1 b_1) + (a_0 b_1 + a_1 b_0 + a_1 b_1)x\\
+\end{aligned}\]
+
+Zodoende bekomt men:
+
+\[\begin{aligned}
+V_t	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x] + [F_d^2 + F_c^2x]\\
+		&= (F_a^2 + F_b^2 + F_c^2) + (F_b^2 + F_c^2 + F_d^2)x\\
+W_t	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x\\
+G_t	&= [(F_c^2 + F_d^2) + F_d^2x] + [F_d^2 + F_c^2x]\\
+		&= F_c^2 + (F_c^2 + F_d^2)x\\
+\end{aligned}\]
+
+\subsubsection{Inversie in $\mathbb{F}_{2^m}$}
+
+Voor de gemeenschappelijke noemer $G_n$ vind men:
+
+\[\begin{aligned}
+G_n	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
+		&\quad + [(F_a F_c + F_b F_d) + (F_a F_d + F_b F_c + F_b F_d)x]\\
+		&\quad + [F_a F_d + F_b F_c + F_b F_d) + (F_a F_c + F_a F_d + F_b F_c)x]\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + F_a F_c + F_a F_d + F_b F_c) + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + (F_a + F_b) \cdot (F_c + F_d) + F_b F_d) + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
+\end{aligned}\]
+
+Vervolgens moet de inverse van $G_n$ berekend worden. Hiertoe dient een inversie in $\mathbb{F}_{2^{2m}}$ berekend te worden\cite{beuchat}.
+
+Stel $A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$ met multiplicatieve inverse $B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$. Volgens de definitie is $A \cdot B = 1$, met andere woorden:
+
+\[\left\{\begin{array}{l}
+A_a B_a + A_b B_b = 1\\
+A_a B_b + A_b B_a + B_b A_a = 0\\
+\end{array}\right.\]
+
+De oplossing van dit stelsel is
+
+\[\begin{aligned}
+B_a	&= w^{-1} \cdot (A_a + A_b)\\
+B_b	&= w^{-1} \cdot A_b\\
+\end{aligned}\]
+
+met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ kan dus berekend worden via een inversie in $\mathbb{F}_{2^m}$. Uitgewerkt geeft dit \refalg{algoritme-implementatie-miller-inverse-f2m}. De inversie kost in totaal drie vermenigvuldigingen, \'e\'en kwadratering, twee optellingen en \'e\'en inversie in $\mathbb{F}_{2^m}$. Er zijn twee registers nodig om $B$ in op te slaan en drie tijdelijke registers voor $a$, $b$ en $c$.
+
+\begin{algorithm}[h]
+	\caption{Uitwerking van multiplicatieve inversie in $\mathbb{F}_{2^{2m}}$}
+	\label{algoritme-implementatie-miller-inverse-f2m}
+	\KwIn{$A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$}
+	\KwOut{$B = A^{-1} = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
+	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
+	$a \leftarrow A_a + A_b$; $b \leftarrow A_a^2$\comm{1 S, 1 A}\;
+	$c \leftarrow a \cdot A_b$; $c \leftarrow c + b$\comm{1 M, 1 A}\;
+	$c \leftarrow c^{-1}$\comm{1 I}\;
+	$B_a \leftarrow a \cdot c$; $B_b \leftarrow A_b \cdot c$\comm{2 M}\;
+\end{algorithm}
