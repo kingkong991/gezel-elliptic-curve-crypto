@@ -15,7 +15,7 @@
 }
 
 \matrix [column sep=1.5mm, row sep=1.5mm] {
-	\node[labeltextin] {T$_i$}; \node[labelboxin] (i1) {}; &
+	\node[labeltextin] {$T$}; \node[labelboxin] (i1) {}; &
 	&[1mm]
 	\node[joint, xshift=-0.18cm/2] (j1) {}; &
 	\node[joint, xshift=-0.18cm/2] (j2) {}; &
@@ -24,7 +24,7 @@
 	\node[dots] (e1) {$\ldots$}; &
 	\node[nothing, xshift=-0.18cm/2] (j5) {}; \\
 
-	\node[labeltextin] {A$_i$B}; \node[labelboxin] (i2) {}; &
+	\node[labeltextin] {$B$}; \node[labelboxin] (i2) {}; &
 	&
 	\node[joint, xshift=0.18cm/2] (j6) {}; &
 	\node[joint, xshift=0.18cm/2] (j7) {}; &
@@ -42,7 +42,7 @@
 	\node (e3) {}; &
 	\node[xor] (x5) {}; \\[-1mm]
 
-	\node[labeltextin] {m$_i$P}; \node[labelboxin] (i3) {}; &
+	\node[labeltextin] {$P_{\text{in}}$}; \node[labelboxin] (i3) {}; &
 	&
 	\node[joint, xshift=0.18cm] (j11) {}; &
 	\node[joint, xshift=0.18cm] (j12) {}; &
@@ -68,7 +68,7 @@
 	\node[nothing, xshift=4mm] (e10) {}; &
 	\node[dots] (e11) {$\ldots$}; &
 	&[4mm]
-	\node[labeltextout] {m$_{i+1}$}; \node[labelboxout] (o1) {}; \\
+	\node[labeltextout] {$mod_{\text{u}}$}; \node[labelboxout] (o1) {}; \\
 
 	&
 	\node[nothing, xshift=0.5cm] (j16)	{}; &
@@ -78,7 +78,7 @@
 	\node[joint, xshift=0.8cm] (j20) {}; &
 	\node[dots] (e12) {$\ldots$}; &
 	\node[joint, xshift=-0.5cm] (j21) {}; &
-	\node[labeltextout] {T$_{i+1}$}; \node[labelboxout] (o2) {}; \\
+	\node[labeltextout] {$R$}; \node[labelboxout] (o2) {}; \\
 };
 
 \path[-] (i1.east) edge [multibit, line cap=rect] (j1.base)
