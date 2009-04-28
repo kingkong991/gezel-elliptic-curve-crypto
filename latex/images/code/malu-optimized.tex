@@ -15,7 +15,7 @@
 
 \begin{tikzpicture}
 \matrix [column sep=1.5mm, row sep=1.5mm] {
-	\node[labeltextin] {T$_i$}; \node[labelboxin] (i1) {}; &
+	\node[labeltextin] {$T$}; \node[labelboxin] (i1) {}; &
 	&[1mm]
 	\node[joint, xshift=-0.18cm/2] (j1) {}; &
 	\node[joint, xshift=-0.18cm/2] (j2) {}; &
@@ -24,7 +24,7 @@
 	\node[dots] (e1) {$\ldots$}; &
 	\node[nothing, xshift=-0.18cm/2] (j5) {}; \\
 
-	\node[labeltextin] {A$_i$B}; \node[labelboxin] (i2) {}; &
+	\node[labeltextin] {$B$}; \node[labelboxin] (i2) {}; &
 	&
 	\node[joint, xshift=0.18cm/2] (j6) {}; &
 	\node[joint, xshift=0.18cm/2] (j7) {}; &
@@ -42,7 +42,7 @@
 	\node (e3) {}; &
 	\node[xor] (x5) {}; \\[-1mm]
 
-	\node[labeltextin] {m$_i$}; \node[labelboxin] (i3) {}; &
+	\node[labeltextin] {$mod_{\text{e}}$}; \node[labelboxin] (i3) {}; &
 	&
 	\node[joint, xshift=0.18cm] (j11) {}; &
 	&
@@ -58,7 +58,8 @@
 	&
 	\node[xor, yshift=-0.18cm/2] (x9) {}; &
 	\node (e5) {}; &
-	\node[xor, yshift=-0.18cm/2] (x10) {}; \\[-2mm]
+	%\node[xor, yshift=-0.18cm/2] (x10) {}; \\[-2mm]
+	\node (e6) {}; \\[-2mm]
 
 	\node[nothing, xshift=4mm] (i4) {}; &
 	\node[nothing, xshift=4mm] (e6) {}; &
@@ -68,7 +69,7 @@
 	\node[nothing, xshift=4mm] (e10) {}; &
 	\node[dots] (e11) {$\ldots$}; &
 	&[4mm]
-	\node[labeltextout] {m$_{i+1}$}; \node[labelboxout] (o1) {}; \\
+	\node[labeltextout] {$mod_{\text{u}}$}; \node[labelboxout] (o1) {}; \\
 
 	&
 	\node[nothing, xshift=0.5cm] (j16)	{}; &
@@ -78,7 +79,7 @@
 	\node[joint, xshift=0.8cm] (j20) {}; &
 	\node[dots] (e12) {$\ldots$}; &
 	\node[joint, xshift=-0.5cm] (j21) {}; &
-	\node[labeltextout] {T$_{i+1}$}; \node[labelboxout] (o2) {}; \\
+	\node[labeltextout] {$R$}; \node[labelboxout] (o2) {}; \\
 };
 
 \path[-] (i1.east) edge [multibit, line cap=rect] (j1.base)
@@ -113,7 +114,7 @@
 			(i3.east) edge [bit, line cap=rect] (j11.base)
 			(j11.base) edge [bit] (j14.base)
 			(j14.base) edge [bit] (e4)
-			(e4) edge [bit] (j15.base)
+			%(e4) edge [bit] (j15.base)
 
 			(x1.output) edge [bit] (x6.input 1)
 			(j11.base) edge [bit] (x6.input 2)
@@ -121,8 +122,8 @@
 			(x4.output) edge [bit] (x9.input 1)
 			(j14.base) edge [bit] (x9.input 2)
 
-			(x5.output) edge [bit] (x10.input 1)
-			(j15.base) edge [bit] (x10.input 2)
+			%(x5.output) edge [bit] (x10.input 1)
+			%(j15.base) edge [bit] (x10.input 2)
 
 			(j16.west) edge [multibit] (j17.base)
 			(j17.base) edge [multibit] (j18.base)
@@ -139,7 +140,7 @@
 			}
 
 			(e11) -| (j21)
-			(x10.output) |- (o1.west);
+			(x5.output) |- (o1.west);
 
 % Draw rectangle
 \draw[multibit, color=black!50] ($(j1.north west) + (-7mm, 3mm)$) rectangle ($(o2.south west) + (-3mm, 0)$);
