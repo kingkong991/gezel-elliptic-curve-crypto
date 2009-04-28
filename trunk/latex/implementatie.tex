@@ -43,7 +43,7 @@ T + B	&= T \xor B\\
 		&= R \mod P
 \end{aligned}\]
 
-Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn aan die van $T$ en $B$. Indien $B$ van graad $\leq m$ is en $T$ van graad $\leq m + 1$, is de modulo bewerking te implementeren als in \refalg{algoritme-implementatie-malu-modulo}.
+Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn aan die van $T$ en $B$. Indien $B$ van graad $\leq m$ is en $T$ van graad $\leq m + 1$, is de optelling te implementeren als in \refalg{algoritme-implementatie-malu-modulo}.
 
 \begin{algorithm}[h]
 \caption{Modulo optelling in $\mathbb{F}_{2^m}$}
@@ -59,16 +59,7 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 	}
 \end{algorithm}
 
-Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic-noshift}. Ingang $P_{\text{in}}$ dient afhankelijk van $T_{m}$ ingesteld te worden op $0$ of $P$. $P_{m}$ kan genegeerd worden, aangezien in het resultaat de graad $< m$ is.
-
-\begin{figure}[h]
-	\begin{center}
-		\includegraphics[width=12cm]{malu-basic-noshift}
-		\figcaption{MALU - Basis ontwerp}\label{figuur-implementatie-malu-basic-noshift}
-	\end{center}
-\end{figure}
-
-In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Indien die bewerking wordt toegevoegd, bekomt men de schakeling uit \reffig{figuur-implementatie-malu-basic}. Net als de vorige implementatie bestaat deze uit $2m$ XOR poorten.
+In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
 
 \begin{figure}[h]
 	\begin{center}
@@ -77,7 +68,7 @@ In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn o
 	\end{center}
 \end{figure}
 
-Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{in}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
+Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang $P$ en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{e}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
 \[\Delta = m - (\textsf{Hamm}(P) - 1)\]
 XOR poorten uitgespaard, met \textsf{Hamm}$(P)$ gelijk aan het Hamming gewicht van de binaire representatie van $P$.
 
@@ -103,8 +94,8 @@ Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A 
 \begin{algorithm}[h]
 \caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}
 \label{algoritme-implementatie-gf2m-multiply}
-	\KwIn{$A, B \in \mathbb{F}_{2^m}/[P]$}
-	\KwOut{$R \in \mathbb{F}_{2^m}/[P]$}
+	\KwIn{$A, B \in \mathbb{F}_{2^m}$}
+	\KwOut{$R \in \mathbb{F}_{2^m}$}
 	\KwData{$T \in \mathbb{F}_{2^{m + 1}}$}
 	\SetKwFunction{Degree}{Degree}
 
@@ -126,7 +117,7 @@ Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A 
 	$R \leftarrow T \gg 1$\;
 \end{algorithm}
 
-Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, is het noodzakelijk een onderscheid te kunnen maken tussen beide bewerkingen. Ook moet kunnen aangegeven worden wanneer de berekening klaar is. Ten slotte moet het resultaat opgeslagen kunnen worden, zodat de uitgang van de schakeling correct blijft. Omdat in het Miller algoritme verscheidene keren de som $R + 1$ moet berekend worden, wordt ook een ingang $plus\_one$ voorzien. De uiteindelijke schakeling is te zien in \reffig{figuur-implementatie-wrapper-gf2m}. Het register $cycle$ is $\log _2 (m)$ bits groot en $T$ is $m$ bits. De waarde van $F_m$ wordt opgeslagen in register $mod$. Alle overige registers zijn 1 bit groot.
+Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, is het noodzakelijk een onderscheid te kunnen maken tussen beide bewerkingen. Ook moet kunnen aangegeven worden wanneer de berekening klaar is. Ten slotte moet het resultaat opgeslagen kunnen worden, zodat de uitgang van de schakeling correct blijft. Omdat in het Miller algoritme verscheidene keren de som $R + 1$ moet berekend worden, wordt ook een ingang $plus\_one$ voorzien. De uiteindelijke schakeling, zonder logica, is te zien in \reffig{figuur-implementatie-wrapper-gf2m}. Het register $cycle$ is $\log _2 (m)$ bits groot en $T$ is $m$ bits. De waarde van $F_m$ wordt opgeslagen in register $mod$. Alle overige registers zijn 1 bit groot.
 
 \begin{figure}[h]
 	\begin{center}
@@ -135,7 +126,7 @@ Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, i
 	\end{center}
 \end{figure}
 
-Gezien de eenvoud van de schakeling is het niet nodig een FSM te implementeren, de besturing kan volledig via logica gebeuren. Die logica wordt getoond in \reffig{figuur-implementatie-wrapper-gf2m-logica}.
+Gezien de eenvoud van de schakeling is het niet nodig een FSM te implementeren, de besturing kan volledig via logica gebeuren. Die wordt getoond in \reffig{figuur-implementatie-wrapper-gf2m-logica}.
 
 \begin{figure}[h]
 	\begin{center}
