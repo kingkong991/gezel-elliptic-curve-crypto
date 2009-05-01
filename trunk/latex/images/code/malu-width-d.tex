@@ -1,6 +1,6 @@
 \tikzset {
 	xor/.style={draw, xor gate US, logic gate inputs=nn, rotate=90, xscale=-1, line width=0.6pt},
-	labelbox/.style={draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, chamfered rectangle angle=55, chamfered rectangle xsep=2cm, chamfered rectangle ysep=14pt/2, minimum height=14pt, minimum width=1.7cm, text width=1.6cm, inner sep=0pt, text ragged},
+	labelbox/.style={draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, chamfered rectangle angle=55, chamfered rectangle xsep=2cm, chamfered rectangle ysep=14pt/2, minimum height=14pt, minimum width=1.7cm, text width=1.5cm, inner sep=0pt, text ragged},
 	labelboxin/.style={labelbox, anchor=base},
 	labelboxout/.style={labelbox, anchor=west},
 	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.15cm, fill, circle},
@@ -15,7 +15,7 @@
 
 \begin{tikzpicture}
 \matrix [column sep=1.5mm, row sep=1.5mm] {
-	\node[labeltextin] {T$_i$}; \node[labelboxin] (i1) {}; &
+	\node[labeltextin] {$T$}; \node[labelboxin] (i1) {}; &
 	&[1mm]
 	\node[joint, xshift=-0.18cm/2] (j1) {}; &
 	\node[joint, xshift=-0.18cm/2] (j2) {}; &
@@ -23,10 +23,10 @@
 	\node[joint, xshift=-0.18cm/2] (j4) {}; &
 	\node[dots] (e1) {$\ldots$}; &
 	\node[nothing, xshift=-0.18cm/2] (j5) {}; 
-	&[4mm];
-	\node[nothing, xshift=2cm] (a1) {}; \\
+	&[6mm]
+	\node[nothing, xshift=23mm] (a1) {}; \\
 
-	\node[labeltextin] {A$_i$B}; \node[labelboxin] (i2) {}; &
+	\node[labeltextin] {$B_{\text{in}_0}$}; \node[labelboxin] (i2) {}; &
 	&
 	\node[joint, xshift=0.18cm/2] (j6) {}; &
 	\node[joint, xshift=0.18cm/2] (j7) {}; &
@@ -44,7 +44,7 @@
 	\node (e3) {}; &
 	\node[xor] (x5) {}; \\[-1mm]
 
-	\node[labeltextin] {m$_i$}; \node[labelboxin] (i3) {}; &
+	\node[labeltextin] {$mod_{\text{reg}}$}; \node[labelboxin] (i3) {}; &
 	&
 	\node[joint, xshift=0.18cm] (j11) {}; &
 	&
@@ -59,8 +59,7 @@
 	&
 	&
 	\node[xor, yshift=-0.18cm/2] (x9) {}; &
-	\node (e5) {}; &
-	\node[xor, yshift=-0.18cm/2] (x10) {}; \\[-2mm]
+	\node (e5) {}; \\[-2mm]
 
 	\node[nothing, xshift=4mm] (i4) {}; &
 	\node[nothing, xshift=4mm] (e6) {}; &
@@ -70,7 +69,7 @@
 	\node[nothing, xshift=4mm] (e10) {}; &
 	\node[dots] (e11) {$\ldots$}; &
 	&[4mm]
-	\node[labeltextout] {m$_{i+1}$}; \node[labelboxout] (o1) {}; \\[1mm]
+	\node[labeltextout] {$mod_{\text{u}_1}$}; \node[labelboxout] (o1) {}; \\[1mm]
 
 	&
 	\node[nothing, xshift=0.5cm] (j16)	{}; &
@@ -105,7 +104,7 @@
 	\node[dots] (e2-1) {$\ldots$}; &
 	\node[nothing, xshift=-0.18cm/2] (j2-5) {}; \\
 
-	\node[labeltextin] {A$_{i+d-1}$B}; \node[labelboxin] (i2-2) {}; &
+	\node[labeltextin] {$B_{\text{in}_{d-1}}$}; \node[labelboxin] (i2-2) {}; &
 	&
 	\node[joint, xshift=0.18cm/2] (j2-6) {}; &
 	\node[joint, xshift=0.18cm/2] (j2-7) {}; &
@@ -123,7 +122,7 @@
 	\node (e2-3) {}; &
 	\node[xor] (x2-5) {}; \\[-1mm]
 
-	\node[labeltextin] {m$_{i+d-1}$}; \node[labelboxin] (i2-3) {}; &
+	\node[labeltextin] {$mod_{\text{u}_{d-1}}$}; \node[labelboxin] (i2-3) {}; &
 	&
 	\node[joint, xshift=0.18cm] (j2-11) {}; &
 	&
@@ -138,8 +137,7 @@
 	&
 	&
 	\node[xor, yshift=-0.18cm/2] (x2-9) {}; &
-	\node (e2-5) {}; &
-	\node[xor, yshift=-0.18cm/2] (x2-10) {}; \\[-2mm]
+	\node (e2-5) {}; \\[-2mm]
 
 	\node[nothing, xshift=4mm] (i2-4) {}; &
 	\node[nothing, xshift=4mm] (e2-6) {}; &
@@ -149,7 +147,7 @@
 	\node[nothing, xshift=4mm] (e2-10) {}; &
 	\node[dots] (e2-11) {$\ldots$}; &
 	&[4mm]
-	\node[labeltextout] {m$_{i+d}$}; \node[labelboxout] (o2-1) {}; \\
+	\node[labeltextout] {$mod_{\text{u}_d}$}; \node[labelboxout] (o2-1) {}; \\
 
 	&
 	\node[nothing, xshift=0.5cm] (j2-16)	{}; &
@@ -159,8 +157,8 @@
 	\node[joint, xshift=0.8cm] (j2-20) {}; &
 	\node[dots] (e2-12) {$\ldots$}; &
 	\node[joint, xshift=-0.5cm] (j2-21) {}; &
-	\node[labeltextout] {T$_{i+d}$}; \node[labelboxout] (o2-2) {}; 
-	\node[nothing, xshift=2cm] (a2) {}; \\
+	\node[labeltextout] {$R_d$}; \node[labelboxout] (o2-2) {}; 
+	\node[nothing, xshift=23mm] (a2) {}; \\
 };
 
 \path[-] (i1.east) edge [multibit, line cap=rect] (j1.base)
@@ -195,7 +193,7 @@
 			(i3.east) edge [bit, line cap=rect] (j11.base)
 			(j11.base) edge [bit] (j14.base)
 			(j14.base) edge [bit] (e4)
-			(e4) edge [bit] (j15.base)
+			%(e4) edge [bit] (j15.base)
 
 			(x1.output) edge [bit] (x6.input 1)
 			(j11.base) edge [bit] (x6.input 2)
@@ -203,9 +201,6 @@
 			(x4.output) edge [bit] (x9.input 1)
 			(j14.base) edge [bit] (x9.input 2)
 
-			(x5.output) edge [bit] (x10.input 1)
-			(j15.base) edge [bit] (x10.input 2)
-			
 			(i2-2.east) edge [multibit, line cap=rect] (j2-6.base)
 			(j2-6.base) edge [multibit] (j2-7.base)
 			(j2-7.base) edge [multibit] (j2-8.base)
@@ -231,16 +226,13 @@
 			(i2-3.east) edge [bit, line cap=rect] (j2-11.base)
 			(j2-11.base) edge [bit] (j2-14.base)
 			(j2-14.base) edge [bit] (e2-4)
-			(e2-4) edge [bit] (j2-15.base)
+			%(e2-4) edge [bit] (j2-15.base)
 
 			(x2-1.output) edge [bit] (x2-6.input 1)
 			(j2-11.base) edge [bit] (x2-6.input 2)
 
 			(x2-4.output) edge [bit] (x2-9.input 1)
 			(j2-14.base) edge [bit] (x2-9.input 2)
-
-			(x2-5.output) edge [bit] (x2-10.input 1)
-			(j2-15.base) edge [bit] (x2-10.input 2)
 
 			(j2-16.west) edge [multibit] (j2-17.base)
 			(j2-17.base) edge [multibit] (j2-18.base)
@@ -257,7 +249,7 @@
 			}
 
 			(e11) -| (j21)
-			(x10.output) |- (o1.west)
+			(x5.output) |- (o1.west)
 			
 			(i2-4.south east) node [above] {\large $0$} -| (j2-16.base)
 			
@@ -266,7 +258,7 @@
 			}
 
 			(e2-11) -| (j2-21)
-			(x2-10.output) |- (o2-1.west)
+			(x2-5.output) |- (o2-1.west)
 			
 			(j22) |- (j2-1)
 			(j23) |- (j2-2)
@@ -275,7 +267,7 @@
 			(j26) |- (e2-1)
 			(j27) |- (j2-5);
 			
-\draw [latex-latex, very thick]	(a1) -- node[xshift=3mm] {$d$} (a2);
+\draw [latex'-latex', very thick] (a1) -- node[xshift=3mm] {$d$} (a2);
 
 % Draw rectangle
 \draw[multibit, color=black!50] ($(j1.north west) + (-7mm, 3mm)$) rectangle ($(o1.south west) + (-3mm, 0)$);

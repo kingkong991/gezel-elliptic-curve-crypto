@@ -2,18 +2,11 @@
 	and/.style={draw, and gate US, logic gate inputs=nn, thick, scale=0.8},
 	or/.style={draw, or gate US, logic gate inputs=nn, thick, scale=0.8},
 	xor/.style={draw, xor gate US, logic gate inputs=nn, line width=0.6pt, scale=0.8},
+	not/.style={draw, not gate US, line width=0.6pt, scale=1.0},
+	buffer/.style={draw, buffer gate US, line width=0.6pt, scale=1.0},
 	equal/.style={draw, minimum height=5mm, minimum width=8mm, thick, scale=0.8},	
 	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.10cm, fill, circle},
 	bit/.style={thick, line cap=butt},
-	multibit/.style={line width=2pt},
-	labeltext/.style={text ragged},
-	labeltextin/.style={labeltext, anchor=west, xshift=-6mm},
-	labeltextout/.style={labeltext, anchor=west, xshift=0mm},
-	labeltextreg/.style={labeltext, text centered},
-	labelbox/.style={draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, chamfered rectangle angle=55, chamfered rectangle xsep=2cm, chamfered rectangle ysep=14pt/2, minimum height=14pt, minimum width=1.2cm, text width=1cm, inner sep=0pt, outer sep=0pt, text ragged},
-	labelboxin/.style={labelbox, anchor=base, xshift=0.8mm},
-	labelboxout/.style={labelbox, anchor=west},
-	labelboxreg/.style={draw, minimum height=14pt, minimum width=2cm, outer sep=0pt},
 	empty/.style={},
 	emptyraised/.style={empty, yshift=1mm},
 	emptylowered/.style={empty, yshift=-1mm},
@@ -26,79 +19,153 @@
 
 \begin{tikzpicture}
 %\draw[help lines] (-3,-3) grid (2,2);
-\matrix [column sep=5mm, row sep=1.5mm] {
-	\node[emptyraised] (e1) {}; &
+\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (0,0) {
+	\node[emptyraised] (e1) {}; &[8mm]
 	&
 	&
-	\node[and, logic gate inputs=in] (and1) {};\\
+	\node[and, logic gate inputs=in] (and1) {}; &[8mm]
+	\node[empty] (o1) {}; \\
 	
-	\node[emptyraised] (e2) {}; &
 	&
-	\node[or, logic gate inputs=in] (or1) {};\\
+	&
+	\node[or, logic gate inputs=in] (or1) {}; \\
 	
-	\node[empty] (e3) {}; &
-	\node[equal] (equal1) {$= m - 2$};\\
+	&
+	\node[equal] (equal1) {$= m - 2$}; \\
 	
 	\\[5mm]
 	
-	\node[empty] (e4) {}; \\
+	\node[empty] (e2) {}; \\
 	
-	\node[emptylowered] (e5) {}; &
+	&
 	\node[and] (and2) {}; &
 	\node[or, yshift=-5mm] (or2) {}; \\[-2mm]
 	
-	\node[emptylowered] (e6) {}; &
-	\node[and, logic gate inputs=in] (and3) {};\\
+	&
+	\node[and, logic gate inputs=in] (and3) {}; \\
 	
 	\\[5mm]
 	
-	\node[empty] (e7) {}; \\
+	\node[empty] (e3) {}; \\
 	
-	\node[emptylowered] (e8) {}; &
+	&
 	\node[and] (and4) {}; &
 	\node[or, yshift=-5mm] (or3) {}; \\[-2mm]
 	
-	\node[emptylowered] (e9) {}; &
+	&
 	\node[and, logic gate inputs=in] (and5) {};\\
 	
 	\\[5mm]
 	
-	\node[emptyraised] (e10) {}; &
+	&
 	&
 	\node[and, logic gate inputs=in] (and6) {};\\
 	
-	\node[emptyraised] (e11) {}; &
+	&
 	\node[or, logic gate inputs=in] (or4) {};\\
 	
-	\node[empty] (e12) {}; \\
+	\node[empty] (e4) {}; \\
 };
 
 \draw [bit] (or1.output) -| ($(or1.output)!0.5!(and1.input 2)$) |- (and1.input 2)
 		(equal1.east) -| ($(equal1.east)!0.5!(or1.input 2)$) |- (or1.input 2)
-		(and1.input 1 -| -3,0) -- node[input] {start} (and1.input 1)
-		(or1.input 1 -| -3,0) -- node[input] {mode$_{\text{reg}}$} (or1.input 1)
-		(equal1.west -| -3,0) -- node[input] {cycle$_{\text{reg}}$} (equal1.west)
-		(and1.output) [outputline] -- node[output] {ready} (and1.output -| 3.5, 0);
+		(and1.input 1 -| e1.base) -- node[input] {start} (and1.input 1)
+		(or1.input 1 -| e1.base) -- node[input] {mode$_{\text{reg}}$} (or1.input 1)
+		(equal1.west -| e1.base) -- node[input] {cycle$_{\text{reg}}$} (equal1.west)
+		(and1.output) [outputline] -- node[output] {ready} (and1.output -| o1.base);
 		
 \draw [bit] (and2.output) -| ($(and2.output)!0.5!(or2.input 1)$) |- (or2.input 1)
 		(and3.output) -| ($(and3.output)!0.5!(or2.input 2)$) |- (or2.input 2)
-		(e4 -| -3, 0) -| node[input] {start} ($(and2.input 1) - (2.5mm, 0)$) |- (and2.input 1)
+		(e2.base) -| node[input] {start} ($(and2.input 1) - (2.5mm, 0)$) |- (and2.input 1)
 		($(and2.input 1) - (2.5mm, 0)$) |- node[joint, at start] {} (and3.input 1)
-		(and2.input 2 -| -3, 0) -- node[input] {mode} (and2.input 2)
-		(and3.input 2 -| -3, 0) -- node[input] {mode$_{\text{reg}}$} (and3.input 2)
-		(or2.output) [outputline] -- node[output] {mode$_{\text{reg}}$} (or2.output -| 3.5, 0);
+		(and2.input 2 -| e1.base) -- node[input] {mode} (and2.input 2)
+		(and3.input 2 -| e1.base) -- node[input] {mode$_{\text{reg}}$} (and3.input 2)
+		(or2.output) [outputline] -- node[output] {mode$_{\text{reg}}$} (or2.output -| o1.base);
 		
 \draw [bit] (and4.output) -| ($(and4.output)!0.5!(or3.input 1)$) |- (or3.input 1)
 		(and5.output) -| ($(and5.output)!0.5!(or3.input 2)$) |- (or3.input 2)
-		(e7 -| -3, 0) -| node[input] {start} ($(and4.input 1) - (2.5mm, 0)$) |- (and4.input 1)
+		(e3.base) -| node[input] {start} ($(and4.input 1) - (2.5mm, 0)$) |- (and4.input 1)
 		($(and4.input 1) - (2.5mm, 0)$) |- node[joint, at start] {} (and5.input 1)
-		(and4.input 2 -| -3, 0) -- node[input] {plus\_1} (and4.input 2)
-		(and5.input 2 -| -3, 0) -- node[input] {plus\_1$_{\text{reg}}$} (and5.input 2)
-		(or3.output) [outputline] -- node[output] {plus\_1$_{\text{reg}}$} (or3.output -| 3.5, 0);
+		(and4.input 2 -| e1.base) -- node[input] {plus\_1} (and4.input 2)
+		(and5.input 2 -| e1.base) -- node[input] {plus\_1$_{\text{reg}}$} (and5.input 2)
+		(or3.output) [outputline] -- node[output] {plus\_1$_{\text{reg}}$} (or3.output -| o1.base);
 		
 \draw [bit] (or4.output) -| ($(or4.output)!0.5!(and6.input 2)$) |- (and6.input 2)
-		(and6.input 1 -| -3, 0) -| node[input] {ready$_{i - 1}$} (and6.input 1)
-		(or4.input 1 -| -3, 0) -- node[input] {mode$_{\text{reg}}$} (or4.input 1)
-		(e12 -| -3, 0) -| node[input] {A$_{m-1}$} ($(or4.input 2) - (2.5mm, 0)$) |- (or4.input 2)
-		(and6.output) [outputline] -- node[output] {B$_{\text{and}}$} (and6.output -| 3.5, 0);
+		(and6.input 1 -| e1.base) -| node[input] {ready$_{i - 1}$} (and6.input 1)
+		(or4.input 1 -| e1.base) -- node[input] {mode$_{\text{reg}}$} (or4.input 1)
+		(e4.base) -| node[input] {A$_{m-1}$} ($(or4.input 2) - (2.5mm, 0)$) |- (or4.input 2)
+		(and6.output) [outputline] -- node[output] {B$_{\text{and}}$} (and6.output -| o1.base);
+
+\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (8, 0) {
+	\node[emptyraised] (e5) {}; &[8mm]
+	\node[or] (or5) {}; &\\[-2mm]
+	
+	\node[empty] (e6) {}; &
+	&
+	\node[and, logic gate inputs=in] (and7) {}; &[10mm]
+	\node[empty] (o2) {}; \\
+	
+	\node[empty] (e7) {}; \\
+	
+	\\[9mm]
+
+	&
+	\node[buffer] (buf1) {}; \\
+
+	\\[2.5mm]
+
+	&
+	\node[buffer] (buf2) {}; \\
+
+	\\[9mm]
+	
+	&
+	\node[and, logic gate inputs=ni] (and8) {}; \\[-2mm]
+	
+	\node[empty] (e8) {}; &
+	&
+	\node[or] (or6) {}; \\
+	
+	\node[empty] (e9) {}; \\
+
+	\\[2.5mm]
+
+	&
+	\node[not] (not1) {}; \\
+
+	\\[2.5mm]
+
+	\node[empty] (e10) {}; &
+	\node[and, yshift=-5mm] (and9) {}; \\[-1mm]
+
+	\node[empty] (e11) {}; \\
+};
+
+\draw [bit] (or5.input 1 -| e5.base) -- node[input] {start} (or5.input 1)
+		(e6.base) -| node[input] {ready} ($(or5.input 2) - (2.5mm, 0)$) |- (or5.input 2)
+		(e7.base) -- node[input] {mod$_{\text{u}}$} (e7.base -| or5.output) -| ($(e7.base -| or5.output)!0.5!(and7.input 1)$) |- (and7.input 2)
+		(or5.output) -| ($(or5.output)!0.5!(and7.input 1)$) |- (and7.input 1)
+		(and7.output) [outputline] -- node[output] {mod$_{\text{reg}}$} (and7.output -| o2.base);
+
+\draw [bit] (and8.input 1 -| e5.base) -- node[input] {start} (and8.input 1)
+		(e8.base) -| node[input] {mode} ($(and8.input 2) - (2.5mm, 0)$) |- (and8.input 2)
+		(e9.base) -- node[input] {ready} (e9.base -| and8.output) -| ($(e9.base -| and8.output)!0.5!(or6.input 1)$) |- (or6.input 2)
+		(and8.output) -| ($(and8.output)!0.5!(or6.input 1)$) |- (or6.input 1)
+		(or6.output) [outputline] -- node[output] {s$_{2a}$} (or6.output -| o2.base);
+
+\draw [bit] (not1.west -| e5.base) -- node[input] {start} (not1.west)
+		(not1.output) [outputline] -- node[output] {s$_{2b}$} (not1.output -| o2.base);
+
+\draw [bit] (e10.base) -| node[input] {start} ($(and9.input 1) - (2.5mm, 0)$) |- (and9.input 1)
+		(e11.base) -| node[input] {mode} ($(and9.input 2) - (2.5mm, 0)$) |- (and9.input 2)
+		(and9.output) [outputline] -- node[output] {F$_{\text{reset}}$} (and9.output -| o2.base);
+
+\draw [bit] (buf1.west -| e5.base) -- node[input] {ready} (buf1.west)
+		(buf1.output) [outputline] -- node[output] {s$_1$} (buf1.output -| o2.base);
+
+\draw [bit] (buf2.west -| e5.base) -- node[input] {start} (buf2.west)
+		(buf2.output) [outputline] -- node[output] {cycle$_{\text{reset}}$} (buf2.output -| o2.base);
+
+% Vertical line
+\draw [bit] (7.5,0 |- e1.base) -- (7.5,-9 |- e11.base);
 \end{tikzpicture}
