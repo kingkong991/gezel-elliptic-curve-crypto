@@ -65,8 +65,8 @@
 	\labelboxout{o1}{out}{};\\
 
 	\labelboxin{i4}{B}{yshift=-1mm}; &
-	\node[logic, xshift=-7mm, yshift=6mm] (l1) {};
-	\node[and, yshift=0mm, xshift=0mm] (a1) {};&
+	\node[logic, xshift=-9mm, yshift=6mm] (l1) {};
+	\node[and, yshift=0mm, xshift=-3mm] (a1) {};&
 	\boxmalucore{mcore}; 
 	\node[joint, xshift=19.1mm, yshift=-3.1mm] (j4) {}; &
 	\node[joint, xshift=8.1mm, yshift=3.1mm] (j5) {};
@@ -86,7 +86,6 @@
 			(i3.east) edge [multibit, line cap=rect] (j1.base)
 			(i4.east) edge [multibit, line cap=rect] ($(i4.east)!0.5!($(a1.south west) + (0, 1.5mm)$)$)
 			($(i4.east)!0.5!($(a1.south west) + (0, 1.5mm)$)$) edge [multibit, line cap=butt] ($(a1.south west) + (0, 1.5mm)$)
-			(a1.east) edge [multibit] (mcore.west)
 			(r4.east) edge [multibit] (j2.base)
 			(j2.base) edge [multibit] (m2.north)
 			(j2.base) edge [multibit] (j7.base)
@@ -97,7 +96,8 @@
 \draw		[multibit] (j1.base) -| ($(m2.south east) + (-1mm, 0)$)
 			(r4.west) -| ($(mcore.north west) + (-4mm, 0)$) |- ($(mcore.north west) + (0, -4mm)$)
 			($(mcore.north east) + (0, -4mm)$) -| ($(m2.south west) + (6mm, 0)$) |- ($(m2.south west) + (1mm, 2mm)$) |- ($(m2.south west) + (1mm, 0)$)
-			($(j5.base) + (3mm, 0)$) |-  node[near end, above] {$\gg 1$} ($(m2.south) + (0, 4mm)$) |- ($(m2.south) + (0, 0)$);
+			($(j5.base) + (3mm, 0)$) |-  node[near end, above] {$\gg 1$} ($(m2.south) + (0, 4mm)$) |- ($(m2.south) + (0, 0)$)
+			(a1.east) -- node [above, near start, yshift=-0.7mm, xshift=1mm] {B$_{\text{in}}$} (mcore.west);
 
 \draw		[bit] %(m1.north) |- ($(a1.north west) + (0, -1.5mm)$)
 			%(m1.south) -- node[at end, above] {0} ($(m1.south) + (0, 3mm)$)
@@ -108,7 +108,8 @@
 			(j7.base) |- ($(x1.south west) + (0.5mm, 1mm)$)
 			(x1.east) -| (j8.base)
 			%($(m1.east) - (8mm, 0mm)$) -- node[near start, above, yshift=-0.7mm] {ctrl$_1$} (m1.east)
-			($(m2.east) - (8mm, 0mm)$) -- node[near start, above, yshift=-0.7mm] {sel} (m2.east);
+			($(m2.east) - (5mm, 0mm)$) -- node[near start, above, yshift=-0.7mm] {s$_2$} (m2.east)
+			(m1.west) -- node[xshift=-1.7mm] {s$_1$} ($(m1.west) - (0, 3mm)$);
 
 \draw		[line width=1.2pt] (r7.east) -- ($(r7.east) + (2mm, 0)$) |- (add.east)
 			(r7.west) -- ($(r7.west) - (2mm, 0)$) |- (m1.north)
