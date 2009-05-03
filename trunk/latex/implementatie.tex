@@ -466,7 +466,7 @@ F	&= (F_a + F_b x) + (F_c + F_d x)y\\
 met $U_0, U_1 \in \mathbb{F}_{2^{2m}}$. Met $y^{2^{2m}} = y + x + 1$ is $F^{2^{2m}} = U_0 + U_1 + U_1x + U_1y$. Men vindt dus 
 
 \[\begin{aligned}
-V  &= F^{1 - 2^{2m}} = \frac{F^{2^{2m}}}{F}\\
+V  &= F^{2^{2m} - 1} = \frac{F^{2^{2m}}}{F}\\
 	&= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
 	&= \frac{(U_0 + U_1 + U_1x + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
 %	&= \frac{U_0^2 + U_1^2 + U_1^2x + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
@@ -583,7 +583,7 @@ met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ k
 
 \subsubsection{Berekening van $V$ en $W$}
 
-Gewapend met al deze waarden is het mogelijk $V = V_0 + V_1 y$ en $W = W_0 + W_1 y$ te berekenen. In totaal zijn hier zes vermenigvuldigingen in $\mathbb{F}_{2^m}$ nodig. 
+Gewapend met al deze waarden is het mogelijk $V = V_0 + V_1 y$ en $W = W_0 + W_1 y$ te berekenen. In totaal zijn hier zes vermenigvuldigingen in $\mathbb{F}_{2^{2m}}$ nodig. 
 
 Stel $A = A_a + A_b x, B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$, de vermenigvuldiging kan dan geschreven worden als:
 
@@ -593,7 +593,7 @@ C	&= (A_a + A_b x) + (B_a + B_b x)\\
 	&= (A_a B_a + A_b B_b) + \bigl( (A_a + A_b) \cdot (B_a + B_b) + A_a B_a \bigr) x\\
 \end{aligned}\]
 
-In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n$ vermenigvuldigd te worden. Vooropgesteld dat de tellers na vermenigvuldiging met $G_n$ niet meer nodig zijn en dus overschreven mogen worden, kan \refalg{algoritme-implementatie-miller-f2m-mult} gebruikt worden. Er zijn dan zes registers nodig voor de uitkomsten, twee voor $G_n$ en twee tijdelijke register voor $a$ en $b$. De vermenigvuldiging in $\mathbb{F}_{2^{2m}}$ kan berekend worden in drie vermenigvuldigingen en vier optellingen.
+In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd te worden. Vooropgesteld dat de tellers na vermenigvuldiging met $G_n$ niet meer nodig zijn en dus overschreven mogen worden, kan \refalg{algoritme-implementatie-miller-f2m-mult} gebruikt worden. Er zijn dan zes registers nodig voor de uitkomsten, twee voor $G_n^{-1}$ en twee tijdelijke register voor $a$ en $b$. De vermenigvuldiging in $\mathbb{F}_{2^{2m}}$ kan berekend worden in drie vermenigvuldigingen en vier optellingen.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van vermenigvuldiging in $\mathbb{F}_{2^{2m}}$}
@@ -605,4 +605,78 @@ In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n$ vermenigvuldigd te wo
 	$A_a \leftarrow A_a \cdot B_a$; $A_b \leftarrow B_a + B_b$\comm{1 M, 1 A}\;
 	$A_b \leftarrow A_b \cdot b$\comm{1 M}\;
 	$A_b \leftarrow A_a + A_b$; $A_a \leftarrow A_a + a$\comm{2 A}\;
+\end{algorithm}
+
+\subsection{Berekening van $V^{2^m + 1}$}
+
+Nu $V$ en $W$ bekend zijn, moeten ze beiden tot de correcte macht verheven worden. Voor $V$ is dat $2^m + 1$, wat simpelweg mogelijk zou zijn door $V^{2^m}$ te berekenen en dit resultaat te vermenigvuldigen met $V$. Dit zou, zoals verderop zal gezien worden, negen vermenigvuldigingen en twee\"entwintig optellingen kosten. Er is echter een snellere manier. Uitgaande van volgende gelijkheden:
+
+\[\begin{aligned}
+x^{2^m}	&= 1 + x\\
+y^{2^m}	&= 1 + x + y + xy\\
+(xy)^{2^m}	&= x + xy\\
+\end{aligned}\]
+
+en met $V = V_a + V_b x + V_c y + V_d xy$, vindt men:
+
+\[V^{2^m} = (V_a + V_b + V_c) + (V_b + V_c + V_d) x + V_c y + (V_c + V_d) xy\]
+
+Vervolgens vermenigvuldigd men dit met $V$, wat resulteert in $V^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
+
+\[\begin{aligned}
+r_a	&= (V_a + V_b + V_c) \cdot V_a + (V_b + V_c + V_d) \cdot V_b + V_c^2 + (V_c + V_d) \cdot V_d\\
+r_b	&= (V_a + V_b + V_c) \cdot V_b + (V_b + V_c + V_d) \cdot V_a + (V_b + V_c + V_d) \cdot V_b\\
+		&\quad + V_c V_d + (V_c + V_d) \cdot V_c + (V_c + V_d) \cdot V_d\\
+r_c	&= (V_a + V_b + V_c) \cdot V_c + (V_b + V_c + V_d) \cdot V-d + V_a V_c + V_c^2 + V_c V_d\\
+		&\quad + (V_c + V_d) \cdot V_b + (V_c + V_d) \cdot V_c\\
+r_d	&= (V_a + V_b + V_c) \cdot V_d + (V_b + V_c + V_d) \cdot V_c + (V_b + V_c + V_d) \cdot V_d\\
+		&\quad + V_b V_c + V_c^2 + (V_c + V_d) \cdot V_a + (V_c + V_d) \cdot V_b + (V_c + V_d) \cdot V_d\\
+\end{aligned}\]
+
+Dit kan vereenvoudigd worden tot:
+
+\[\begin{aligned}
+r_a	&= V_a^2 + V_a V_b + V_a V_c + V_b^2 + V_b V_c + V_b V_d + V_c^2 + V_c V_d + V_d^2\\
+r_b	&= V_a V_c + V_a V_d + V_b V_d + V_c V_d + V_c^2 + V_d^2\\
+r_c	&= V_c^2 + V_c V_d + V_d^2\\
+r_d	&= V_a V_c + V_b V_c + V_b V_d\\
+\end{aligned}\]
+
+Voor de toepassing van de Karatsuba techniek worden de volgende tussenresultaten uitgerekend:
+
+\[\begin{aligned}
+m_0	&= (V_a + V_b) \cdot (V_c + V_d)
+			&\quad m_1	&= V_a V_b\\
+m_2	&= V_a V_d
+			&m_3	&= V_b V_c\\
+m_4	&= V_c V_d\\
+s_0	&= (V_a + V_b)^2
+			&s_1	&= (V_c + V_d)^2\\
+\end{aligned}\]
+
+Aan de hand van deze waarden kan het uiteindelijke resultaat berekend worden:
+
+\[\begin{aligned}
+V^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
+				&\quad + (m_0 + m_3 + m_4 + s_1) x \\
+				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy\\
+\end{aligned}\]
+
+Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang variable, $V$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en zeven voor tussenresultaten. De totale kost komt uit op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
+
+\begin{algorithm}[h]
+	\caption{Uitwerking $V^{2^m + 1}$ in $\mathbb{F}_{2^{4m}}$}
+	\label{algoritme-implementatie-miller-v-power}
+	\KwIn{$V = V_a + V_b x + V_c y + V_d xy \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$V = V^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
+	\KwData{$a, b, \ldots, g \in \mathbb{F}_{2^m}$}
+	$m_3 \leftarrow V_a \cdot V_b$; $m_0' \leftarrow V_a + V_b$\comm{1 M, 1 A}\;
+	$s_1 \leftarrow m_0'^2$; $m_2 \leftarrow V_a \cdot V_d$\comm{1 M, 1 S}\;
+	$m_4 \leftarrow V_b \cdot V_c$; $m_0'' \leftarrow V_c + V_d$\comm{1 M, 1 A}\;
+	$s_0 \leftarrow m_0''^2$; $m_0 \leftarrow m_0' \cdot m_0''$\comm{1 M, 1 S}\;
+	$m_1 \leftarrow V_c \cdot V_d$\comm{1 M}\;
+	$V_c \leftarrow m_1 + s_0$; $r_a' \leftarrow V_c + m_0$\comm{2 A}\;
+	$V_b \leftarrow r_a' + m_4$; $V_d \leftarrow m_0 + m_2$\comm{2 A}\;
+	$r_a'' \leftarrow m_2 + s_1$; $r_a' \leftarrow r_a' + r_a''$\comm{2 A}\;
+	$V_a \leftarrow r_a' + m_3$\comm{1 A}\;
 \end{algorithm}
