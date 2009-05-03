@@ -95,7 +95,7 @@ Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A 
 \caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}
 \label{algoritme-implementatie-gf2m-multiply}
 	\KwIn{$A, B \in \mathbb{F}_{2^m}$}
-	\KwOut{$R \in \mathbb{F}_{2^m}$}
+	\KwOut{$R = A \cdot B \in \mathbb{F}_{2^m}$}
 	\KwData{$T \in \mathbb{F}_{2^{m + 1}}$}
 	\SetKwFunction{Degree}{Degree}
 
@@ -117,7 +117,13 @@ Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A 
 	$R \leftarrow T \gg 1$\;
 \end{algorithm}
 
-Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, is het noodzakelijk een onderscheid te kunnen maken tussen beide bewerkingen. Ook moet kunnen aangegeven worden wanneer de berekening klaar is. Ten slotte moet het resultaat opgeslagen kunnen worden, zodat de uitgang van de schakeling correct blijft. Omdat in het Miller algoritme verscheidene keren de som $R + 1$ moet berekend worden, wordt ook een ingang $plus\_one$ voorzien. De uiteindelijke schakeling, zonder logica, is te zien in \reffig{figuur-implementatie-wrapper-gf2m}. Het register $cycle$ is $\log _2 (m)$ bits groot en $T$ is $m$ bits. De waarde van $F_m$ wordt opgeslagen in register $mod$. Alle overige registers zijn 1 bit groot.
+Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, dient te schakeling te weten welke van de twee bewerkingen moet uitgevoerd worden. Verder moet het mogelijk zijn de uitkomt $R$ in het register $T$ op te slaan. Op die manier is het mogelijk de uitgang van de schakeling gelijk te stellen aan $R$ zolang geen nieuwe berekening gestart wordt.  
+
+Verderop zal gezien worden dat in het Miller algoritme verscheidene keren de som $R + 1$ moet berekend worden. Daarom wordt aan de schakeling een ingang $plus\_one$ toegevoegd die hierin helpt voorzien	. Er wordt zo veel mogelijk bespaard op registers. Het register $cycle$ (equivalent aan $i$ in \refalg{algoritme-implementatie-gf2m-multiply}) is $\lceil \log _2 (m) \rceil$ bits lang en $T$ $m$ bits. De waarde van $T_m$ wordt opgeslagen in register $mod$.  Alle overige registers zijn 1 bit groot. Voor $A$ wordt geen appart register voorzien en in plaats van $A_i$ wordt steeds bit $A_m$ ingelezen voor de vermenigvuldiging. De schakeling die van deze schakeling gebruik maakt, dient dus te voorzien in een methode om elke klokslag de juiste $A_i$ aan te bieden op $A_m$. Dit kan simpelweg gebeuren door elke klokslag na de start van de berekening het register dat $A$ bevat \'e\'en positie naar links door te schuiven.
+
+ De uiteindelijke schakeling is te zien in \reffig{figuur-implementatie-wrapper-gf2m}. Gezien de eenvoud van de schakeling is het niet nodig een FSM te implementeren, de besturing kan volledig via logica gebeuren. Die wordt getoond in \reffig{figuur-implementatie-wrapper-gf2m-logica}.
+
+De werking is zeer eenvoudig: zo lang $start$ hoog is, worden de registers $mode$ en $plus\_one$ geladen met hun respectievelijke ingangen. Verder wordt, afhankelijk van $mode$, $F$ ingeladen met de waarde van $A$ (optelling, $mode = 0$) of gelijkgesteld aan nul (vermenigvuldiging, $mode = 1$). Ook wordt $cycle$ gereset. Wanneer $start$ laag is, wordt, afhankelijk van de gewenste bewerking en de waarde van $ready$, het register $T$ geladen met de uitgang $R$ van de MALU of het uiteindelijke resultaat $R_{\text{ready}} = R \gg 1$.
 
 \begin{figure}[h]
 	\begin{center}
@@ -125,8 +131,6 @@ Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, i
 		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$}\label{figuur-implementatie-wrapper-gf2m}
 	\end{center}
 \end{figure}
-
-Gezien de eenvoud van de schakeling is het niet nodig een FSM te implementeren, de besturing kan volledig via logica gebeuren. Die wordt getoond in \reffig{figuur-implementatie-wrapper-gf2m-logica}.
 
 \begin{figure}[h]
 	\begin{center}
@@ -154,16 +158,13 @@ Wanneer met behulp van de schakeling in \reffig{figuur-implementatie-wrapper-gf2
 
 De rekentijd van het Miller algoritme zal door toepassing van deze techniek gevoelig verkort kunnen worden. Hoe groter $m$ en hoe meer vermenigvuldigigen er uitgevoerd dienen te worden, des te significanter de tijdswinst die geboekt kan worden. Uiteraard gaat het gebruik van deze techniek wel in tegen de eerder opgelegde beperking aan de grootte van de uiteindelijke schakeling. Het is echter niet zo dat er enkel $d - 1$ extra MALU blokken dienen toegevoegd te worden, afhankelijk van $d$ en $m$ dient ook een extra multiplexer in de schakeling gestoken te worden. Dit is zoals opgemerkt in \refsect{sectie-implementatie-beperkingen} een zeer slechte zaak voor de  oppervlakte.
 
-Stel bijvoorbeeld $d = 4$ (en $m = 	163$). Het resultaat van een optelling zal net zoals in het standaard ontwerp aanwezig aan de uitgang van MALU \nr 1. Het resultaat van een vermenigvuldiging zal echter aan de uitgang van MALU \nr 3 verschijnen, aangezien $163 \bmod 4 = 3$. Het eindresultaat dat in $T$ dient opgeslagen te worden, is voor een vermenigvuldiging dus
-\[T = mod3 \text{ \# } T3_{162:1}\]
+Stel bijvoorbeeld $d = 4$ (en $m = 	163$). Het resultaat van een optelling zal net zoals in het standaard ontwerp (\reffig{figuur-implementatie-wrapper-gf2m}) aanwezig aan de uitgang van MALU \nr 1. Het resultaat van een vermenigvuldiging zal echter aan de uitgang van MALU \nr 3 verschijnen, aangezien $163 \bmod 4 = 3$. Het eindresultaat dat in $T$ dient opgeslagen te worden, is voor een vermenigvuldiging dus
+\[R_{3_{\text{ready}}} = mod{\text{u}_3} \text{ \# } R_{3_{162:1}}\]
 , terwijl dit voor een optelling
-\[T = mod1 \text{ \# } T1_{162:1}\]
-is. Met andere woorden, er dient nu niet enkel gekozen te kunnen worden voor de ingang $A$, $T_{\text{out}}$ of $T1_{\text{ready}}$, maar ook voor $T3_{\text{ready}}$.
+\[R_{1_{\text{ready}}} = mod_{\text{u}_1} \text{ \# } R_{1_{162:1}}\]
+is. Met andere woorden, er dient nu niet enkel gekozen te kunnen worden tussen de ingangen $A$, $R_d$ of $R_{1_{\text{ready}}}$, maar ook voor $R_{3_{\text{ready}}}$.
 
-Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een $d$ te kiezen waarvoor
-\[m \bmod d = 1\]
-
-Als voorbeeld worden enkele voor de hand liggende en optimale keuzes vergeleken voor $d$ indien $m = 163$ in \reftbl{tabel-implementatie-woordbreedte-d}.
+Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een $d$ te kiezen waarvoor $m \bmod d = 1$. Als voorbeeld worden enkele voor de hand liggende en optimale keuzes vergeleken voor $d$ indien $m = 163$ in \reftbl{tabel-implementatie-woordbreedte-d}.
 
 \begin{table}[h]
 	\caption{Voor de hand liggende versus optimale waarden voor woordbreedte $d$ indien \mbox{$m=163$}}
