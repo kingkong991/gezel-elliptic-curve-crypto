@@ -59,7 +59,7 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 	}
 \end{algorithm}
 
-In \refsect{sectie-implementatie-gf2m} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
+In \refsect{sectie-implementatie-miller-forlus} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
 
 \begin{figure}[h]
 	\begin{center}
@@ -139,12 +139,6 @@ De werking is zeer eenvoudig: zo lang $start$ hoog is, worden de registers $mode
 	\end{center}
 \end{figure}
 
-%Indien dit algoritme in een schakeling gegoten wordt, dienen enkele toevoegingen te gebeuren. Omdat een vermenigvuldiging langer dan \'e\'en klokslag duurt, is het noodzakelijk een $start$ ingang en $ready$ uitgang te hebben. Ook moet worden bijgehouden of $A$ en $B$ opgeteld of vermenigvuldigd dienen te worden. Deze functie wordt vervuld door het register $mode$. Ten slotte moet het mogelijk zijn om $R$ in $T$ op te slaan, zodat het juiste resultaat niet verloren gaat.
-
-%Bij het hoog gaan van $start$, wordt nagegaan wat de waarde van $mode$ is. Indien het om een optelling gaat, wordt $A$ opgeslagen in $T$, anders wordt $T \leftarrow 0$ zoals in \refalg{algoritme-implementatie-gf2m-multiply}. Bij een optelling is het resultaat na \'e\'en klokslag beschikbaar aan de uitgang van het MALU blok. Het dient dan enkel nog 1 bit naar rechts verschoven te worden, net zoals moet gebeuren op het einde van een vermenigvuldiging.
-
-%Wanneer dit alles in rekening gebracht wordt, verkrijgt men uiteindelijk de schakeling in \reffig{figuur-implementatie-wrapper-gf2m}. Om het geheel overzichtelijker te houden, bevat register $T$ een getal in $\mathbb{F}_{2^m}$ en wordt de waarde van $T_m$ bijgehouden in het register $mod$.
-
 \subsection{Versnelling van de vermenigvuldiging}\label{subsectie-implementatie-gf2m-versnelling}
 
 Wanneer met behulp van de schakeling in \reffig{figuur-implementatie-wrapper-gf2m} een vermenigvuldiging wordt berekend, zal het $m$ klokcycles duren eer het resultaat beschikbaar is aan de uitgang. Het is echter mogelijk dat aantal drastisch naar beneden te halen door $d$ MALU's te gebruiken en dus $d$ optellingen per klokcycle uit te voeren. Het principe hiervan wordt ge\"illustreerd in \reffig{figuur-implementatie-wrapper-gf2m-d}.
@@ -191,14 +185,14 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 
 \subsection{Inleiding}\label{subsectie-implementatie-miller-inleiding}
 
-Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (\refalg{algoritme-cryptografie-pairings-miller}) uitvoert. Het algoritme met invulling van de gekende parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
+Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (\refalg{algoritme-cryptografie-pairings-miller}) uitvoert. Het algoritme met invulling van de vastgelegde parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
 
 \begin{algorithm}[h]
-	\caption{Miller algoritme voor berekening van de Tate pairing - Algemene versie}
+	\caption{Miller algoritme voor berekening van de Tate pairing}
 	\label{algoritme-implementatie-miller-algemeen}
 	\KwIn{$P, Q \in E(\mathbb{F}_{2^{163}})[l]$}
-	\KwOut{e($P, Q$)}
-	\KwData{$V \in E(\mathbb{F}_{2^{163}})[l]$; $F, G \in \mathbb{F}_{2^{4 \cdot 163}}$}
+	\KwOut{$e(P, Q)$}
+	%\KwData{$V \in E(\mathbb{F}_{2^{163}})[l]$; $F, G \in \mathbb{F}_{2^{4 \cdot 163}}$}
 	$F \leftarrow 1$\;
 	$V \leftarrow P$\;
 	\For{$i \leftarrow 162$ \KwTo $0$}{
@@ -209,8 +203,8 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 			$V \leftarrow V + P$\;\nllabel{lijn-implementatie-miller-algemeen-add-2}
 		}
 	}
-	$F \leftarrow F^{\frac{2^{4 \cdot 163} - 1}{l}}$\;
-	\KwRet{$F$}
+	$e(P, Q) \leftarrow F^{\frac{2^{4 \cdot 163} - 1}{2^{163} + 2^{82} + 1}}$\;
+	\KwRet{$e(P, Q)$}
 \end{algorithm}
 
 Merk op dat op lijn~\ref{lijn-implementatie-miller-algemeen-add-if} slechts \'e\'en waarde moet nagekeken worden, aangezien $l = 2^{163} + 2^{82} + 1$.
@@ -263,8 +257,6 @@ De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in 
 Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
 
 Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er ook een register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
-
-%Om te achterhalen in welke volgorde de bewerkingen best worden uitgevoerd om zo weinig mogelijk tussenresultaten te moeten opslaan. Het resultaat hiervan staat in \reftbl{tabel-implementatie-miller-double}. Een gearceerde cel betekend dat de aangeduide variabele op dat moment ingelezen moet worden. Indien er voor een variabele onder een bepaald niveau geen gearceerde cellen meer staan, kan deze verwijderd worden.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van de verdubbelingstap voor hyperelliptische krommen in het Miller algoritme}
@@ -379,7 +371,7 @@ F^2	&= (F_a + F_b x + F_c y + F_d xy) \cdot (F_a + F_b x + F_c y + F_d xy)\\
 Mist de originele waarde van $F$ overschreven mag worden, is het mogelijk dit te berekenen zonder gebruik van tijdelijke variabelen. Er zijn dus enkel vier registers nodig voor $F$. Hoe dat in z'n werk gaat is te zien in \refalg{algoritme-implementatie-miller-f-square}. E\'en kwadratering van $F$ vraagt vier optellingen en vier kwadrateringen in $\mathbb{F}_{2^m}$.
 
 \begin{algorithm}[h]
-	\caption{Uitwerking van de kwadratering van $F$ in het Miller algoritme}
+	\caption{Uitwerking van van $F^2 \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-f-square}
 	\KwIn{$F = F_a + F_b x + F_c y + F_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$F = F^2 \in \mathbb{F}_{2^{4m}}$}
@@ -570,7 +562,7 @@ B_b	&= w^{-1} \cdot A_b\\
 met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ kan dus berekend worden via een inversie in $\mathbb{F}_{2^m}$. Uitgewerkt geeft dit \refalg{algoritme-implementatie-miller-f2m-inverse}, waarbij de oorspronkelijk $A$ wordt overschreven door zijn inverse. Het algoritme kost in totaal drie vermenigvuldigingen, \'e\'en kwadratering, twee optellingen en \'e\'en inversie in $\mathbb{F}_{2^m}$. Er zijn twee registers nodig om $A$ in op te slaan en drie tijdelijke registers voor $a$, $b$ en $c$.
 
 \begin{algorithm}[h]
-	\caption{Uitwerking van multiplicatieve inversie in $\mathbb{F}_{2^{2m}}$}
+	\caption{Uitwerking van $A^{-1} \in \mathbb{F}_{2^{2m}}$}
 	\label{algoritme-implementatie-miller-f2m-inverse}
 	\KwIn{$A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$}
 	\KwOut{$B = A^{-1} = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
@@ -596,7 +588,7 @@ C	&= (A_a + A_b x) + (B_a + B_b x)\\
 In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd te worden. Vooropgesteld dat de tellers na vermenigvuldiging met $G_n$ niet meer nodig zijn en dus overschreven mogen worden, kan \refalg{algoritme-implementatie-miller-f2m-mult} gebruikt worden. Er zijn dan zes registers nodig voor de uitkomsten, twee voor $G_n^{-1}$ en twee tijdelijke register voor $a$ en $b$. De vermenigvuldiging in $\mathbb{F}_{2^{2m}}$ kan berekend worden in drie vermenigvuldigingen en vier optellingen.
 
 \begin{algorithm}[h]
-	\caption{Uitwerking van vermenigvuldiging in $\mathbb{F}_{2^{2m}}$}
+	\caption{Uitwerking van $A \cdot B \in \mathbb{F}_{2^{2m}}$}
 	\label{algoritme-implementatie-miller-f2m-mult}
 	\KwIn{$A = A_a + A_b x, B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
 	\KwOut{$A = A \cdot B \in \mathbb{F}_{2^{2m}}$}
@@ -607,7 +599,7 @@ In dit geval dienen zowel $V_t$, $W_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd 
 	$A_b \leftarrow A_a + A_b$; $A_a \leftarrow A_a + a$\comm{2 A}\;
 \end{algorithm}
 
-\subsection{Berekening van $V^{2^m + 1}$}
+\subsubsection{Berekening van $V^{2^m + 1}$}
 
 Nu $V$ en $W$ bekend zijn, moeten ze beiden tot de correcte macht verheven worden. Voor $V$ is dat $2^m + 1$, wat simpelweg mogelijk zou zijn door $V^{2^m}$ te berekenen en dit resultaat te vermenigvuldigen met $V$. Dit zou, zoals verderop zal gezien worden, negen vermenigvuldigingen en twee\"entwintig optellingen kosten. Er is echter een snellere manier. Uitgaande van volgende gelijkheden:
 
@@ -664,8 +656,10 @@ V^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
 
 Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang variable, $V$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en zeven voor tussenresultaten. De totale kost komt uit op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
 
+%TODO: Variabelen tellen
+
 \begin{algorithm}[h]
-	\caption{Uitwerking $V^{2^m + 1}$ in $\mathbb{F}_{2^{4m}}$}
+	\caption{Uitwerking van $V^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-v-power}
 	\KwIn{$V = V_a + V_b x + V_c y + V_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$V = V^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
@@ -680,3 +674,70 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang
 	$r_a'' \leftarrow m_2 + s_1$; $r_a' \leftarrow r_a' + r_a''$\comm{2 A}\;
 	$V_a \leftarrow r_a' + m_3$\comm{1 A}\;
 \end{algorithm}
+
+\subsubsection{Berekening van $W^{\frac{m + 1}{2}}$}
+
+De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $W$. Helaas is het in dit geval niet mogelijk om de bewerking even snel uit te voeren als de kwadratering van $V$. De handigste oplossing in dit geval is $W$ simpelweg $\frac{m + 1}{2}$ opeenvolgende keren te kwadrateren. Hiervoor kan \refalg{algoritme-implementatie-miller-f-square} gebruikt worden. In totaal zal deze stap dus $2 \cdot (m + 1)$ vermenigvuldigigen en optellingen vragen, wat voor de gekozen $m = 163$ neerkomt op 328 maal beide bewerkingen.
+
+\subsubsection{Vermenigvuldiging van $V \cdot W$}
+
+De finale stap in de exponentiatie, na de machtsverheffingen, is de vermenigvuldiging van de twee resulterende variabelen $V$ en $W$. Dit is een vermenigvuldiging in $F^{2^{4m}}$ en deze kan als volgt geformuleerd worden:
+
+\[\begin{aligned}
+e(P, Q)	&= V \cdot W\\
+	&= (V_a W_a + V_b W_b + V_c W_c + V_d W_d)\\
+	&\quad + (V_a W_b + V_b W_a + V_b W_b + V_c W_d + V_d W_c + V_d W_d)x\\
+	&\quad + (V_a W_c + V_b W_d + V_c W_a + V_c W_c + V_d W_d + V_d W_b + V_d W_c)y\\
+	&\quad + (V_a W_d + V_b W_c + V_b W_d + V_c W_b + V_c W_c + V_d W_a + V_d W_b + V_d W_d)xy\\
+\end{aligned}\]
+
+Om de berekening via de Karatsuba techniek te versnellen, worden eerst volgende tussenresultaten uitgerekend:
+
+\[\begin{aligned}
+m_0	&= V_a W_a
+	&m_1	&= V_b W_b\\
+m_3	&= V_c W_c
+	&m_4	&= V_d W_d\\
+l_0	&= (V_a + V_b) \cdot (W_a + W_b)
+	&\quad l_1	&= (V_c + V_d) \cdot (W_c + W_d)\\
+l_2	&= (V_a + V_d) \cdot (W_a + W_d)
+	&l_3	&= (V_a + V_c) \cdot (W_a + W_c)\\
+n_0	&= V_a + V_b + V_c + V_d
+	&n_1	&= W_a + W_b + W_c + W_d\\
+p_0	&= n_0 \cdot n_1\\
+\end{aligned}\]
+
+Gebruik makende van deze waarden, kan de vermenigvuldiging voor $e(P, Q)$ geschreven worden als:
+
+\[\begin{aligned}
+e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
+	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
+\end{aligned}\]
+
+De minimum benodigde opslagruimte om deze berekeningen uit te voeren bestaat uit vier registers voor het eindresultaat $R = e(P, Q)$ en negenentwintigmiljard tijdelijke registers voor $a, b, \ldots, zhx$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. Het resulterend algoritme is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
+
+\begin{algorithm}
+	\caption{Uitwerking van $V \cdot W \in \mathbb{F}_{2^{4m}}$}
+	\label{algoritme-implementatie-miller-f4m-mult}
+	\KwIn{$V = V_a + V_b x + V_c y + V_d xy, W = W_a + W_b x + W_c y + W_d xy \in \mathbb{F}_{2^{4m}}$}
+	\KwOut{$R = V \cdot W \in \mathbb{F}_{2^{4m}}$}
+	\KwData{$a, b, \ldots, zhx \in \mathbb{F}_{2^m}$}
+	$k_3 \leftarrow W_c + W_d$; $k_5 \leftarrow W_b + W_d$\comm{2 A}\;
+	$m_3 \leftarrow V_d \cdot W_d$; $k_4 \leftarrow V_b + V_d$\comm{1 M, 1 A}\;
+	$k_1 \leftarrow V_c + V_d$; $m_1 \leftarrow V_b \cdot W_b$\comm{1 M, 1 A}\;
+	$k_0 \leftarrow V_a + V_b$; $k_2 \leftarrow W_a + W_b$\comm{2 A}\;
+	$k_7 \leftarrow W_a + W_c$; $m_2 \leftarrow V_c \cdot W_c$\comm{1 M, 1 A}\;
+	$m_0 \leftarrow V_a \cdot W_a$; $k_6 \leftarrow V_a + V_c$\comm{1 M, 1 A}\;
+	$l_3 \leftarrow k_6 \cdot k_7$; $l_2 \leftarrow k_4 \cdot k_5$\comm{2 M}\;
+	$l_0 \leftarrow k_0 \cdot k_2$; $n_0 \leftarrow k_0 + k_1$\comm{1 M, 1 A}\;
+	$l_1 \leftarrow k_1 \cdot k_3$; $n_1 \leftarrow k_2 + k_3$\comm{1 M, 1 A}\;
+	$p_0 \leftarrow n_0 \cdot n_1$; $q_0 \leftarrow m_0 + l_1$\comm{1 M, 1 A}\;
+	$q_1 \leftarrow q_0 + l_0$; $r_1 \leftarrow m_2 + q_1$\comm{2 A}\;
+	$q_3 \leftarrow m_1 + m_2$; $r_3' \leftarrow m_3 + p_0$\comm{2 A}\;
+	$r_3'' \leftarrow r_3' + q_1$; $r_3 \leftarrow r_3'' + l_3$\comm{2 A}\;
+	$r_2' \leftarrow l_3 + q_0$; $r_2'' \leftarrow r_2' + l_2$\comm{2 A}\;
+	$r_2 \leftarrow r_2'' + q_3$; $r_0' \leftarrow m_3 + q_3$\comm{2 A}\;
+	$r_0 \leftarrow r_0' + m_0$\comm{1 A}\;
+\end{algorithm}
+
+\subsection{Geheugen ontwerp}
