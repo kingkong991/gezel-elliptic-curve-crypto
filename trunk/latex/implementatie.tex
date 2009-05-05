@@ -182,8 +182,7 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 
 \section{Controller voor het Miller algoritme}\label{sectie-implementatie-miller}
 
-
-\subsection{Inleiding}\label{subsectie-implementatie-miller-inleiding}
+\subsection{Algemeen ontwerp}\label{subsectie-implementatie-miller-ontwerp}
 
 Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (\refalg{algoritme-cryptografie-pairings-miller}) uitvoert. Het algoritme met invulling van de vastgelegde parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
 
@@ -209,7 +208,14 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 
 Merk op dat op lijn~\ref{lijn-implementatie-miller-algemeen-add-if} slechts \'e\'en waarde moet nagekeken worden, aangezien $l = 2^{163} + 2^{82} + 1$.
 
-Om \refalg{algoritme-implementatie-miller-algemeen} te kunnen implementeren, moeten eerst de verschillende berekeningen uitgewerkt worden. Vervolgens zal aan de hand van die uitwerkingen bepaald worden welke registers de uiteindelijke schakeling ten minste nodig heeft en ten slotte zal een FSM ontworpen worden.
+De controller zal ontworpen worden zoals het schema in \reffig{figuur-implementatie-miller-controller-algemeen}. Voor het geheugenblok volledig ontworpen kan worden, moeten echter eerst de verschillende berekeningen uitgewerkt worden. Vervolgens zal aan de hand van die uitwerkingen bepaald worden hoeveel registers ten minste noodzakelijk zijn. Ten slotte zal een FSM ontworpen worden.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=12cm]{controller-miller-algemeen}
+		\figcaption{Schakeling voor de uitvoering van het Miller algoritme}\label{figuur-implementatie-miller-controller-algemeen}
+	\end{center}
+\end{figure}
 
 Grofweg kan het algoritme opgedeeld worden in de for-lus  en een finale exponentiatie. De for-lus kan verder onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet kunnen worden, wat ook verder uitgediept zal worden.
 
@@ -716,6 +722,8 @@ e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
 
 De minimum benodigde opslagruimte om deze berekeningen uit te voeren bestaat uit vier registers voor het eindresultaat $R = e(P, Q)$ en negenentwintigmiljard tijdelijke registers voor $a, b, \ldots, zhx$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. Het resulterend algoritme is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
 
+%TODO: Variabelen tellen
+
 \begin{algorithm}
 	\caption{Uitwerking van $V \cdot W \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-f4m-mult}
@@ -741,3 +749,37 @@ De minimum benodigde opslagruimte om deze berekeningen uit te voeren bestaat uit
 \end{algorithm}
 
 \subsection{Geheugen ontwerp}
+
+Nu alle nodige algoritmes en de daarbij horende geheugenvereisten gekend zijn, is het mogelijk om het geheugenblok van de schakeling te ontwerpen. Eerst zal het minimum aantal benodigde registers bepaald worden en vervolgens zal een ontwerp voor het geheugenblok voorgesteld worden.
+
+De geheugenvereisten van de for-lus en de finale exponentiatie kunnen los van elkaar bekeken worden. Eens de lus be\"eindigd is, is het immers niet meer nodig $P, Q, V$ en $G$ bij te houden.
+
+Van de vijf algoritmes die opgeroepen worden in de for-lus, vereist de de vermenigvuldiging van $F$ en $G$ het grootste aantal tijdelijke registers, namelijk drie. Het minimum aantal registers om alle bewerkingen in de lus te kunnen uitvoeren is dus vijftien: zes voor $P, \phi(Q)$ en $V$, twee voor $G$, vier voor $F$ en drie tijdelijke registers.
+
+Bij de berekening van de finale exponentiate gaat de vermenigvuldiging van $V$ en $W$ met de titel van 'meest geheugenvereistende' algoritme lopen. In dit geval zijn er opnieuw vijftien registers nodig: acht voor $V$ en $W$ en zeven miljard voor de tussenresultaten.
+
+Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de schakeling voor berekeningen in $\mathbb{F}^{2^m}$.
+
+Voor het ontwerp van het geheugenblok wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde `shift' operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (`swap') en kan de waarde van register twee naar register \'e\'en gekopieerd worden (`copy'). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de schakeling voor berekeningen in $\mathbb{F}^{2^m}$ vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
+
+Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelijk geheugen is de veel lagere complexiteit. Bij een willekeurig toegankelijk geheugen stijgt de complexiteit van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie. In \reffig{figuur-implementatie-miller-geheugen-circ} wordt dit type ontwerp ge\"illustreerd.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=12cm]{geheugen-circ}
+		\figcaption{Circulair registerblok ontwerp en mogelijke operaties}\label{figuur-implementatie-miller-geheugen-circ}
+	\end{center}
+\end{figure}
+
+%TODO: Kansberekening: gemiddeld aantal posities dat x_0 of x_1 van register 1 of 2 verwijderd is.
+
+Aangezien de ingangen van de onderliggende schakeling rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Gezien het feit dat er echter vijftien registers zijn (tegenover zes in \cite{lee}), zou het veel energie kosten om per 'shift' operatie aan elk van de vijftien registers nieuwe waarden toe te wijzen. Verder zou het gemiddeld veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan. Grofweg kan gesteld worden dat de benodigde waarden $x_0$ en $x_1$ gemiddeld $\frac{n}{2}$ registers van elkaar verwijderd zullen zijn. Er zijn dan $\frac{n}{2}$ `swap' operaties nodig om de registers naast elkaar te krijgen. Verder zijn er per `swap' operatie $n$ `shift' operaties nodig voor $x_0$ opnieuw een positie dichter bij $x_1$ kan gebracht worden. Na het be\"eindigen van deze operatie zijn er dus grof geschat $\frac{n}{2} \cdot n$ maal $n$ registers van waarde veranderd. De gehele operatie vraagt dus een tijdscomplexiteit van $\mathcal{O}(n^2)$ en er dienen $\mathcal{O}(n^3)$ schrijfbewerkingen uitgevoerd te worden.
+
+ Om het energieverbruik enigszins te matigen, wordt het mogelijk gemaakt om elk register ook de waarde van zijn voorganger aan te laten nemen. Dit is equivalent aan de `swap' (en `copy') operatie toe te laten tussen alle aan elkaar grenzende registers. `swap' operaties tussen twee paar registers kunnen in parallel uitgevoerd en elke `swap' operatie vraagt twee schrijfbewerkingen. Er zullen dus gemiddeld $2 \cdot \frac{n}{2}$ schrijfbewerkingen uitgevoerd worden per benodigde waarde, $2n$ in totaal dus. Met dit aaangepast ontwerp komt dit alles dus neer op een tijds- en schrijfbewerkingscomplexiteit $\mathcal{O}(n)$, respectievelijk een factor $n$ en $n^2$ lager. Uiteraard wordt hiervoor een prijs betaald, want er zal nu per register een extra multiplexer voorzien moeten worden. Het geoptimaliseerde ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=12cm]{geheugen-circ-optimized}
+		\figcaption{Circulair registerblok geoptimaliseerd voor energieverbruik}\label{figuur-implementatie-miller-geheugen-circ-optimized}
+	\end{center}
+\end{figure}
