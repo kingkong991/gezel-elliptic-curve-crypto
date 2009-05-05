@@ -773,9 +773,24 @@ Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelij
 
 %TODO: Kansberekening: gemiddeld aantal posities dat x_0 of x_1 van register 1 of 2 verwijderd is.
 
-Aangezien de ingangen van de onderliggende schakeling rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Gezien het feit dat er echter vijftien registers zijn (tegenover zes in \cite{lee}), zou het veel energie kosten om per 'shift' operatie aan elk van de vijftien registers nieuwe waarden toe te wijzen. Verder zou het gemiddeld veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan. Grofweg kan gesteld worden dat de benodigde waarden $x_0$ en $x_1$ gemiddeld $\frac{n}{2}$ registers van elkaar verwijderd zullen zijn. Er zijn dan $\frac{n}{2}$ `swap' operaties nodig om de registers naast elkaar te krijgen. Verder zijn er per `swap' operatie $n$ `shift' operaties nodig voor $x_0$ opnieuw een positie dichter bij $x_1$ kan gebracht worden. Na het be\"eindigen van deze operatie zijn er dus grof geschat $\frac{n}{2} \cdot n$ maal $n$ registers van waarde veranderd. De gehele operatie vraagt dus een tijdscomplexiteit van $\mathcal{O}(n^2)$ en er dienen $\mathcal{O}(n^3)$ schrijfbewerkingen uitgevoerd te worden.
+Omdat de ingangen van de onderliggende schakeling rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
+\[\begin{aligned}
+s	&= \sum_{i = 1}^{n - 1} \sum_{j = i + 1}^n (j - i - 1)
+	&\qquad c	&= \sum_{i = 0}^{n - 1} i\\
+	&= \frac{n \cdot (n - 1) \cdot (n - 2)}{6}
+	&	&= n \cdot \frac{n - 1}{2}\\
+\end{aligned}\]
+dus
+\[\overline{r}	= \frac{n - 2}{3}.\]
+Merk op dat deze formules slechts een benadering geven. Zo wordt bijvoorbeeld niet in rekening gebracht dat wanneer beide waarden in de eerste twee registers zitten, er geen doorschuivingen moeten gebeuren.
 
- Om het energieverbruik enigszins te matigen, wordt het mogelijk gemaakt om elk register ook de waarde van zijn voorganger aan te laten nemen. Dit is equivalent aan de `swap' (en `copy') operatie toe te laten tussen alle aan elkaar grenzende registers. `swap' operaties tussen twee paar registers kunnen in parallel uitgevoerd en elke `swap' operatie vraagt twee schrijfbewerkingen. Er zullen dus gemiddeld $2 \cdot \frac{n}{2}$ schrijfbewerkingen uitgevoerd worden per benodigde waarde, $2n$ in totaal dus. Met dit aaangepast ontwerp komt dit alles dus neer op een tijds- en schrijfbewerkingscomplexiteit $\mathcal{O}(n)$, respectievelijk een factor $n$ en $n^2$ lager. Uiteraard wordt hiervoor een prijs betaald, want er zal nu per register een extra multiplexer voorzien moeten worden. Het geoptimaliseerde ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
+Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een `swap' operatie uitgevoerd moeten. Daartoe dient $x_1$ telkens eerst verplaatst te worden tot register twee. Er zijn dus $\overline{r} \cdot n$ doorschuif operaties nodig. Dit is opnieuw een ruwe schatting, die voor kleine $n$ niet zal kloppen. Algemeen kan echter gesteld worden dat
+\[\overline{t} = \mathcal{O} \Bigl( \frac{n^2}{3} \Bigr).\]
+
+Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen die op de registers worden uitgevoerd. Elke doorschuif operatie kost $n$ zulke bewerkingen, maw.\ het gemiddeld aantal schrijfbewerkingen $\overline{w}$ dat uitgevoerd moet worden voor gestart kan worden met de berekening van een optelling of vermenigvuldiging, is
+\[\overline{w} =  \mathcal{O} \Bigl( \frac{n^3}{3} \Bigr).\]
+
+Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de `swap' (en `copy') operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen `swap' operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
 
 \begin{figure}[h]
 	\begin{center}
@@ -783,3 +798,16 @@ Aangezien de ingangen van de onderliggende schakeling rechtstreeks verbonden zij
 		\figcaption{Circulair registerblok geoptimaliseerd voor energieverbruik}\label{figuur-implementatie-miller-geheugen-circ-optimized}
 	\end{center}
 \end{figure}
+
+In dit geval zal de afstand $r$ van een waarde $x$ tot het eerste register gelijk zijn aan $\textsf{min}(j - 1, n - j + 1)$ omdat nu in beide richtingen geschoven kan worden. De gemiddelde afstand $\overline{r}$ is dan
+\[\begin{aligned}
+\overline{r}	&= \frac{1}{n} \cdot \sum_{i = 1}^{n} \textsf{min}(j - 1, n - j + 1)\\
+	&= \frac{2}{n} \cdot \sum_{i = 1}^{\frac{n}{2}} (j - 1)\\
+	&= \frac{n - 1}{4}.
+\end{aligned}\]
+Aangezien de omwissel operaties in parallel uitgevoerd kunnen worden, is het gemiddeld aantal klokslagen in dit geval
+\[\overline{t} = \mathcal{O}  \Bigl( \frac{n}{4} \Bigr)\]
+en, rekening houdend met het feit dat elke omwissel operatie twee schrijfbewerkingen vraagt en er twee variabelen naar de juiste positie gebracht moeten worden,
+\[\overline{w} = \mathcal{O}(n).\]
+
+Tegenover het registerblok ontwerp uit \cite{lee}, zal dit ontwerp dus voor voldoende grote $n$ significant minder energie verbruiken. Tevens zullen veel minder klokslagen verloren gaan aan het in de juiste positie brengen van de benodigde variabelen.

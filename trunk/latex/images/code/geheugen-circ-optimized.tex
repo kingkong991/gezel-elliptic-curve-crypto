@@ -1,0 +1,29 @@
+\tikzset{
+	reg-nobox/.style={minimum height=6mm, minimum width=10mm},
+	reg/.style={reg-nobox, draw}
+}
+\begin{tikzpicture}
+\hspace{-0.6mm}
+\matrix [column sep=1.5mm, row sep=1.5mm] {
+	\node[reg] (r1) {reg$_1$}; &
+	\node[reg] (r2) {reg$_2$}; &
+	\node[reg] (r3) {reg$_3$}; &
+	\node[reg] (r4) {reg$_4$}; &
+	\node[reg-nobox] (e1) {$\ldots$}; &
+	\node[reg] (r5) {reg$_n$};\\
+};
+\begin{scope}[>=latex', very thick]
+	\draw [<->] ($(r1.south east) + (-3mm, 0)$) |- ($(r2.south west) + (3mm, -3mm)$) -| ($(r2.south west)  + (3mm, 0)$);
+	\draw [<->] ($(r2.south east) + (-3mm, 0)$) |- ($(r3.south west) + (3mm, -3mm)$) -| ($(r3.south west)  + (3mm, 0)$);
+	\draw [<->] ($(r3.south east) + (-3mm, 0)$) |- ($(r4.south west) + (3mm, -3mm)$) -| ($(r4.south west)  + (3mm, 0)$);
+	
+	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r4.south east) + (-3mm, 0)$) |- ($(r4.south east) + (3mm, -3mm)$);
+	\draw [<-, dash pattern=on 0.5mm off 0.5mm] ($(r5.south west) + (3mm, 0)$) |- ($(r5.south west) + (-3mm, -3mm)$);
+
+	\draw [<-] ($(r5.south east) + (-3mm, 0)$) |- ($(r5.south east) + (2mm, -3mm)$) |- ($(r5.north west)  + (0, 3mm)$);
+	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r4.north east)  + (3mm, 3mm)$) -| ($(r4.north east) + (0, 3mm)$);
+	\draw [dash pattern=on 0.5mm off 0.5mm] ($(r5.north west)  + (-3mm, 3mm)$) -| ($(r5.north west) + (0, 3mm)$);
+
+	\draw [->] ($(r4.north east) + (0, 3mm)$) -- ($(r1.north west)  + (-2mm, 3mm)$) |- ($(r1.south west)  + (3mm, -3mm)$) -- ($(r1.south west)  + (3mm, 0)$);
+\end{scope}
+\end{tikzpicture}
