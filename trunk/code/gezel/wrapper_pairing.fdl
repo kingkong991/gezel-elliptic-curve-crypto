@@ -1794,7 +1794,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	@f4mmult87	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xp, update_Xp_from_Yp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult88;
 	@f4mmult88	(do_always, MALU_idle, update_ToMALU_from_MALU, idle_Xv, update_Yv_from_Xp, update_Xp_from_Yv, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult89;
 	
-	// Calculate r0' (q3 + m1)
+	// Calculate r0' (q3 + m3)
 	@f4mmult89	(do_always, MALU_idle, update_ToMALU_from_Xv, update_Xv_from_ToMALU, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult90;
 	@f4mmult90	(do_always, MALU_add, idle_ToMALU, update_Xv_from_Yv, update_Yv_from_Xv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> f4mmult91;
 	@f4mmult91	(do_always, MALU_idle, update_ToMALU_from_MALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, update_TmpB_from_TmpA) -> f4mmult92;
