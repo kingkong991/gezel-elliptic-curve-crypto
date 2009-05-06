@@ -620,7 +620,7 @@ en met $V = V_a + V_b x + V_c y + V_d xy$, vindt men:
 \[V^{2^m} = (V_a + V_b + V_c) + (V_b + V_c + V_d) x + V_c y + (V_c + V_d) xy\]
 
 Vervolgens vermenigvuldigd men dit met $V$, wat resulteert in $V^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
-
+algoritme-implementatie-miller-add-detail
 \[\begin{aligned}
 r_a	&= (V_a + V_b + V_c) \cdot V_a + (V_b + V_c + V_d) \cdot V_b + V_c^2 + (V_c + V_d) \cdot V_d\\
 r_b	&= (V_a + V_b + V_c) \cdot V_b + (V_b + V_c + V_d) \cdot V_a + (V_b + V_c + V_d) \cdot V_b\\
@@ -790,7 +790,7 @@ Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een `swap' operat
 Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen die op de registers worden uitgevoerd. Elke doorschuif operatie kost $n$ zulke bewerkingen, maw.\ het gemiddeld aantal schrijfbewerkingen $\overline{w}$ dat uitgevoerd moet worden voor gestart kan worden met de berekening van een optelling of vermenigvuldiging, is
 \[\overline{w} =  \mathcal{O} \Bigl( \frac{n^3}{3} \Bigr).\]
 
-Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de `swap' (en `copy') operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen `swap' operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
+Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de `swap' (en `copy') operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen `swap' operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
 
 \begin{figure}[h]
 	\begin{center}
@@ -810,4 +810,21 @@ Aangezien de omwissel operaties in parallel uitgevoerd kunnen worden, is het gem
 en, rekening houdend met het feit dat elke omwissel operatie twee schrijfbewerkingen vraagt en er twee variabelen naar de juiste positie gebracht moeten worden,
 \[\overline{w} = \mathcal{O}(n).\]
 
-Tegenover het registerblok ontwerp uit \cite{lee}, zal dit ontwerp dus voor voldoende grote $n$ significant minder energie verbruiken. Tevens zullen veel minder klokslagen verloren gaan aan het in de juiste positie brengen van de benodigde variabelen.
+Tegenover het originele ontwerp voor het registerblok, zal dit ontwerp veel minder klokslagen verloren laten gaan aan het in de juiste positie brengen van de benodigde variabelen. Ook zal het, ten koste van meer multiplexers, significant minder energie verbruiken. De extra multiplexers zullen echter ook energie vragen, dus in hoeverre dit het totale verbruik naar beneden haalt, moet van implementatie tot implementatie bekeken worden. 
+
+Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de $\mathbb{F}^{2^m}$ kern verbonden. Om vermenigvuldigingen tot een succesvol einde te brengen, moet het register dat met de $A$ ingang verbonden is elke klokslag met $d$ bits naar links doorgeschoven kunnen worden. Hierbij gaat de originele waarde van het register echter wel verloren. Wanneer de algoritmes die het meeste tijdelijke opslag vragen echter nauwkeurig worden bekeken, zal men merken dat dit geen probleem vormt. Vandaar dat er voor gekozen wordt om het derde tijdelijk register uit de doorschuif lus te halen. Verder moet het ook mogelijk zijn waarden die op de ingang van de Miller controller aangelegd worden op te slaan. Ten slotte moet het resultaat van een berekening opgeslagen kunnen worden. Teneinde dat mogelijk te maken, wordt de uitgang $R$ van de $\mathbb{F}^{2^m}$ kern aan het derde tijdelijk register gekoppeld. Rekend houdend met deze drie zaken, wordt het ontwerp van de eerste twee registers aangepast zoals te zien in \reffig{figuur-implementatie-geheugen-eerste-twee}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=12cm]{geheugen-eerste-twee}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-geheugen-eerste-twee}
+	\end{center}
+\end{figure}
+
+\subsection{FSM}
+
+Met alle details over de hardware bekend, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zullen een zeer groot deel van de te implementeren states niets anders doen dan geheugen verschuifen. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op state niveau gebeuren. Ook zal zoveel mogelijk getracht worden reeds ge\"implementeerde states opnieuw te gebruiken.
+
+Aangezien een beeld meer dan duizend woorden zegt, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbeling- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en het nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen door dezelfde states begeleid worden, ongeacht of nu de verdubbeling- of de optelstap uitgevoerd wordt.
+
+Merk op dat voor de verdubbelings- en optelstap in de for-lus enkel de berekening van $\lambda$ in essentie verschillend is. van het algoritme De conditionele overgangen waarbij bijvoorbeeld \emph{add} nagekeken worden, 
