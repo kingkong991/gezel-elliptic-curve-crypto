@@ -135,8 +135,8 @@
 
 	\\[2.5mm]
 
-	\node[empty] (e10) {}; &
-	\node[and, yshift=-5mm] (and9) {}; \\[-1mm]
+	\node[emptyraised] (e10) {}; &
+	\node[and] (and9) {}; \\[-1mm]
 
 	\node[empty] (e11) {}; \\
 };
@@ -156,7 +156,7 @@
 \draw [bit] (not1.west -| e5.base) -- node[input] {start} (not1.west)
 		(not1.output) [outputline] -- node[output] {s$_{2b}$} (not1.output -| o2.base);
 
-\draw [bit] (e10.base) -| node[input] {start} ($(and9.input 1) - (2.5mm, 0)$) |- (and9.input 1)
+\draw [bit] (e10.base) -- node[input] {start} (and9.input 1)
 		(e11.base) -| node[input] {mode} ($(and9.input 2) - (2.5mm, 0)$) |- (and9.input 2)
 		(and9.output) [outputline] -- node[output] {F$_{\text{reset}}$} (and9.output -| o2.base);
 

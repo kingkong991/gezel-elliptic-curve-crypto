@@ -62,10 +62,9 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 In \refsect{sectie-implementatie-miller-forlus} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, maw.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{malu-basic}
 		\figcaption{MALU - Basis ontwerp met shift}\label{figuur-implementatie-malu-basic}
-	\end{center}
 \end{figure}
 
 Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang $P$ en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{e}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
@@ -77,10 +76,9 @@ In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\
 De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optimized}.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{malu-optimized}
 		\figcaption{MALU - Geoptimaliseerd ontwerp met shift}\label{figuur-implementatie-malu-optimized}
-	\end{center}
 \end{figure}
 
 \section{Berekeningen in $\mathbb{F}_{2^m}$}\label{sectie-implementatie-gf2m}
@@ -126,17 +124,15 @@ Verderop zal gezien worden dat in het Miller algoritme verscheidene keren de som
 De werking is zeer eenvoudig: zo lang $start$ hoog is, worden de registers $mode$ en $plus\_one$ geladen met hun respectievelijke ingangen. Verder wordt, afhankelijk van $mode$, $F$ ingeladen met de waarde van $A$ (optelling, $mode = 0$) of gelijkgesteld aan nul (vermenigvuldiging, $mode = 1$). Ook wordt $cycle$ gereset. Wanneer $start$ laag is, wordt, afhankelijk van de gewenste bewerking en de waarde van $ready$, het register $T$ geladen met de uitgang $R$ van de MALU of het uiteindelijke resultaat $R_{\text{ready}} = R \gg 1$.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{wrapper-gf2m}
 		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$}\label{figuur-implementatie-wrapper-gf2m}
-	\end{center}
 \end{figure}
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{wrapper-gf2m-logica}
 		\figcaption{Logica voor besturing van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$}\label{figuur-implementatie-wrapper-gf2m-logica}
-	\end{center}
 \end{figure}
 
 \subsection{Versnelling van de vermenigvuldiging}\label{subsectie-implementatie-gf2m-versnelling}
@@ -144,10 +140,9 @@ De werking is zeer eenvoudig: zo lang $start$ hoog is, worden de registers $mode
 Wanneer met behulp van de schakeling in \reffig{figuur-implementatie-wrapper-gf2m} een vermenigvuldiging wordt berekend, zal het $m$ klokcycles duren eer het resultaat beschikbaar is aan de uitgang. Het is echter mogelijk dat aantal drastisch naar beneden te halen door $d$ MALU's te gebruiken en dus $d$ optellingen per klokcycle uit te voeren. Het principe hiervan wordt ge\"illustreerd in \reffig{figuur-implementatie-wrapper-gf2m-d}.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{malu-width-d}
 		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$ met woordbreedte $d$}\label{figuur-implementatie-wrapper-gf2m-d}
-	\end{center}
 \end{figure}
 
 De rekentijd van het Miller algoritme zal door toepassing van deze techniek gevoelig verkort kunnen worden. Hoe groter $m$ en hoe meer vermenigvuldigigen er uitgevoerd dienen te worden, des te significanter de tijdswinst die geboekt kan worden. Uiteraard gaat het gebruik van deze techniek wel in tegen de eerder opgelegde beperking aan de grootte van de uiteindelijke schakeling. Het is echter niet zo dat er enkel $d - 1$ extra MALU blokken dienen toegevoegd te worden, afhankelijk van $d$ en $m$ dient ook een extra multiplexer in de schakeling gestoken te worden. Dit is zoals opgemerkt in \refsect{sectie-implementatie-beperkingen} een zeer slechte zaak voor de  oppervlakte.
@@ -211,10 +206,9 @@ Merk op dat op lijn~\ref{lijn-implementatie-miller-algemeen-add-if} slechts \'e\
 De controller zal ontworpen worden zoals het schema in \reffig{figuur-implementatie-miller-controller-algemeen}. Voor het geheugenblok volledig ontworpen kan worden, moeten echter eerst de verschillende berekeningen uitgewerkt worden. Vervolgens zal aan de hand van die uitwerkingen bepaald worden hoeveel registers ten minste noodzakelijk zijn. Ten slotte zal een FSM ontworpen worden.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{controller-miller-algemeen}
 		\figcaption{Schakeling voor de uitvoering van het Miller algoritme}\label{figuur-implementatie-miller-controller-algemeen}
-	\end{center}
 \end{figure}
 
 Grofweg kan het algoritme opgedeeld worden in de for-lus  en een finale exponentiatie. De for-lus kan verder onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet kunnen worden, wat ook verder uitgediept zal worden.
@@ -765,10 +759,9 @@ Voor het ontwerp van het geheugenblok wordt verder gebouwd op de idee\"en aangeb
 Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelijk geheugen is de veel lagere complexiteit. Bij een willekeurig toegankelijk geheugen stijgt de complexiteit van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie. In \reffig{figuur-implementatie-miller-geheugen-circ} wordt dit type ontwerp ge\"illustreerd.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{geheugen-circ}
 		\figcaption{Circulair registerblok ontwerp en mogelijke operaties}\label{figuur-implementatie-miller-geheugen-circ}
-	\end{center}
 \end{figure}
 
 %TODO: Kansberekening: gemiddeld aantal posities dat x_0 of x_1 van register 1 of 2 verwijderd is.
@@ -793,10 +786,9 @@ Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen 
 Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de `swap' (en `copy') operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen `swap' operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{geheugen-circ-optimized}
 		\figcaption{Circulair registerblok geoptimaliseerd voor energieverbruik}\label{figuur-implementatie-miller-geheugen-circ-optimized}
-	\end{center}
 \end{figure}
 
 In dit geval zal de afstand $r$ van een waarde $x$ tot het eerste register gelijk zijn aan $\textsf{min}(j - 1, n - j + 1)$ omdat nu in beide richtingen geschoven kan worden. De gemiddelde afstand $\overline{r}$ is dan
@@ -815,16 +807,67 @@ Tegenover het originele ontwerp voor het registerblok, zal dit ontwerp veel mind
 Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de $\mathbb{F}^{2^m}$ kern verbonden. Om vermenigvuldigingen tot een succesvol einde te brengen, moet het register dat met de $A$ ingang verbonden is elke klokslag met $d$ bits naar links doorgeschoven kunnen worden. Hierbij gaat de originele waarde van het register echter wel verloren. Wanneer de algoritmes die het meeste tijdelijke opslag vragen echter nauwkeurig worden bekeken, zal men merken dat dit geen probleem vormt. Vandaar dat er voor gekozen wordt om het derde tijdelijk register uit de doorschuif lus te halen. Verder moet het ook mogelijk zijn waarden die op de ingang van de Miller controller aangelegd worden op te slaan. Ten slotte moet het resultaat van een berekening opgeslagen kunnen worden. Teneinde dat mogelijk te maken, wordt de uitgang $R$ van de $\mathbb{F}^{2^m}$ kern aan het derde tijdelijk register gekoppeld. Rekend houdend met deze drie zaken, wordt het ontwerp van de eerste twee registers aangepast zoals te zien in \reffig{figuur-implementatie-geheugen-eerste-twee}.
 
 \begin{figure}[h]
-	\begin{center}
+	\centering
 		\includegraphics[width=12cm]{geheugen-eerste-twee}
 		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-geheugen-eerste-twee}
-	\end{center}
 \end{figure}
 
 \subsection{FSM}
 
 Met alle details over de hardware bekend, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zullen een zeer groot deel van de te implementeren states niets anders doen dan geheugen verschuifen. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op state niveau gebeuren. Ook zal zoveel mogelijk getracht worden reeds ge\"implementeerde states opnieuw te gebruiken.
 
-Aangezien een beeld meer dan duizend woorden zegt, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbeling- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en het nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen door dezelfde states begeleid worden, ongeacht of nu de verdubbeling- of de optelstap uitgevoerd wordt.
+Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbeling- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en het nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen met dezelfde states uitgewerkt worden, ongeacht of nu de verdubbeling- of de optelstap uitgevoerd wordt.
 
-Merk op dat voor de verdubbelings- en optelstap in de for-lus enkel de berekening van $\lambda$ in essentie verschillend is. van het algoritme De conditionele overgangen waarbij bijvoorbeeld \emph{add} nagekeken worden, 
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=12cm]{miller-fsm}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-miller-fsm}
+\end{figure}
+
+\section{Optimalisaties}
+
+Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw op de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\textsf{log}_2(m)$ bit niet veel bijdragen aan zowel de uiteindelijke oppervlakte als het verbruik zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
+
+Een register is doorgaans opgebouwd uit een hoeveelheid master-slave D flip-flops. Dit type flip-flops slaat een nieuwe waarde op bij een stijgende klokslag en toont deze waarde aan z'n uitgang vanaf de daaropvolgende neergaande klokslag. In alle paragrafen die volgen, wordt er van uit gegaan dat alle registers effectief uit dit type flip-flops samengesteld zijn.
+
+\subsection{Registers zonder reset}
+
+Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan een met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden, om $F$ in te stellen aan het begin van het algoritme.
+
+\subsection{Clock gating}
+
+%TODO: Is this correct? The thing about losing multiplexers, etc.
+
+Normaal wordt een register elke klokslag immers geladen met de waarde aan zijn ingang en is het dus noodzakelijk het register naar zichzelf terug te koppelen, wil men geen data verliezen. Een voor de hand liggende techniek, clock gating, laat toe deze terugkoppeling (en de daarbij horende multiplexer) achterwege te laten. Bij deze techniek wordt het kloksignaal enkel gepropageerd naar een register wanneer een daarbij horende enable ingang hoog is. Het implementeren van clock gating kost enige extra oppervlakte. Per register moet echter slechts \'e\'en bijhorende clock gating schakeling voorzien  worden en de schakelingen zijn zeer klein zijn. Netto zal er dus nog steeds oppervlakte winst gemaakt worden door de eliminatie van de multiplexers.
+
+De eenvoudigste schakeling waarmee clock gating ge\"implementeerd kan worden is te zien in \reffig{figuur-implementatie-optimalisatie-cg-basic}. Er zijn echter enkele problemen geassocieerd met dit type schakeling. Ze is immers onderhevig aan glitches op het enable signaal. Stel bijvoorbeeld dat de enable ingang al hoog wordt terwijl het kloksignaal ook nog hoog is. Dan zal het kloksignaal gepropageerd worden tot het register, wat niet de bedoeling is.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=12cm]{cg-basic}
+		\figcaption{Basic}\label{figuur-implementatie-optimalisatie-cg-basic}
+\end{figure}
+
+Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De D latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke glitches dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=12cm]{cg-no-glitch}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-optimalisatie-cg-no-glitch}
+\end{figure}
+
+Ten slotte is er nog een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt aangetoond dat het energie verbruik van een D master-slave flip-flop (het type dat gebruikt wordt voor de registers) veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-cg-power-dis}: wanneer de klok hoog is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capacitanties van twee andere poorten. Indien de klokingang laag is, wijzigt een veranderend ingangssignaal enkel de gate capacitantie van de eerste interne poort.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=12cm]{cg-power-dis}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-optimalisatie-cg-power-dis}
+\end{figure}
+
+Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang laag gehouden wordt zolang de enable ingang laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is. Deze schakeling is echter wel niet bestand tegen glitches gedurende de eerste (lage) periode van het kloksignaal.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=12cm]{cg-low-power}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-optimalisatie-cg-low-power}
+\end{figure}
