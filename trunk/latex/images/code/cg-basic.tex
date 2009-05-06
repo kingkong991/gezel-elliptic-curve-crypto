@@ -45,30 +45,30 @@
 
 \draw [bit] (e1.south) 
 		% x = n * 12 + 5
-		\foreach \x in {5, 17, ..., 53} {
+		\foreach \x in {5, 17, ..., 49} {
 			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(5mm, 0) -- ++(1mm, -2.5mm)
 		}
 		-- ++(5mm, 0mm);
 		
 \draw [bit] (e2.south) 
-		\foreach \x / \l in {2.5 / 7.5, 15 / 5, 41 / 5} {
+		\foreach \x / \l in {2.5 / 7.5, 15 / 5, 33 / 13} {
 			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
 		}
-		-- ++(17mm, 0mm);
+		-- ++(5mm, 0mm);
 		
 \draw [bit] (e3.south) 
-		\foreach \x / \l in {5 / 5, 17 / 3, 41 / 5} {
+		\foreach \x / \l in {5 / 5, 17 / 3, 33 / 1, 41 / 5} {
 			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
 		}
-		-- ++(17mm, 0mm);	
+		-- ++(5mm, 0mm);	
 
 \draw [thin, dotted] 
 		% CLK & CLK_GC both low
-		\foreach \x in  {5, 12, 17, 41, 48} {
+		\foreach \x in  {5, 12, 17, 36, 41, 48} {
 			($(e1.south) + (\x mm, 0)$) -- ($(e3.south) + (\x mm, 0)$)
 		}
 		% CLK high
-		\foreach \x in  {22} {
+		\foreach \x in  {22, 33} {
 			($(e1.south) + (\x mm, 2.5mm)$) -- ($(e3.south) + (\x mm, 0)$)
 		};
 		
