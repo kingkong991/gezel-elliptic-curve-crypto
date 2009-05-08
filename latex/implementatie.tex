@@ -1,8 +1,8 @@
-\Chapter{Implementatie}\label{hfdst-implementatie}
+\Chapter{Implementatie\label{hfdst-implementatie}}
 
 In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van de Tate pairing uit de doeken gedaan. Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het veld $\mathbb{F}_{2^m}$. Ten slotte is er dan nog de schakeling die alle berekeningen voor het Miller algoritme in goede banen leidt. Allereerst wordt echter gekeken welke beperkingen aan de implementatie opgelegd moeten worden.
 
-\section{Beperkingen}\label{sectie-implementatie-beperkingen}
+\section{Beperkingen\label{sectie-implementatie-beperkingen}}
 
 Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of een smartcard. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is stroomverbruik, maar dat is helaas zeer moeilijk te berekenen. Het verbruik hangt echter samen met de oppervlakte, dus het beperken daarvan zal ook het verbruik ten goede komen. Het verbruik kan ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus kan dit aspect bij het ontwerp van de schakelingen genegeerd worden. Op dit alles zal dieper ingegaan worden in \refhfdst{hfdst-resultaten}
 
@@ -32,7 +32,7 @@ Algemeen kan gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe 
 	\end{tabular}
 \end{table}
 
-\section{Modular Arithmetic Logical Unit}\label{sectie-implementatie-malu}
+\section{Modular Arithmetic Logical Unit\label{sectie-implementatie-malu}}
 
 De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU) \cite{sakiyama}\cite{batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
@@ -46,8 +46,8 @@ T + B	&= T \xor B\\
 Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn aan die van $T$ en $B$. Indien $B$ van graad $\leq m$ is en $T$ van graad $\leq m + 1$, is de optelling te implementeren als in \refalg{algoritme-implementatie-malu-modulo}.
 
 \begin{algorithm}[h]
-\caption{Modulo optelling in $\mathbb{F}_{2^m}$}
-\label{algoritme-implementatie-malu-modulo}
+	\caption{Modulo optelling in $\mathbb{F}_{2^m}$}
+	\label{algoritme-implementatie-malu-modulo}
 	\KwIn{$B \in \mathbb{F}_{2^m}$, $T \in \mathbb{F}_{2^{m + 1}}$}
 	\KwOut{$R \mod P \in \mathbb{F}_{2^m}$}
 	\SetKwFunction{Degree}{Degree}
@@ -64,7 +64,7 @@ In \refsect{sectie-implementatie-miller-forlus} zal blijken dat het vaak nodig z
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{malu-basic}
-		\figcaption{MALU - Basis ontwerp met shift}\label{figuur-implementatie-malu-basic}
+		\figcaption{MALU - Basis ontwerp met shift\label{figuur-implementatie-malu-basic}}
 \end{figure}
 
 Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang $P$ en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{e}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
@@ -78,20 +78,20 @@ De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optim
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{malu-optimized}
-		\figcaption{MALU - Geoptimaliseerd ontwerp met shift}\label{figuur-implementatie-malu-optimized}
+		\figcaption{MALU - Geoptimaliseerd ontwerp met shift\label{figuur-implementatie-malu-optimized}}
 \end{figure}
 
-\section{Berekeningen in $\mathbb{F}_{2^m}$}\label{sectie-implementatie-gf2m}
+\section{Berekeningen in $\mathbb{F}_{2^m}$\label{sectie-implementatie-gf2m}}
 
-\subsection{Basisontwerp}\label{subsectie-implementatie-gf2m-basisontwerp}
+\subsection{Basisontwerp\label{subsectie-implementatie-gf2m-basisontwerp}}
 
 De eerder ontworpen MALU schakeling laat toe optellingen te doen, maar het Miller algoritme vereist dat er ook vermenigvuldigingen worden uitgerekend. Delingen en machtsverheffingen kunnen met behulp van vermenigvuldiging berekend worden en dienen dus niet rechtstreeks ge\"implementeerd te worden. Indien dus zowel optellingen als vermenigvuldigingen berekend kunnen worden, is alles voorhanden om de Tate pairing te berekenen.
 
 Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A \cdot B = R$} berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Door de modulo operatie telkens op het tussenresultaat uit te voeren, is het steeds van graad $\leq m$ en kan het opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
 
 \begin{algorithm}[h]
-\caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}
-\label{algoritme-implementatie-gf2m-multiply}
+	\caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}
+	\label{algoritme-implementatie-gf2m-multiply}
 	\KwIn{$A, B \in \mathbb{F}_{2^m}$}
 	\KwOut{$R = A \cdot B \in \mathbb{F}_{2^m}$}
 	\KwData{$T \in \mathbb{F}_{2^{m + 1}}$}
@@ -126,23 +126,23 @@ De werking is zeer eenvoudig: zo lang $start$ hoog is, worden de registers $mode
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{wrapper-gf2m}
-		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$}\label{figuur-implementatie-wrapper-gf2m}
+		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$\label{figuur-implementatie-wrapper-gf2m}}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{wrapper-gf2m-logica}
-		\figcaption{Logica voor besturing van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$}\label{figuur-implementatie-wrapper-gf2m-logica}
+		\figcaption{Logica voor besturing van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$\label{figuur-implementatie-wrapper-gf2m-logica}}
 \end{figure}
 
-\subsection{Versnelling van de vermenigvuldiging}\label{subsectie-implementatie-gf2m-versnelling}
+\subsection{Versnelling van de vermenigvuldiging\label{subsectie-implementatie-gf2m-versnelling}}
 
 Wanneer met behulp van de schakeling in \reffig{figuur-implementatie-wrapper-gf2m} een vermenigvuldiging wordt berekend, zal het $m$ klokcycles duren eer het resultaat beschikbaar is aan de uitgang. Het is echter mogelijk dat aantal drastisch naar beneden te halen door $d$ MALU's te gebruiken en dus $d$ optellingen per klokcycle uit te voeren. Het principe hiervan wordt ge\"illustreerd in \reffig{figuur-implementatie-wrapper-gf2m-d}.
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{malu-width-d}
-		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$ met woordbreedte $d$}\label{figuur-implementatie-wrapper-gf2m-d}
+		\figcaption{Schakeling voor berekeningen in $\mathbb{F}_{2^m}$ met woordbreedte $d$\label{figuur-implementatie-wrapper-gf2m-d}}
 \end{figure}
 
 De rekentijd van het Miller algoritme zal door toepassing van deze techniek gevoelig verkort kunnen worden. Hoe groter $m$ en hoe meer vermenigvuldigigen er uitgevoerd dienen te worden, des te significanter de tijdswinst die geboekt kan worden. Uiteraard gaat het gebruik van deze techniek wel in tegen de eerder opgelegde beperking aan de grootte van de uiteindelijke schakeling. Het is echter niet zo dat er enkel $d - 1$ extra MALU blokken dienen toegevoegd te worden, afhankelijk van $d$ en $m$ dient ook een extra multiplexer in de schakeling gestoken te worden. Dit is zoals opgemerkt in \refsect{sectie-implementatie-beperkingen} een zeer slechte zaak voor de  oppervlakte.
@@ -175,9 +175,9 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 	\end{tabular}
 \end{table}
 
-\section{Controller voor het Miller algoritme}\label{sectie-implementatie-miller}
+\section{Controller voor het Miller algoritme\label{sectie-implementatie-miller}}
 
-\subsection{Algemeen ontwerp}\label{subsectie-implementatie-miller-ontwerp}
+\subsection{Algemeen ontwerp\label{subsectie-implementatie-miller-ontwerp}}
 
 Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (\refalg{algoritme-cryptografie-pairings-miller}) uitvoert. Het algoritme met invulling van de vastgelegde parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
 
@@ -208,14 +208,14 @@ De controller zal ontworpen worden zoals het schema in \reffig{figuur-implementa
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{controller-miller}
-		\figcaption{Schakeling voor de uitvoering van het Miller algoritme}\label{figuur-implementatie-miller-controller}
+		\figcaption{Schakeling voor de uitvoering van het Miller algoritme\label{figuur-implementatie-miller-controller}}
 \end{figure}
 
 Grofweg kan het algoritme opgedeeld worden in de for-lus  en een finale exponentiatie. De for-lus kan verder onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet kunnen worden, wat ook verder uitgediept zal worden.
 
 Bij elk van de volgende algoritmen zal aangegeven worden hoeveel en welke bewerkingen juist nodig zijn. Daarbij staat \textsf{A} voor een optelling, \textsf{M} voor een vermenigvuldiging, \textsf{S} voor een kwadratering en \textsf{I} voor een inversie. Aangezien er echter geen afzonderlijke schakeling voor kwadrateren ontworpen is, zijn \textsf{S} en \textsf{M} qua rekentijd in dit geval equivalent aan elkaar. De bewerking $a + 1$ neemt geen extra tijd in beslag, omdat die functie parallel met een optelling of vermenigvuldiging kan uitgevoerd worden door de $plus\_one$ van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ hoog te maken bij de start van een berekening.
 
-\subsection{For-lus}\label{subsectie-implementatie-miller-forlus}
+\subsection{For-lus\label{subsectie-implementatie-miller-forlus}}
 
 Zoals reeds eerder vermeld kan de for-lus onderverdeeld worden in een verdubbelingsstap, een optellingstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze onderdelen zal in de volgende paragrafen in detail aan bod komen.
 
@@ -431,7 +431,7 @@ Mist het gebruik van een vierde tijdelijk register zou het mogelijk zijn de bere
 	$F_c \leftarrow b + a$; $F_d \leftarrow c$\comm{1 A}\;
 \end{algorithm}
 
-\subsection{Finale exponentiatie}\label{subsectie-implementatie-miller-finale-exp}
+\subsection{Finale exponentiatie\label{subsectie-implementatie-miller-finale-exp}}
 
 Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $e(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen. De gebruikte methode zijn gebaseerd op die in \cite{beuchat}, aangepast aan het gekozen extensieveld.
 
@@ -750,7 +750,7 @@ Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelij
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{geheugen-circ}
-		\figcaption{Circulair registerblok ontwerp en mogelijke operaties}\label{figuur-implementatie-miller-geheugen-circ}
+		\figcaption{Circulair registerblok ontwerp en mogelijke operaties\label{figuur-implementatie-miller-geheugen-circ}}
 \end{figure}
 
 %TODO: Kansberekening: gemiddeld aantal posities dat x_0 of x_1 van register 1 of 2 verwijderd is.
@@ -777,7 +777,7 @@ Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zo
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{geheugen-circ-optimized}
-		\figcaption{Circulair registerblok geoptimaliseerd voor energieverbruik}\label{figuur-implementatie-miller-geheugen-circ-optimized}
+		\figcaption{Circulair registerblok geoptimaliseerd voor energieverbruik\label{figuur-implementatie-miller-geheugen-circ-optimized}}
 \end{figure}
 
 In dit geval zal de afstand $r$ van een waarde $x$ tot het eerste register gelijk zijn aan $\textsf{min}(j - 1, n - j + 1)$ omdat nu in beide richtingen geschoven kan worden. De gemiddelde afstand $\overline{r}$ is dan
@@ -798,7 +798,7 @@ Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{geheugen-eerste-twee}
-		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok}\label{figuur-implementatie-geheugen-eerste-twee}
+		\figcaption{Ontwerp van de schakeling rond de eerste twee registers in het registerblok\label{figuur-implementatie-geheugen-eerste-twee}}
 \end{figure}
 
 \subsection{FSM}
@@ -810,7 +810,7 @@ Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder ve
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{miller-fsm}
-		\figcaption{FSM ontwerp van de controller voor het Miller algoritme}\label{figuur-miller-fsm}
+		\figcaption{FSM ontwerp van de controller voor het Miller algoritme\label{figuur-miller-fsm}}
 \end{figure}
 
 \section{Optimalisaties}
@@ -834,7 +834,7 @@ De eenvoudigste schakeling waarmee clock gating ge\"implementeerd kan worden is 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{cg-basic}
-		\figcaption{Schakeling voor clock gating - Basis ontwerp}\label{figuur-implementatie-optimalisatie-cg-basic}
+		\figcaption{Schakeling voor clock gating - Basis ontwerp\label{figuur-implementatie-optimalisatie-cg-basic}}
 \end{figure}
 
 Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De D latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke glitches dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
@@ -842,23 +842,22 @@ Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuu
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{cg-no-glitch}
-		\figcaption{Schakeling voor clock gating - Glitchvrij ontwerp}\label{figuur-implementatie-optimalisatie-cg-no-glitch}
+		\figcaption{Schakeling voor clock gating - Glitchvrij ontwerp\label{figuur-implementatie-optimalisatie-cg-no-glitch}}
 \end{figure}
 
-Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt aangetoond dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-cg-power-dis}: wanneer de klok hoog is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang laag is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
+Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt aangetoond dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-optimalisatie-cg-power-dis}: wanneer de klok hoog is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang laag is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
 
 \begin{figure}[h]
 	\centering
 		\subfigure[$CLK = 0$]{
 			\includegraphics[width=5.7cm]{cg-pow-dis-zero}
-			\label{subfig-1-implementatie-optimalisatie-cg-power-dis}
+			%\label{subfig-1-implementatie-optimalisatie-cg-power-dis}
 		}
 		\subfigure[$CLK = 1$]{
 			\includegraphics[width=5.7cm]{cg-pow-dis-one}
-			\label{subfig-2-implementatie-optimalisatie-cg-power-dis}
+			%\label{subfig-2-implementatie-optimalisatie-cg-power-dis}
 		}
-		\label{figuur-implementatie-optimalisatie-cg-power-dis}
-		\caption[Stroomverbruikende componenten van een D flip-flop bij constante waarde van de klok ingang \cite{mueller}]{Stroomverbruikende componenten van een D flip-flop bij constante waarde van de klok ingang \cite{mueller}}
+		\figcaption{Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang \cite{mueller}\label{figuur-implementatie-optimalisatie-cg-power-dis}}
 \end{figure}
 
 Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang laag gehouden wordt zolang de enable ingang laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is. Deze schakeling is echter wel niet bestand tegen glitches gedurende de eerste (lage) periode van het kloksignaal.
@@ -866,5 +865,5 @@ Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang la
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{cg-low-power}
-		\figcaption{Schakeling voor clock gating - Laag vermogen ontwerp}\label{figuur-implementatie-optimalisatie-cg-low-power}
+		\figcaption{Schakeling voor clock gating - Laag vermogen ontwerp\label{figuur-implementatie-optimalisatie-cg-low-power}}
 \end{figure}
