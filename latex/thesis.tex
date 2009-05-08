@@ -14,12 +14,14 @@
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
 
-\usepackage{tocloft}		% Lijsten van willekeurige dingen
+\usepackage[subfigure]{tocloft}		% Lijsten van willekeurige dingen + optie om errors met subfigure te vermijden
 
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}	% Algorithm typesetting
 
 %\usepackage[pdftex, bookmarks=true, bookmarksnumbered=true, pdfborder={0 0 0}]{hyperref}	% Links in pdf
 \usepackage[pdftex, pdfborder={0 0 0}]{hyperref}	% Links in pdf
+
+\usepackage{subfigure}	% Multiple figures in one float
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -131,12 +133,12 @@
 %\bibliographystyle{plain}
 
 % Voorkom lelijke opmaak
-\clubpenalty=8000
-\widowpenalty=8000
-\displaywidowpenalty=8000
+%\clubpenalty=8000
+%\widowpenalty=8000
+%\displaywidowpenalty=8000
 
-\hyphenpenalty=5000
-\tolerance=1000
+%\hyphenpenalty=5000
+%\tolerance=1000
 
 %%% Code voor figuren %%%
 %%% Plaatst figuur op huidige plaats %%%
@@ -164,7 +166,7 @@
 %\include{copyright}
 
 % Reset counter & maak inhoudstafel
-\setcounter{page}{1}
+%\setcounter{page}{1}
 \tableofcontents
 \listoffigures
 %\listoftables
@@ -172,6 +174,8 @@
 %\listofmyequations
 
 %\clearpage
+
+\setcounter{page}{0}
 
 \include{implementatie}		% Hardware implementatie
 

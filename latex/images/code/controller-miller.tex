@@ -1,0 +1,69 @@
+\tikzset {
+	labelbox/.style={draw, chamfered rectangle, chamfered rectangle corners={north east, south east}, chamfered rectangle angle=55, chamfered rectangle xsep=2cm, chamfered rectangle ysep=14pt/2, minimum height=14pt, minimum width=1.3cm, text width=1.1cm, inner sep=0pt, outer sep=0pt, text ragged},
+	labelboxin/.style={labelbox, anchor=base, xshift=0.8mm},
+	labelboxout/.style={labelbox, anchor=west},
+	labelboxreg/.style={draw, minimum height=14pt, minimum width=2cm, outer sep=0pt},
+	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.27cm, fill, circle},
+	bit/.style={thick, line cap=butt},
+	multibit/.style={line width=2pt},
+	monsterbit/.style={line width=4pt},
+	nothing/.style={inner sep=0mm, outer sep=0pt, text width=0mm, text height=0mm, minimum width=0.8pt},
+	labeltext/.style={text ragged},
+	labeltextin/.style={labeltext, anchor=west, xshift=-6mm},
+	labeltextout/.style={labeltext, anchor=west, xshift=0mm},
+	labeltextreg/.style={labeltext, text centered},
+	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt},
+	adder/.style={draw, circle, inner sep=0pt, outer sep=0pt, minimum size=6mm, semithick},
+	gfcore/.style={draw, minimum height=14mm, minimum width=3cm, text width=2cm, text centered, semithick},
+	control/.style={gfcore, minimum height=14mm, minimum width=3cm, text width=2cm, yshift=-3.6mm},
+	mem/.style={gfcore, minimum height=14mm, minimum width=3cm, text width=2cm},
+	logic/.style={draw, minimum size=1mm, fill}
+}
+
+\def\labelboxregl#1#2#3{\node[labeltextreg, #3] {#2}; \node[labelboxreg, #3] (#1) {}; \draw (#1.north west) -- ($(#1.north west)!0.5!(#1.south west) + (2mm, 0)$) -- (#1.south west);}
+
+\def\labelboxregr#1#2#3{\node[labeltextreg, #3] {#2}; \node[labelboxreg, #3] (#1) {}; \draw (#1.north east) -- ($(#1.north east)!0.5!(#1.south east) + (-2mm, 0)$) -- (#1.south east);}
+
+\def\labelboxin#1#2#3{\node[labeltextin, #3] {#2}; \node[labelboxin, #3] (#1) {};}
+\def\labelboxout#1#2#3{\node[labeltextout, #3] {#2}; \node[labelboxout, #3] (#1) {};}
+
+\def\adder#1#2{\node[adder, #2] (#1) {+1};}% \draw [semithick] ($(#1.north) - (0, 0.5mm)$) -- ($(#1.south) + (0, 0.5mm)$) ($(#1.west) + (0.5mm, 0)$) -- ($(#1.east) - (0.5mm, 0)$);} 
+
+\def\boxgfcore#1{\node[gfcore] (#1) {\Large $\mathbb{F}_{2^m}$ Core};}
+\def\boxcontrol#1{\node[control] (#1) {\Large Control};}
+\def\boxmem#1{\node[mem] (#1) {\Large Memory};}
+
+\begin{tikzpicture}
+\hspace{-4mm}
+\matrix [column sep=1.5mm, row sep=1.5mm] {
+	\labelboxin{i1}{start}{}; &[8mm]
+	\labelboxregl{r1}{start}{}; &[8mm]
+	\boxcontrol{cont}; &[8mm]
+	\labelboxout{o1}{ready}{yshift=-3.6mm}; \\[-7.5mm]
+	
+	\labelboxin{i2}{next}{}; &[8mm]
+	\labelboxregl{r2}{next}{}; \\[3mm]
+	
+	\labelboxin{i3}{input}{}; &[8mm]
+	\boxmem{mem}; &[4mm]
+	\boxgfcore{gf}; &
+	\labelboxout{o2}{out}{yshift=10mm}; \\
+};
+
+\draw	[bit] (i1.east) -- (r1.west)
+		(i2.east) -- (r2.west)
+		(r1.east) -- (r1.east -| cont.west)
+		(r2.east) -- (r2.east -| cont.west)
+		(o1.west) -- (o1.west -| cont.east)
+		($(cont.south) + (1mm, 0)$) -- ($(gf.north) + (1mm, 0)$)
+		($(cont.south) - (1mm, 0)$) |- ($(cont.south)!0.3!(mem.north)$ -| mem.north) -| (mem.north);
+			
+\draw	[multibit] ($(i3.east)!0.5!(mem.west)$) -- (mem.west)
+		($(mem.east)!0.5!(gf.west)$) node[joint] {} |- (o2.west);
+
+\draw	[monsterbit] (mem.east) -- (gf.west);
+			
+\draw	[multibit, line cap=rect] (i3.east) -- ($(i3.east)!0.5!(mem.west)$);
+
+\draw[multibit, color=black!50] ($(mem.south west) - (4mm, 2mm)$) rectangle ($(cont.north east) + (4mm, 2mm)$);
+\end{tikzpicture}

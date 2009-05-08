@@ -4,31 +4,39 @@
 	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.15cm, fill, circle},
 	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt},
 	input/.style={at start, above, text width=2cm, xshift=10mm, yshift=-0.7mm},
-	output/.style={at end, above, anchor=south west, xshift=-10mm, yshift=-0.7mm},
+	output/.style={at end, above, anchor=south east, xshift=-1mm, yshift=-0.7mm},
 	empty/.style={}
 }
 \begin{tikzpicture}
 \hspace{-1mm}
 \matrix [column sep=1.5mm, row sep=4mm] {
+	\\[1mm]
+	
 	\node[mux, xshift=-2.2mm] (m1) {}; &[5mm]
 	\node[reg] (r0) {reg$_0$}; &[0.5mm]
 	\node[empty] (e1) {}; &[30mm]
-	\node[mux, xshift=4.2mm, minimum width=1.6cm] (m2) {}; &[5mm]
-	\node[reg, yshift=-6.4mm] (r1) {reg$_1$}; \\[0mm]
+	\node[mux, minimum width=1.6cm] (m2) {}; &[5mm]
+	\node[reg, yshift=-2.2mm] (r1) {reg$_1$}; &[2mm]
+	\node[joint, yshift=-2.2mm] (e2) {}; \\[0mm]
 	
 	&\\};
 \begin{scope}[>=latex', very thick]
-	\draw [->] (r0.east) -- ($(m2.south west) + (0, 4.5mm)$);
+	\draw [->] (r0.east) -- ($(m2.south) + (0, 2.1mm)$);
 	\draw [->] (m2.north) -- (r1.west);
-	\draw [->] (r1.east) -| node[joint] {} ($(r1.north east) + (3mm, 12mm)$) -| ($(m1.south west) + (-4mm, 2.5mm)$) -- ($(m1.south west) + (0, 2.5mm)$);
 	\draw [->] ($(m1.south) + (-8mm, 0mm)$) |- node [input] {$R$} (m1.south);
-	\draw [->] (e1.base) node[joint] {} |- node [above, near end, yshift=-0.7mm] {$\ll d$} ($(m1.south) + (-4mm, -8.5mm)$) |- ($(m1.south east) + (0, -2.5mm)$);
+	\draw [->] (e1.base) node[joint] {} |- node [above, near end, yshift=-0.7mm] {$\ll d$} ($(m1.south) + (-4mm, -8.8mm)$) |- ($(m1.south east) + (0, -2.5mm)$);
 	\draw [->] (m1.north) -- (r0.west);
-	\draw [->] ($(m2.south) + (-11mm, 2.1mm)$) |- node [input] {input} ($(m2.south) + (0, 2.1mm)$);
+	\draw [->] ($(m2.south west) + (-11mm, 4.5mm)$) |- node [input] {input} ($(m2.south west) + (0, 4.5mm)$);
 	\draw [->] ($(m2.south) + (-11mm, -2.1mm)$) |- node [input] {reg$_2$} ($(m2.south) + (0, -2.1mm)$);
 	\draw [->] ($(m2.south east) + (-11mm, -4.5mm)$) |- node [input] {reg$_n$} ($(m2.south east) + (0, -4.5mm)$);
-	\draw [->] (r1.east) -- node[output] {reg$_2$} node[output, below, anchor=north west, yshift=+0.7mm] {reg$_n$} ($(r1.east) + (14mm, 0)$);
-	\draw [->] ($(r1.east) + (3mm, 0)$) |- node[output, anchor=south east, xshift=9mm] {$B$} ($(r1.east) + (14mm, -10mm)$);
-	\draw [->] ($(e1.base) + (4mm, 0)$) node[joint] {} |- node[output, anchor=south east, xshift=9mm] {$A$} ($(e1.base) + (15mm, -8.5mm)$);
+	
+	\draw [->] (r1.east) -- (e2.base) |- ($(m1.south west) + (-4mm, 7mm)$) |- ($(m1.south west) + (0, 2.5mm)$);
+	
+	\draw [->] (e2.base) |- node[output] {reg$_n$} ++(16mm, 0);
+	\draw [->] ($(e2.base) + (0, 5mm)$) node[joint] {} -- node[output] {reg$_2$} ++(16mm, 0);
+	\draw [->] ($(e2.base) + (0, -5mm)$) node[joint] {} -- node[output] {B} ++(16mm, 0);
+	\draw [->] (e2.base) |- ($(e2.base) + (0, -10mm)$) |- node[output] {output} ++(16mm, 0);
+		
+	\draw [->] ($(e1.base) + (4mm, 0)$) node[joint] {} |- node[output] {$A$} ++(11mm, -8.8mm);
 \end{scope}
 \end{tikzpicture}

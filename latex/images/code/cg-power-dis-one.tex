@@ -1,0 +1,87 @@
+\tikzset {
+	not/.style={draw, not gate US, line width=0.6pt, scale=1.0, anchor=west},
+	inot/.style={not, rotate=180, anchor=output},
+	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.10cm, fill, circle},
+	bit/.style={thick, line cap=butt},
+	multibit/.style={line width=1pt},
+	empty/.style={},
+	input/.style={at start, above, text width=2cm, xshift=10mm, yshift=-0.7mm},
+	output/.style={at end, above, anchor=south east, xshift=-1mm, yshift=-0.7mm},
+	outputline/.style={-latex'},
+	ct/.style={anchor=south, yshift=-0.7mm},
+	cb/.style={anchor=north, yshift=0.7mm},
+	circ/.style={line width=0.6pt, inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.135cm, circle, draw, fill=white, anchor=north west},
+	power/.style={line width=1.7pt, scale=0.6}
+}
+
+\def\labelboxin#1#2#3{\node[labeltextin, #3] {#2}; \node[labelboxin, #3] (#1) {};}
+
+\begin{tikzpicture}
+\hspace{-1mm}
+\matrix [column sep=6mm, row sep=1.5mm, matrix anchor=north west] at (0,0) {
+	\node[empty] (i1) {}; &[6mm]
+	\node[not] (n1) {}; &
+	\node[not] (n2) {}; &[4mm]
+	\node[not] (n3) {}; &
+	\node[not] (n4) {}; &
+	\node[empty] (e1) {}; &
+	\node[empty] (o1) {}; \\[7.4mm]
+	
+	&
+	&
+	\node[inot] (n5) {}; &
+	&
+	\node[inot] (n6) {}; \\[10mm]
+	
+	\node[empty] (i2) {}; &
+	\node[not] (n7) {}; &
+	\node[not] (n8) {}; &
+	\node[empty] (o2) {}; \\
+};
+
+% Connect not gates
+\draw [bit] (n1.output) -- (n2.input)
+		(n2.output) -- (n3.input)
+		(n3.output) -- (n4.input)
+		(n5.output) -| ($(n2.input) - (3mm, 0)$ -| n5.output) node[joint] {}
+		(n6.output) -| ($(n4.input) - (3mm, 0)$ -| n6.output) node[joint] {}
+		(n5.input) -| ($(n2.output) + (3mm, 0)$ -| n5.input) node[joint] {}
+		(n6.input) -| ($(n4.output) + (3mm, 0)$ -| n6.input) node[joint] {}
+		(n7.output) -- (n8.input);
+
+% In- & outputs
+\draw [bit] (i2.base) -- node[input] {CLK} (n7.input)
+		(n4.output) [outputline] -- node[output] {Q} (o1.base);
+		
+\draw [line width=1.7pt] (i1.base) -- node[input] {D} (n1.input)
+		(n1.north west) -- (n1.south west);
+		
+\draw [bit] (n8.output) [outputline] -- node[output] {CN} (o2.base);
+		
+\draw [bit] ($(n7.output)!0.5!(n8.input)$) node[joint] {} [outputline] |- ($(o2.base) - (0, 5mm)$) node[output] {CP};
+		
+% Draw weird stuff clock lines
+\draw	[bit, line cap=rect] ($(n1.north)!0.5!(n1.north east)$) -- ++(0, 3mm) node[ct] {CP}
+		($(n1.south)!0.5!(n1.south east)$) -- ++(0, -4mm) node[cb] {CN}
+		($(n3.north)!0.5!(n3.north east)$) -- ++(0, 3mm) node[ct] {CN}
+		($(n3.south)!0.5!(n3.south east)$) -- ++(0, -4mm) node[cb] {CP}
+		
+		($(n5.north)!0.5!(n5.north east)$) -- ++(0, -4mm) node[cb] {CP}
+		($(n5.south)!0.5!(n5.south east)$) -- ++(0, 3mm) node[ct] {CN}
+		($(n6.north)!0.5!(n6.north east)$) -- ++(0, -4mm) node[cb] {CN}
+		($(n6.south)!0.5!(n6.south east)$) -- ++(0, 3mm) node[ct] {CP};
+
+% Add weird stuff
+\draw (n1.south) node[circ] {}
+		(n3.south) node[circ] {}
+		(n5.north) node[circ, anchor=north east] {}
+		(n6.north) node[circ, anchor=north east] {};
+		
+% Add lines around master & slave flip-flop
+\draw [semithick, densely dotted, color=black!50] ($(n1.base) + (-4mm, 10mm)$) rectangle ($(n5.base) + (7mm, -10mm)$)
+		($(n6.base) + (7mm, -10mm)$) rectangle ($(n3.base) + (-4mm, 10mm)$);
+
+% Draw borders around everything
+\draw	[multibit, color=black!50] ($(n7.base) - (5mm, 7mm)$) rectangle ($(n4.base) + (11mm, 11mm)$);
+
+\end{tikzpicture}

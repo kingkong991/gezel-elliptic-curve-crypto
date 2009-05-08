@@ -19,17 +19,20 @@
 
 \begin{tikzpicture}
 \hspace{-2mm}
-\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (0,-0.65) {
+\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (-1.5,-0.5) {
 	\node[emptyraised] (e1) {}; &[8mm]
-	\node[and, logic gate inputs=nn] (and1) {}; &[10mm]
+	\node[not, yshift=1mm] (not1) {}; &[2mm]
+	\node[or, yshift=0.2mm] (or1) {}; &[10mm]
 	\node[emptyraised] (o1) {}; \\
 
 	\node[empty] (e2) {}; \\
 };
 
-\draw [bit] (e1.base) -- node[input] {enable} (and1.input 1)
-		(e2.base) -| node[input] {CLK} ($(and1.input 2) - (2.5mm, 0)$) |- (and1.input 2)
-		(and1.output) [outputline] -- node[output] {CLK$_{\text{CG}}$} (and1.output -| o1.base);
+\draw [bit] (e1.base) -- node[input] {enable} (not1.input)
+%		(e1.base) -- (or1.input 1)
+		(not1.output) -- (or1.input 1)
+		(e2.base) -| node[input] {CLK} ($(or1.input 2) - (2.5mm, 0)$) |- (or1.input 2)
+		(or1.output) [outputline] -- node[output] {CLK$_{\text{CG}}$} (or1.output -| o1.base);
 
 \matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (4.5,0) {
 	\node[inp] (s1) {CLK}; &[-4mm]
@@ -56,23 +59,25 @@
 		}
 		-- ++(5mm, 0mm);
 		
-\draw [bit] (e3.south) 
-		\foreach \x / \l in {5 / 5, 17 / 3, 33 / 1, 41 / 5} {
-			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
+\draw [bit] ($(e3.south) + (0, 2.5mm)$) -- ++(2mm, 0) -- ++(1mm, -2.5mm)
+		\foreach \x / \l in {5 / 9, 17 / 17} {
+			-- ++($(\x mm, 0) - (3mm, 0)$) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
 		}
-		-- ++(5mm, 0mm);
+		-- ++(5mm, 0mm) -- ++(1mm, 2.5mm) -- ++(11 mm, 0);
 
 %\draw [bit, red] ($(e2.south) + (33 mm, 0)$) -- ++(1mm, 2.5mm) -- ++(2 mm, 0);		
 %\draw [bit, red] ($(e3.south) + (33 mm, 0)$) -- ++(1mm, 2.5mm) -- ++(1 mm, 0) -- ++(1mm, -2.5mm);
 
-\draw [thin, dotted]
-		% CLK falling
-		\foreach \x in  {5, 11, 17, 35, 41, 47} {
-			($(e1.south) + (\x mm, 1.25mm) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
+%\draw [thin] ($(e1.south) + (2 mm, 0)$) -- ($(e3.south) + (2 mm, 0)$);
+
+\draw [thin, dotted] 
+		% CLK & CLK_GC both low
+		\foreach \x in  {2, 15} {
+			($(e1.south) + (\x mm, 0) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
 		}
 		% CLK high
-		\foreach \x in  {21, 33} {
-			($(e1.south) + (\x mm, 2.5mm) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
+		\foreach \x in  {5, 17, 35, 41} {
+			($(e1.south) + (\x mm, 1.25mm) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
 		};
 		
 % ($(e1.south) + (5mm, 0)$) -- ($(e1.north) + (6mm, 0)$) -- ($(e1.north) + (11mm, 0)$) -- ($(e1.south) + (12mm, 0)$) -- ($(e1.south) + (17mm, 0)$) -- ($(e1.north) + (18mm, 0)$) -- ($(e1.north) + (23mm, 0)$) -- ($(e1.south) + (24mm, 0)$) ;
