@@ -12,22 +12,32 @@
 	input/.style={at start, above, text width=2cm, xshift=10mm, yshift=-0.7mm},
 	output/.style={at end, above, anchor=south east, xshift=-1mm, yshift=-0.7mm},
 	outputline/.style={-latex'},
-	inp/.style={anchor=west}
+	inp/.style={anchor=west},
+	latch/.style={draw, minimum height=14mm, minimum width=12mm, thick}
 }
 
 \def\labelboxin#1#2#3{\node[labeltextin, #3] {#2}; \node[labelboxin, #3] (#1) {};}
 
 \begin{tikzpicture}
 \hspace{-2mm}
-\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (0,-0.65) {
-	\node[emptyraised] (e1) {}; &[8mm]
-	\node[and, logic gate inputs=nn] (and1) {}; &[10mm]
-	\node[emptyraised] (o1) {}; \\
+\matrix [column sep=5mm, row sep=1.5mm, matrix anchor=north west] at (-2.4,-0.35) {
+	\node[emptyraised] (e1) {}; &[10mm]
+	\node[latch] (l1) {};&[4mm]
+	\node[and, logic gate inputs=nn, yshift=4.5mm] (and1) {}; &[10mm]
+	\node[emptyraised] (o1) {}; \\[0mm]
 
-	\node[empty] (e2) {}; \\
+	\node[empty] (e2) {}; &
+\\
 };
 
-\draw [bit] (e1.base) -- node[input] {enable} (and1.input 1)
+\draw (l1.north west) node[empty, anchor=north west] (in1) {D}
+		(l1.north east) node[empty, anchor=north east] (out1) {Q}
+		(l1.south west) node[empty, anchor=south west] (in2) {E}
+		($(in2.west) + (-1mm,0)$) circle (1mm) [thick, anchor=west];
+
+\draw [bit] (e1.base |- in1.west) -- node[input] {enable} (in1.west)
+		(out1.east) -- (and1.input 1)
+		($(in2.west) - (2mm, 0)$) -| ($(e2.base -| in2.west) - (4.5mm, 0)$) node[joint] {} 
 		(e2.base) -| node[input] {CLK} ($(and1.input 2) - (2.5mm, 0)$) |- (and1.input 2)
 		(and1.output) [outputline] -- node[output] {CLK$_{\text{CG}}$} (and1.output -| o1.base);
 
@@ -37,9 +47,12 @@
 	
 	\node[inp] (s2) {enable}; &
 	\node[empty] (e2) {}; & \\
-	
-	\node[inp] (s3) {CLK$_{\text{CG}}$}; &
+
+	\node[inp] (s3) {Q}; &
 	\node[empty] (e3) {}; & \\
+	
+	\node[inp] (s4) {CLK$_{\text{CG}}$}; &
+	\node[empty] (e4) {}; & \\
 };
 
 
@@ -57,25 +70,28 @@
 		-- ++(5mm, 0mm);
 		
 \draw [bit] (e3.south) 
-		\foreach \x / \l in {5 / 5, 17 / 3, 33 / 1, 41 / 5} {
+		\foreach \x / \l in {2 / 8, 15 / 5, 36 / 10} {
+			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
+		}
+		-- ++(5mm, 0mm);
+		
+\draw [bit] (e4.south) 
+		\foreach \x / \l in {5 / 5, 17 / 3, 41 / 5} {
 			-- ++(\x mm, 0) -- ++(1mm, 2.5mm) -- ++(\l mm, 0) -- ++(1mm, -2.5mm)
 		}
 		-- ++(5mm, 0mm);
 
-%\draw [bit, red] ($(e2.south) + (33 mm, 0)$) -- ++(1mm, 2.5mm) -- ++(2 mm, 0);		
-%\draw [bit, red] ($(e3.south) + (33 mm, 0)$) -- ++(1mm, 2.5mm) -- ++(1 mm, 0) -- ++(1mm, -2.5mm);
 
-\draw [thin, dotted]
+\draw [thin, dotted] 
 		% CLK falling
-		\foreach \x in  {5, 11, 17, 35, 41, 47} {
-			($(e1.south) + (\x mm, 1.25mm) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
+		\foreach \x in  {5, 11, 17,  41, 47} {
+			($(e1.south) + (\x mm, 1.25mm) + (0.5mm, 0)$) -- ($(e4.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
 		}
 		% CLK high
-		\foreach \x in  {21, 33} {
-			($(e1.south) + (\x mm, 2.5mm) + (0.5mm, 0)$) -- ($(e3.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
+		\foreach \x in  {21} {
+			($(e1.south) + (\x mm, 2.5mm) + (0.5mm, 0)$) -- ($(e4.south) + (\x mm, 0) + (0.5mm, 1.25mm)$)
 		};
-		
-% ($(e1.south) + (5mm, 0)$) -- ($(e1.north) + (6mm, 0)$) -- ($(e1.north) + (11mm, 0)$) -- ($(e1.south) + (12mm, 0)$) -- ($(e1.south) + (17mm, 0)$) -- ($(e1.north) + (18mm, 0)$) -- ($(e1.north) + (23mm, 0)$) -- ($(e1.south) + (24mm, 0)$) ;
 
-\draw [bit] (4.25, 0 |- s1.north) -- (4.25, 0 |- s3.south);
+
+\draw [bit] (4.25, 0 |- s1.north) -- (4.25, 0 |- s4.south);
 \end{tikzpicture}
