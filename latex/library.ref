@@ -162,7 +162,7 @@
     <key>beuchat</key>
     <notes></notes>
     <bib_type>inproceedings</bib_type>
-    <bib_doi>http://dx.doi.org/10.1007/978-3-540-85538-5_20</bib_doi>
+    <bib_doi>10.1007/978-3-540-85538-5_20</bib_doi>
     <bib_title>A Comparison Between Hardware Accelerators for the Modified Tate Pairing over  $\mathbb{F}_{2^m}$ and $\mathbb{F}_{3^m}$</bib_title>
     <bib_authors>Beuchat, Jean-Luc and Brisebarre, Nicolas and Detrey, Jérémie and Okamoto, Eiji and Rodríguez-Henríquez, Francisco</bib_authors>
     <bib_journal></bib_journal>
@@ -177,7 +177,6 @@
     <bib_extra key="Intrahash">d62aa9722bc9e333af694470560da301</bib_extra>
     <bib_extra key="Isbn">978-3-540-85503-3</bib_extra>
     <bib_extra key="publisher">Springer</bib_extra>
-    <bib_extra key="Url">http://dblp.uni-trier.de/db/conf/pairing/pairing2008.html#BeuchatBDOR08</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/G.%20Bertoni%20et%20al%20-%20Software%20Implementation%20of%20Tate%20Pairing%20over%20GF(2m).pdf</filename>
@@ -265,7 +264,7 @@
     <key>batina-lowcost</key>
     <notes></notes>
     <bib_type>article</bib_type>
-    <bib_doi>http://dx.doi.org/10.1007/11964254_3</bib_doi>
+    <bib_doi>10.1007/11964254\_3</bib_doi>
     <bib_title>Low-Cost Elliptic Curve Cryptography for Wireless Sensor Networks</bib_title>
     <bib_authors>Batina, Lejla and Mentens, Nele and Sakiyama, Kazuo and Preneel, Bart and Verbauwhede, Ingrid</bib_authors>
     <bib_journal>Security and Privacy in Ad-Hoc and Sensor Networks</bib_journal>
@@ -276,11 +275,9 @@
     <bib_extra key="Abstract">This work describes a low-cost Public-Key Cryptography (PKC) based solution for security services such as key-distribution and authentication as required for wireless sensor networks. We propose a custom hardware assisted approach to implement Elliptic Curve Cryptography (ECC) in order to obtain stronger cryptography as well as to minimize the power. Our compact and low-power ECC processor contains a Modular Arithmetic Logic Unit (MALU) for ECC field arithmetic. The best solution features 6718 gates for the MALU and control unit (data memory not included) in 0.13 Œºm CMOS technology over the field</bib_extra>
     <bib_extra key="booktitle">Third European Workshop Security and Privacy in Ad Hoc and Sensor Networks (ESAS &apos;06)</bib_extra>
     <bib_extra key="Citeulike-article-id">4001338</bib_extra>
-    <bib_extra key="Doi">http://dx.doi.org/10.1007/11964254\_3</bib_extra>
     <bib_extra key="Keywords">cryptography, curve, elliptic, embedded, security</bib_extra>
     <bib_extra key="Posted-at">2009-02-03 16:16:40</bib_extra>
     <bib_extra key="Priority">0</bib_extra>
-    <bib_extra key="Url">http://dx.doi.org/http://dx.doi.org/10.1007/11964254\_3</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</filename>
@@ -464,29 +461,31 @@
     <notes></notes>
     <bib_type>book</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>0.13 $\mu$m Platinum Standard Cell Databook</bib_title>
+    <bib_title>$0.13 \mu m$ Platinum Standard Cell Databook</bib_title>
     <bib_authors></bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
     <bib_pages></bib_pages>
     <bib_year>2004</bib_year>
-    <bib_extra key="publisher">Faraday</bib_extra>
+    <bib_extra key="publisher">Faraday Technology Corporation</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Mueller%20et%20Al%20-%20The%20Impact%20Of%20Clock%20Gating%20Schemes%20On%20The%20Power%20Dissipation%20Of%20Synthesizable%20Register%20Files</filename>
     <relative_filename>M.%20Mueller%20et%20Al%20-%20The%20Impact%20Of%20Clock%20Gating%20Schemes%20On%20The%20Power%20Dissipation%20Of%20Synthesizable%20Register%20Files</relative_filename>
     <key>mueller</key>
     <notes></notes>
-    <bib_type>article</bib_type>
+    <bib_type>inproceedings</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>The Impact of Clock Gating Schemes On The Power Dissipation Of Synthesizable Register Files</bib_title>
-    <bib_authors>M. Mueller and A. Wortmann and S. Simon and M. Kugel and T. Schoenauer</bib_authors>
+    <bib_title>The impact of clock gating schemes on the power dissipation of synthesizable register files</bib_title>
+    <bib_authors>M\&quot;uller, Matthias and Wortmann, Andreas and Simon, Sven and Kugel, Michael and Schoenauer, Tim</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
+    <bib_pages>609-612</bib_pages>
     <bib_year>2004</bib_year>
+    <bib_extra key="Bibsource">DBLP, http://dblp.uni-trier.de</bib_extra>
+    <bib_extra key="booktitle">ISCAS (2)</bib_extra>
   </doc>
   <doc>
     <filename></filename>
@@ -502,6 +501,55 @@
     <bib_number>3</bib_number>
     <bib_pages>171--177</bib_pages>
     <bib_year>1988</bib_year>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/D.Hankerson%20et%20Al%20-%20Guide%20To%20Elliptic%20Curve%20Cryptography.pdf</filename>
+    <relative_filename>D.Hankerson%20et%20Al%20-%20Guide%20To%20Elliptic%20Curve%20Cryptography.pdf</relative_filename>
+    <key>hankerson-book</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Guide To Elliptic Curve Cryptography</bib_title>
+    <bib_authors>Hankerson, Darrel and Menezes, Alfred and Vanstone, Scott</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2004</bib_year>
+    <bib_extra key="publisher">Springer</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>karatsuba-oldest</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Multiplication of Multidigit Numbers on Automata</bib_title>
+    <bib_authors>Karatsuba, A. and Ofman, Y.</bib_authors>
+    <bib_journal>Soviet Physics Doklady</bib_journal>
+    <bib_volume>7</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>595</bib_pages>
+    <bib_year>1963</bib_year>
+    <bib_extra key="Adsnote">Provided by the SAO/NASA Astrophysics Data System</bib_extra>
+    <bib_extra key="Adsurl">http://adsabs.harvard.edu/abs/1963SPhD....7..595K</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>zuras</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>10.1109/ARITH.1993.378084</bib_doi>
+    <bib_title>On squaring and multiplying large integers</bib_title>
+    <bib_authors>Zuras, D.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>260</bib_pages>
+    <bib_year>1993</bib_year>
+    <bib_extra key="booktitle">Proceedings of IEEE 11th Symposium on Computer Arithmetic ARITH-93</bib_extra>
   </doc>
 </doclist>
 </library>

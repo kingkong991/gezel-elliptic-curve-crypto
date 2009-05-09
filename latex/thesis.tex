@@ -14,7 +14,7 @@
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
 
-\usepackage[subfigure]{tocloft}		% Lijsten van willekeurige dingen + optie om errors met subfigure te vermijden
+%\usepackage[subfigure]{tocloft}		% Lijsten van willekeurige dingen + optie om errors met subfigure te vermijden
 
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}	% Algorithm typesetting
 
@@ -40,7 +40,7 @@
 \newcommand{\reffig}[1]{Figuur~\ref{#1}}
 \newcommand{\reftbl}[1]{Tabel~\ref{#1}}
 \newcommand{\refalg}[1]{Algoritme~\ref{#1}}
-\newcommand{\refsect}[1]{Sectie~\ref{#1}}
+\newcommand{\refsect}[1]{Paragraaf~\ref{#1}}
 \newcommand{\refhfdst}[1]{Hoofdstuk~\ref{#1}}
 \newcommand{\refform}[1]{Formule~\ref{#1}}
 
@@ -48,10 +48,24 @@
 \newcommand{\nr}{n$^{\circ}$~}
 
 % List of equations
-\newcommand{\listequationsname}{List of vergelijkingen}
-\newlistof{myequations}{equ}{\listequationsname}
-\newcommand{\myequations}[1]{%
-\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+%\newcommand{\listequationsname}{List of vergelijkingen}
+%\newlistof{myequations}{equ}{\listequationsname}
+%\newcommand{\myequations}[1]{%
+%\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+
+% Fix for unsorted bibliographies & citations in captions
+\def\@starttoc#1{%
+  \begingroup
+    \@fileswfalse
+    \makeatletter
+    \@input{\jobname.#1}%
+  \endgroup
+  \if@filesw
+    \expandafter\newwrite\csname tf@#1\endcsname
+    \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+  \fi
+  \@nobreakfalse
+}
 
 % Substring macro
 \def\substring#1#2#3{%
@@ -129,8 +143,10 @@
 
 % BibTex opmaak
 %\bibliographystyle{abbrvurl}
-\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv}
 %\bibliographystyle{plain}
+%\bibliographystyle{IEEEtranS} % Sorted IEEE style
+\bibliographystyle{IEEEtran} % Unsorted IEEE style
 
 % Voorkom lelijke opmaak
 %\clubpenalty=8000
@@ -166,7 +182,8 @@
 %\include{copyright}
 
 % Reset counter & maak inhoudstafel
-%\setcounter{page}{1}
+\pagestyle{empty}
+
 \tableofcontents
 \listoffigures
 %\listoftables
@@ -174,8 +191,8 @@
 %\listofmyequations
 
 %\clearpage
-
 \setcounter{page}{0}
+\thispagestyle{headings}
 
 \include{implementatie}		% Hardware implementatie
 

@@ -11,14 +11,13 @@
 \newcommand{\vak}{ESAT - Thesis}
 
 % Opgave
-\newcommand{\opgave}{Implementation of elliptic curve cryptography in constrained environments}
+\newcommand{\opgave}{Compacte implementaties van pairings}
 
 % Titel
-\newcommand{\titel}{{\LARGE \vak}\\[2mm]
-{\Large \opgave}}
+\newcommand{\titel}{\LARGE \opgave}
 
 % Datum
-\newcommand{\datum}{16 mei 2009}
+\newcommand{\datum}{22 mei 2009}
 
 % Departement
 \newcommand{\departement}{Departement Elektrotechniek}
@@ -30,10 +29,10 @@
 \newcommand{\depcontact}{Tel.: +32~16~321130 - Fax: +32~16~321986}
 
 % Professoren
-\newcommand{\professoren}{Prof.~dr.~ir.~Bart~Preneel}
+\newcommand{\professoren}{Prof.~dr.~ir.~Bart~Preneel\\Prof.~dr.~ir.~Ingrid~Verbauwhede}
 
 % Assistenten
-\newcommand{\assistenten}{dr.~ir.~Lejla~Batina\\ir.~Nele~Mentens}
+\newcommand{\assistenten}{dr.~ir.~Lejla~Batina\\dr.~ir.~Miroslav~Knezevic}
 
 % Student
 \newcommand{\student}{Anthony~Van~Herrewege}
@@ -59,28 +58,45 @@ Faculteit Toegepaste Wetenschappen\\
 
 \begin{center}
 \parbox[c]{0.7\textwidth}{
-    \centering
-    \textsf{\titel\\[6mm]
-            {\small \datum}}
+    \centering \textbf{\titel}
 }
 \end{center}
 
 \vspace*{\stretch{2}}
 
-\begin{minipage}{60mm}
-\textsf{{\large Promotoren:\\}}
-\parbox[t]{3mm}{~}
-\parbox[t]{70mm}{\textsf{\professoren}\\[3mm]}
-\textsf{{\large Assistenten:}}\\
-\parbox[t]{3mm}{~}
-\parbox[t]{50mm}{\textsf{\assistenten}}
-\end{minipage}
-%\hspace{\stretch{1}}
-\hfill
-\begin{minipage}{50mm}
-\textsf{{\large Door:\\}}
-\parbox[t]{3mm}{~}
-\parbox[t]{60mm}{\textsf{\student}}
-\end{minipage}
+\begin{tabular}{p{6cm} p{5cm} p{5cm}}
+	\begin{minipage}[b]{60mm}
+		{\large Promotors:\\}
+		\professoren \\[3mm]
+		{\large Assistenten:\\}
+		\assistenten
+	\end{minipage}
+
+	& &
+
+	\begin{minipage}[b]{50mm}
+		{\large Door:\\}
+		\student
+	\end{minipage}
+\end{tabular}
+
+%\begin{minipage}{60mm}
+%{\large Promotors:\\}
+%\professoren \\[3mm]
+%{\large Assistenten:\\}
+%\assistenten
+%\end{minipage}
+%\hfill
+%\begin{minipage}{50mm}
+%{\large Door:\\}
+%\parbox[t]{3mm}{~}
+%\student
+%\end{minipage}
+
+\vspace*{20mm}
+
+\centering \datum
+
+\vfill	
 
 \end{document}
