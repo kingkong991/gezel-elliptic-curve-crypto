@@ -441,18 +441,24 @@
   <doc>
     <filename>file:///home/anthony/thesis/references/SEC%202%20-%20Recommended%20Elliptic%20Curve%20Domain%20Parameters.pdf</filename>
     <relative_filename>SEC%202%20-%20Recommended%20Elliptic%20Curve%20Domain%20Parameters.pdf</relative_filename>
-    <key>SEC2-Recomm</key>
+    <key>sec2</key>
     <notes></notes>
-    <bib_type>Article</bib_type>
+    <bib_type>manual</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>SEC 2 - Recommended Elliptic Curve Domain Parameters</bib_title>
-    <bib_authors></bib_authors>
+    <bib_title>SEC 2: Recommended Elliptic Curve Domain Parameters</bib_title>
+    <bib_authors>{Certicom Corp.}</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
     <bib_pages></bib_pages>
     <bib_year>2000</bib_year>
-    <bib_extra key="key">sec2</bib_extra>
+    <bib_extra key="Author:corp">Standards for Efficient Cryptography</bib_extra>
+    <bib_extra key="Citeulike-article-id">4001342</bib_extra>
+    <bib_extra key="Keywords">cryptography, curve, elliptic, embedded, security</bib_extra>
+    <bib_extra key="month">september</bib_extra>
+    <bib_extra key="Posted-at">2009-02-03 16:16:40</bib_extra>
+    <bib_extra key="Priority">0</bib_extra>
+    <bib_extra key="Url">http://www.secg.org</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/0.13nm%20Standard%20Cell%20Databook.pdf</filename>

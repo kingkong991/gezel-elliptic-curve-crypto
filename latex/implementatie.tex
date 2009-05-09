@@ -2,18 +2,39 @@
 
 In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van de Tate pairing uit de doeken gedaan. Het uiteindelijke doel is een compacte ASIC implementatie te verkrijgen.
 
-Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het veld $\mathbb{F}_{2^m}$. Ten slotte is er dan nog de schakeling die alle berekeningen voor het Miller algoritme (zie \refsect{sectie-pairings-miller}) in goede banen leidt. In het volgende hoofdstuk zal de resulterende schakeling dan beoordeeld worden. Alleerst wordt echter bekeken welke beperkingen aan de schakeling opgelegd moeten worden en worden noodzakelijke parameters vastgelegd, zodat alle bewerkingen exact gedefini\"eerd kunnen worden.
+Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het veld $\mathbb{F}_{2^m}$. Ten slotte is er dan nog de schakeling die alle berekeningen voor het Miller algoritme (zie \refsect{sectie-pairings-miller}) in goede banen leidt. In het volgende hoofdstuk zal de resulterende schakeling dan beoordeeld worden.
+
+Allereerst worden echter noodzakelijke parameters vastgelegd, zodat alle bewerkingen exact gedefini\"eerd kunnen worden. Vervolgens wordt bekeken welke beperkingen aan de schakeling opgelegd moeten worden.
 
 \section{Parameters\label{sectie-implementatie-parameters}}
 
-Alvorens kan begonnen worden met de implementatie, moeten bepaalde parameters vastgelegd worden. Een eerste, voor de hand liggende, parameter is de woordlengte die gebruikt zal worden. Deze bepaald de cryptografische sterkte van het eindresultaat. In \reftbl{tabel-implementatie-parameters-keylength} zijn enkele vaak gebruikte woordlengtes voor pairings met hun bijhorende sterkte. Er wordt gekozen voor een woordlengte $m = 163$. Dit laat een mooi compromis toe tussen cryptografische sterkte en compactheid van de implementatie.
+Alvorens kan begonnen worden met de implementatie, moeten bepaalde parameters vastgelegd worden. Pas eens dat gedaan is, zijn alle bewerkingen volledig gedefinieerd.
+
+Een belangrijke parameter is de kromme en het veld waarover gewerkt zal worden. Omdat de berekeningen in een veld $\mathbb{F}_2$ (en extensies ervan) veel eenvoudiger zijn dan die in een veld modulo een priemgetal, wordt ervoor gekozen in zulk een veld te werken.
+Verder wordt gekozen voor een supersingulaire elliptische kromme. Dat type krommen heeft een kleine embedding degree en er bestaan simpele rekenregels voor de verdubbeling en optelling van punten. De vergelijking van zo een kromme $E$ over een veld $\mathbb{F}_{2^m}$ wordt gegeven door
+\[E: y^3 + y = x^3 + x + b,\]
+waarbij $b \in \{0, 1\}$. De embedding degree $k = 4$ voor dit type krommen. Verder worden de volgende hulp variabelen bepaald:
+\[\begin{aligned}
+\delta	&= b	\qquad	& m \equiv 1, 7 (\bmod 8)\\
+			&= 1 - b		& m \equiv 3, 5 (\bmod 8)\\
+\nu		&= (-1)^{\delta}\\
+\end{aligned}\]
+De orde van de kromme is gelijk aan \cite{bertoni, beuchat}:
+\[\begin{aligned}
+\#E(\mathbb{F}_{2^m})	&= 2^m + \nu \sqrt{2^{m + 1}} + 1
+\end{aligned}\]
+Om de Tate pairing te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit sommaties bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
+
+Alvorens dit kan gebeuren, moet een woordlengte $m$ vastgelegd worden. Deze bepaald de cryptografische sterkte van het eindresultaat. In \reftbl{tabel-implementatie-parameters-keylength} zijn enkele vaak gebruikte woordlengtes voor pairings met hun bijhorende sterkte terug te vinden. Er wordt gekozen voor $m = 163$. Dit laat een mooi compromis toe tussen cryptografische sterkte en compactheid van de implementatie.
 
 \begin{table}[h]
-	\caption{Vergelijking van woordlengtes en de bijhorende cryptografische sterkte van de Tate pairing}
+	\caption{Vergelijking van woordlengtes $m$ en de bijhorende cryptografische sterkte van de Tate pairing}
 	\label{tabel-implementatie-parameters-keylength}
+
+	\centering
 	\begin{tabular}{|l|l|}
 		\hline
-		Woordlengte $m$ (bit)	& Sterkte (bit)\\
+		$m$ (bit)	& Sterkte (bit)\\
 		\hline
 		81		& 324\\
 		163	& 652\\
@@ -22,11 +43,21 @@ Alvorens kan begonnen worden met de implementatie, moeten bepaalde parameters va
 	\end{tabular}
 \end{table}
 
-Vervolgens moet de kromme (embedding degree, nu, l, ...)
+Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiepunt subgroep over $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
+\[\begin{aligned}
+l	&= \#E = 2^{163} + \sqrt{2^{163 + 1}} + 1\\
+	&= 2^{163} + 2^{82} + 1.\\
+\end{aligned}\]
 
-modulo veelterm
+Nu het veld waarover gewerkt wordt, bepaald is, kan een reductie veelterm $P$ gekozen worden. Bij de keuze daarvan werd uitgegaan van de aangeraden parameters in \cite{sec2}. De veelterm is:
+\[P = z^{163} + z^7 + z^6 + z^3 + 1.\]
 
-extensieveld
+Ten slotte moet het extensieveld $\mathbb{F}_{2^{k m}}$ gedefinieerd worden waarover de Tate pairing berekend zal worden. Aangezien $k = 4$, kan het veld opgebouwd worden in twee stappen. Eerst wordt $\mathbb{F}_{2^{2m}}$ bepaald als volgt:
+\[\mathbb{F}_{2^{2m}} \cong \mathbb{F}_{2^m}[x]/(x^2 + x ^ 1)\]
+en hierop wordt het volgende extensieveld gebouwd:
+\[\mathbb{F}_{2^{4m}} \cong \mathbb{F}_{2^{2m}}[y]/(y^2 + (x + 1)y + 1).\]
+Een element van $\mathbb{F}_{2^{4m}}$ kan dus voorgesteld worden als vier elementen van $\mathbb{F}_{2^m}$.
+
 
 \section{Beperkingen\label{sectie-implementatie-beperkingen}}
 
@@ -37,6 +68,8 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 \begin{table}[h]
 	\caption{Grootte van elementen in een ASIC schakeling in gates$/$bit ($0.13 \mu m$ low leakage technologie van Faraday Technology Corporation) \cite{cell-databook}}
 	\label{tabel-implementatie-beperkingen-elementen-gatecount}
+
+	\centering
 	\begin{tabular}{|l|r|}
 		\hline
 		Element			& Gates$/$bit\\
@@ -184,6 +217,8 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 \begin{table}[h]
 	\caption{Voor de hand liggende versus optimale waarden voor woordbreedte $d$ indien \mbox{$m=163$}}
 	\label{tabel-implementatie-woordbreedte-d}
+
+	\centering
 	\begin{tabular}{|l|c|c|c|c|c|c|}
 		\hline
 		\multicolumn{7}{|c|}{Voor de hand liggende waarden voor $d$}\\
@@ -847,7 +882,7 @@ Een register is doorgaans opgebouwd uit een hoeveelheid D-type master-slave flip
 
 \subsection{Registers zonder reset}
 
-Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan een met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden, om $F$ in te stellen aan het begin van het algoritme.
+Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden, om $F$ in te stellen aan het begin van het algoritme.
 
 \subsection{Clock gating}
 
@@ -883,7 +918,7 @@ Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparin
 			\includegraphics[width=5.7cm]{cg-pow-dis-one}
 			%\label{subfig-2-implementatie-optimalisatie-cg-power-dis}
 		}
-		\caption{Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang \cite{mueller}\label{figuur-implementatie-optimalisatie-cg-power-dis}}
+		\caption[Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang]{Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang \protect\cite{mueller}\label{figuur-implementatie-optimalisatie-cg-power-dis}}
 \end{figure}
 
 Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang laag gehouden wordt zolang de enable ingang laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is: de klokingang hoog houden zolang geen nieuwe waarde in het register opgeslagen moet worden. Om het voorkomen van glitches te garanderen, moet het enable signaal stabiel worden voor het CLK signaal hoog wordt. Indien bepaalde kloksignaalbeperkingen worden opgelegd bij het synthetiseren van het circuit is dit normaal gezien echter geen probleem.
