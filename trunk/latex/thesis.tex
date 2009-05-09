@@ -1,15 +1,16 @@
 \documentclass[a4paper]{report}
 \usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
 \usepackage{graphicx}
-\usepackage{color}
 
+\usepackage{fancyhdr} % Fancy headers & footers
+
+\usepackage{color}
 \usepackage{colortbl}  % Use colors in table
 
 \usepackage{url}                % Opmaak van URLs
 %\usepackage[official]{eurosym}  % Euro symbool
-%\usepackage{colortbl}           % Kleur tabellen
 
-\usepackage{nonfloat}            % Voeg non-floating tables & figures toe
+%\usepackage{nonfloat}            % Voeg non-floating tables & figures toe
 \usepackage{pdfpages}            % Maak dat voorblad kan toegevoegd worden
 \usepackage{amsmath,amsfonts}    % Wiskunde
 \usepackage{listings}            % Code Listings
@@ -53,6 +54,13 @@
 %\newcommand{\myequations}[1]{%
 %\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
 
+% BibTex opmaak
+%\bibliographystyle{abbrvurl}
+%\bibliographystyle{abbrv}
+%\bibliographystyle{plain}
+%\bibliographystyle{IEEEtranS} % Sorted IEEE style
+\bibliographystyle{IEEEtran} % Unsorted IEEE style
+
 % Fix for unsorted bibliographies & citations in captions
 \def\@starttoc#1{%
   \begingroup
@@ -81,8 +89,12 @@
 \graphicspath{{images/}}
 \DeclareGraphicsExtensions{.pdf,.eps,.png}
 
-% Stel paginastijl in
-\pagestyle{headings}
+% Stel headers & footers in
+\pagestyle{fancy}
+\fancyhfoffset[EO]{2cm}
+
+% Fix caption spacing bij tabellen
+\setlength{\belowcaptionskip}{6pt}
 
 % Zet hier de woorden waarmee de splitser problemen heeft:
 \hyphenation{}
@@ -141,13 +153,6 @@
 
 \renewcommand*\lstlistlistingname{Lijst van listings}
 
-% BibTex opmaak
-%\bibliographystyle{abbrvurl}
-%\bibliographystyle{abbrv}
-%\bibliographystyle{plain}
-%\bibliographystyle{IEEEtranS} % Sorted IEEE style
-\bibliographystyle{IEEEtran} % Unsorted IEEE style
-
 % Voorkom lelijke opmaak
 %\clubpenalty=8000
 %\widowpenalty=8000
@@ -182,7 +187,7 @@
 %\include{copyright}
 
 % Reset counter & maak inhoudstafel
-\pagestyle{empty}
+%\pagestyle{empty}
 
 \tableofcontents
 \listoffigures
@@ -191,20 +196,16 @@
 %\listofmyequations
 
 %\clearpage
-\setcounter{page}{0}
-\thispagestyle{headings}
-
-\include{implementatie}		% Hardware implementatie
+%\setcounter{page}{0}
+%\pagestyle{fancy}
 
 %\include{inleiding}             % Inleiding
-%\include{encryptie-applicaties} % Encryptie - Applicaties van encryptie
-%\include{encryptie-wiskunde}    % Encryptie - Wiskundige achtergrond
-%\include{malu}                   % Modular Aritmitic Logical Unit - Design
-%\include{malu-pairings}         % MALU - Uitbreiding naar pairings
-%\include{malu-pairings-hw}      % MALU - Pairings hardware implementatie
-%\include{optimalisatie}          % MALU - Optimalisatie (& parallellisatie)
-%\include{tests}                 % MALU - Oppervlakte/snelheids tests
-%\include{side-channel-attacks}  % Side channel attack weerstand
+%\include{cryptografie-inleiding} % Algemene informatie over cryptografie
+%\include{cryptografie-pairings}  % Informatie over pairings 
+
+\include{implementatie}		% Hardware implementatie
+\include{resultaten}      % Resultaten vd implementatie
+
 %\include{conclusie}             % Conclusie
 
 \appendix                        % Start appendices
