@@ -11,24 +11,19 @@
 \usetikzlibrary{shapes.gates.logic.IEC}
 \usetikzlibrary{shapes.misc}
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary{plotmarks}
 
-\pgfrealjobname{brol}
+% Wiskundige uitdrukkingen voor bv labels
+\usepackage{xlop}
 
-%\tikzset{
-%	reg/.style={draw, minimum height=6mm, minimum width=10mm},
-%	lut/.style={draw, minimum height=10mm, minimum width=10mm},
-%	joint/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=0.15cm, fill, circle},
-%	mux/.style={draw, trapezium, trapezium stretches=true, rotate=-90, inner sep=1pt, minimum height=12pt, minimum width=1.2cm, xshift=2.2mm, outer sep=0pt},
-%	labeltextreg/.style={text centered},
-%	labelboxreg/.style={draw, minimum height=8mm, minimum width=18mm, outer sep=0pt}
-%}
+\makeatletter
+\newcommand{\printresult}[1]{\pgfmathparse{#1}\let\temp@printresult\pgfmathresult\opcopy{\temp@printresult}{a}\opunzero{a}$\opprint{a}$}
+\makeatother
 
-%\def\labelboxreg#1#2{\node[labeltextreg, xshift=0.5mm] {#2}; \node[labelboxreg] (#1) {}; \draw (#1.north west) -- ($(#1.north west)!0.5!(#1.south west) + (2mm, 0)$) -- (#1.south west);}
-
-
+\pgfrealjobname{images}
 
 \begin{document}
 \beginpgfgraphicnamed{image}
-\input{code/cg-power-dis-one.tex}
+\input{code/results-md.tex}
 \endpgfgraphicnamed
 \end{document}
