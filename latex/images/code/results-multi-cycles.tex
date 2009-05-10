@@ -1,0 +1,27 @@
+\begin{tikzpicture}[domain=1:163]
+\begin{scope}[xstep=50mm, x=50mm, ystep=0.1mm, y=0.1mm]
+	% Data
+	\draw [thick, color=black!90] plot[samples=163] ({ln(\x) / ln(10)}, {27.058 + 2.993 * ceil(163 / \x)});
+	\draw [densely dotted, color=black!90, samples at={2, 3, 4, 6, 8, 16, 32, 64, 163}] plot[ycomb] ({ln(\x) / ln(10)}, {27.058 + 2.993 * ceil(163 / \x)});
+\end{scope}
+
+% Axis
+\begin{scope}[xstep=50mm, x=50mm, ystep=10mm, y=10mm]
+	% Axis
+	\draw [-latex'] (0,0) -- (0,5.5) node[right] {$c$};
+	\draw [-latex'] (0,0) -- (2.4, 0) node[above] {$d$}; 
+
+	% Y-axis links
+	\draw (-1mm, 0) -- (0, 0) node[left, xshift=-1mm] {0};
+	\foreach \y in {1, 2, ..., 5}
+		\draw[yshift=\y * 10mm] (-1mm, 0) -- (0, 0) node[left, xshift=-1mm, yshift=0.4mm] {{\printresult{10 * \y}}0k};
+
+	\foreach \y in {0, 1, ..., 4}
+		\draw[yshift=\y * 10mm + 5mm] (-0.5mm, 0) -- (0, 0);
+
+	% X-axis
+	\foreach \x in {1, 2, 3, 4, 6, 8, 16, 32, 64, 163} {
+		\draw[xshift=ln(\x) / ln(10) * 50mm] (0, 0) -- (0, -1mm) node[below] {\x};
+	}
+\end{scope}
+\end{tikzpicture}
