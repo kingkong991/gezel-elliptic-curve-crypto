@@ -164,41 +164,47 @@ Ter vergelijking worden de resulterende parameters van beide implementaties gege
 
 \section{Vergelijking met bestaande implementaties}
 
-Gezien de vrij recente ontwikkeling van pairings lag de focus tot nu toe steeds op het snel berekenen van de pairing. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze allemaal als doelplatform een microprocessor. Er werd slechts \'e\'en paper gevonden waarin het uiteindelijke resultaat naar een ASIC gesynthetiseerd werd. Alle andere recent gepubliceerde implementaties werden ontwikkeld in software of voor FPGA's. Gezien de eerder vermelde focus op snelheid wordt in die gevallen nooit vermeld hoeveel de uiteindelijke schakelingen verbruiken.
+Gezien de vrij recente ontdekking van pairings lag de focus tot nu toe vooral op het snel berekenen van de pairing. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze als doelplatform allemaal een microprocessor. Er werd slechts \'e\'en paper gevonden waarin het uiteindelijke resultaat naar een ASIC gesynthetiseerd werd. Alle andere recent gepubliceerde implementaties werden ontwikkeld in software of voor FPGA's. Gezien de eerder vermelde focus op snelheid wordt in die gevallen nooit vermeld hoeveel de uiteindelijke schakelingen verbruiken.
 
 Het is dus zo goed als onmogelijk een grondige vergelijking te maken tussen de verschillende bestaande implementaties, gezien hun volledig andere invalshoek. Toch zal zo goed als mogelijk getracht worden enigszins een overzicht te geven, zodat de in deze thesis voorgestelde schakeling beter geplaats kan worden tussen de reeds bestaande ontwerpen.
 
-De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{tinypbc, tinytate, nanoecc}. In alle gevallen wordt de pairing berekend op een ATMega128L microchip. Deze implementaties zijn ontwikkeld voor gebruik op een MICA node, specifiek ontwikkeld voor gebruik in sensor netwerken. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik gegeven in \cite{nanoecc} wordt het verbruik tijdens een berekening geschat op ongeveer $23.60mW$. Uiteraard zijn de oppervlakte en het verbruik van een microchip implementatie niet te vergelijken met de in deze thesis voorgestelde ASIC schakeling, gezien de zeer verschillende filosofie achter het gebruik van beiden.
+De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{tinypbc, tinytate, nanoecc}. In alle gevallen wordt de pairing berekend op een ATMega128L microchip. Deze implementaties zijn ontwikkeld voor gebruik op een MICA node, specifiek ontwikkeld voor gebruik in sensor netwerken. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik gegeven in \cite{nanoecc} wordt het verbruik geschat op ongeveer $23.60mW$. Uiteraard zijn de oppervlakte en het verbruik van een microchip implementatie niet te vergelijken met de in deze thesis voorgestelde ASIC schakeling, gezien de zeer verschillende architectuur en de filosifie achter het gebruik van beiden.
 
 \begin{table}[h]
-	\caption{Resultaten voor bestaande ontwerpen met focus op sensor netwerken}
+	\caption{Resultaten uit de literatuur voor ontwerpen met focus op sensor netwerken}
 	\label{tabel-resultaten-sensor}
 
 	\centering
-	\begin{tabular}{|l|l|p{1cm}|}
+	\begin{tabular}{|l|l|l|l|l|}
 		\hline
-		& Pairing	&	Reken-tijd ($s$)\\
-		\hline \hline
-		NanoECC \cite{nanoecc}		& $e(\mathbb{F}_{2^{163}})$	& 10.96\\
-		NanoECC \cite{nanoecc}		& $e(\mathbb{F}_{q = 160})$	& 17.93\\
-		TinyTate \cite{tinytate}	& $e(\mathbb{F}_{q = 256})$	& 30.21\\
-		TinyPBC	\cite{tinypbc}		& $\eta_T(\mathbb{F}_{2^{271}})$	& 5.45\\
+		&	\multicolumn{2}{c|}{NanoECC \cite{nanoecc}}	& \multirow{2}{*}{TinyTate \cite{tinytate}}	& \multirow{2}{*}{TinyPBC \cite{tinypbc}}\\
+		\cline{2-3}
+		& Binair	& Priem	&	& \\
+ 		\hline \hline
+		Veld	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$ \\ \hline
+		Pairing	& Tate	& Tate	& Tate	& $\eta_T$ \\ \hline
+		Rekentijd ($s$)	& 	10.96	& 17.93	& 30.21	& 5.45\\
 		\hline		
 	\end{tabular}
 \end{table}
 
-Toch wordt in \reftbl{tabel-resultaten-andere} een overzicht gegeven van enkele van deze implementaties om een idee te geven over tot nu toe gepubliceerde resultaten.
+In de literatuur zijn vrij veel ontwerpen voor FPGA's terug te vinden. Het probleem is echter dat men zich bij het ontwerp hiervan steeds toelegt op het behalen van een zo hoog mogelijke snelheid, wat resulteert in een grote oppervlakte. Ook wordt vaak gerekend over grote velden (bv. $\mathbb{F}_{2^{313}}$ of $\mathbb{F}_{3^{197}}$), wat meer veiligheid biedt, maar resulteert in nog grotere ontwerpen.
 
-zijn er in de literatuur niet heel veel implementaties terug te vinden. De weinige papers die over implementaties handelen zijn verder steeds gefocussed op snelheid. Verder was er ten tijde van schrijven geen ander ASIC ontwerp bekend. Daar alle andere hardware implementaties of voor microchip of voor FPGA ontwikkeld zijn, is het zeer moeilijk onderbouwde conclussies te trekken. Toch worden in enkele andere ontwerpen voorgesteld. Voor het stroomverbruik werd uitgegaan van het gemiddeld verbruik opgegeven door de fabrikant.
+Grootte van een FPGA ontwerp wordt vermeld in slices (voor Xilinx chips) of logical units (voor Altera chips). Deze eenheden zijn onmogelijk om te zetten naar een aantal gates. Zodoende is het dus niet mogelijk de grootte van deze ontwerpen te vergelijken met die van een ASIC schakeling.
+
+Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet oppervlakte, het voornaamste doel is.
 
 \begin{table}[h]
-	\caption{Resultaten uit de literatuur voor verschillende implementaties van pairings}
-	\label{tabel-resultaten-andere}
+	\caption{Resultaten uit de literatuur voor ontwerpen ontwikkeld voor FPGA's}
+	\label{tabel-resultaten-fpga}
 
 	\centering
-	\begin{tabular}{|l||l|l|l|l|l|l|}
+	\begin{tabular}{|l||l|l|l|l|l|}
 		\hline
-		&	Platform	& Curve	& Verbruik ($W$)	& $f$ (MHz)	& Rekentijd ($\mu s$)\\
+		&	Veld	& Pairing	& Opp. (slices)	& $f$ (MHz)	& Rekentijd ($\mu s$)\\
+		Shu \emph{et al.} \cite{shu}		& $\mathbb{F}_{2^{239}}$	& Mod. Tate	& 25287	& 84	& 41\\
+		Ronan \emph{et al.} \cite{ronan}	& $\mathbb{F}_{2^{103}}$	& Mod. Tate	& 21021	& 51	& 206\\
+		Grabher and Page \cite{grabher}	& $\mathbb{F}_{3^{97}}$		& Mod. Tate	& 4481	& 150	& 432.3\\
 		\hline
 	\end{tabular}
 \end{table}
