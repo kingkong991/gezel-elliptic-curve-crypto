@@ -896,35 +896,39 @@ Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder ve
 
 Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw op de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\textsf{log}_2(m)$ bit niet veel bijdragen aan zowel de uiteindelijke oppervlakte als het verbruik zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
 
-Een register is doorgaans opgebouwd uit een hoeveelheid D-type master-slave flip-flops. Dit type flip-flops slaat de waarde aan de ingang $D$ op bij een stijgende klokslag op ingang $CLK$ en toont deze waarde aan de uitgang $Q$ vanaf de daaropvolgende neergaande klokslag. In alle paragrafen die volgen, wordt er van uit gegaan dat alle registers uit dit type flip-flops opgebouwd zijn.
+Een register is doorgaans opgebouwd uit een hoeveelheid D-type master-slave flip-flops. Dit type flip-flops is opgebouwd uit twee latches. De eerst latch (master) is verbonden met de ingang $D$ en slaat de waarde daarvan op zolang $CLK$ laag is. De tweede latch (slave) is verbonden met de uitgang $Q$  en neemt de waarde van de eerste latch over eens $CLK$ hoog is. Het effect is dus dat de uitgang $Q$ op een stijgende klokflank de waarde van $D$ overneemt. Er bestaan verschillende gespecialiseerde types: met reset ingang, met enable ingang, met test ingang, $\ldots$ In de paragrafen die volgen, wordt er van uit gegaan dat alle registers uit dit type flip-flops zijn opgebouwd.
 
 \subsection{Registers zonder reset}
 
-Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden, om $F$ in te stellen aan het begin van het algoritme.
+Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden om $F$ in te stellen aan het begin van het algoritme.
 
 \subsection{Clock gating\label{subsectie-implementatie-optimalisatie-clock-gating}}
 
 %TODO: Is this correct? The thing about losing multiplexers, etc.
 
-Normaal wordt een register elke klokslag immers geladen met de waarde aan zijn ingang en is het dus noodzakelijk het register naar zichzelf terug te koppelen, wil men geen data verliezen. Een voor de hand liggende techniek, clock gating, laat toe deze terugkoppeling (en de daarbij horende multiplexer) achterwege te laten. Bij deze techniek wordt het kloksignaal enkel gepropageerd naar een register wanneer een daarbij horende enable ingang hoog is. Het implementeren van clock gating kost enige extra oppervlakte. Per register moet echter slechts \'e\'en bijhorende clock gating schakeling voorzien  worden en de schakelingen zijn zeer klein zijn. Netto zal er dus nog steeds oppervlakte winst gemaakt worden door de eliminatie van de multiplexers.
+Normaal wordt een register elke klokslag geladen met de waarde aan zijn ingang en is het dus noodzakelijk het register naar zichzelf terug te koppelen, wil men geen data verliezen. Een voor de hand liggende techniek, clock gating, laat toe deze terugkoppeling (en de daarbij horende multiplexer) achterwege te laten. Bij deze techniek wordt het kloksignaal enkel gepropageerd naar een register wanneer een daarbij horende enable ingang hoog is. Zolang het kloksignaal stabiel blijft, doet de uitgang dat dus ook.
+
+Het implementeren van clock gating kost enige extra oppervlakte. Per register moet echter slechts \'e\'en bijhorende clock gating schakeling voorzien  worden en die schakelingen zijn zeer klein. Netto zal er dus nog steeds oppervlakte winst gemaakt worden door de eliminatie van de multiplexers.
+
+Deze techniek laat ook toe het verbruik van de schakeling drastisch te verlagen. Er zullen immers veel minder interne poorten zijn (bv. in de multiplexers) die elke klokslag van waarde dienen te veranderen.
 
 De eenvoudigste schakeling waarmee clock gating ge\"implementeerd kan worden is te zien in \reffig{figuur-implementatie-optimalisatie-cg-basic}. Er zijn echter enkele problemen geassocieerd met dit type schakeling. Ze is immers onderhevig aan glitches op het enable signaal. Stel bijvoorbeeld dat de enable ingang al hoog wordt terwijl het kloksignaal ook nog hoog is. Dan zal het kloksignaal gepropageerd worden tot het register, wat niet de bedoeling is.
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=12cm]{cg-basic}
+		\includegraphics[scale=0.8]{cg-basic}
 		\caption{Schakeling voor clock gating - Basis ontwerp\label{figuur-implementatie-optimalisatie-cg-basic}}
 \end{figure}
 
-Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De D latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke glitches dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
+Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke glitches dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=12cm]{cg-no-glitch}
+		\includegraphics[scale=0.8]{cg-no-glitch}
 		\caption{Schakeling voor clock gating - Glitchvrij ontwerp\label{figuur-implementatie-optimalisatie-cg-no-glitch}}
 \end{figure}
 
-Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt aangetoond dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-optimalisatie-cg-power-dis}: wanneer de klok laag is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang hoog is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
+Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt bewezen dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-optimalisatie-cg-power-dis}: wanneer de klok laag is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang hoog is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
 
 \begin{figure}[h]
 	\centering
@@ -943,6 +947,6 @@ Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang la
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=12cm]{cg-low-power}
+		\includegraphics[scale=0.8]{cg-low-power}
 		\caption{Schakeling voor clock gating - Laag vermogen ontwerp\label{figuur-implementatie-optimalisatie-cg-low-power}}
 \end{figure}
