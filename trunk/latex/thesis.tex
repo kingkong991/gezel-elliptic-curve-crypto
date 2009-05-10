@@ -6,6 +6,7 @@
 
 \usepackage{color}
 \usepackage{colortbl}  % Use colors in table
+\usepackage{multirow} % Multiple rows and columns in tables
 
 \usepackage{url}                % Opmaak van URLs
 %\usepackage[official]{eurosym}  % Euro symbool
@@ -180,26 +181,38 @@
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
 
+\pagestyle{empty}
+\pagenumbering{roman}
+
 % Voeg voorblad toe
 %\includepdf{voorblad.pdf}
 
 % Copyright
 %\include{copyright}
 
-% Reset counter & maak inhoudstafel
-%\pagestyle{empty}
+\pagestyle{fancy}
 
-\tableofcontents
-\listoffigures
-%\listoftables
-\listofalgorithms
-%\listofmyequations
+%\include{dankwoord}  % Dankwoord
+%\include{samenvatting} % Samenvatting
 
+%\tableofcontents
 %\clearpage
-%\setcounter{page}{0}
-%\pagestyle{fancy}
 
-%\include{inleiding}             % Inleiding
+%\listoffigures
+%\clearpage
+
+%\listoftables
+%\clearpage
+  
+%\listofalgorithms
+%\clearpage
+
+%\include{lijstafkortingen} % Lijst van afkortingen
+%\include{lijstsymbolen}    % Lijst van symbolen
+
+\pagenumbering{arabic}
+
+%\include{inleiding}             % Inleiding & motivatie
 %\include{cryptografie-inleiding} % Algemene informatie over cryptografie
 %\include{cryptografie-pairings}  % Informatie over pairings 
 
@@ -210,7 +223,8 @@
 
 \appendix                        % Start appendices
 
-%\include{code}                  % Implementatie code
+%\include{code}       % Implementatie code
+%\include{debugging}  % Manier van debugging
 
 % BibTex referenties
 \bibliography{references}
