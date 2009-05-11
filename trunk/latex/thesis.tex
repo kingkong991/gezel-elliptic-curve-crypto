@@ -1,3 +1,4 @@
+% To check for overfull hboxes, add draft to the document options
 \documentclass[a4paper]{report}
 \usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
 \usepackage{fancyhdr} % Fancy headers & footers
@@ -50,6 +51,19 @@
 %\def\@fnsymbol#1{\ifcase#1\or *\or \dagger\or \ddagger\or \mathchar "278\or \mathchar "27B\or \|\or **\or \dagger\dagger \or \ddagger\ddagger \else\@ctrerr\fi\relax}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}	% Voetnoten met symbolen ipv nummers
 
+% Narrow environment for wide tables & figures
+% Usage: \begin{narrow}{-left cm}{-right cm}
+\newenvironment{narrow}[2]{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{#1}%
+    \setlength{\rightmargin}{#2}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]
+}{\end{list}}
 
 % List of equations
 %\newcommand{\listequationsname}{List of vergelijkingen}
