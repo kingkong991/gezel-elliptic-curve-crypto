@@ -1,29 +1,28 @@
 \documentclass[a4paper]{report}
 \usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
-\usepackage{graphicx}
-
 \usepackage{fancyhdr} % Fancy headers & footers
 
+\usepackage{graphicx}
+\usepackage{subfigure}	% Multiple figures in one float
+
 \usepackage{color}
-\usepackage{colortbl}  % Use colors in table
-\usepackage{multirow} % Multiple rows and columns in tables
+\usepackage{colortbl}	% Use colors in table
+\usepackage{multirow}	% Multiple rows and columns in tables
+\usepackage{booktabs}	% Professional looking tables
 
-\usepackage{url}                % Opmaak van URLs
-%\usepackage[official]{eurosym}  % Euro symbool
-
-%\usepackage{nonfloat}            % Voeg non-floating tables & figures toe
-\usepackage{pdfpages}            % Maak dat voorblad kan toegevoegd worden
 \usepackage{amsmath,amsfonts}    % Wiskunde
+
 \usepackage{listings}            % Code Listings
-
 %\usepackage[subfigure]{tocloft}		% Lijsten van willekeurige dingen + optie om errors met subfigure te vermijden
-
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}	% Algorithm typesetting
+%\usepackage{url}                % Opmaak van URLs
 
-%\usepackage[pdftex, bookmarks=true, bookmarksnumbered=true, pdfborder={0 0 0}]{hyperref}	% Links in pdf
+\usepackage{pdfpages}            % Maak dat voorblad kan toegevoegd worden
 \usepackage[pdftex, pdfborder={0 0 0}]{hyperref}	% Links in pdf
 
-\usepackage{subfigure}	% Multiple figures in one float
+\usepackage{ifthen}	% Conditionele stuff
+\newboolean{makeall}	% Als dit true is, wordt inhoudsopgave etc toegevoegd
+\setboolean{makeall}{false}
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -48,6 +47,9 @@
 
 % Misc commando's
 \newcommand{\nr}{n$^{\circ}$~}
+%\def\@fnsymbol#1{\ifcase#1\or *\or \dagger\or \ddagger\or \mathchar "278\or \mathchar "27B\or \|\or **\or \dagger\dagger \or \ddagger\ddagger \else\@ctrerr\fi\relax}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}	% Voetnoten met symbolen ipv nummers
+
 
 % List of equations
 %\newcommand{\listequationsname}{List of vergelijkingen}
@@ -181,34 +183,37 @@
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
 
+\ifthenelse{\boolean{makeall}}%
+{
 \pagestyle{empty}
 \pagenumbering{roman}
 
 % Voeg voorblad toe
-%\includepdf{voorblad.pdf}
+\includepdf{voorblad.pdf}
 
 % Copyright
-%\include{copyright}
+\include{copyright}
 
 \pagestyle{fancy}
 
-%\include{dankwoord}  % Dankwoord
-%\include{samenvatting} % Samenvatting
+\include{dankwoord}  % Dankwoord
+\include{samenvatting} % Samenvatting
 
-%\tableofcontents
-%\clearpage
+\tableofcontents
+\clearpage
 
-%\listoffigures
-%\clearpage
+\listoffigures
+\clearpage
 
-%\listoftables
-%\clearpage
+\listoftables
+\clearpage
   
-%\listofalgorithms
-%\clearpage
+\listofalgorithms
+\clearpage
 
 %\include{lijstafkortingen} % Lijst van afkortingen
 %\include{lijstsymbolen}    % Lijst van symbolen
+}{}
 
 \pagenumbering{arabic}
 
@@ -216,7 +221,7 @@
 %\include{cryptografie-inleiding} % Algemene informatie over cryptografie
 %\include{cryptografie-pairings}  % Informatie over pairings 
 
-%\include{implementatie}		% Hardware implementatie
+\include{implementatie}		% Hardware implementatie
 \include{resultaten}      % Resultaten vd implementatie
 
 %\include{conclusie}             % Conclusie

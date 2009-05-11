@@ -164,9 +164,9 @@ Ter vergelijking worden de resulterende parameters van beide implementaties gege
 
 \section{Vergelijking met bestaande implementaties}
 
-Gezien de vrij recente ontdekking van pairings lag de focus tot nu toe vooral op het snel berekenen van de pairing. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze als doelplatform allemaal een microprocessor. Er werd slechts \'e\'en paper gevonden waarin het uiteindelijke resultaat naar een ASIC gesynthetiseerd werd. Alle andere recent gepubliceerde implementaties werden ontwikkeld in software of voor FPGA's. Gezien de eerder vermelde focus op snelheid wordt in die gevallen nooit vermeld hoeveel de uiteindelijke schakelingen verbruiken.
+Gezien de vrij recente ontdekking van pairings lag de focus tot nu toe vooral op het snel berekenen van de pairing. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze als doelplatform allemaal een microprocessor. Er werden slechts drie papers gevonden gevonden in de literatuur waarin het uiteindelijke resultaat naar een ASIC gesynthetiseerd werd. Alle andere  gepubliceerde implementaties werden ontwikkeld in software of voor FPGA's.
 
-Het is dus zo goed als onmogelijk een grondige vergelijking te maken tussen de verschillende bestaande implementaties, gezien hun volledig andere invalshoek. Toch zal zo goed als mogelijk getracht worden enigszins een overzicht te geven, zodat de in deze thesis voorgestelde schakeling beter geplaats kan worden tussen de reeds bestaande ontwerpen.
+Het is dus zo goed als onmogelijk een grondige vergelijking te maken tussen de verschillende bestaande implementaties. Toch zal zo goed als mogelijk getracht worden enigszins een overzicht te geven, zodat de in deze thesis voorgestelde schakeling beter geplaats kan worden.
 
 De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{tinypbc, tinytate, nanoecc}. In alle gevallen wordt de pairing berekend op een ATMega128L microchip. Deze implementaties zijn ontwikkeld voor gebruik op een MICA node, specifiek ontwikkeld voor gebruik in sensor netwerken. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik gegeven in \cite{nanoecc} wordt het verbruik geschat op ongeveer $23.60mW$. Uiteraard zijn de oppervlakte en het verbruik van een microchip implementatie niet te vergelijken met de in deze thesis voorgestelde ASIC schakeling, gezien de zeer verschillende architectuur en de filosifie achter het gebruik van beiden.
 
@@ -175,7 +175,7 @@ De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{t
 	\label{tabel-resultaten-sensor}
 
 	\centering
-	\begin{tabular}{|l|l|l|l|l|}
+	\begin{tabular}{|l||l|l|l|l|}
 		\hline
 		&	\multicolumn{2}{c|}{NanoECC \cite{nanoecc}}	& \multirow{2}{*}{TinyTate \cite{tinytate}}	& \multirow{2}{*}{TinyPBC \cite{tinypbc}}\\
 		\cline{2-3}
@@ -183,16 +183,15 @@ De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{t
  		\hline \hline
 		Veld	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$ \\ \hline
 		Pairing	& Tate	& Tate	& Tate	& $\eta_T$ \\ \hline
-		Rekentijd ($s$)	& 	10.96	& 17.93	& 30.21	& 5.45\\
-		\hline		
+		Rekentijd ($s$)	& 	10.96	& 17.93	& 30.21	& 5.45\\ \hline		
 	\end{tabular}
 \end{table}
 
 In de literatuur zijn vrij veel ontwerpen voor FPGA's terug te vinden. Het probleem is echter dat men zich bij het ontwerp hiervan steeds toelegt op het behalen van een zo hoog mogelijke snelheid, wat resulteert in een grote oppervlakte. Ook wordt vaak gerekend over grote velden (bv. $\mathbb{F}_{2^{313}}$ of $\mathbb{F}_{3^{197}}$), wat meer veiligheid biedt, maar resulteert in nog grotere ontwerpen.
 
-Grootte van een FPGA ontwerp wordt vermeld in slices (voor Xilinx chips) of logical units (voor Altera chips). Deze eenheden zijn onmogelijk om te zetten naar een aantal gates. Zodoende is het dus niet mogelijk de grootte van deze ontwerpen te vergelijken met die van een ASIC schakeling.
+Grootte van een FPGA ontwerp wordt vermeld in \emph{slices} (Xilinx) of \emph{logic elements} (Altera). Deze eenheden zijn onmogelijk om te zetten naar een aantal gates. Zodoende is het dus niet mogelijk de grootte van deze ontwerpen te vergelijken met die van een ASIC schakeling.
 
-Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet oppervlakte, het voornaamste doel is.
+Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet oppervlakte, het voornaamste doel is. Het gebruik van een vermenigvuldigingsschakeling equivalent aan het gebruik van honderd of meer MALU's is in deze gevallen eerder regel dan uitzondering.
 
 \begin{table}[h]
 	\caption{Resultaten uit de literatuur voor ontwerpen ontwikkeld voor FPGA's}
@@ -201,10 +200,42 @@ Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van ee
 	\centering
 	\begin{tabular}{|l||l|l|l|l|l|}
 		\hline
-		&	Veld	& Pairing	& Opp. (slices)	& $f$ (MHz)	& Rekentijd ($\mu s$)\\
-		Shu \emph{et al.} \cite{shu}		& $\mathbb{F}_{2^{239}}$	& Mod. Tate	& 25287	& 84	& 41\\
-		Ronan \emph{et al.} \cite{ronan}	& $\mathbb{F}_{2^{103}}$	& Mod. Tate	& 21021	& 51	& 206\\
-		Grabher and Page \cite{grabher}	& $\mathbb{F}_{3^{97}}$		& Mod. Tate	& 4481	& 150	& 432.3\\
-		\hline
+		&	\multicolumn{1}{c|}{Veld}	& \multicolumn{1}{c|}{Pairing}	& $\begin{array}{@{}c@{}}\text{Opp.}\\\text{(slices)}\end{array}$	& $\begin{array}{@{}c@{}}f\\\text{(MHz)}\end{array}$	& $\begin{array}{@{}c@{}}\text{Reken-}\\\text{tijd }(\mu s)\end{array}$\\
+		\hline \hline
+		Ronan \emph{et al.} \cite{ronan}	& $\mathbb{F}_{2^{103}}$	& Mod. Tate	& 21021	& 51	& 206\\ \hline
+		Shu \emph{et al.} \cite{shu}		& $\mathbb{F}_{2^{239}}$	& Mod. Tate	& 25287	& 84	& 41\\ \hline
+		Keller \emph{et al.} \cite{keller}		& $\mathbb{F}_{2^{251}}$	& Mod. Tate	& 27725	& 40	& 2370\\ \hline
+		Grabher and Page \cite{grabher}	& $\mathbb{F}_{3^{97}}$		& Mod. Tate	& 4481	& 150	& 432.3\\ \hline
+		Beuchat \emph{et al.} \cite{beuchat-eta}	& $\mathbb{F}_{3^{97}}$	& $\eta_T$	& 1833	& 145	& 192\\ \hline		
 	\end{tabular}
+\end{table}
+
+Ten slotte rest dan nog de vergelijking met de tot nu toe gepubliceerde ASIC ontwerpen uit \cite{beuchat-asic}, \cite{kammler} en \cite{savas}. Zowel in \cite{beuchat-asic} als \cite{savas} wordt met het oog op het behalen van hoge snelheden ontworpen. De implementatie uit \cite{kammler} bevat naast de schakeling voor pairings tevens een RISC processor. Vaak werd getracht daarbij het oppervlakte-rekentijd product zo laag mogelijk te maken. \reftbl{tabel-resultaten-asic} geeft een vergelijkend overzicht van het ontwerp voorgesteld in deze thesis en de ontwerpen uit \cite{beuchat-asic} en \cite{kammler}.
+
+\begin{table}[h]
+	\caption{Vergelijking van het ontwerp voorgesteld in deze thesis met ASIC ontwerpen uit de literatuur}
+	\label{tabel-resultaten-asic}
+
+	\centering
+%	\begin{minipage}{\textwidth}	% Fix voor voetnoot in tabel
+%	\renewcommand{\thefootnote}{\fnsymbol{footnote}}	% Voetnoten met symbolen ipv nummers
+%	\def\@fnsymbol#1{\ifcase#1\or *\or \dagger\or \ddagger\or \mathchar "278\or \mathchar "27B\or \|\or **\or \dagger\dagger \or \ddagger\ddagger \else\@ctrerr\fi\relax}
+	\centering
+	\begin{tabular}{llllll}
+		\toprule
+		&	\multicolumn{2}{c}{Thesis}	& \multirow{2}{*}{PairingLite \cite{beuchat-asic}}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
+		\cmidrule(r){2-3}
+		& \multicolumn{1}{c}{10kHz} & \multicolumn{1}{c}{10.3Mhz} & & &\\
+ 		\midrule
+		Veld						& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
+		Pairing					& Tate							& Tate							& $\eta_T$					& Optimal Ate 					& Tate\\
+		Technologie				& $0.13 \mu m$					& $0.13 \mu m$					& $0.18 \mu m$				& $0.13 \mu m$					& $0.25 \mu m$\\
+		Opp. (gates)			& $30\:546$						& $32\:546$						& $193\:765$				& $97\:000$						& \emph{$10mm^2$}\footnotemark[2]\\
+		$f$ (MHz)				& 0.01							& 10.3							& 200							& 338								& 78\\
+		Rekentijd ($\mu s$)	& $51.5 \cdot 10^6$			& 5000							& 46.7						& 15800							& 250\\
+		\bottomrule		
+	\end{tabular}
+	
+	\raggedright \footnotesize \footnotemark[2] Voor deze implementatie zijn geen gegevens voorradig i.v.m.\ het aantal gates. De gegeven oppervlakte is die van de complete schakeling inclusief routing.
+%	\end{minipage}
 \end{table}
