@@ -1,0 +1,31 @@
+default:
+	Combinational area:       57467.000000
+	Noncombinational area:    58390.000000
+	Total cell area:          115857.000000
+	
+	Critical path: 17.06 ns
+	
+	Total Dynamic Power    =   4.6108 uW
+	Cell Leakage Power     = 113.3958 nW
+
+
+no_reset:
+	Combinational area:       55807.000000
+	Noncombinational area:    53441.000000
+	Total cell area:          109248.000000
+	
+	Critical path: 17.67 ns
+	
+	Total Dynamic Power    =   3.9350 uW
+	Cell Leakage Power     = 105.1518 nW
+
+
+clock_gating_glitch_free:
+	Combinational area:       56784.000000
+	Noncombinational area:    53436.000000
+	Total cell area:          110220.000000
+	
+	Critical path: 18.03 ns
+	
+	Total Dynamic Power    = 586.8621 nW
+	Cell Leakage Power     = 101.8208 nW
