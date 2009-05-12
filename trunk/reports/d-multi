@@ -1,0 +1,140 @@
+d1
+	area:
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   110937.0000    100.0  52178.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                  8813.0000      7.9   3131.0000   3850.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.7   1832.0000      0.0000  0.0000  malu
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   57141.0000  53796.0000  0.0000
+
+	power:
+		Cell Internal Power  =  61.8275 nW   (64%)
+		Net Switching Power  =  34.3446 nW   (36%)
+						             ---------
+		Total Dynamic Power    =  96.1721 nW  (100%)
+
+		Cell Leakage Power     = 109.8674 nW
+
+	timing:
+		data arrival time                                  19.36
+		
+---------------------------------------------------------------
+
+d2
+	area:
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   113691.0000    100.0  52232.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                 11513.0000     10.1   3988.0000   3872.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.6   1832.0000      0.0000  0.0000  malu_0
+		label_wrapper_gf2m/label_malu2      1821.0000      1.6   1821.0000      0.0000  0.0000  malu_1
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   59873.0000  53818.0000  0.0000
+	
+	power:
+		Cell Internal Power  =  55.9714 nW   (62%)
+		Net Switching Power  =  33.8238 nW   (38%)
+				                   ---------
+		Total Dynamic Power    =  89.7952 nW  (100%)
+
+		Cell Leakage Power     = 113.4958 nW
+	
+	timing:
+		data arrival time                                                 19.75
+	
+---------------------------------------------------------------
+
+d3
+	area:
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   116285.0000    100.0  52179.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                 14160.0000     12.2   4836.0000   3850.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.6   1832.0000      0.0000  0.0000  malu_0
+		label_wrapper_gf2m/label_malu2      1821.0000      1.6   1821.0000      0.0000  0.0000  malu_2
+		label_wrapper_gf2m/label_malu3      1821.0000      1.6   1821.0000      0.0000  0.0000  malu_1
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   62489.0000  53796.0000  0.0000
+
+	
+	power:
+		Cell Internal Power  =  65.4725 nW   (64%)
+		Net Switching Power  =  37.3298 nW   (36%)
+				                   ---------
+		Total Dynamic Power    = 102.8023 nW  (100%)
+
+		Cell Leakage Power     = 117.7247 nW
+	
+	timing:
+		data arrival time                                                 21.23
+	
+---------------------------------------------------------------
+
+d4
+	area:
+	
+	
+	power:
+	
+	
+	timing:
+	
+	
+---------------------------------------------------------------
+
+d6
+	area:
+	
+	
+	power:
+	
+	
+	timing:
+	
+	
+---------------------------------------------------------------
+
+d8
+	area:
+	
+	
+	power:
+	
+	
+	timing:
+	
+	
+---------------------------------------------------------------
+
+d16
+	area:
+	
+	
+	power:
+	
+	
+	timing:
+	
+	
+---------------------------------------------------------------
+
+d32
+	area:
+	
+	
+	power:
+	
+	
+	timing:
+	
+	
