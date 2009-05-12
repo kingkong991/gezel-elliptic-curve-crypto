@@ -15,35 +15,32 @@ Deze beide waarden moeten met een stevige korrel zout genomen worden. Het is voo
 Indien gewenst kan het verbruik voor hogere kloksnelheiden geschat worden. Gegeven de standaard frequentie $f = 10$kHz, de formule voor het dynamisch verbruik van een CMOS schakeling:
 \[P_d = V^2 \cdot C \cdot f\]
 en het leakage verbruik $P_l$, kan men dus het totale verbruik omrekenen naar dat van een willekeurige kloksnelheid via
-\[P' = \frac{P_d \cdot f'}{10 000} + P_l.\]
+\[P' = \frac{P_d \cdot f'}{10 \cdot 10^3} + P_l.\]
 
 \section{Basisimplementatie \& register optimalisaties\label{section-resultaten-basisimplementatie}}
 
-Het synthetiseren van de meest eenvoudige implementatie, zonder enige optimalisaties aan de registers en met slechts \'e\'en MALU in de $\mathbb{F}_{2^m}$ kern, geeft de resultaten in \reftbl{tabel-resultaten-basis}.
-
-
-Allereerst zal onderzocht worden wat de effecten zijn van de optimalisaties voorgesteld in \refsect{sectie-implementatie-optimalisatie}. Bij de implementaties met clock gating werden steeds ook de reset ingangen van zoveel mogelijk registers verwijderd. De synthese resultaten voor de vijf verschillende implementaties worden gegeven in \reftbl{tabel-resultaten-optimalisaties}. De versies met clock gating (CG $n$) implementeren de schakelingen in de volgorde waarin ze voorkomen in \refsect{subsectie-implementatie-optimalisatie-clock-gating}. Ter verduidelijking zijn de oppervlakte en het totale verbruik van deze resultaten ook nog eens uitgezet in \reffig{figuur-resultaten-m1}.
+Allereerst zal onderzocht worden wat de effecten zijn van de optimalisaties voorgesteld in \refsect{sectie-implementatie-optimalisaties}. Bij de implementaties met clock gating werden steeds ook de reset ingangen van zoveel mogelijk registers verwijderd. De synthese resultaten voor de vijf verschillende implementaties worden gegeven in \reftbl{tabel-resultaten-optimalisaties}. De versies met clock gating (CG~$n$) implementeren de schakelingen in de volgorde waarin ze voorkomen in \refsect{subsectie-implementatie-optimalisatie-clock-gating}. Ter verduidelijking zijn deze resultaten ook nog eens uitgezet in \reffig{figuur-resultaten-m1}.
 
 %De synthese software gebruikt in de basis implementatie en die zonder reset ingangen flip flops met een enable ingang. Zo'n flip flops kosten achtentwintig gates, waarbij de reset ingang door twee van die gates gevormd wordt. Intern zijn deze flip flops equivalent aan een flip flop zonder enable ingang die naar zichzelf is terug gekoppeld via een multiplexer. Het enable signaal vervult in dit geval de functie van selectie signaal die anders voor de multiplexer nodig zou zijn. De synthese software zal zelf de sturing van de enable signalen bepalen in dit gevallen. Het is om deze reden dat het toepassen van clock gating in dit geval geen oppervlakte winst oplevert tegenover.
 
-Zoals verwacht resulteert het toepassen van clock gating wel in een zeer grote besparing op het verbruik. Daarbij is het opmerkelijk dat het dynamisch verbruik van CG 3 niet lager is dan dat van de andere twee implementaties met clock gating. Het is mogelijk dat de synthese software bij de berekening van het verbruik niet nauwkeurig genoeg te werk gaat om het effect van de clock gating schakeling op de interne gates van de flip flop juist in te schatten. Door het kloksignaal door de clock gating schakelingen te sturen, wordt het als het ware gebufferd. Aangezien in de schakeling het kritische pad gevormd wordt door onder meer het klokpad, zorgt het toepassen van clock gating er dus voor dat het kritische pad verkort wordt.  Dit is de reden waarom de ontwerpen CG $n$ sneller kunnen werken. Waarom de schakeling zonder resets ook een hogere snelheid behaald kan worden, is niet volledig duidelijk.
+Zoals verwacht resulteert het toepassen van clock gating wel in een zeer grote besparing op het verbruik. Daarbij is het opmerkelijk dat het dynamisch verbruik van CG 3 niet lager is dan dat van de andere twee implementaties met clock gating. Het is mogelijk dat de synthese software bij de berekening van het verbruik niet nauwkeurig genoeg te werk gaat om het effect van de clock gating schakeling op de interne gates van de flip flop juist in te schatten. Door het kloksignaal door de clock gating schakelingen te sturen, wordt het als het ware gebufferd. Aangezien in de schakeling het kritische pad gevormd wordt door onder meer het klokpad, zorgt het toepassen van clock gating er dus voor dat het kritische pad verkort wordt.  Dit is de reden waarom de ontwerpen CG~$n$ sneller kunnen werken. Waarom de schakeling zonder resets ook een hogere snelheid kan behalen, is niet volledig duidelijk.
 
 \begin{table}[h]
 	\caption{Syntheseresultaten voor ontwerpen met \'e\'en MALU}
 	\label{tabel-resultaten-optimalisaties}
 
 	\centering
-	\begin{tabular}{ll@{$\;\;$}rl@{$\;\;$}rl@{$\;\;$}rl@{$\;\;$}r}
+	\begin{tabular}{llrlrlr}
 		\toprule
-		\multirow{2}{*}{Ontwerp}	& \multicolumn{2}{l}{\multirow{2}{*}{Opp. [gates]}}	& \multicolumn{4}{c}{Verbruik @ 10kHz [$nW$]}	& \multicolumn{2}{l}{\multirow{2}{*}{$f_{\text{max}}$ [MHz]}}\\
+		\multirow{2}{*}{Ontwerp}	& \multicolumn{2}{l}{\multirow{2}{*}{Opp. [gates]}}	& \multicolumn{4}{c}{Verbruik @ 10kHz [$nW$]}\\
 		\cmidrule{4-7}
-		&	& & \multicolumn{2}{l}{Dynamisch}	& \multicolumn{2}{l}{Leakage}	& &\\
+		&	& & \multicolumn{2}{c}{Dynamisch}	& \multicolumn{2}{c}{Leakage}\\
 		\midrule
-		Basis			& $28\,876$	& 			& 512	&	 		& 117 & 			& 50.10 	& \\
-		Geen reset	& $27\,596$	& 96\%	& 395	& 77\%	& 107 & 92\%	& 52.11	& 104\%\\
-		CG 1			& $27\,751$	& 96\%	& 94	& 18\%	& 109	& 94\%	& 51.68	& 103\%\\
-		CG 2			& $27\,713$	& 96\%	& 59	& 12\%	& 102	& 88\%	& 53.76	& 107\%\\
-		CG 3			& $27\,734$	& 96\%	& 96	& 19\%	& 110	& 94\%	& 51.65	& 103\%\\
+		Basis			& $28\,876$	& 			& 512	&	 		& 117 & \\
+		Geen reset	& $27\,596$	& 96\%	& 395	& 77\%	& 107 & 92\%\\
+		CG 1			& $27\,751$	& 96\%	& 94	& 18\%	& 109	& 94\%\\
+		CG 2			& $27\,713$	& 96\%	& 59	& 12\%	& 102	& 88\%\\
+		CG 3			& $27\,734$	& 96\%	& 96	& 19\%	& 110	& 94\%\\
 		\bottomrule		
 	\end{tabular}
 \end{table}
@@ -54,16 +51,16 @@ Zoals verwacht resulteert het toepassen van clock gating wel in een zeer grote b
 		\caption{Syntheseresultaten voor de basis implementatie met en zonder register optimalisaties\label{figuur-resultaten-m1}}
 \end{figure}
 
-\section{Meerdere MALU's\label{sectie-resulaten-malus}}
+\section{Meerdere MALUs\label{sectie-resulaten-malus}}
 
-Mits de toevoeging van extra MALU's is het mogelijk de totale rekeningtijd drastisch te verlagen (zie \refsect{subsectie-implementatie-gf2m-versnelling}). Hoewel het gebruik van meerdere MALU's de uiteindelijke schakeling vergroot en dat dus enigszins in gaat tegen de originele doelstelling, wordt hier toch onderzocht in welke mate de interessante parameters hierdoor juist worden be\"invloed. Er kan dan een afweging gemaakt worden tussen het gebruik van een schakeling met \'e\'en MALU op hogere kloksnelheid versus \'e\'en met meerdere MALU's aan een lagere kloksnelheid. De eerste schakeling zal kleiner zijn, maar waarschijnlijk wel meer verbruiken dan de tweede.
+Mits de toevoeging van extra MALUs is het mogelijk de totale rekeningtijd drastisch te verlagen (zie \refsect{subsectie-implementatie-gf2m-versnelling}). Hoewel het gebruik van meerdere MALUs de uiteindelijke schakeling vergroot en dat dus enigszins in gaat tegen de originele doelstelling, wordt hier toch onderzocht in welke mate de interessante parameters hierdoor juist worden be\"invloed. Er kan dan een afweging gemaakt worden tussen het gebruik van een schakeling met \'e\'en MALU op hogere kloksnelheid versus \'e\'en met meerdere MALUs aan een lagere kloksnelheid. De eerste schakeling zal kleiner zijn, maar waarschijnlijk wel meer verbruiken dan de tweede.
 
-De totale berekeningstijd $t = \frac{c}{f}$ kan bepaald worden in functie van het aantal benodigde klokcycli $c$, wat op zijn beurt bepaald wordt door het aantal MALU's $d$:
+De totale rekentijd $t = \frac{c}{f}$ kan bepaald worden in functie van het aantal benodigde klokcycli $c$, wat op zijn beurt bepaald wordt door het aantal MALUs $d$:
 \[c = 27058 + 2993 \cdot \left\lceil \frac{163}{d} \right\rceil,\]
-waarbij 2993 het aantal vermenigvuldigingen is dat dient uitgevoerd te worden en de tweede term in de vermenigvuldiging het aantal klokcycli is die een vermenigvuldiging kost. In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoeveel klokcycli nodig zijn om een berekening te voltooien. In \reffig{figuur-resultaten-multi-cycles} wordt hetzelfde weergegeven, maar dan voor elke $d$ van 1 t.e.m.\ 163. Het is duidelijk dat de tijdsbesparing waar extra MALU's voor zorgen vrij snel teniet wordt gedaan door het aantal cycli dat niet door $d$ be\"invloed wordt.
+waarbij 2993 het aantal vermenigvuldigingen is dat dient uitgevoerd te worden en de tweede term in de vermenigvuldiging het aantal klokcycli is die een vermenigvuldiging kost. In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoeveel klokcycli nodig zijn om een berekening te voltooien. In \reffig{figuur-resultaten-multi-cycles} wordt hetzelfde weergegeven, maar dan voor elke $d$ van 1 t.e.m.\ 163. Het is duidelijk dat de tijdsbesparing waar extra MALUs voor zorgen vrij snel teniet wordt gedaan door het aantal cycli dat niet door $d$ be\"invloed wordt.
 
 \begin{table}[h]
-	\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ aantal MALU's $d$}
+	\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ aantal MALUs $d$}
 	\label{tabel-resultaten-multi-cycles}
 
 	\begin{narrow}{-1cm}{-1cm}
@@ -79,31 +76,31 @@ waarbij 2993 het aantal vermenigvuldigingen is dat dient uitgevoerd te worden en
 
 \begin{figure}[h]
 	\centering
-		\fbox{\includegraphics[width=11.9cm]{results$206 \cdot 10^{-6}$-multi-cycles}}
-		\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ aantal MALU's $d$\label{figuur-resultaten-multi-cycles}}
+		\fbox{\includegraphics[width=11.9cm]{results-multi-cycles}}
+		\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ aantal MALUs $d$\label{figuur-resultaten-multi-cycles}}
 \end{figure}
 
-Op de implementaties met meerdere MALU's werden ook steeds de derde clock gating techniek (en het verwijderen van reset ingangen) toegepast, aangezien deze de grootste energiebesparing teweeg brengt. Implementaties met een aantal MALU's gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALU's zou immers compleet ingaan tegen de originele doelstelling. De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Indien men nog meer snelheidswinst wenst te boeken, zou het beter zijn het gehele ontwerp anders te ontwikkelen (bv.\ door RAM te gebruiken i.p.v.\ individuele registers).
+Op de implementaties met meerdere MALUs werden ook steeds de derde clock gating techniek (en het verwijderen van reset ingangen) toegepast, aangezien deze de grootste energiebesparing teweeg brengt. Implementaties met een aantal MALUs gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALUs zou immers compleet ingaan tegen de originele doelstelling. De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Indien men nog meer snelheidswinst wenst te boeken, zou het beter zijn het gehele ontwerp anders te ontwikkelen (bv.\ door RAM te gebruiken i.p.v.\ individuele registers).
 
 \begin{table}[h]
-	\caption{Syntheseresultaten voor ontwerpen met $d$ MALU's}
+	\caption{Syntheseresultaten voor ontwerpen met $d$ MALUs}
 	\label{tabel-resultaten-md}
 
 	\centering
-	\begin{tabular}{ll@{$\;\;$}rl@{$\;\;$}rl@{$\;\;$}rl@{$\;\;$}rl}
+	\begin{tabular}{llrlrlrl}
 		\toprule
-		\multirow{2}{*}{$d$} & \multicolumn{2}{l}{\multirow{2}{*}{Opp. [gates]}}	& \multicolumn{4}{c}{Verbruik @ 10kHz [$nW$]}	& \multicolumn{2}{l}{\multirow{2}{*}{$f_{\text{max}}$ [MHz]}} & \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Tijds-}\\\text{winst}\end{array}$}\\
+		\multirow{2}{*}{$d$} & \multicolumn{2}{l}{\multirow{2}{*}{Opp. [gates]}}	& \multicolumn{4}{c}{Verbruik @ 10kHz [$nW$]}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Tijds-}\\\text{winst}\end{array}$}\\
 		\cmidrule{4-7}
-		&	& & \multicolumn{2}{l}{Dynamisch}	& \multicolumn{2}{l}{Leakage}	& & &\\
+		&	& & \multicolumn{2}{c}{Dynamisch}	& \multicolumn{2}{c}{Leakage}	&\\
 		\midrule
-		1			& $30\,481$	& 100\%	& 104	& 100\%	& 117	& 5\%	& 47.73	& 100\%	& 0\%\\
-		2			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 47.1\%\\
-		3			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 62.8\%\\
-		4			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 70.9\%\\
-		6			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 78.5\%\\
-		8			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 82.5\%\\
-		16			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 88.4\%\\
-		32			& $30\,481$	& 1\%	& 104	& 5\%	& 117	& 5\%	& 47.73	& 5\%	& 91.3\%\\
+		1			& $27\,734$	& 			& 96	& 			& 110	& 			& \\
+		2			& $28\,423$	& 102\%	& 90	& 94\%	& 113	& 103\%	& 47.1\%\\
+		3			& $29\,071$	& 105\%	& 103	& 107\%	& 118	& 107\%	& 62.8\%\\
+		4			& $30\,481$	& 1\%		& 104	& 5\%		& 117	& 5\%		& 70.9\%\\
+		6			& $30\,481$	& 1\%		& 104	& 5\%		& 117	& 5\%		& 78.5\%\\
+		8			& $30\,481$	& 1\%		& 104	& 5\%		& 117	& 5\%		& 82.5\%\\
+		16			& $30\,481$	& 1\%		& 104	& 5\%		& 117	& 5\%		& 88.4\%\\
+		32			& $30\,481$	& 1\%		& 104	& 5\%		& 117	& 5\%		& 91.3\%\\
 		\hline		
 	\end{tabular}
 \end{table}
@@ -111,14 +108,14 @@ Op de implementaties met meerdere MALU's werden ook steeds de derde clock gating
 \begin{figure}[h]
 	\centering
 		\fbox{\includegraphics[scale=1]{results-md}}
-		\caption{Syntheseresultaten voor implementaties met meerdere MALU's\label{figuur-resultaten-md}}
+		\caption{Syntheseresultaten voor implementaties met meerdere MALUs\label{figuur-resultaten-md}}
 \end{figure}
 
-\section{Hogere kloksnelheid vs.\ meerdere MALU's}
+\section{Hogere kloksnelheid vs.\ meerdere MALUs}
 
-Aan de gegeven kloksnelheid van 10kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Aangezien het doel nog steeds blijft de schakeling zo klein mogelijk te maken, zal voor een implementatie met meerdere MALU's enkel die met twee nader onderzocht worden.
+Aan de gegeven kloksnelheid van 10kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALUs gebruikt worden. Aangezien het doel nog steeds blijft de schakeling zo klein mogelijk te maken, zal voor een implementatie met meerdere MALUs enkel die met twee nader onderzocht worden.
 
-Stel een maximale rekentijd $t_{\text{max}} = 50ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALU's even snel wenst te maken als die met \'e\'en dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met:
+Stel een maximale rekentijd $t_{\text{max}} = 50ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALUs even snel wenst te maken als die met \'e\'en dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met:
 \[\begin{aligned}
 \Delta f &= \frac{272484}{514917}\\
 	&\approx 0.53.
@@ -129,7 +126,7 @@ f_1	&= 10.3\text{MHz}\\
 f_2	&\approx 5.45\text{MHz}.
 \end{aligned}\]
 
-Ter vergelijking worden de resulterende parameters van beide implementaties gegeven in \reftbl{tabel-resultaten-m1-vs-m2}. Beiden werden volledig gehersynthetiseerd met aangepaste parameters voor de klok. Vandaar dat de opgegeven grootte enigzins verschilt met eerder gegeven resultaten. De schattingen voor het vermogen zijn dus ook niet bekomen door de conversie formule aan het begin van dit hoofdstuk toe te passen. Welke van de twee opties de voorkeur zal genieten, zal afhangen van toepassing tot toepassing.
+Ter vergelijking worden de resulterende parameters van beide implementaties gegeven in \reftbl{tabel-resultaten-m1-vs-m2}. Beiden werden gehersynthetiseerd met aangepaste parameters voor de klok. Aangezien afhankelijk van de kloksnelheid veranderingen aan het klokpad moeten gebeuren, verschillen de groottes van de resulterende schakelingen dus enigzins met eerder gegeven resultaten. De schattingen voor het vermogen zijn dus ook niet bekomen door de conversie formule aan het begin van dit hoofdstuk toe te passen. Of Welke van de twee opties de voorkeur zal genieten, zal afhangen van toepassing tot toepassing.
 
 \begin{table}[h]
 	\caption{Vergelijking van syntheseresultaten voor twee verschillende implementaties die er even lang over doen \'e\'en pairing te berekenen}
@@ -138,25 +135,22 @@ Ter vergelijking worden de resulterende parameters van beide implementaties gege
 	\centering
 	\begin{tabular}{lll@{$\;\;$}l}
 		\toprule
-		& 1 MALU	& \multicolumn{2}{l}{2 MALU's}\\
+		& 1 MALU	& \multicolumn{2}{l}{2 MALUs}\\
 		\midrule
-		Opp. (gates)				& $30\,481$	& $30\,481$	& 120\% \\
-		$f$ (MHz)					& 10.3		& 5.45		& 52.9\% \\ 
-		Verbruik ($nW$)			& 				& 				& \\
+		$f$ [MHz]					& 10.3		& 5.45		& 52.9\% \\ 
+		Opp. [gates]				& $30\,481$	& $30\,481$	& 120\% \\
+		Verbruik [$nW$]			& 				& 				& \\
 		$\quad$ Dynamisch			& 104			& 134			& 118\% \\
 		$\quad$ Leakage			& 114			& 164			& 144\% \\
-		$f_{\text{max}}$ (MHz)	& 47.73		& 40.12		& 85\% \\
 		\bottomrule	
 	\end{tabular}
 \end{table}
 
 \section{Vergelijking met bestaande implementaties}
 
-Gezien de vrij recente ontdekking van pairings lag de focus tot nu toe vooral op het snel berekenen van de pairing. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze als doelplatform allemaal een microprocessor. Er werden slechts drie papers gevonden gevonden in de literatuur waarin het uiteindelijke resultaat naar een ASIC gesynthetiseerd werd. Alle andere  gepubliceerde implementaties werden ontwikkeld in software of voor FPGA's.
+Gezien de vrij recente ontdekking van pairings is het beschikbare aantal implementaties voor ASICs ook vrij beperkt. Er werden slechts drie papers in de literatuur gevonden waarin het voorgestelde ontwerp naar een ASIC gesynthetiseerd werd. Enkele papers beschrijven een ontwerp voor gebruik in sensor netwerken. Helaas hebben deze als doelplatform allemaal een microprocessor. Zowat alle andere gepubliceerde implementaties werden ontwikkeld in software of voor FPGAs. Verder wordt in het geval van de FPGA ontwerpen, waar een zekere controle over de uiteindelijke grootte mogelijk is, zowat steeds geoptimaliseerd naar een minimum oppervlakte rekentijd product. Voor laag vermogensschakeling is dit echter geen interessante waarde. Het is dus zo goed als onmogelijk een grondige vergelijking te maken tussen de verschillende bestaande implementaties. Toch zal zo goed als mogelijk getracht worden enigszins een overzicht te geven, zodat het in deze thesis voorgestelde ontwerp beter geplaats kan worden.
 
-Het is dus zo goed als onmogelijk een grondige vergelijking te maken tussen de verschillende bestaande implementaties. Toch zal zo goed als mogelijk getracht worden enigszins een overzicht te geven, zodat de in deze thesis voorgestelde schakeling beter geplaats kan worden.
-
-De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{tinypbc, tinytate, nanoecc}. In alle gevallen wordt de pairing berekend op een ATMega128L microchip. Deze implementaties zijn ontwikkeld voor gebruik op een MICA node, specifiek ontwikkeld voor gebruik in sensor netwerken. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik gegeven in \cite{nanoecc} wordt het verbruik geschat op ongeveer $23.60mW$. Uiteraard zijn de oppervlakte en het verbruik van een microchip implementatie niet te vergelijken met de in deze thesis voorgestelde ASIC schakeling, gezien de zeer verschillende architectuur en de filosifie achter het gebruik van beiden.
+Ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{tinytate}, \cite{tinypbc} en \cite{nanoecc}. Deze implementaties zijn ontwikkeld voor gebruik op een MICA node, specifiek ontwikkeld voor gebruik in sensor netwerken. De processor op deze nodes is een ATMega128L microchip. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik gegeven in \cite{nanoecc} wordt het verbruik geschat op ongeveer $23.60mW$. Uiteraard zijn de oppervlakte en het verbruik van een microchip implementatie niet te vergelijken met de in deze thesis voorgestelde ASIC implementatie, gezien de zeer verschillende architectuur van en filosofie achter de keuze voor beiden.
 
 \begin{table}[h]
 	\caption{Resultaten uit de literatuur voor ontwerpen met focus op sensor netwerken}
@@ -165,25 +159,25 @@ De ontwerpen specifiek gericht op sensor netwerken worden voorgesteld in \cite{t
 	\centering
 	\begin{tabular}{lllll}
 		\toprule
-		&	\multicolumn{2}{c}{NanoECC \cite{nanoecc}}	& \multirow{2}{*}{TinyTate \cite{tinytate}}	& \multirow{2}{*}{TinyPBC \cite{tinypbc}}\\
-		\cmidrule(r){2-3}
-		& Binair	& Priem	&	& \\
- 		\midrule
-		Veld					& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$ \\
-		Pairing				& Tate							& Tate							& Tate							& $\eta_T$ \\
-		Rekentijd ($s$)	& 	10.96							& 17.93							& 30.21							& 5.45\\
+		& \multirow{2}{*}{TinyTate \cite{tinytate}}	& \multirow{2}{*}{TinyPBC \cite{tinypbc}} &	\multicolumn{2}{c}{NanoECC \cite{nanoecc}}\\
+		\cmidrule{4-5}
+		& & & \multicolumn{1}{c}{Binair} & \multicolumn{1}{c}{Priem}\\
+			\midrule
+		Veld					& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit\\
+		Pairing				& Tate							& $\eta_T$ 						& Tate							& Tate\\
+		Rekentijd ($s$)	& 30.21							& 5.45							& 10.96							& 17.93\\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-In de literatuur zijn vrij veel ontwerpen voor FPGA's terug te vinden. Het probleem is echter dat men zich bij het ontwerp hiervan steeds toelegt op het behalen van een zo hoog mogelijke snelheid, wat resulteert in een grote oppervlakte. Ook wordt vaak gerekend over grote velden (bv. $\mathbb{F}_{2^{313}}$ of $\mathbb{F}_{3^{197}}$), wat meer veiligheid biedt, maar resulteert in nog grotere ontwerpen.
+In de literatuur zijn vrij veel ontwerpen voor FPGAs terug te vinden. Het probleem is echter dat men zich bij het ontwerp hiervan steeds toelegt op het behalen van een zo hoog mogelijke snelheid, wat resulteert in een grote oppervlakte. Ook wordt vaak gerekend over grote velden (bv. $\mathbb{F}_{2^{313}}$ of $\mathbb{F}_{3^{197}}$), wat meer veiligheid biedt, maar resulteert in nog grotere ontwerpen.
 
 Grootte van een FPGA ontwerp wordt vermeld in \emph{slices} (Xilinx) of \emph{logic elements} (Altera). Deze eenheden zijn onmogelijk om te zetten naar een aantal gates. Zodoende is het dus niet mogelijk de grootte van deze ontwerpen te vergelijken met die van een ASIC schakeling.
 
-Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet oppervlakte, het voornaamste doel is. Het gebruik van een vermenigvuldigingsschakeling equivalent aan het gebruik van honderd of meer MALU's is in deze gevallen eerder regel dan uitzondering.
+Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet oppervlakte, het voornaamste doel is. Het gebruik van een vermenigvuldigingsschakeling equivalent aan het gebruik van honderd of meer MALUs is in deze gevallen eerder regel dan uitzondering.
 
 \begin{table}[h]
-	\caption{Resultaten uit de literatuur voor ontwerpen ontwikkeld voor FPGA's}
+	\caption{Resultaten uit de literatuur voor ontwerpen ontwikkeld voor FPGAs}
 	\label{tabel-resultaten-fpga}
 
 	\centering
@@ -200,7 +194,7 @@ Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van ee
 	\end{tabular}
 \end{table}
 
-Ten slotte rest dan nog de vergelijking met de tot nu toe gepubliceerde ASIC ontwerpen uit \cite{beuchat-asic}, \cite{kammler} en \cite{savas}. Zowel in \cite{beuchat-asic} als \cite{savas} wordt met het oog op het behalen van zo hoog mogelijke snelheden ontworpen. De implementatie uit \cite{kammler} bevat naast de schakeling voor pairings tevens een RISC processor. \reftbl{tabel-resultaten-asic} geeft een vergelijkend overzicht van het ontwerp voorgesteld in deze thesis en de ontwerpen uit \cite{beuchat-asic} en \cite{kammler}.
+Ten slotte rest dan nog de vergelijking met de tot nu toe gepubliceerde ASIC ontwerpen. De drie ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}, \cite{kammler} en \cite{savas}. Zowel in \cite{beuchat-asic} als \cite{savas} wordt met het oog op het behalen van zo hoog mogelijke snelheden ontworpen. De implementatie uit \cite{kammler} bevat naast de schakeling voor pairings tevens een RISC processor. In \cite{savas} wordt de finale machtsverheffing niet uitgevoerd. \reftbl{tabel-resultaten-asic} geeft een vergelijkend overzicht van het ontwerp voorgesteld in deze thesis en de vermelde ontwerpen.
 
 \begin{table}[h]
 	\caption{Vergelijking van het ontwerp voorgesteld in deze thesis met ASIC ontwerpen uit de literatuur}
@@ -210,24 +204,24 @@ Ten slotte rest dan nog de vergelijking met de tot nu toe gepubliceerde ASIC ont
 		\centering
 		\begin{tabular}{llllll}
 			\toprule
-			&	\multicolumn{2}{c}{Thesis (1 MALU, CG 3)}	& \multirow{2}{*}{PairingLite \cite{beuchat-asic}}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
+			&	\multicolumn{2}{c}{Thesis (1 MALU, CG 3)}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
 			\cmidrule(r){2-3}
 			& \multicolumn{1}{c}{10kHz} & \multicolumn{1}{c}{10.3Mhz} & & &\\
 	 		\midrule
-			Veld							& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
-			Pairing						& Tate							& Tate							& $\eta_T$					& Optimal Ate 					& Tate\\
-			Technologie					& $0.13 \mu m$					& $0.13 \mu m$					& $0.18 \mu m$				& $0.13 \mu m$					& $0.25 \mu m$\\
-			Opp. [gates]				& $27\,734$						& $27\,734$						& $193\,765$				& $97\,000$						& \emph{$10mm^2$}\footnotemark[2]\\
-			$f$ [MHz]					& 0.01							& 10.3							& 200							& 338								& 78\\
-			Rekentijd [$\mu s$]		& $51.5 \cdot 10^6$			& $50 \cdot 10^3$				& 46.7						& 15800							& 250\\
-			Verbruik [$mW$]			& $206 \cdot 10^{-6}$		& $212 \cdot 10^{-3}$		& 672							& ?								& ?\\
-			Opp. $\cdot$ tijd\footnotemark[3]			& \\
-			Opp. $\cdot$ verbruik	& \\
+			Veld																		& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
+			Pairing																	& Tate							& Tate							& $\eta_T$					& Optimal Ate 					& Tate\\
+			Technologie																& $0.13 \mu m$					& $0.13 \mu m$					& $0.18 \mu m$				& $0.13 \mu m$					& $0.25 \mu m$\\
+			Opp. [gates]															& $27\,734$						& $27\,734$						& $193\,765$				& $97\,000$						& \emph{$10mm^2$}\footnotemark[2]\\
+			$f$ [MHz]																& 0.01							& 10.3							& 200							& 338								& 78\\
+			Rekentijd [$\mu s$]													& $51.5 \cdot 10^6$			& $50 \cdot 10^3$				& 46.7						& $15.8 \cdot 10^3$			& 250\footnotemark[3]\\
+			Verbruik [$mW$]														& $206 \cdot 10^{-6}$		& $212 \cdot 10^{-3}$		& 672							& ?								& ?\\
+			Score $[\frac{nW \cdot \mu s}{gates}]$\footnotemark[4]	& 383								& 382								& 162							& ?								& ?\\
 			\bottomrule		
 		\end{tabular}
 	\end{narrow}
-		
-	\raggedright \footnotesize \footnotemark[2] Voor deze implementatie zijn geen gegevens voorradig i.v.m.\ het aantal gates. De gegeven oppervlakte is die van de complete schakeling inclusief routing.
+	\footnotesize \footnotemark[2] De gegeven oppervlakte is die van de complete schakeling inclusief routing.
 	
-	\footnotemark[3] Bij de berekening van deze waarde werd het bekomen getal gedeeld door de kloksnelheid. Hoewel de oppervlakte enigszins afhangt van de klokfrequentie, za
+	\footnotemark[3] Exclusief de finale machtsverheffing.
+	
+	\footnotemark[4] De score wordt berekend als score $= \frac{\text{verbruik} \cdot \text{rekentijd}}{\text{oppervlakte}}$. Een hogere score betekent in dit geval dat de schakeling waarschijnlijk geschikter is voor gebruik in een omgeving met beperkte ressources.
 \end{table}

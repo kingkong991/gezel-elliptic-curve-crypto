@@ -32,14 +32,14 @@ Alvorens dit kan gebeuren, moet een woordlengte $m$ vastgelegd worden. Deze bepa
 	\label{tabel-implementatie-parameters-keylength}
 
 	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		$m$ (bit)	& sterkte (bit)\\
-		\hline
+	\begin{tabular}{ll}
+		\toprule
+		$m$ [bit]	& $\begin{array}{@{}c@{}}\text{sterkte}\\\text{[bit]}\end{array}$\\
+		\midrule
 		81		& 324\\
 		163	& 652\\
 		239	& 956\\
-		\hline		
+		\bottomrule		
 	\end{tabular}
 \end{table}
 
@@ -58,9 +58,9 @@ en hierop wordt het volgende extensieveld gebouwd:
 \[\mathbb{F}_{2^{4m}} \cong \mathbb{F}_{2^{2m}}[y]/(y^2 + (x + 1)y + 1).\]
 Een element van $\mathbb{F}_{2^{4m}}$ kan dus voorgesteld worden als vier elementen van $\mathbb{F}_{2^m}$.
 
-Ten slotte moet een distortiemap voor gebruik in de berekening van de Tate bepaald worden. Hiervoor wordt dezelfde gekozen als in \cite{bertoni}. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie volgende transformatie:
+Ten slotte moet een distortiemap voor gebruik in de berekening van de Tate pairing bepaald worden. Hiervoor wordt dezelfde gekozen als in \cite{bertoni}. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie volgende transformatie:
 \[\phi : (x_A, y_A) \to (x_A + s^2, y_A + x_A s + t^6)\]
-met $s, t \in \mathbb{F}_{2^{4m}}$. Verder moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
+met $s, t \in \mathbb{F}_{2^{4m}}$. Daarbij moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
 \[\begin{gathered}
 s^4 + s = 0\\
 t^2 + t + s^6 + s^2 = 0.
@@ -84,14 +84,14 @@ Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze geb
 Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0.13 \mu m$ low leakage technologie van Faraday Technology Corporation. De ordening van de elementen zal echter grotendeels behouden voor andere technologi\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
 
 \begin{table}[h]
-	\caption[Grootte van elementen in een ASIC schakeling in gates$/$bit ($0.13 \mu m$ low leakage technologie van Faraday Technology Corporation)]{Grootte van elementen in een ASIC schakeling in gates$/$bit ($0.13 \mu m$ low leakage technologie van Faraday Technology Corporation) \cite{cell-databook}}
+	\caption[Oppervlakte van elementen in een ASIC schakeling in gates$/$bit ($0.13 \mu m$ \emph{low leakage} technologie van Faraday Technology Corporation)]{Grootte van elementen in een ASIC schakeling in gates$/$bit ($0.13 \mu m$ low leakage technologie van Faraday Corporation \cite{cell-databook})}
 	\label{tabel-implementatie-beperkingen-elementen-gatecount}
 
 	\centering
-	\begin{tabular}{|l|r|}
-		\hline
-		Element			& Gates$/$bit\\
-		\hline
+	\begin{tabular}{lr}
+		\toprule
+		Element			& Opp. $\left[\frac{\text{gates}}{\text{bit}}\right]$\\
+		\midrule
 		D flip-flop met reset	& 6\\
 		D flip-flop zonder reset	& 5.5\\
 		full adder		& 5.5\\
@@ -105,7 +105,7 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 		2 ingang NOR	& 1\\
 		2 ingang NAND	& 1\\
 		NOT				& 0.75\\
-		\hline		
+		\bottomrule		
 	\end{tabular}
 \end{table}
 
@@ -237,20 +237,20 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 	\label{tabel-implementatie-woordbreedte-d}
 
 	\centering
-	\begin{tabular}{|l|c|c|c|c|c|c|}
-		\hline
-		\multicolumn{7}{|c|}{Voor de hand liggende waarden voor $d$}\\
-		\hline
+	\begin{tabular}{lcccccc}
+		\toprule
+		\multicolumn{7}{c}{Voor de hand liggende waarden voor $d$}\\
+		\midrule
 		$d$			& 2	& 4	& 8	& 16	& 32	& 64\\
 		$m \bmod d \qquad$	& 1	& 3	& 3	& 3	& 3	& 35\\
-		\hline
+		\bottomrule
 		\multicolumn{7}{c}{}\\
-		\hline
-		\multicolumn{7}{|c|}{Ideale waarden voor $d$}\\
-		\hline
+		\toprule
+		\multicolumn{7}{c}{Ideale waarden voor $d$}\\
+		\midrule
 		$d$			& 2	& 3	& 6	& 9	& 18	& 27\\
 		$m \bmod d$	& 1	& 1	& 1	& 1	& 1	& 1\\
-		\hline
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -292,7 +292,7 @@ De controller zal ontworpen worden zoals het schema in \reffig{figuur-implementa
 
 Grofweg kan het algoritme opgedeeld worden in de for-lus  en een finale machtsverheffing. De for-lus kan verder onderverdeeld worden in een verdubbelstap, een optelstap, een kwadratering van F en een vermenigvuldiging $F \cdot G$. Elk van deze stappen zal verder uitgediept worden en er zal voor elke berekening bepaald worden hoeveel tussenresultaten minimum opgeslagen moeten worden. Het zal blijken dat een inversie in $\mathbb{F}_{2^m}$ uitgerekend moet kunnen worden, wat ook verder uitgediept zal worden.
 
-Bij elk van de volgende algoritmen zal aangegeven worden hoeveel en welke bewerkingen juist nodig zijn. Daarbij staat \textsf{A} voor een optelling, \textsf{M} voor een vermenigvuldiging, \textsf{I} voor een kwadratering en \textsf{I} voor een inversie. Aangezien er echter geen afzonderlijke schakeling voor kwadrateren ontworpen is, zijn \textsf{I} en \textsf{M} qua rekentijd in dit geval equivalent aan elkaar. De bewerking $a + 1$ neemt geen extra tijd in beslag, omdat die functie parallel met een optelling of vermenigvuldiging kan uitgevoerd worden door de $plus\_one$ van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ hoog te maken bij de start van een berekening.
+Bij elk van de volgende algoritmen zal aangegeven worden hoeveel en welke bewerkingen juist nodig zijn. Daarbij staat \textsf{A} voor een optelling, \textsf{M} voor een vermenigvuldiging, \textsf{S} voor een kwadratering en \textsf{I} voor een inversie. Aangezien er echter geen afzonderlijke schakeling voor kwadrateren ontworpen is, zijn \textsf{S} en \textsf{M} qua rekentijd in dit geval equivalent aan elkaar. De bewerking $a + 1$ neemt geen extra tijd in beslag, omdat die functie parallel met een optelling of vermenigvuldiging kan uitgevoerd worden door de $plus\_one$ van de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ hoog te maken bij de start van een berekening.
 
 \subsection{For-lus\label{subsectie-implementatie-miller-forlus}}
 
@@ -300,20 +300,20 @@ Zoals reeds eerder vermeld kan de for-lus onderverdeeld worden in een verdubbels
 
 \subsubsection{Verdubbelstap}
 
-De verdubbelstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algemeen-double-1} en \ref{lijn-implementatie-miller-algemeen-double-2} in \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme zijn de berekeningen als volgt \cite{bertoni, hankerson-book}:
+De verdubbelstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algemeen-double-1} en \ref{lijn-implementatie-miller-algemeen-double-2} in \refalg{algoritme-implementatie-miller-algemeen}. Voor een supersinguliere kromme zijn de berekeningen als volgt \cite{bertoni, hankerson-book}:
 
 \[\begin{aligned}
-	\lambda &= x_I^2 + 1\\
-	x_{2I} &= \lambda ^2\\
-	y_{2I} &= \lambda (x_{2I} + x_I) + y_I + 1\\
-	G_{I,I}(\phi(Q)) &= \lambda (x_{\phi} + x_I) + (y_{\phi} + y_I)\\
+	\lambda &= x_V^2 + 1\\
+	x_{2V} &= \lambda ^2\\
+	y_{2V} &= \lambda (x_{2V} + x_V) + y_V + 1\\
+	G_{V,V}(\phi(Q)) &= \lambda (x_{\phi} + x_V) + (y_{\phi} + y_V)\\
 \end{aligned}\]
 
-In dit geval kan $y_{2I}$ ook berekend worden als:
+In dit geval kan $y_{2V}$ ook berekend worden als:
 
 \[\begin{aligned}
-y_{2I}	&= y_I^4 + x_I^4\\
-			&= (y_I + x_I)^4\\	
+y_{2V}	&= y_V^4 + x_V^4\\
+			&= (y_V + x_V)^4\\	
 \end{aligned}\]
 
 Aangezien dit echter twee kwadrateringen en een optelling kost tegenover een vermenigvuldiging en twee optellingen, wordt de voorkeur gegeven aan de eerste methode.
@@ -321,7 +321,7 @@ Aangezien dit echter twee kwadrateringen en een optelling kost tegenover een ver
 Door de specifieke vorm van $\phi(Q)$ kan $G$ uitgeschreven worden als:
 
 \[\begin{aligned}
-	G_a	&=	\lambda (x_{\phi_a} + x_I) + (y_{\phi_a} + y_I)\qquad&
+	G_a	&=	\lambda (x_{\phi_a} + x_V) + (y_{\phi_a} + y_V)\qquad&
 				G_c	&= \lambda \cdot x_{\phi_c} + y_{\phi_c}\\
 	G_b	&=	\lambda \cdot x_{\phi_b} + y_{\phi_b}&
 						&= 0\\
@@ -335,18 +335,18 @@ De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in 
 
 Tanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
 
-Buiten registers voor $x_{2I}$, $y_{2I}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er ook een register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
+Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er ook een register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
 
 \begin{algorithm}[h]
-	\caption{Uitwerking van de verdubbelstap voor hyperelliptische krommen in het Miller algoritme}
+	\caption{Uitwerking van de verdubbelstap voor supersinguliere krommen in het Miller algoritme}
 	\label{algoritme-implementatie-miller-double-detail}
-	\KwIn{$x_I, y_I \in E(\mathbb{F}_{2^m})$}
-	\KwOut{$x_{2I}, y_{2I} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
+	\KwIn{$x_V, y_V \in E(\mathbb{F}_{2^m})$}
+	\KwOut{$x_{2V}, y_{2V} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$\lambda \in \mathbb{F}_{2^m}$}
-	$G_a \leftarrow x_I$; $G_b \leftarrow y_I$\;
-	$\lambda \leftarrow G_a^2 + 1$; $x_{2I} \leftarrow \lambda ^2$\comm{2 I}\;
-	$y_{2I} \leftarrow x_{2I} + G_a$; $y_{2I} \leftarrow y_{2I} \cdot \lambda$\comm{1 M, 1 A}\;
-	$y_{2I} \leftarrow y_{2I} + G_b + 1$\comm{1 A}\;
+	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
+	$\lambda \leftarrow G_a^2 + 1$; $x_{2V} \leftarrow \lambda ^2$\comm{2 S}\;
+	$y_{2V} \leftarrow x_{2V} + G_a$; $y_{2V} \leftarrow y_{2V} \cdot \lambda$\comm{1 M, 1 A}\;
+	$y_{2V} \leftarrow y_{2V} + G_b + 1$\comm{1 A}\;
 	$G_a \leftarrow G_a + x_{\phi_a}$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 M, 1 A}\;
 	$G_a \leftarrow G_a + y_{\phi_a}$; $G_a \leftarrow G_a + G_b$\comm{2 A}\;
 	$G_b \leftarrow \lambda + x_{\phi_a}$\comm{1 A}\;
@@ -354,13 +354,13 @@ Buiten registers voor $x_{2I}$, $y_{2I}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $
 
 \subsubsection{Optelstap}
 
-De optelstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} en \ref{lijn-implementatie-miller-algemeen-add-2} van \refalg{algoritme-implementatie-miller-algemeen}. Voor een hyperelliptische kromme dienen de volgende bewerkingen uitgevoerd te worden \cite{bertoni, hankerson-book}:
+De optelstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} en \ref{lijn-implementatie-miller-algemeen-add-2} van \refalg{algoritme-implementatie-miller-algemeen}. Voor een supersinguliere kromme dienen de volgende bewerkingen uitgevoerd te worden \cite{bertoni, hankerson-book}:
 
 \[\begin{aligned}
-	\lambda &= \frac{y_I + y_P}{x_I + x_P}\\
-	x_{I + P} &= \lambda ^2 + x_I + x_P\\
-	y_{I + P} &= \lambda (x_{I+P} + x_P) + y_P + 1\\
-	G_{I,I}(\phi(Q)) &= \lambda (x_{\phi} + x_P) + (y_{\phi} + y_P)\\
+	\lambda &= \frac{y_V + y_P}{x_V + x_P}\\
+	x_{V + P} &= \lambda ^2 + x_V + x_P\\
+	y_{V + P} &= \lambda (x_{V + P} + x_P) + y_P + 1\\
+	G_{V,P}(\phi(Q)) &= \lambda (x_{\phi} + x_P) + (y_{\phi} + y_P)\\
 \end{aligned}\]
 
 Net zoals bij de verdubbelstap kan $G$ hier in 2 variabelen opgeslagen worden. Hoewel de optelstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}.
@@ -368,17 +368,17 @@ Net zoals bij de verdubbelstap kan $G$ hier in 2 variabelen opgeslagen worden. H
 In tegenstelling tot de verdubbelstap zijn hier twee tijdelijke registers nodig, een voor $\lambda$ en een voor $a$. Verder zijn er twee registers nodig voor $x_P$ en $y_P$. Alles samen dienen er tien optellingen, drie vermenigvuldigingen, twee kwadrateringen en een inversie uitgerekend te worden.
 
 \begin{algorithm}[h]
-	\caption{Uitwerking van de optelstap voor hyperelliptische krommen in het Miller algoritme}
+	\caption{Uitwerking van de optelstap voor supersinguliere krommen in het Miller algoritme}
 	\label{algoritme-implementatie-miller-add-detail}
-	\KwIn{$x_I, y_I, x_P, y_P \in E(\mathbb{F}_{2^m})$}
-	\KwOut{$x_{I + P}, y_{I + P} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
+	\KwIn{$x_V, y_V, x_P, y_P \in E(\mathbb{F}_{2^m})$}
+	\KwOut{$x_{V + P}, y_{V + P} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$\lambda, a \in \mathbb{F}_{2^m}$}
-	$G_a \leftarrow x_I$; $G_b \leftarrow y_I$\;
+	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
 	$\lambda \leftarrow G_a + x_P$; $\lambda \leftarrow \lambda^{-1}$\comm{1 I, 1 A}\;
 	$a \leftarrow G_b + y_P$; $\lambda \leftarrow \lambda \cdot a$\comm{1 M, 1 A}\;
-	$x_{I + P} \leftarrow \lambda ^2 + G_a$; $x_{I + P} \leftarrow x_{I + P} + x_P$\comm{1 I, 2 A}\;
-	$y_{I + P} \leftarrow x_{I + P} + x_P$; $y_{I + P} \leftarrow y_{I + P} \cdot \lambda$\comm{1 M, 1 A}\;
-	$y_{I + P} \leftarrow y_{I + P} + y_P + 1$\comm{1 A}\;
+	$x_{V + P} \leftarrow \lambda ^2 + G_a$; $x_{V + P} \leftarrow x_{V + P} + x_P$\comm{1 S, 2 A}\;
+	$y_{V + P} \leftarrow x_{V + P} + x_P$; $y_{V + P} \leftarrow y_{V + P} \cdot \lambda$\comm{1 M, 1 A}\;
+	$y_{V + P} \leftarrow y_{V + P} + y_P + 1$\comm{1 A}\;
 	$G_a \leftarrow x_{\phi_a} + x_P$; $G_a \leftarrow G_a \cdot \lambda$\comm{1 M, 1 A}\;
 	$G_a \leftarrow G_a + y_{\phi_a}$; $G_a \leftarrow G_a + y_P$\comm{2 A}\;
 	$G_b \leftarrow \lambda + x_{\phi_a}$\comm{1 A}\;
@@ -394,23 +394,19 @@ a^{2^m - 1}	&= 1\\
 a^{2^m - 2}	&= a^{-1}\\
 \end{aligned}\]
 
-De naieve manier om dit te berekenen zou zijn om $a$ $2^m - 2$ keer met zichzelf te vermenigvuldigingen. In dit geval zou dat betekenen dat er $2^{163} -2 = 11 692 013 098 647 223 345 629 478 661 730 264 157 247 460 343 806$ vermenigvuldigingen zouden moeten uitgevoerd worden. Zoiets is uiteraard onhaalbaar.
+% $2^{163} -2 = 11 692 013 098 647 223 345 629 478 661 730 264 157 247 460 343 806$
+
+De naieve manier om dit te berekenen zou zijn om $a$ $2^m - 2$ keer met zichzelf te vermenigvuldigingen. In dit geval zou dat betekenen dat er $2^{163} - 2$ vermenigvuldigingen moeten uitgevoerd worden, wat uiteraard onhaalbaar is.
 
 Een tweede manier bestaat er in de exponent te ontbinden in machten van 2 en 3. In dat geval zouden er nog 237 vermenigvuldigen nodig zijn.
 
-Er is echter een derde, optimale manier die toegepast kan worden indien de exponent van de vorm $2^m - 2$ is \cite{batina-pkc}\cite{itoh}. Dit gaat als volgt in zijn werk:
-
+Er is echter een derde, optimale manier die toegepast kan worden indien de exponent van de vorm $2^m - 2$ is \cite{batina-pkc, itoh}. Dit gaat als volgt in zijn werk. Stel:
 \[a^{2^m - 2} = (a^{2^{m - 1} - 1})^2\]
-
-Als wordt aangenomen dat $m$ oneven is, is de macht van twee na het gelijkheidsteken dus even. Zolang de exponent even is, kan recursief volgende formule toegepast worden:
-
+Als wordt aangenomen dat $m$ oneven is, is de exponent van twee na het gelijkheidsteken dus even. Zolang de exponent even is, kan recursief volgende formule toegepast worden:
 \[a^{2^i - 1} = (a^{2^{\frac{i}{2}} - 1})^{2^{\frac{i}{2}}} \cdot a^{2^{\frac{i}{2}} - 1}\]
-
 Indien $a$ oneven is, dient volgende formule toegepast te worden:
-
 \[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a\]
-
-Uiteindelijk eindigt men dan bij $a^2$ of $a^3$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\textsf{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
+Uiteindelijk eindigt men dan bij $a^2$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\textsf{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
 
 In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}. Het aantal berekeningen in dat geval is 9 vermenigvuldigingen en 162 kwadrateringen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
 
@@ -419,16 +415,16 @@ In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegev
 	\label{algoritme-implementatie-miller-inversie}
 	\KwIn{$a \in \mathbb{F}_{2^{163}}$}
 	\KwOut{$a^{-1} \in \mathbb{F}_{2^{163}}$}
-	$a^3 \leftarrow a^2 \cdot a$\comm{1 I, 1 M}\;
-	$a^{2^4 - 1} \leftarrow (a^3)^{2^2} \cdot a^3$\comm{2 I, 1 M}\;
-	$a^{2^5 - 1} \leftarrow (a^{2^4 - 1})^2 \cdot a$\comm{1 I, 1 M}\;
-	$a^{2^{10} - 1} \leftarrow (a^{2^5 - 1})^{2^5} \cdot a^{2^5 - 1}$\comm{5 I, 1 M}\;
-	$a^{2^{20} - 1} \leftarrow (a^{2^{10} - 1})^{2^{10}} \cdot a^{2^{10} - 1}$\comm{10 I, 1 M}\;
-	$a^{2^{40} - 1} \leftarrow (a^{2^{20} - 1})^{2^{20}} \cdot a^{2^{20} - 1}$\comm{20 I, 1 M}\;
-	$a^{2^{80} - 1} \leftarrow (a^{2^{40} - 1})^{2^{40}} \cdot a^{2^{40} - 1}$\comm{40 I, 1 M}\;
-	$a^{2^{81} - 1} \leftarrow (a^{2^{80} - 1})^2 \cdot a$\comm{1 I, 1 M}\;
-	$a^{2^{162} - 1} \leftarrow (a^{2^{81} - 1})^{2^{81}} \cdot a^{2^{81} - 1}$\comm{81 I, 1 M}\;
-	$a^{-1} \leftarrow (a^{2^{162} - 1})^2$\comm{1 I}\;
+	$a^3 \leftarrow a^2 \cdot a$\comm{1 S, 1 M}\;
+	$a^{2^4 - 1} \leftarrow (a^3)^{2^2} \cdot a^3$\comm{2 S, 1 M}\;
+	$a^{2^5 - 1} \leftarrow (a^{2^4 - 1})^2 \cdot a$\comm{1 S, 1 M}\;
+	$a^{2^{10} - 1} \leftarrow (a^{2^5 - 1})^{2^5} \cdot a^{2^5 - 1}$\comm{5 S, 1 M}\;
+	$a^{2^{20} - 1} \leftarrow (a^{2^{10} - 1})^{2^{10}} \cdot a^{2^{10} - 1}$\comm{10 S, 1 M}\;
+	$a^{2^{40} - 1} \leftarrow (a^{2^{20} - 1})^{2^{20}} \cdot a^{2^{20} - 1}$\comm{20 S, 1 M}\;
+	$a^{2^{80} - 1} \leftarrow (a^{2^{40} - 1})^{2^{40}} \cdot a^{2^{40} - 1}$\comm{40 S, 1 M}\;
+	$a^{2^{81} - 1} \leftarrow (a^{2^{80} - 1})^2 \cdot a$\comm{1 S, 1 M}\;
+	$a^{2^{162} - 1} \leftarrow (a^{2^{81} - 1})^{2^{81}} \cdot a^{2^{81} - 1}$\comm{81 S, 1 M}\;
+	$a^{-1} \leftarrow (a^{2^{162} - 1})^2$\comm{1 S}\;
 \end{algorithm}
 
 \subsubsection{Kwadratering van $F$}
@@ -455,12 +451,12 @@ Mist de originele waarde van $F$ overschreven mag worden, is het mogelijk dit te
 	\KwIn{$F = F_a + F_b x + F_c y + F_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$F = F^2 \in \mathbb{F}_{2^{4m}}$}
 	$F_a \leftarrow F_a + F_c$\comm{1 A}\;
-	$F_a \leftarrow F_a^2$\comm{1 I}\;
+	$F_a \leftarrow F_a^2$\comm{1 S}\;
 	$F_b \leftarrow F_b + F_d$\comm{1 A}\;
-	$F_b \leftarrow F_b^2$\comm{1 I}\;
+	$F_b \leftarrow F_b^2$\comm{1 S}\;
 	$F_a \leftarrow F_a + F_b$\comm{1 A}\;
-	$F_c \leftarrow F_c^2$\comm{1 I}\;
-	$F_d \leftarrow F_d^2$\comm{1 I}\;
+	$F_c \leftarrow F_c^2$\comm{1 S}\;
+	$F_d \leftarrow F_d^2$\comm{1 S}\;
 	$F_d \leftarrow F_d + F_c$\comm{1 A}\;
 \end{algorithm}
 
@@ -599,7 +595,7 @@ Een methode om deze vier resultaten uit te rekenen is te zien in \refalg{algorit
 	\KwIn{$F = F_a + F_b x + F_c y + F_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$I_t = I_{t_a} + I_{t_b} x, J_t = J_{t_a} + J_{t_b} x, G_t = G_{t_a} + G_{t_b} x$, \mbox{$G_n = G_{n_a} + G_{n_b} x$} $\in \mathbb{F}_{2^{2m}}$}
 	\KwData{$a \in \mathbb{F}_{2^m}$}
-	$I_{t_a} \leftarrow F_a^2$; $I_{t_b} \leftarrow F_b^2$; $G_{t_a} \leftarrow F_c^2$; $G_{t_b} \leftarrow F_d^2$\comm{4 I}\;
+	$I_{t_a} \leftarrow F_a^2$; $I_{t_b} \leftarrow F_b^2$; $G_{t_a} \leftarrow F_c^2$; $G_{t_b} \leftarrow F_d^2$\comm{4 S}\;
 	$I_{t_a} \leftarrow I_{t_a} + I_{t_b}$; $J_{t_b} \leftarrow I_{t_b} + G_{t_b}$\comm{2 A}\;
 	$G_{t_b} \leftarrow I_{t_b} + G_{t_b}$; $J_{t_a} \leftarrow I_{t_a} + G_{t_b}$\comm{2 A}\;
 	$I_{t_a} \leftarrow I_{t_a} + G_{t_a}$; $I_{t_b} \leftarrow I_{t_b} + G_{t_b}$\comm{2 A}\;
@@ -635,9 +631,9 @@ met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ k
 	\KwIn{$A = A_a + A_b x \in \mathbb{F}_{2^{2m}}, A \neq 0$}
 	\KwOut{$B = A^{-1} = B_a + B_b x \in \mathbb{F}_{2^{2m}}$}
 	\KwData{$a, b, c \in \mathbb{F}_{2^m}$}
-	$a \leftarrow A_a + A_b$; $b \leftarrow A_a^2$\comm{1 I, 1 A}\;
+	$a \leftarrow A_a + A_b$; $b \leftarrow A_a^2$\comm{1 S, 1 A}\;
 	$c \leftarrow a \cdot A_b$; $c \leftarrow c + b$\comm{1 M, 1 A}\nllabel{lijn-implementatie-miller-f2m-inverse-b}\;
-	$c \leftarrow c^{-1}$\comm{1 I}\;
+	$c \leftarrow c^{-1}$\comm{1 S}\;
 	$B_a \leftarrow a \cdot c$; $B_b \leftarrow A_b \cdot c$\comm{2 M}\;
 \end{algorithm}
 
@@ -733,9 +729,9 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang
 	\KwOut{$I = I^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$a, b, \ldots, g \in \mathbb{F}_{2^m}$}
 	$m_3 \leftarrow I_a \cdot I_b$; $m_0' \leftarrow I_a + I_b$\comm{1 M, 1 A}\;
-	$s_1 \leftarrow m_0'^2$; $m_2 \leftarrow I_a \cdot I_d$\comm{1 M, 1 I}\;
+	$s_1 \leftarrow m_0'^2$; $m_2 \leftarrow I_a \cdot I_d$\comm{1 M, 1 S}\;
 	$m_4 \leftarrow I_b \cdot I_c$; $m_0'' \leftarrow I_c + I_d$\comm{1 M, 1 A}\;
-	$s_0 \leftarrow m_0''^2$; $m_0 \leftarrow m_0' \cdot m_0''$\comm{1 M, 1 I}\;
+	$s_0 \leftarrow m_0''^2$; $m_0 \leftarrow m_0' \cdot m_0''$\comm{1 M, 1 S}\;
 	$m_1 \leftarrow I_c \cdot I_d$\comm{1 M}\;
 	$I_c \leftarrow m_1 + s_0$; $r_a' \leftarrow I_c + m_0$\comm{2 A}\;
 	$I_b \leftarrow r_a' + m_4$; $I_d \leftarrow m_0 + m_2$\comm{2 A}\;
@@ -743,9 +739,9 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang
 	$I_a \leftarrow r_a' + m_3$\comm{1 A}\;
 \end{algorithm}
 
-\subsubsection{Berekening van $J^{\frac{m + 1}{2}}$}
+\subsubsection{Berekening van $J^{2^{\frac{m + 1}{2}}}$}
 
-De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J$. Helaas is het in dit geval niet mogelijk om de bewerking even snel uit te voeren als de kwadratering van $I$. De handigste oplossing in dit geval is $J$ simpelweg $\frac{m + 1}{2}$ opeenvolgende keren te kwadrateren. Hiervoor kan \refalg{algoritme-implementatie-miller-f-square} gebruikt worden. In totaal zal deze stap dus $2 \cdot (m + 1)$ vermenigvuldigigen en optellingen vragen, wat voor de gekozen $m = 163$ neerkomt op 328 maal beide bewerkingen.
+De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J$. Helaas is het in dit geval niet mogelijk om de bewerking even snel uit te voeren als de kwadratering van $I$. De handigste oplossing in dit geval is $J$ simpelweg $\frac{m + 1}{2}$ opeenvolgende keren te kwadrateren. Hiervoor kan \refalg{algoritme-implementatie-miller-f-square} gebruikt worden. In totaal zal deze stap $2 \cdot (m + 1)$ vermenigvuldigigen en optellingen vragen, wat voor de gekozen $m = 163$ neerkomt op 328 maal beide bewerkingen.
 
 \subsubsection{Vermenigvuldiging van $I \cdot J$}
 
@@ -822,7 +818,7 @@ Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $
 
 Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de schakeling voor berekeningen in $\mathbb{F}_{2^m}$.
 
-Voor het ontwerp van het geheugenblok wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde `shift' operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (`swap') en kan de waarde van register twee naar register \'e\'en gekopieerd worden (`copy'). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
+Voor het ontwerp van het geheugenblok wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
 
 Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelijk geheugen is de veel lagere complexiteit. Bij een willekeurig toegankelijk geheugen stijgt de complexiteit van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie. In \reffig{figuur-implementatie-miller-geheugen-circ} wordt dit type ontwerp ge\"illustreerd.
 
@@ -831,8 +827,6 @@ Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelij
 		\includegraphics[width=12cm]{geheugen-circ}
 		\caption{Circulair registerblok ontwerp en mogelijke operaties\label{figuur-implementatie-miller-geheugen-circ}}
 \end{figure}
-
-%TODO: Kansberekening: gemiddeld aantal posities dat x_0 of x_1 van register 1 of 2 verwijderd is.
 
 Omdat de ingangen van de onderliggende schakeling rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
 \[\begin{aligned}
@@ -845,13 +839,13 @@ dus
 \[\overline{r}	= \frac{n - 2}{3}.\]
 Merk op dat deze formules slechts een benadering geven. Zo wordt bijvoorbeeld niet in rekening gebracht dat wanneer beide waarden in de eerste twee registers zitten, er geen doorschuivingen moeten gebeuren.
 
-Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een `swap' operatie uitgevoerd moeten. Daartoe dient $x_1$ telkens eerst verplaatst te worden tot register twee. Er zijn dus $\overline{r} \cdot n$ doorschuif operaties nodig. Dit is opnieuw een ruwe schatting, die voor kleine $n$ niet zal kloppen. Algemeen kan echter gesteld worden dat
+Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een \emph{swap} operatie uitgevoerd moeten. Daartoe dient $x_1$ telkens eerst verplaatst te worden tot register twee. Er zijn dus $\overline{r} \cdot n$ doorschuif operaties nodig. Dit is opnieuw een ruwe schatting, die voor kleine $n$ niet zal kloppen. Algemeen kan echter gesteld worden dat
 \[\overline{t} \in \mathcal{O} \Bigl( \frac{n^2}{3} \Bigr).\]
 
 Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen die op de registers worden uitgevoerd. Elke doorschuif operatie kost $n$ zulke bewerkingen, m.a.w.\ het gemiddeld aantal schrijfbewerkingen $\overline{w}$ dat uitgevoerd moet worden voor gestart kan worden met de berekening van een optelling of vermenigvuldiging, is
 \[\overline{w} \in \mathcal{O} \Bigl( \frac{n^3}{3} \Bigr).\]
 
-Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de `swap' (en `copy') operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen `swap' operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
+Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de \emph{swap} (en \emph{copy}) operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen \emph{swap} operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
 
 \begin{figure}[h]
 	\centering
@@ -900,7 +894,9 @@ Een register is doorgaans opgebouwd uit een hoeveelheid D-type master-slave flip
 
 \subsection{Registers zonder reset}
 
-Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$. In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden om $F$ in te stellen aan het begin van het algoritme.
+Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$.
+
+In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden om $F$ in te stellen aan het begin van het algoritme.
 
 \subsection{Clock gating\label{subsectie-implementatie-optimalisatie-clock-gating}}
 
@@ -943,7 +939,7 @@ Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparin
 		\caption[Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang]{Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang \protect\cite{mueller}\label{figuur-implementatie-optimalisatie-cg-power-dis}}
 \end{figure}
 
-Helaas is de werking van de twee vorige schakelingen net zo dat de klokingang laag gehouden wordt zolang de enable ingang laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is: de klokingang hoog houden zolang geen nieuwe waarde in het register opgeslagen moet worden. Om het voorkomen van glitches te garanderen, moet het enable signaal stabiel worden voor het CLK signaal hoog wordt. Indien bepaalde kloksignaalbeperkingen worden opgelegd bij het synthetiseren van het circuit is dit normaal gezien echter geen probleem.
+De werking van de twee vorige schakelingen is zo dat de klokingang laag gehouden wordt zolang het enable signaal laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is: de klokingang hoog houden zolang geen nieuwe waarde moet opgeslagen worden. Om het voorkomen van glitches te garanderen, moet het enable signaal stabiel worden voor het CLK signaal hoog wordt. Indien bepaalde kloksignaalbeperkingen worden opgelegd bij het synthetiseren van het circuit is dit normaal gezien echter geen probleem.
 
 \begin{figure}[h]
 	\centering
