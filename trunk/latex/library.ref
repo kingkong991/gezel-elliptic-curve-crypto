@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <library>
 <manage_target braces="true" utf8="true">file:///home/anthony/thesis/latex/references.bib</manage_target>
-<library_folder monitor="true"></library_folder>
+<library_folder monitor="false"></library_folder>
 <taglist>
 </taglist>
 <doclist>
@@ -142,19 +142,23 @@
     <bib_extra key="url">citeseer.ist.psu.edu/diffie76new.html</bib_extra>
   </doc>
   <doc>
-    <filename>file:///home/anthony/thesis/references/Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</filename>
+    <filename></filename>
     <relative_filename>Y%20K%20Lee%20-%20A%20Compact%20Architecture%20for%20Montgomery%20Elliptic%20Curve%20Scalar%20Multiplication%20Processor.pdf</relative_filename>
     <key>lee</key>
     <notes></notes>
-    <bib_type>article</bib_type>
+    <bib_type>inproceedings</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>A Compact Architecture for Montgomery Elliptic Curve Scalar Multiplication Processor</bib_title>
-    <bib_authors>Lee, Yong Kee and Verbauwhede, Ingrid</bib_authors>
+    <bib_title>A Compact Architecture for Montgomery Elliptic Curve Scalar Multiplication Processor.</bib_title>
+    <bib_authors>Lee, Yong Ki and Verbauwhede, Ingrid</bib_authors>
     <bib_journal></bib_journal>
-    <bib_volume></bib_volume>
+    <bib_volume>4867</bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
-    <bib_year>2006</bib_year>
+    <bib_pages>115-127</bib_pages>
+    <bib_year>2007</bib_year>
+    <bib_extra key="booktitle">WISA</bib_extra>
+    <bib_extra key="editor">Kim, Sehun and Yung, Moti and Lee, Hyung-Woo</bib_extra>
+    <bib_extra key="publisher">Springer</bib_extra>
+    <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/JL.%20Beuchat%20-%20A%20Comparison%20Between%20Hardware%20Accelerators%20For%20The%20Modified%20Tate%20Pairing%20Over%20F2m%20And%20F3m.pdf</filename>
@@ -282,33 +286,35 @@
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</filename>
     <relative_filename>L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</relative_filename>
-    <key>oliviera-tinypbc</key>
+    <key>tinypbc</key>
     <notes></notes>
-    <bib_type>article</bib_type>
-    <bib_doi></bib_doi>
-    <bib_title>L. Oliviera et Al - TinyPBC</bib_title>
-    <bib_authors></bib_authors>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>10.1109/INSS.2008.4610921</bib_doi>
+    <bib_title>TinyPBC: Pairings for authenticated identity-based non-interactive key distribution in sensor networks</bib_title>
+    <bib_authors>Oliveira, L. B. and Scott, M. and Lopez, J. and Dahab, R.</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
-    <bib_year>2005</bib_year>
+    <bib_pages>173-180</bib_pages>
+    <bib_year>2008</bib_year>
+    <bib_extra key="booktitle">Networked Sensing Systems, 2008. INSS 2008. 5th International Conference on</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyTate.pdf</filename>
     <relative_filename>L.%20Oliviera%20et%20Al%20-%20TinyTate.pdf</relative_filename>
-    <key>L.Olivieraet</key>
+    <key>tinytate</key>
     <notes></notes>
-    <bib_type>Article</bib_type>
-    <bib_doi></bib_doi>
-    <bib_title>L. Oliviera et Al - TinyTate</bib_title>
-    <bib_authors></bib_authors>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>10.1109/NCA.2007.48</bib_doi>
+    <bib_title>TinyTate: Computing the Tate Pairing in Resource-Constrained Sensor Nodes</bib_title>
+    <bib_authors>Oliveira, Leonardo B. and Aranha, Diego F. and Morais, Eduardo and Daguano, Felipe and L?pez, Julio and Dahab, Ricardo</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
-    <bib_year>2005</bib_year>
-    <bib_extra key="key">oliviera-tinytate</bib_extra>
+    <bib_pages>318-323</bib_pages>
+    <bib_year>2007</bib_year>
+    <bib_extra key="booktitle">Network Computing and Applications, 2007. NCA 2007. Sixth IEEE International Symposium on</bib_extra>
+    <bib_extra key="publisher">IEEE Computer Society</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/M.%20Scott%20-%20Computing%20The%20Tate%20Pairing.pdf</filename>
@@ -572,6 +578,176 @@
     <bib_pages></bib_pages>
     <bib_year>2007</bib_year>
     <bib_extra key="Url">http://rijndael.ece.vt.edu/gezel2</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/D.%20Garret%20et%20Al%20-%20Challenges%20in%20Clockgating%20for%20a%20Low%20Power%20ASIC%20Methodology.pdf</filename>
+    <relative_filename>D.%20Garret%20et%20Al%20-%20Challenges%20in%20Clockgating%20for%20a%20Low%20Power%20ASIC%20Methodology.pdf</relative_filename>
+    <key>garret</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Challenges in clockgating for a low power ASIC methodology</bib_title>
+    <bib_authors>Garrett, D. and Stan, M. and Dean, A.</bib_authors>
+    <bib_journal>Low Power Electronics and Design, 1999. Proceedings. 1999 International Symposium on</bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>176-181</bib_pages>
+    <bib_year>1999</bib_year>
+    <bib_extra key="Issn"> </bib_extra>
+    <bib_extra key="Keywords"> application specific integrated circuits, digital integrated circuits, integrated circuit design, low-power electronics, timing clock distribution network, clock gating, clockgating, hierarchical gated clock distribution, logic modules, low power ASIC methodology, low power design, power dissipation elimination, zero-skew tree algorithms</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/JL%20Beuchat%20et%20Al%20-%20FPGA%20and%20ASIC%20Implementations%20of%20the%20nT%20Pairing%20in%20Characteristic%20Three.pdf</filename>
+    <relative_filename>JL%20Beuchat%20et%20Al%20-%20FPGA%20and%20ASIC%20Implementations%20of%20the%20nT%20Pairing%20in%20Characteristic%20Three.pdf</relative_filename>
+    <key>beuchat-asic</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>FPGA and ASIC Implementations of the $\eta_T$ Pairing in Characteristic Three</bib_title>
+    <bib_authors>Beuchat, Jean-Luc and Doi, Hiroshi and Fujita, Kaoru and Inomata, Atsuo and Kanaoka, Akira and Katouno, Masayoshi and Mambo, Masahiro and Okamoto, Eiji and Okamoto, Takeshi and Shiga, Takaaki and Shirase, Masaaki and Soga, Ryuji and Takagi, Tsuyoshi and Vithanage, Ananda and Yamamoto, Hiroyasu</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2008</bib_year>
+    <bib_extra key="booktitle">Cryptology ePrint Archive, Report 2008/280</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Oliveira%20et%20Al%20-%20NanoECC%20-%20Testing%20the%20Limits%20of%20Elliptic%20Curve%20Cryptography%20in%20Sensor%20Networks.pdf</filename>
+    <relative_filename>Oliveira%20et%20Al%20-%20NanoECC%20-%20Testing%20the%20Limits%20of%20Elliptic%20Curve%20Cryptography%20in%20Sensor%20Networks.pdf</relative_filename>
+    <key>nanoecc</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>NanoECC: Testing the Limits of Elliptic Curve Cryptography in Sensor Networks.</bib_title>
+    <bib_authors>Szczechowiak, Piotr and Oliveira, Leonardo B. and Scott, Michael and Collier, Martin and Dahab, Ricardo</bib_authors>
+    <bib_journal>European conference on Wireless Sensor Networks (EWSN’08)</bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2008</bib_year>
+    <bib_extra key="Citeulike-article-id">2406068</bib_extra>
+    <bib_extra key="Keywords">security</bib_extra>
+    <bib_extra key="Posted-at">2008-02-21 11:29:32</bib_extra>
+    <bib_extra key="Priority">2</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Kammler%20et%20Al%20-%20Designing%20an%20ASIP%20for%20Cryptographic%20Pairings%20over%20Barreto-Naehrig%20Curves.pdf</filename>
+    <relative_filename>Kammler%20et%20Al%20-%20Designing%20an%20ASIP%20for%20Cryptographic%20Pairings%20over%20Barreto-Naehrig%20Curves.pdf</relative_filename>
+    <key>kammler</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Designing an ASIP for Cryptographic Pairings over Barreto-Naehrig Curves</bib_title>
+    <bib_authors>Kammler, David and Zhang, Diandian and Schwabe, Peter and Scharwaechter, Hanno and Langenberg, Markus and Auras, Dominik and Ascheid, Gerd and Leupers, Rainer and Mathar, Rudolf and Meyr, Heinrich</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2009</bib_year>
+    <bib_extra key="booktitle">Cryptology ePrint Archive, Report 2009/056</bib_extra>
+  </doc>
+  <doc>
+    <filename>file:///home/anthony/thesis/references/Savas%20-%20An%20Efficient%20hardware%20implementation%20of%20the%20tate%20pairing%20in%20characteristic%20three.pdf</filename>
+    <relative_filename>Savas%20-%20An%20Efficient%20hardware%20implementation%20of%20the%20tate%20pairing%20in%20characteristic%20three.pdf</relative_filename>
+    <key>savas</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>10.1109/ICONS.2008.27</bib_doi>
+    <bib_title>An Efficient Hardware Implementation of the Tate Pairing in Characteristic Three.</bib_title>
+    <bib_authors>K\&quot;om\&quot;urc\&quot;u, Giray and Savas, Erkay</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>23-28</bib_pages>
+    <bib_year>2008</bib_year>
+    <bib_extra key="booktitle">ICONS</bib_extra>
+    <bib_extra key="publisher">IEEE Computer Society</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>ronan</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>10.1016/j.sysarc.2006.09.003</bib_doi>
+    <bib_title>Hardware acceleration of the Tate pairing on a genus 2 hyperelliptic curve</bib_title>
+    <bib_authors>Ronan, Robert and O’Eigeartaigh, Colm and Murphy, Colin C. and Scott, Michael and Kerins, Tim</bib_authors>
+    <bib_journal>Journal of Systems Architecture</bib_journal>
+    <bib_volume>53</bib_volume>
+    <bib_number>2-3</bib_number>
+    <bib_pages>85-98</bib_pages>
+    <bib_year>2007</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>shu</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>FPGA Accelerated Tate Pairing Based Cryptosystems over Binary Fields</bib_title>
+    <bib_authors>Soonhak, Chang Shu and Shu, Chang and Kwon, Soonhak and Gaj, Kris</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2006</bib_year>
+    <bib_extra key="booktitle">Cryptology ePrint Archive, Report 2006/179</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>keller</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>FPGA Implementation of a GF(2m) Tate Pairing Architecture.</bib_title>
+    <bib_authors>Keller, Maurice and Kerins, Tim and Crowe, Francis M. and Marnane, William P.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume>3985</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>358-369</bib_pages>
+    <bib_year>2006</bib_year>
+    <bib_extra key="booktitle">ARC</bib_extra>
+    <bib_extra key="editor">Bertels, Koen and Cardoso, João M. P. and Vassiliadis, Stamatis</bib_extra>
+    <bib_extra key="publisher">Springer</bib_extra>
+    <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>grabher</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Hardware Acceleration of the Tate Pairing in Characteristic Three.</bib_title>
+    <bib_authors>Grabher, Philipp and Page, Dan</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume>3659</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>398-411</bib_pages>
+    <bib_year>2005</bib_year>
+    <bib_extra key="booktitle">CHES</bib_extra>
+    <bib_extra key="editor">Rao, Josyula R. and Sunar, Berk</bib_extra>
+    <bib_extra key="Isbn">3-540-28474-5</bib_extra>
+    <bib_extra key="publisher">Springer</bib_extra>
+    <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>beuchat-eta</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Algorithms and Arithmetic Operators for Computing the etaT Pairing in Characteristic Three.</bib_title>
+    <bib_authors>Beuchat, Jean-Luc and Brisebarre, Nicolas and Detrey, Jérémie and Okamoto, Eiji and Shirase, Masaaki and Takagi, Tsuyoshi</bib_authors>
+    <bib_journal>IEEE Trans. Computers</bib_journal>
+    <bib_volume>57</bib_volume>
+    <bib_number>11</bib_number>
+    <bib_pages>1454-1468</bib_pages>
+    <bib_year>2008</bib_year>
   </doc>
 </doclist>
 </library>
