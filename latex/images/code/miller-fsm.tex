@@ -1,0 +1,69 @@
+\tikzset{
+	state/.style={draw, minimum height=6mm, minimum width=10mm, rounded corners}
+}
+
+\newcommand{\xstep}{20}
+\newcommand{\ystep}{12}
+
+\begin{tikzpicture}[node distance={\ystep * 1mm} and {\xstep * 1mm}, on grid, ->, >=latex', auto]
+\hspace{-3mm}
+\node[state]	(init)									{\small init};
+\node[]			(e1)		[right=of init]			{};
+%\node[state]	(begin)	[right=of e1]				{b};
+%\node[]			(e2)		[right=of begin, xshift={\xstep * -1.0mm}]			{};
+\node[state]	(ready)	[right=of e1]				{\small ready};
+
+\node[state]	(loop)	[below=of init, yshift={\ystep * -0.1mm}]			{\small loop};
+\node[state]	(ldouble)[below left=of loop, xshift={\xstep * 0.5mm}]	{$\lambda _{\text{v}}$};
+\node[state]	(ladd1)	[below right=of loop, xshift={\xstep * -0.5mm}]	{$\lambda _{\text{o1}}$};
+\node[state]	(ladd2)	[below=of ladd1]		{$\lambda _{\text{o2}}$};
+\node[state]	(coord)	[below left=of ladd2, xshift={\xstep * 0.5mm}]	{\footnotesize $V \& G$};
+\node[state]	(fsqr)	[below left=of coord, xshift={\xstep * 0.5mm}]	{\small F$^2$};
+\node[state]	(fg)		[below=of fsqr, xshift={\xstep * 0.5mm}]	{\footnotesize $F \cdot G$};
+
+\node[state]	(inv)		[right=of ladd1, xshift={\xstep * -0.25mm}]	{inv};
+
+\node[state]	(final)	[below=of ready, yshift={\ystep * -0.1mm}]	{\small final};
+\node[state]	(br1)		[below=of final]	{\small $I\&J _1$};
+\node[state]	(br2)		[below=of br1]		{\small $I\&J _2$};
+\node[state]	(expi)	[below=of br2]		{\small $I^a$};
+\node[state]	(expj)	[below=of expi]	{\small $J^b$};
+\node[state]	(ij)		[below=of expj]	{\footnotesize $I \cdot J$};
+
+\node[]			(e3)		[left=of init]	{}; 
+
+\draw		($(init.west -| fsqr.west) - (3mm, 0)$)	-- node[at start, anchor=south west, yshift=-0.7mm, xshift=-1mm] {begin}	(init.west);
+\draw		(init.south) -- (loop.north);
+\draw		($(loop.south) - (2mm, 0)$) |- ($(ldouble.north) + (0, 2.5mm)$) -| (ldouble.north);
+\draw		(loop.south) |- ($(ladd1.north) + (0, 2.5mm)$) -| (ladd1.north);
+\draw		($(loop.south) + (2mm, 0)$) |- ($(loop.south) + (3mm, -2mm)$) -| (ladd1.north |- loop.east) |- ($(final.north) + (0, 2.5mm)$) -- (final.north);
+%\draw		(ladd1.south) |- ($(ladd1.south)!0.5!(inv.north)$) -| ($(inv.north) - (2mm, 0)$);
+\draw		($(inv.south) - (2mm, 0)$) |- ($(inv.south)!0.5!(ladd2.north)$) -| (ladd2.north);
+%\draw		(br1.south) |- ($(br1.south)!0.5!(inv.north)$) -| ($(inv.north) + (2mm, 0)$);
+\draw		($(inv.south) + (2mm, 0)$) |- ($(inv.south)!0.5!(br2.north)$) -| (br2.north);
+
+\draw		(ldouble.south) |- ($(coord.north) + (-2mm, 3mm)$) -| ($(coord.north) - (2mm, 0)$);
+\draw		(ladd2.south) |- ($(coord.north) + (2mm, 3mm)$) -| ($(coord.north) + (2mm, 0)$);
+
+\draw		($(coord.south) - (2mm, 0)$) |- ($(fsqr.north)!0.5!(coord.south)$) -| (fsqr.north);
+\draw		(fsqr.south) |- ($(fsqr.south)!0.5!(fg.north)$) -| ($(fg.north) - (2mm, 0)$);
+\draw		($(coord.south) + (2mm, 0)$) -- ($(fg.north) + (2mm, 0)$);
+
+\draw		(fg.south) |- ($(fg.south -| fsqr.west) - (3mm, 2mm)$) |- ($(loop.north) + (-2mm, 2.5mm)$) -- ($(loop.north) - (2mm, 0)$);
+
+\draw		(ij.south) |- ($(ij.south east) + (5mm, -2mm)$) |- ($(ready.north) + (2mm, 4mm)$) -| (ready.north);
+
+\draw		($(ready.south) + (2mm, 0)$) |- ($(ready.south east) + (2.5mm, -2mm)$) |- ($(ready.north) + (2mm, 2.5mm)$) -| ($(ready.north) + (2mm, 0)$);
+\draw		($(ready.south) - (2mm, 0)$) |- ($(ready.south west) - (1.5mm, 2mm)$) -| ($(init.north -| ladd1.north) + (0, 4mm)$) -| ($(init.north) + (0, 0)$);
+
+\draw		($(init.south) + (2mm, 0)$) |- ($(init.south east) + (2.5mm, -2mm)$) |- ($(init.north) + (2mm, 2.5mm)$) -| ($(init.north) + (2mm, 0)$);
+
+\draw		(final.south) -- (br1.north);
+\draw		(br2.south) -- (expi.north);
+\draw		(expi.south) -- (expj.north);
+\draw		(expj.south) -- (ij.north);
+
+\draw		(ladd1.south) |- ($(ladd1.south)!0.5!(inv.south) - (0, 1.5mm)$) |- ($(inv.north) + (-2mm, 2.5mm)$) -- ($(inv.north) - (2mm, 0)$);
+\draw		(br1.south) |- ($(br1.south)!0.5!(inv.south) - (0, 1.5mm)$) |- ($(inv.north) + (2mm, 2.5mm)$) -- ($(inv.north) + (2mm, 0)$);
+
+\end{tikzpicture}

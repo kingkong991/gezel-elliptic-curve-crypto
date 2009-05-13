@@ -45,8 +45,8 @@ dp wrapper_pairing(in input:	ns(const_m);
 	out sig_en_out_TmpB: ns(1);
 	out sig_en_out_ToMALU: ns(1)) {
 
-	//reg reg_count_mult: ns(const_m);
-	//reg reg_count_add: ns(const_m);
+	reg reg_count_mult: ns(const_m);
+	reg reg_count_add: ns(const_m);
 
 	// Registers:
 	reg reg_Xv: ns(const_m);
@@ -410,7 +410,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 0;
 
-		//reg_count_add = reg_count_add + 1;
+		reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_add_plus_one {
@@ -418,7 +418,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 0;
 		sig_MALU_plus_one = 1;
 
-		//reg_count_add = reg_count_add + 1;
+		reg_count_add = reg_count_add + 1;
 	}
 
 	sfg MALU_mult {
@@ -426,7 +426,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 0;
 
-		//reg_count_mult = reg_count_mult + 1;
+		reg_count_mult = reg_count_mult + 1;
 	}
 
 	sfg MALU_mult_plus_one {
@@ -434,7 +434,7 @@ dp wrapper_pairing(in input:	ns(const_m);
 		sig_MALU_mode = 1;
 		sig_MALU_plus_one = 1;
 
-		//reg_count_mult = reg_count_mult + 1;
+		reg_count_mult = reg_count_mult + 1;
 	}	
 
 	// SFG's for individual data transfer
@@ -763,8 +763,14 @@ dp wrapper_pairing(in input:	ns(const_m);
 	}
 
 	sfg disp_counter {
+		$display("[Cycle] ", $dec, $cycle);
 		$display("[Mult Counter] ", $dec, reg_count_mult);
 		$display("[Add Counter] ", $dec, reg_count_add);
+	}
+	
+	sfg reset_counters {
+		reg_count_mult = 0;
+		reg_count_add = 0;
 	}
 }
 
@@ -860,7 +866,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	
 	// If start goes high, start the input loading cycle (see notebook). If start goes high again after inital raising edge, reset (= go to step 2).
 
-	@init1	if (reg_start == 1) then (do_always, set_not_ready, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
+	@init1	if (reg_start == 1) then (reset_counters, disp_counter, do_always, set_not_ready, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
 			else (do_always, MALU_idle, idle_regs) -> init1;
 
 	@init2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
@@ -878,7 +884,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Ready]
 
 	// Set TmpB to 0, F should be in Xv to Yp.
-	@ready1	(do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
+	@ready1	(reset_counters, disp_counter, do_always, set_ready, reset_counter_misc, MALU_idle, idle_regs) -> ready2;
 
 	// Use inverse counter to keep track of nr of nexts (max 3). Once limit is reached, go to init1.
 	@ready2	if (reg_start == 1) then (do_always, MALU_idle, idle_ToMALU, update_Xv_from_Input, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, idle_Fd, idle_TmpA, idle_TmpB) -> init2;
@@ -1325,7 +1331,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	// [Final Exponentiation]
 	
 	// Calculate m0, m1, m2 & m3
-	@finalexp1	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> finalexp2;
+	@finalexp1	(reset_counters, disp_counter, do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, update_Fb_from_Fa, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, idle_TmpB) -> finalexp2;
 	@finalexp2	(do_always, MALU_idle, idle_ToMALU, idle_Xv, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, update_Fc_from_Fb, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> finalexp3;
 	@finalexp3	(do_always, MALU_idle, idle_ToMALU, update_Xv_from_TmpB, idle_Yv, idle_Xp, idle_Yp, idle_Xfa, idle_Yfa, idle_Ga, idle_Gb, idle_Fa, idle_Fb, idle_Fc, update_Fd_from_Fc, update_TmpA_from_Fd, update_TmpB_from_TmpA) -> finalexp4;
 

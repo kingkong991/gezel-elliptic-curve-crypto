@@ -1,15 +1,15 @@
 \begin{tikzpicture}[domain=1:163]
-\begin{scope}[xstep=50mm, x=50mm, ystep=0.1mm, y=0.1mm]
+\begin{scope}[x=50mm, y=0.1mm]
 	% Data
-	\draw [thick, color=black!90] plot[samples=163] ({ln(\x) / ln(10)}, {27.058 + 2.993 * ceil(163 / \x)});
-	\draw [densely dotted, color=black!90, samples at={2, 3, 4, 6, 8, 16, 32, 64, 163}] plot[ycomb] ({ln(\x) / ln(10)}, {27.058 + 2.993 * ceil(163 / \x)});
+	\draw [thick, color=black!90] plot[samples=163] ({ln(\x) / ln(10)}, {26.003 + 2.998 * ceil(163 / \x)});
+	\draw [densely dotted, color=black!90, samples at={2, 3, 4, 6, 8, 16, 32, 64, 163}] plot[ycomb] ({ln(\x) / ln(10)}, {26.003 + 2.998 * ceil(163 / \x)});
 \end{scope}
 
 % Axis
-\begin{scope}[xstep=50mm, x=50mm, ystep=10mm, y=10mm]
+\begin{scope}[x=50mm, y=10mm]
 	% Axis
-	\draw [-latex'] (0,0) -- (0,5.5) node[right] {$c$};
-	\draw [-latex'] (0,0) -- (2.4, 0) node[above] {$d$}; 
+	\draw [-latex'] (0,0) -- ($(0, {0.01 * (26.003 + 2.998 * 163)}) + (0, 4mm)$) node[right] {$c$};
+	\draw [-latex'] (0,0) -- ($({ln(163) / ln(10)}, 0) + (4mm, 0)$) node[above] {$d$}; 
 
 	% Y-axis links
 	\draw (-1mm, 0) -- (0, 0) node[left, xshift=-1mm] {0};

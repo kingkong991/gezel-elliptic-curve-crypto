@@ -82,59 +82,136 @@ d3
 
 d4
 	area:
-	
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   121113.0000    100.0  52304.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                 18863.0000     15.6   7716.0000   3852.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.5   1832.0000      0.0000  0.0000  malu_0
+		label_wrapper_gf2m/label_malu2      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_3
+		label_wrapper_gf2m/label_malu3      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_2
+		label_wrapper_gf2m/label_malu4      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_1
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   67315.0000  53798.0000  0.0000
 	
 	power:
-	
+		Cell Internal Power  =  64.4421 nW   (60%)
+		Net Switching Power  =  43.4779 nW   (40%)
+				                   ---------
+		Total Dynamic Power    = 107.9200 nW  (100%)
+
+		Cell Leakage Power     = 121.9213 nW
 	
 	timing:
-	
+		data arrival time                                                 19.99
 	
 ---------------------------------------------------------------
 
 d6
 	area:
-	
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   123823.0000    100.0  52236.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                 21641.0000     17.5   6854.0000   3850.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.5   1832.0000      0.0000  0.0000  malu_0
+		label_wrapper_gf2m/label_malu2      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_5
+		label_wrapper_gf2m/label_malu3      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_4
+		label_wrapper_gf2m/label_malu4      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_3
+		label_wrapper_gf2m/label_malu5      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_2
+		label_wrapper_gf2m/label_malu6      1821.0000      1.5   1821.0000      0.0000  0.0000  malu_1
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   70027.0000  53796.0000  0.0000
+
 	
 	power:
-	
+		Cell Internal Power  =  69.6607 nW   (62%)
+		Net Switching Power  =  42.3692 nW   (38%)
+				                   ---------
+		Total Dynamic Power    = 112.0299 nW  (100%)
+
+		Cell Leakage Power     = 126.6254 nW
 	
 	timing:
-	
+		data arrival time                                                 20.37
 	
 ---------------------------------------------------------------
 
 d8
 	area:
-	
+				                            Global cell area             Local cell area
+				                            --------------------  ------------------------------ 
+		Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-   Black
+				                            Total        Total    national    national    boxes   Design
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		wrapper_pairing                   131127.0000    100.0  52313.0000  49946.0000  0.0000  wrapper_pairing
+		label_wrapper_gf2m                 28868.0000     22.0  10437.0000   3852.0000  0.0000  wrapper_gf2m
+		label_wrapper_gf2m/label_malu       1832.0000      1.4   1832.0000      0.0000  0.0000  malu_0
+		label_wrapper_gf2m/label_malu2      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_7
+		label_wrapper_gf2m/label_malu3      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_6
+		label_wrapper_gf2m/label_malu4      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_5
+		label_wrapper_gf2m/label_malu5      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_4
+		label_wrapper_gf2m/label_malu6      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_3
+		label_wrapper_gf2m/label_malu7      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_2
+		label_wrapper_gf2m/label_malu8      1821.0000      1.4   1821.0000      0.0000  0.0000  malu_1
+		--------------------------------  -----------  -------  ----------  ----------  ------  ------------
+		Total                                                   77329.0000  53798.0000  0.0000
 	
 	power:
-	
+		Cell Internal Power  =  72.4794 nW   (60%)
+		Net Switching Power  =  49.0965 nW   (40%)
+				                   ---------
+		Total Dynamic Power  = 121.5760 nW  (100%)
+
+		Cell Leakage Power   = 135.7183 nW
 	
 	timing:
-	
+		 data arrival time                                                 20.50
 	
 ---------------------------------------------------------------
 
 d16
-	area:
-	
-	
+	area: (-hierarchy geeft brol terug)
+		Combinational area:       97397.000000
+		Noncombinational area:    53794.000000
+		Net Interconnect area:      undefined  (Wire load has zero net area)
+
+		Total cell area:          151191.000000
+		Total area:                 undefined
+
 	power:
-	
+		Cell Internal Power  =  90.4188 nW   (56%)
+		Net Switching Power  =  71.1666 nW   (44%)
+				                   ---------
+		Total Dynamic Power    = 161.5854 nW  (100%)
+
+		Cell Leakage Power     = 162.7822 nW
 	
 	timing:
-	
+		data arrival time                                                 24.38
 	
 ---------------------------------------------------------------
 
 d32
-	area:
-	
-	
+	area:	(-hierarchy geeft brol terug)
+		Combinational area:       137538.000000
+		Noncombinational area:    53794.000000
+		Net Interconnect area:      undefined  (Wire load has zero net area)
+
+		Total cell area:          191332.000000
+		Total area:                 undefined
+
 	power:
-	
+		Cell Internal Power  = 119.9176 nW   (57%)
+		Net Switching Power  =  91.7678 nW   (43%)
+				                   ---------
+		Total Dynamic Power    = 211.6855 nW  (100%)
+
+		Cell Leakage Power     = 212.6646 nW
 	
 	timing:
-	
-	
+		data arrival time                                                 31.14	
