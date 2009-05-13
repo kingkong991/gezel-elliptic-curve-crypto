@@ -6,9 +6,7 @@ Het ontwerp werd geprogrammeerd in GEZEL \cite{gezel}. Simulaties en compilatie 
 
 De grootte van alle resultaten wordt uitgedrukt in gates. Dit laat toe te vergelijken met andere resultaten die in de literatuur terug te vinden zijn.
 
-Voor de resultaten in verband met energieverbruik worden steeds twee waarden gegeven. De eerste waarde, dynamisch verbruik, geeft weer hoeveel vermogen verbruikt wordt door veranderende CMOS in- en uitgangen. De tweede waarde, leakage verbruik, is verbruik dat voorkomt zelfs indien een transistor niet geleidt. De impact hiervan hangt onder meer af van de gebruikte bibliotheek.
-
-Deze beide waarden moeten met een stevige korrel zout genomen worden. Het is voor het synthese programma zeer moeilijk hier een nauwkeurige schatting voor te geven. Zolang twee schakelingen echter met dezelfde software, bibliotheek en parameters werden gesynthetiseerd, zijn relatieve vergelijkingen mogelijk. Stel bijvoorbeeld dat het verbruik van ontwerp A geschat wordt op $200 nW$ en dit van ontwerp B op $100 nW$. Indien er dan voldaan is aan de voorgenoemde voorwaarden, zal het effectief verbruik van B ongeveer de helft zijn van A. Het is dus in het algemeen niet aangeraden vergelijkingen omtrent verbruik te maken met andere bestaande ontwerpen aan de hand van de waarden gegeven in dit hoofdstuk.
+Voor de resultaten in verband met energieverbruik worden steeds twee waarden gegeven. De eerste waarde, dynamisch verbruik, geeft weer hoeveel vermogen verbruikt wordt door veranderende CMOS in- en uitgangen. De tweede waarde, leakage verbruik, is verbruik dat voorkomt zelfs indien een transistor niet geleidt. De impact hiervan hangt onder meer af van de gebruikte bibliotheek. Het is voor het synthese programma zeer moeilijk een nauwkeurige schatting voor het verbruik te geven, dus de gegeven waarden moeten niet als exact worden beschouwd.
 
 % TODO: Blijft leakage constant bij hogere kloksnelheid?
 
@@ -24,7 +22,14 @@ Alvorens de syntheseresultaten te presenteren, wordt even uitgewijd over het noo
 
 Het totaal aantal cycli wordt gegeven door:
 \[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil.\]
-Daarbij staat het eerste getal voor het aantal klokcycli waarin geheugen van plaats verschoven wordt. Het tweede getal is het aantal optellingen dat uitgevoerd dient te worden en de co\"efficient voor de vermenigvuldiging is het aantal vermenigvuldigingen. In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoeveel klokcycli nodig zijn om een berekening te voltooien in het geval $m = 163$. In \reffig{figuur-resultaten-multi-cycles} wordt hetzelfde weergegeven, maar dan voor elke $d$ van 1 t.e.m.\ 163. Het is duidelijk dat de tijdsbesparing waar extra MALUs voor zorgen vrij snel teniet wordt gedaan door het aantal cycli dat niet door $d$ be\"invloed wordt.
+Daarbij staat het eerste getal voor het aantal klokcycli waarin geheugen van plaats verschoven wordt. Het tweede getal is het aantal optellingen dat uitgevoerd dient te worden en de co\"efficient voor de vermenigvuldiging is het aantal vermenigvuldigingen. Het aantal klokcycli $c$ kan verder opgesplitst worden in het aantal cycli $c_f$ voor de for-lus en $c_m$ voor de finale machtsverheffing. In dat geval zijn de formules:
+\[\begin{gathered}
+c_f = 18731 + 3937 + 2463 \cdot \left\lceil \frac{m}{d} \right\rceil\\
+c_m = 2950 + 385 + 535 \cdot \left\lceil \frac{m}{d} \right\rceil,
+\end{gathered}\]
+waarbij de co\"efficienten opnieuw voor respectievelijk geheugenverschuivingen, optellingen en vermenigvuldigingen staan.
+
+In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoeveel klokcycli nodig zijn om een berekening te voltooien in het geval $m = 163$. In \reffig{figuur-resultaten-multi-cycles} wordt hetzelfde weergegeven, maar dan voor elke $d$ van 1 t.e.m.\ 163. Het is duidelijk dat de tijdsbesparing waar extra MALUs voor zorgen vrij snel teniet wordt gedaan door het aantal cycli dat niet door $d$ be\"invloed wordt.
 
 \begin{table}[h]
 	\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ het aantal MALUs $d$ voor $m = 163$}
@@ -46,13 +51,6 @@ Daarbij staat het eerste getal voor het aantal klokcycli waarin geheugen van pla
 		\fbox{\includegraphics[width=11.9cm]{results-multi-cycles}}
 		\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ het aantal MALUs $d$ voor $m = 163$\label{figuur-resultaten-multi-cycles}}
 \end{figure}
-
-Het aantal klokcycli $c$ kan verder opgesplitst worden in het aantal cycli $c_f$ voor de for-lus en $c_m$ voor de finale machtsverheffing. In dat geval zijn de formules:
-\[\begin{gathered}
-c_f = 18731 + 3937 + 2463 \cdot \left\lceil \frac{m}{d} \right\rceil\\
-c_m = 2950 + 385 + 535 \cdot \left\lceil \frac{m}{d} \right\rceil,
-\end{gathered}\]
-waarbij de co\"efficienten opnieuw voor respectievelijk geheugenverschuivingen, optellingen en vermenigvuldigingen staan.
 
 \section{Basisimplementatie \& register optimalisaties\label{section-resultaten-basisimplementatie}}
 
@@ -90,7 +88,7 @@ Zoals verwacht resulteert het toepassen van clock gating in een zeer grote bespa
 
 Het is opmerkelijk dat het dynamisch verbruik van CG~3 niet lager is dan dat van de andere twee CG implementaties. Dit mogelijk als volgt te verklaren: clock gating methode drie bespaart enkel energie tegenover de andere methodes indien de ingang van een register wijzigt wanneer dat register geen nieuwe waarde moet opslaan. De enige ingang die echter vaak wijzigt is die van het register verbonden met de uitgang van de $\mathbb{F}_{2^m}$ kern tijdens een vermenigvuldiging. Zolang een vermenigvuldiging aan de gang is, moet ditzelfde register echter telkens zijn eigen waarde verschoven met \'e\'en positie naar links opslaan. Met andere woorden: op het moment dat de clock gating schakeling zijn besparende werk zou kunnen verrichten, wordt het register sowieso elke klokslag beschreven met een nieuwe waarde. Het effect is dus dat in dit geval de schakeling effectief geen of amper vermogensbesparing teweeg brengt tegenover de andere clock gating schakelingen. Verder is het ook goed mogelijk dat de synthese software bij het berekenen van het verbruik niet nauwkeurig genoeg tewerk gaat om het effect van de schakeling op de interne gates van de flip flop in rekening te kunnen brengen.
 
-Ten slotte wordt nog ontleed hoeveel oppervlakte de individuele onderdelen van de schakeling innemen. \reftbl{tabel-resultaten-onderdelen} geeft een overzicht van de grootte van de verschillende delen van implementatie CG~3. Het valt op dat de zestien registers en de FSM (logica van de controller) samen goed zijn voor 95.5\% van de oppervlakte.
+Ten slotte wordt nog ontleed hoeveel oppervlakte de individuele onderdelen van de schakeling innemen. \reftbl{tabel-resultaten-onderdelen} geeft een overzicht van de grootte van de verschillende delen van implementatie CG~3. Het valt op dat de zestien registers en de FSM (logica van de controller) samen goed zijn voor 95.5\% van de oppervlakte. Het effect daarvan zal duidelijk worden in de volgende paragraaf, wanneer meerdere MALUs ge\"implementeerd worden.
 
 \begin{table}[h]
 	\caption{Oppervlakte van de individuele onderdelen in de implementatie met \'e\'en MALU}
@@ -119,7 +117,7 @@ Ten slotte wordt nog ontleed hoeveel oppervlakte de individuele onderdelen van d
 
 Mits de toevoeging van extra MALUs is het, zoals aangetoond, mogelijk de totale rekeningtijd drastisch te verlagen. Hoewel het gebruik van meerdere MALUs de uiteindelijke schakeling vergroot en dat dus enigszins in gaat tegen de originele doelstelling, wordt hier toch onderzocht in welke mate de interessante parameters hierdoor juist worden be\"invloed.
 
-Op de implementaties met meerdere MALUs werd steeds de derde clock gating techniek (en het verwijderen van reset ingangen) toegepast, aangezien dit in werkelijkheid de grootste energiebesparing teweeg zou moeten brengen. Implementaties met een aantal MALUs gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALUs zou immers compleet ingaan tegen de originele doelstelling. De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Het valt op dat het toevoegen van een klein aantal extra MALUs weinig extra oppervlakte en verbruik met zich meebrengt en dus een aangeraden manier is om de snelheid van de schakeling op te drijven. Dit wordt verder onderzocht in de volgende paragraaf.
+Op de implementaties met meerdere MALUs werd steeds de derde clock gating techniek (en het verwijderen van reset ingangen) toegepast, aangezien dit in werkelijkheid de grootste energiebesparing teweeg zou moeten brengen. Implementaties met een aantal MALUs gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALUs zou immers compleet ingaan tegen de originele doelstelling. De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Het valt op dat, zoals verwacht, het toevoegen van een klein aantal extra MALUs weinig extra oppervlakte en verbruik met zich meebrengt en dus een aangeraden manier is om de snelheid van de schakeling op te drijven. Dit wordt verder onderzocht in de volgende paragraaf.
 
 \begin{table}[h]
 	\caption{Syntheseresultaten voor implementaties met $d$ MALUs}

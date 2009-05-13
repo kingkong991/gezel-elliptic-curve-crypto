@@ -23,7 +23,7 @@
 
 \usepackage{ifthen}	% Conditionele stuff
 \newboolean{makeall}	% Als dit true is, wordt inhoudsopgave etc toegevoegd
-\setboolean{makeall}{false}
+\setboolean{makeall}{true}
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -225,8 +225,11 @@
 \listofalgorithms
 \clearpage
 
-%\include{lijstafkortingen} % Lijst van afkortingen
-%\include{lijstsymbolen}    % Lijst van symbolen
+\include{lijstafkortingen} % Lijst van afkortingen
+\clearpage
+
+\include{lijstsymbolen}    % Lijst van symbolen
+\clearpage
 }{}
 
 \pagenumbering{arabic}
@@ -238,7 +241,7 @@
 \include{implementatie}		% Hardware implementatie
 \include{resultaten}      % Resultaten vd implementatie
 
-%\include{conclusie}             % Conclusie
+\include{conclusie}             % Conclusie
 
 \appendix                        % Start appendices
 
