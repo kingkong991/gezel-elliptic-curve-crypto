@@ -1,12 +1,12 @@
 \newcommand{\xmax}{7}
-\newcommand{\ymax}{4}
+\newcommand{\ymax}{5}
 
 \newcommand{\xscale}{12}
 \newcommand{\yscaleleft}{12}
-\newcommand{\yscaleright}{40/300}
+\newcommand{\yscaleright}{50/250}
 
 \begin{tikzpicture}
-\hspace{-0.5mm}
+\hspace{-3mm}
 % Plot area
 \begin{scope}[x={\xscale * 1mm}, y={\yscaleleft * 1mm}]
 	% Data
@@ -14,16 +14,16 @@
 \end{scope}
 
 % Plot power
-\begin{scope}[x={\xscale * 1mm}, y={\yscaleright * 1mm}]
+\begin{scope}[x={\xscale * 1mm}, y={\yscaleright * \yscaleleft / 10 * 1mm}]
 	% Data
-	\draw [xshift=3mm, color=black!90, thick] plot[mark=square*, sharp plot] file{data/results-md-power};
+	\draw [xshift=3mm, color=black!100, thick] plot[mark=square*, sharp plot] file{data/results-md-power};
 \end{scope}
 
 % Axis
-\begin{scope}[x={\xscale * 1mm}]
+\begin{scope}[x={\xscale * 1mm}, y={\yscaleleft * 1mm}]
 	% Axis
 	\draw [-latex'] (0,0) -- (0, \ymax + 0.5) node[right] (y1) {Opp. [gates]};
-	\draw [-latex'] ($(\xmax, 0) + (6mm, 0)$) -- ++(0, \ymax + 0.5) node[left] (y2) {Verbruik [$nW$]};
+	\draw [-latex'] ($(\xmax, 0) + (6mm, 0)$) -- ++(0, \ymax + 0.5) node[left] (y2) {Dyn. verbruik [$nW$]};
 	\draw (0,0) -- node[below, yshift=-4mm] {Aantal MALUs} ($(\xmax, 0) + (6mm, 0)$); 
 
 	% Legende
@@ -32,17 +32,24 @@
 
 	% Y-axis links
 	\draw (-1mm, 0) -- (0, 0) node[left, xshift=-1mm] {0};
-	\draw[yshift=(\ymax - 0.5) * \yscaleleft * 1mm] (-0.5mm, 0) -- (0, 0);
-	\foreach \y in {1, 2, ..., 3} {
+	%\draw[yshift=(\ymax - 0.5) * \yscaleleft * 1mm] (-0.5mm, 0) -- (0, 0);
+	\foreach \y in {1, 2, ..., 5} {
 		\draw[yshift=\y * \yscaleleft * 1mm] (-1mm, 0) -- (0, 0) node[left, xshift=-1mm, yshift=0.4mm] {{\printresult{10 * \y}}k};
 		\draw[yshift=(\y - 0.5) * \yscaleleft * 1mm] (-0.5mm, 0) -- (0, 0);
 	}
 
 	% Y-axis rechts
 	\draw[xshift=6mm] (\xmax, 0) -- ++(1mm, 0) node[left, xshift=1mm, anchor=west] {0};
-	\foreach \y in {1, 2, ..., 3} {
-		\draw[yshift=\y * \yscaleright * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(1mm, 0) node[left, xshift=1mm, yshift=0.4mm, anchor=west] {\printresult{100 * \y}};
-		\draw[yshift=(\y - 0.5) * \yscaleright * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.5mm, 0);
+
+	\draw[yshift=(3 - 0.5) * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.75mm, 0);
+	\draw[yshift=(3 - 0.75) * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.5mm, 0);	
+	
+	\foreach \y in {1, 2} {
+		\draw[yshift=\y * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(1mm, 0) node[left, xshift=1mm, yshift=0.4mm, anchor=west] {\printresult{100 * \y}};
+
+		\draw[yshift=(\y - 0.25) * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.5mm, 0);
+		\draw[yshift=(\y - 0.5) * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.75mm, 0);
+		\draw[yshift=(\y - 0.75) * \yscaleright * \yscaleleft / 10 * 100 * 1mm, xshift=6mm] (\xmax, 0) -- ++(0.5mm, 0);
 	}
 
 	% X-axis
