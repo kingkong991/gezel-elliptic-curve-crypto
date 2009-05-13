@@ -90,7 +90,7 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 	\centering
 	\begin{tabular}{lr}
 		\toprule
-		Element			& Opp. $\left[\frac{\text{gates}}{\text{bit}}\right]$\\
+		Element			& Opp. $\left[\frac{\text{gate}}{\text{bit}}\right]$\\
 		\midrule
 		D flip-flop met reset	& 6\\
 		D flip-flop zonder reset	& 5.5\\
@@ -109,7 +109,7 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 	\end{tabular}
 \end{table}
 
-\section{Modular Arithmetic Logical Unit\label{sectie-implementatie-malu}}
+\section{Modulaire Arithmetische Logische Unit\label{sectie-implementatie-malu}}
 
 De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU) \cite{sakiyama, batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
@@ -127,7 +127,7 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 	\label{algoritme-implementatie-malu-modulo}
 	\KwIn{$B \in \mathbb{F}_{2^m}$, $T \in \mathbb{F}_{2^{m + 1}}$}
 	\KwOut{$R \mod P \in \mathbb{F}_{2^m}$}
-	\SetKwFunction{Degree}{Degree}
+	\SetKwFunction{Degree}{degree}
 
 	$R \leftarrow T \xor B$\;
 
@@ -146,7 +146,7 @@ In \refsect{sectie-implementatie-miller-forlus} zal blijken dat het vaak nodig z
 
 Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zijn, is het mogelijk een zeer groot aantal XOR poorten uit het ontwerp te verwijderen. De ingang $P$ en de bijhorende $m$ XOR poorten kunnen vervangen worden door een 1 bit `modulo enable' ingang $mod_{\text{e}}$ en er worden enkel XOR poorten geplaatst voor de bits $i$ waarvoor $P_i = 1$. Hierdoor wordt het aantal ingangen drastisch verkleind en worden 
 \[\Delta = m - (\textsf{Hamm}(P) - 1)\]
-XOR poorten uitgespaard, met \textsf{Hamm}$(P)$ gelijk aan het Hamming gewicht van de binaire representatie van $P$.
+XOR poorten uitgespaard.
 
 In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\textsf{Hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ minder dan het oorsponkelijk aantal).
 
@@ -158,7 +158,7 @@ De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optim
 		\caption{MALU - Geoptimaliseerd ontwerp met shift\label{figuur-implementatie-malu-optimized}}
 \end{figure}
 
-\section{Berekeningen in $\mathbb{F}_{2^m}$\label{sectie-implementatie-gf2m}}
+\section{$\mathbb{F}_{2^m}$\label{sectie-implementatie-gf2m} kern}
 
 \subsection{Basisontwerp\label{subsectie-implementatie-gf2m-basisontwerp}}
 
@@ -172,7 +172,7 @@ Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A 
 	\KwIn{$A, B \in \mathbb{F}_{2^m}$}
 	\KwOut{$R = A \cdot B \in \mathbb{F}_{2^m}$}
 	\KwData{$T \in \mathbb{F}_{2^{m + 1}}$}
-	\SetKwFunction{Degree}{Degree}
+	\SetKwFunction{Degree}{degree}
 
 	$T \leftarrow 0$\;
 	\For{$i \leftarrow m - 1$ \KwTo $0$}{
@@ -406,7 +406,7 @@ Als wordt aangenomen dat $m$ oneven is, is de exponent van twee na het gelijkhei
 \[a^{2^i - 1} = (a^{2^{\frac{i}{2}} - 1})^{2^{\frac{i}{2}}} \cdot a^{2^{\frac{i}{2}} - 1}\]
 Indien $a$ oneven is, dient volgende formule toegepast te worden:
 \[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a\]
-Uiteindelijk eindigt men dan bij $a^2$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen. $\textsf{Hamm}(x)$ staat daarbij voor het Hamming gewicht van de binaire voorstelling van $x$.
+Uiteindelijk eindigt men dan bij $a^2$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen.
 
 In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}. Het aantal berekeningen in dat geval is 9 vermenigvuldigingen en 162 kwadrateringen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
 
@@ -543,11 +543,11 @@ J  &= F^{1 - 2^{2m}} = \frac{F}{F^{2^{2m}}}\\
 	&= \frac{U_0^2 + U_1^2}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
 \end{aligned}\]
 
-Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk verder op dat de noemers van alle breuken in zowel $I$ als $J$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ten slotte zijn de tweede termen van $I$ en $J$ identiek. Er moeten in totaal dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden voor de uiteindelijke vermenigvuldiging van beide resultaten. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
+Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk echter op dat de noemers van alle breuken in zowel $I$ als $J$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ook zijn de tweede termen van $I$ en $J$ identiek. In totaal moeten dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden alvorens de termen  vermenigvuldigd kunnen worden. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
 
 \subsubsection{Termen van de deelbreuken}
 
-Ten eerste worden de drie te berekenen tellers $I_t$, $J_t$ en $G_t$ uitgewerkt. Hierbij staan $I_t$ en $J_t$ voor de teller van de eerste breuk van respectievelijk $I$ en $J$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk. Met andere woorden:
+Ten eerste worden de drie tellers $I_t$, $J_t$ en $G_t$ uitgewerkt. Hierbij staan $I_t$ en $J_t$ voor de teller van de eerste breuk van respectievelijk $I$ en $J$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk en $G_n$ voor de gemeenschappelijke noemer. Met andere woorden:
 
 \[\begin{aligned}
 I = \frac{I_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y\\
@@ -665,20 +665,18 @@ In dit geval dienen zowel $I_t$, $J_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd 
 
 \subsubsection{Berekening van $I^{2^m + 1}$}
 
-Nu $I$ en $J$ bekend zijn, moeten ze beiden tot de correcte macht verheven worden. Voor $I$ is dat $2^m + 1$, wat simpelweg mogelijk zou zijn door $I^{2^m}$ te berekenen en dit resultaat te vermenigvuldigen met $I$. Dit zou, zoals verderop zal gezien worden, negen vermenigvuldigingen en twee\"entwintig optellingen kosten. Er is echter een snellere manier. Uitgaande van volgende gelijkheden:
+Nu $I$ en $J$ bekend zijn, moeten ze beiden tot de correcte macht verheven worden. Voor $I$ is dat $2^m + 1$, wat simpelweg mogelijk zou zijn door $I^{2^m}$ te berekenen en dit resultaat te vermenigvuldigen met $I$. Dit zou een vermenigvuldiging van twee elementen in $\mathbb{F}_{2^{4m}}$ zijn, wat, zoals verderop zal gezien worden, negen vermenigvuldigingen en twee\"entwintig optellingen kost. Er is echter een snellere manier.
+
+Uitgaande van de gelijkheid $A^{2^m} = A$ voor $A \in \mathbb{F}_{2^{m}}$, weet men dat de vier elementen van $I$ na de machtsverheffing simpelweg zullen bestaan uit sommen van de beginwaarden. Via volgende gelijkheden:
 
 \[\begin{aligned}
 x^{2^m}	&= 1 + x\\
 y^{2^m}	&= 1 + x + y + xy\\
 (xy)^{2^m}	&= x + xy\\
 \end{aligned}\]
-
-en met $I = I_a + I_b x + I_c y + I_d xy$, vindt men:
-
-\[I^{2^m} = (I_a + I_b + I_c) + (I_b + I_c + I_d) x + I_c y + (I_c + I_d) xy\]
-
-Vervolgens vermenigvuldigd men dit met $I$, wat resulteert in $I^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
-algoritme-implementatie-miller-add-detail
+en met $I = I_a + I_b x + I_c y + I_d xy$, vindt men dus:
+\[I^{2^m} = (I_a + I_b + I_c) + (I_b + I_c + I_d) x + I_c y + (I_c + I_d) xy.\]
+Vervolgens vermenigvuldigd men dit met de originele $I$, wat resulteert in $I^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
 \[\begin{aligned}
 r_a	&= (I_a + I_b + I_c) \cdot I_a + (I_b + I_c + I_d) \cdot I_b + I_c^2 + (I_c + I_d) \cdot I_d\\
 r_b	&= (I_a + I_b + I_c) \cdot I_b + (I_b + I_c + I_d) \cdot I_a + (I_b + I_c + I_d) \cdot I_b\\
@@ -686,20 +684,17 @@ r_b	&= (I_a + I_b + I_c) \cdot I_b + (I_b + I_c + I_d) \cdot I_a + (I_b + I_c + 
 r_c	&= (I_a + I_b + I_c) \cdot I_c + (I_b + I_c + I_d) \cdot I-d + I_a I_c + I_c^2 + I_c I_d\\
 		&\quad + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_c\\
 r_d	&= (I_a + I_b + I_c) \cdot I_d + (I_b + I_c + I_d) \cdot I_c + (I_b + I_c + I_d) \cdot I_d\\
-		&\quad + I_b I_c + I_c^2 + (I_c + I_d) \cdot I_a + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_d\\
+		&\quad + I_b I_c + I_c^2 + (I_c + I_d) \cdot I_a + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_d.\\
 \end{aligned}\]
-
 Dit kan vereenvoudigd worden tot:
-
 \[\begin{aligned}
 r_a	&= I_a^2 + I_a I_b + I_a I_c + I_b^2 + I_b I_c + I_b I_d + I_c^2 + I_c I_d + I_d^2\\
 r_b	&= I_a I_c + I_a I_d + I_b I_d + I_c I_d + I_c^2 + I_d^2\\
 r_c	&= I_c^2 + I_c I_d + I_d^2\\
-r_d	&= I_a I_c + I_b I_c + I_b I_d\\
+r_d	&= I_a I_c + I_b I_c + I_b I_d.\\
 \end{aligned}\]
 
-Voor de toepassing van de Karatsuba techniek worden de volgende tussenresultaten uitgerekend:
-
+Voor de toepassing van de Karatsuba-Ofman techniek worden de volgende tussenresultaten uitgerekend:
 \[\begin{aligned}
 m_0	&= (I_a + I_b) \cdot (I_c + I_d)
 			&\quad m_1	&= I_a I_b\\
@@ -707,18 +702,16 @@ m_2	&= I_a I_d
 			&m_3	&= I_b I_c\\
 m_4	&= I_c I_d\\
 s_0	&= (I_a + I_b)^2
-			&s_1	&= (I_c + I_d)^2\\
+			&s_1	&= (I_c + I_d)^2.\\
 \end{aligned}\]
-
 Aan de hand van deze waarden kan het uiteindelijke resultaat berekend worden:
-
 \[\begin{aligned}
 I^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
 				&\quad + (m_0 + m_3 + m_4 + s_1) x \\
-				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy\\
+				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy.\\
 \end{aligned}\]
 
-Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de ingang variable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en zeven voor tussenresultaten. De totale kost komt uit op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
+Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginvariable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en zeven voor tussenresultaten. De totale kost komt uit op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
 
 %TODO: Variabelen tellen
 
@@ -745,7 +738,7 @@ De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J
 
 \subsubsection{Vermenigvuldiging van $I \cdot J$}
 
-De finale stap in de machtsverheffing, na de machtsverheffingen, is de vermenigvuldiging van de twee resulterende variabelen $I$ en $J$. Dit is een vermenigvuldiging in $F^{2^{4m}}$ en deze kan als volgt geformuleerd worden:
+De finale stap is de vermenigvuldiging van de twee resulterende variabelen $I$ en $J$. Dit is een vermenigvuldiging in $\mathbb{F}_{2^{4m}}$ en deze kan als volgt geformuleerd worden:
 
 \[\begin{aligned}
 e(P, Q)	&= I \cdot J\\
@@ -755,7 +748,7 @@ e(P, Q)	&= I \cdot J\\
 	&\quad + (I_a J_d + I_b J_c + I_b J_d + I_c J_b + I_c J_c + I_d J_a + I_d J_b + I_d J_d)xy\\
 \end{aligned}\]
 
-Om de berekening via de Karatsuba techniek te versnellen, worden eerst volgende tussenresultaten uitgerekend:
+Om de berekening via de Karatsuba-Ofman techniek te versnellen, worden eerst volgende tussenresultaten uitgerekend:
 
 \[\begin{aligned}
 m_0	&= I_a J_a
@@ -818,7 +811,7 @@ Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $
 
 Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de schakeling voor berekeningen in $\mathbb{F}_{2^m}$.
 
-Voor het ontwerp van het geheugenblok wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
+Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de schakeling voor berekeningen in $\mathbb{F}_{2^m}$ vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
 
 Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelijk geheugen is de veel lagere complexiteit. Bij een willekeurig toegankelijk geheugen stijgt de complexiteit van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie. In \reffig{figuur-implementatie-miller-geheugen-circ} wordt dit type ontwerp ge\"illustreerd.
 
