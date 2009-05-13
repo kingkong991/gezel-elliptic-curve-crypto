@@ -150,7 +150,7 @@ Op de implementaties met meerdere MALUs werd steeds de derde clock gating techni
 
 \section{Hogere kloksnelheid vs.\ meerdere MALUs}
 
-Aan de gegeven kloksnelheid $f = 10$kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALUs gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALUs die met twee nader onderzocht worden.
+Aan de gegeven kloksnelheid $f = 10$kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALUs gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALUs die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk reset ingangen verwijderd.
 
 Stel een maximale rekentijd $t_{\text{max}} \approx 50ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALUs even snel wenst te maken als die met \'e\'en dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met $\Delta f = 1 - 0.472$.
 %\[\begin{aligned}
@@ -163,7 +163,7 @@ f_1	&\approx 10.3\text{MHz}\\
 f_2	&\approx 5.44\text{MHz}.
 \end{aligned}\]
 
-Ter vergelijking worden de resulterende parameters van beide implementaties gegeven in \reftbl{tabel-resultaten-m1-vs-m2}. Beiden werden gehersynthetiseerd met aangepaste parameters voor de klok. Hoewel de implementatie met twee MALUs 3\% groter is dan die met \'e\'en, verbruikt ze slechts de helft zoveel vermogen. Het lijkt dus vanzelfsprekend om steeds voor een implementatie met meerdere MALUs te kiezen indien de snelheid moet opgedreven worden. Hoeveel MALUs ideaal zijn, zal afhankelijk zijn van toepassing tot toepassing.
+Ter vergelijking worden de resulterende parameters van beide implementaties gegeven in \reftbl{tabel-resultaten-m1-vs-m2}. Beiden werden gehersynthetiseerd met aangepaste parameters voor de klok. Dat de schakeling met \'e\'en MALU in dit geval kleiner is dan in het geval $f = 10$kHz, is te wijten aan enige willekeurigheid in de algoritmes van de synthesesoftware. Hoewel de implementatie met twee MALUs 3\% groter is dan die met \'e\'en, verbruikt ze slechts de helft zoveel vermogen. Het lijkt dus vanzelfsprekend om steeds voor een implementatie met meerdere MALUs te kiezen indien de snelheid moet opgedreven worden. Hoeveel MALUs ideaal zijn, zal afhankelijk zijn van toepassing tot toepassing.
 
 \begin{table}[h]
 	\caption{Vergelijking van syntheseresultaten voor twee verschillende implementaties die er even lang over doen \'e\'en pairing te berekenen}
