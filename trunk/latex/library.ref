@@ -139,7 +139,6 @@
     <bib_number>6</bib_number>
     <bib_pages>644--654</bib_pages>
     <bib_year>1976</bib_year>
-    <bib_extra key="url">citeseer.ist.psu.edu/diffie76new.html</bib_extra>
   </doc>
   <doc>
     <filename></filename>
@@ -291,7 +290,7 @@
     <bib_type>inproceedings</bib_type>
     <bib_doi>10.1109/INSS.2008.4610921</bib_doi>
     <bib_title>TinyPBC: Pairings for authenticated identity-based non-interactive key distribution in sensor networks</bib_title>
-    <bib_authors>Oliveira, L. B. and Scott, M. and Lopez, J. and Dahab, R.</bib_authors>
+    <bib_authors>Oliveira, L. B. and Scott, M. and L\&apos;opez, J. and Dahab, R.</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
@@ -748,6 +747,91 @@
     <bib_number>11</bib_number>
     <bib_pages>1454-1468</bib_pages>
     <bib_year>2008</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>athbash</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Some Cryptograms in the Aramaic Incantation Bowls</bib_title>
+    <bib_authors>Isbell, Charles D.</bib_authors>
+    <bib_journal>Journal of Near Eastern Studies</bib_journal>
+    <bib_volume>33</bib_volume>
+    <bib_number>4</bib_number>
+    <bib_pages>405-407</bib_pages>
+    <bib_year>1974</bib_year>
+    <bib_extra key="Publisher">The University of Chicago Press</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>caesar</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Cryptology: yesterday, today, and tomorrow</bib_title>
+    <bib_authors></bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>1987</bib_year>
+    <bib_extra key="address">Norwood, MA, USA</bib_extra>
+    <bib_extra key="editor">Deavours, Cipher A. and Kahn, David and Kruh, Louis and Mellen, Greg and Winkel, Brian</bib_extra>
+    <bib_extra key="Isbn">0-89006-253-6</bib_extra>
+    <bib_extra key="publisher">Artech House, Inc.</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>kahn</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>The Codebreakers: The Story of Secret Writing</bib_title>
+    <bib_authors>Kahn, David</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>1967</bib_year>
+    <bib_extra key="address">New York</bib_extra>
+    <bib_extra key="publisher">The Macmillan Company</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>aes</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>The Design of Rijndael: AES -- The Advanced Encryption Standard</bib_title>
+    <bib_authors>Daemen, Joan and Rijmen, Vincent</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>238</bib_pages>
+    <bib_year>2002</bib_year>
+    <bib_extra key="Isbn">3-540-42580-2</bib_extra>
+    <bib_extra key="publisher">Springer-Verlag</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>3des</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Recommendation for the Triple Data Encryption Algorithm (TDEA) block cipher</bib_title>
+    <bib_authors>Barker, William C.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year> 2004 </bib_year>
+    <bib_extra key="publisher">National Institute for Standards and Technology</bib_extra>
   </doc>
 </doclist>
 </library>

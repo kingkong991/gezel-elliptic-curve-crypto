@@ -56,7 +56,7 @@ In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoev
 		\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ het aantal MALU's $d$ voor $m = 163$\label{figuur-resultaten-multi-cycles}}
 \end{figure}
 
-\section{Basisimplementatie \& register optimalisaties\label{section-resultaten-basisimplementatie}}
+\section{Basisimplementatie \& optimalisaties\label{section-resultaten-basisimplementatie}}
 
 Logischerwijs wordt eerst gekeken naar de syntheseresultaten voor een implementatie met \'e\'en MALU. Verder zal in deze paragraaf ook onderzocht worden wat de effecten zijn van de optimalisaties voorgesteld in \refsect{sectie-implementatie-optimalisaties}. Bij de implementaties met clock gating werden steeds ook de reset ingangen van zoveel mogelijk registers verwijderd. Ten slotte zal onderzocht worden hoeveel oppervlakte de individuele onderdelen van het ontwerp innemen.
 
@@ -92,7 +92,7 @@ De synthese resultaten voor de vijf verschillende implementaties worden gegeven 
 
 Zoals verwacht resulteert het toepassen van clock gating in een zeer grote besparing op het verbruik. Het is zelfs zo dat na toepassing van clock gating het dynamisch verbruik lager is dan het leakage verbruik. Daarbij dient opgemerkt te worden dat het dynamisch verbruik zal stijgen bij een hogere kloksnelheid terwijl het leakage verbruik constant zal blijven.
 
-Het is opmerkelijk dat het dynamisch verbruik van CG~2 zo veel lager wordt gerapporteerd dan dat van de andere twee CG implementaties. Dit mogelijk als te verklaren door het feit dat de synthese software in de CG~2 implementatie de clock gating schakeling herkent, aangezien dit de de facto manier is om clock gating toe te passen. Waarschijnlijk wordt daar dus bij de berekening van het verbruik ook rekening mee gehouden. In werkelijkheid zal implementatie CG~3 het minste verbruiken.
+Het is opmerkelijk dat het dynamisch verbruik van CG~2 zo veel lager wordt gerapporteerd dan dat van de andere twee CG implementaties. Dit is mogelijk te verklaren door het feit dat de synthese software in de CG~2 implementatie de clock gating schakeling herkent. Waarschijnlijk wordt daar dus bij de berekening van het verbruik ook rekening mee gehouden. In werkelijkheid zal implementatie CG~3 het minste verbruiken.
 
 Verder valt het ook op dat de implementaties met clock gating niet kleiner zijn als die zonder. Normaal gezien zou de toepassing van deze schakeling per register \'e\'en multiplexer ingang moeten elemineren. Dat dit niet gebeurd is opnieuw te wijten aan de synthese software die niet doorheeft dat er clock gating wordt toegepast en het register dus sowieso naar zichzelf terugkoppelt. Hoe het dan komt dat het verbruik van CG~2 toch lager wordt gerapporteerd is niet helemaal duidelijk.
 
@@ -129,7 +129,7 @@ Mits de toevoeging van extra MALU's is het, zoals aangetoond, mogelijk de totale
 
 Op de implementaties met meerdere MALU's werd steeds de derde clock gating techniek (en het verwijderen van reset ingangen) toegepast, aangezien dit in werkelijkheid de grootste energiebesparing teweeg zou moeten brengen. Implementaties met een aantal MALU's gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALU's zou immers compleet ingaan tegen de originele doelstelling.
 
-De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Het valt op dat, zoals verwacht, het toevoegen van een klein aantal extra MALU's weinig extra oppervlakte en verbruik met zich meebrengt en dus een aangeraden manier is om de snelheid van de schakeling op te drijven. Dit wordt verder onderzocht in de volgende paragraaf.
+De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Zoals in de vorige paragraaf gezien, neemt een MALU zeer weinig oppervlakte in in de implementatie. Het toevoegen van een klein aantal extra MALU's brengt dus weinig extra oppervlakte en verbruik met zich mee. Het is dus een aangeraden manier om de snelheid van de schakeling op te drijven. Dit wordt nog verder onderzocht in de volgende paragraaf.
 
 \begin{table}[h]
 	\caption{Syntheseresultaten voor implementaties met $d$ MALU's}
@@ -162,7 +162,7 @@ De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \r
 
 \section{Hogere kloksnelheid vs.\ meerdere MALU's}
 
-Aan de gegeven kloksnelheid $f = 10$kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALU's die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk reset ingangen verwijderd.
+Aan een kloksnelheid $f = 10$kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALU's die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk reset ingangen verwijderd.
 
 Stel een maximale rekentijd $t_{\text{max}} \approx 50ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALU's even snel wenst te maken als die met \'e\'en dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met $\Delta f = 1 - 0.472$.
 %\[\begin{aligned}
