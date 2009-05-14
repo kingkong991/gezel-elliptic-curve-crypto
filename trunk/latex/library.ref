@@ -307,7 +307,7 @@
     <bib_type>inproceedings</bib_type>
     <bib_doi>10.1109/NCA.2007.48</bib_doi>
     <bib_title>TinyTate: Computing the Tate Pairing in Resource-Constrained Sensor Nodes</bib_title>
-    <bib_authors>Oliveira, Leonardo B. and Aranha, Diego F. and Morais, Eduardo and Daguano, Felipe and L?pez, Julio and Dahab, Ricardo</bib_authors>
+    <bib_authors>Oliveira, Leonardo B. and Aranha, Diego F. and Morais, Eduardo and Daguano, Felipe and L\&apos;opez, Julio and Dahab, Ricardo</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
@@ -702,7 +702,7 @@
     <notes></notes>
     <bib_type>inproceedings</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>FPGA Implementation of a GF(2m) Tate Pairing Architecture.</bib_title>
+    <bib_title>FPGA Implementation of a GF($2^m$) Tate Pairing Architecture.</bib_title>
     <bib_authors>Keller, Maurice and Kerins, Tim and Crowe, Francis M. and Marnane, William P.</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume>3985</bib_volume>
@@ -710,7 +710,7 @@
     <bib_pages>358-369</bib_pages>
     <bib_year>2006</bib_year>
     <bib_extra key="booktitle">ARC</bib_extra>
-    <bib_extra key="editor">Bertels, Koen and Cardoso, João M. P. and Vassiliadis, Stamatis</bib_extra>
+    <bib_extra key="editor">Bertels, Koen and Cardoso, Jo\~{a}o M. P. and Vassiliadis, Stamatis</bib_extra>
     <bib_extra key="publisher">Springer</bib_extra>
     <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
   </doc>
