@@ -786,7 +786,7 @@ fsm fsm_wrapper_pairing (wrapper_pairing) {
 	
 	state ready1, ready2;
 	
-	state dlambda1, dlambda2, dlambda3, dlambda4;s
+	state dlambda1, dlambda2, dlambda3, dlambda4;
 	state alambda1, alambda2, alambda3, alambda4, alambda5, alambda6, alambda7, alambda8, alambda9;
 	state alambda10, alambda11, alambda12, alambda13, alambda14, alambda15, alambda16, alambda17;
 	

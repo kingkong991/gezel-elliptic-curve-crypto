@@ -1,5 +1,5 @@
 % To check for overfull hboxes, add draft to the document options
-\documentclass[a4paper]{report}
+\documentclass[a4paper, 11pt]{report}
 \usepackage[dutch]{babel}   % Taal van het document (opmaakregels ed.)
 \usepackage{fancyhdr} % Fancy headers & footers
 
@@ -23,7 +23,9 @@
 
 \usepackage{ifthen}	% Conditionele stuff
 \newboolean{makeall}	% Als dit true is, wordt inhoudsopgave etc toegevoegd
+\newboolean{dankwoord}
 \setboolean{makeall}{true}
+\setboolean{dankwoord}{false}
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -107,8 +109,18 @@
 \DeclareGraphicsExtensions{.pdf,.eps,.png}
 
 % Stel headers & footers in
-\pagestyle{fancy}
 \fancyhfoffset[EO]{2.5cm}
+
+\fancyhead[LE, LO]{\small \slshape \rightmark}
+\fancyhead[RE, RO]{\small \slshape \leftmark}
+
+% Voor afwisselende pagina's:
+%\fancyhead[LE,RO]{\small \slshape \rightmark}
+%\fancyhead[RE,LO]{\small \slshape \leftmark}
+
+\fancyfoot[CE,CO]{\thepage}
+
+\pagestyle{fancy}
 
 % Fix caption spacing bij tabellen
 \setlength{\belowcaptionskip}{6pt}
@@ -210,7 +222,10 @@
 
 \pagestyle{fancy}
 
+\ifthenelse{\boolean{dankwoord}}{
 \include{dankwoord}  % Dankwoord
+}{}
+
 \include{samenvatting} % Samenvatting
 
 \tableofcontents
@@ -226,15 +241,14 @@
 \clearpage
 
 \include{lijstafkortingen} % Lijst van afkortingen
-\clearpage
 
 \include{lijstsymbolen}    % Lijst van symbolen
-\clearpage
 }{}
 
 \pagenumbering{arabic}
 
-%\include{inleiding}             % Inleiding & motivatie
+\include{inleiding}             % Inleiding & motivatie
+
 %\include{cryptografie-inleiding} % Algemene informatie over cryptografie
 %\include{cryptografie-pairings}  % Informatie over pairings 
 
