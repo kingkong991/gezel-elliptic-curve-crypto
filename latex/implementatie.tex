@@ -712,7 +712,7 @@ I^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
 				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy.\\
 \end{aligned}\]
 
-Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginvariable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en zeven voor tussenresultaten. De totale kost komt uit op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
+Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginvariable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en vijf voor tussenresultaten. De totale kost komt neer op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
 
 %TODO: Variabelen tellen
 
@@ -721,16 +721,16 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginv
 	\label{algoritme-implementatie-miller-v-power}
 	\KwIn{$I = I_a + I_b x + I_c y + I_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$I = I^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
-	\KwData{$a, b, \ldots, g \in \mathbb{F}_{2^m}$}
-	$m_3 \leftarrow I_a \cdot I_b$; $m_0' \leftarrow I_a + I_b$\comm{1 M, 1 A}\;
-	$s_1 \leftarrow m_0'^2$; $m_2 \leftarrow I_a \cdot I_d$\comm{1 M, 1 S}\;
-	$m_4 \leftarrow I_b \cdot I_c$; $m_0'' \leftarrow I_c + I_d$\comm{1 M, 1 A}\;
-	$s_0 \leftarrow m_0''^2$; $m_0 \leftarrow m_0' \cdot m_0''$\comm{1 M, 1 S}\;
-	$m_1 \leftarrow I_c \cdot I_d$\comm{1 M}\;
-	$I_c \leftarrow m_1 + s_0$; $r_a' \leftarrow I_c + m_0$\comm{2 A}\;
-	$I_b \leftarrow r_a' + m_4$; $I_d \leftarrow m_0 + m_2$\comm{2 A}\;
-	$r_a'' \leftarrow m_2 + s_1$; $r_a' \leftarrow r_a' + r_a''$\comm{2 A}\;
-	$I_a \leftarrow r_a' + m_3$\comm{1 A}\;
+	\KwData{$a, b, c, d, e \in \mathbb{F}_{2^m}$}
+	$a \leftarrow I_a \cdot I_b$; $b \leftarrow I_a + I_b$\comm{1 M, 1 A}\;
+	$c \leftarrow b^2$; $d \leftarrow I_a \cdot I_d$\comm{1 M, 1 S}\;
+	$I_b \leftarrow I_b \cdot I_c$; $e \leftarrow I_c + I_d$\comm{1 M, 1 A}\;
+	$b \leftarrow b \cdot e$; $e \leftarrow e^2$\comm{1 M, 1 S}\;
+	$I_c \leftarrow I_c \cdot I_d$\comm{1 M}\;
+	$I_c \leftarrow I_c + e$; $I_a \leftarrow I_c + b$\comm{2 A}\;
+	$I_b \leftarrow I_a + I_b$; $I_d \leftarrow b + d$\comm{2 A}\;
+	$b \leftarrow c + d$; $I_a \leftarrow I_a + b$\comm{2 A}\;
+	$I_a \leftarrow I_a + a$\comm{1 A}\;
 \end{algorithm}
 
 \subsubsection{Berekening van $J^{2^{\frac{m + 1}{2}}}$}
@@ -816,9 +816,7 @@ Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete sc
 
 \subsubsection{Ontwerp van geheugenblok}
 
-Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld waarbij elk van de registers enkel de waarde van zijn voorganger kan aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De enige manier om nieuwe waarden in de registers op te slaan, is via de aanpassing van de waarde van register \'e\'en. Tevens worden ingangen $A$ en $B$ voor de $\mathbb{F}_{2^m}$ kern vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
-
-Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelijk geheugen is de veel lagere complexiteit. Bij een willekeurig toegankelijk geheugen stijgt de complexiteit van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie. In \reffig{figuur-implementatie-miller-geheugen-circ} wordt dit type ontwerp ge\"illustreerd.
+Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld dat ge\"illustreerd wordt in \reffig{figuur-implementatie-miller-geheugen-circ}.
 
 \begin{figure}[h]
 	\centering
@@ -826,7 +824,11 @@ Het voordeel van zo'n implementatie ten opzichte van een willekeurig toegankelij
 		\caption{Circulair registerblok ontwerp en mogelijke operaties\label{figuur-implementatie-miller-geheugen-circ}}
 \end{figure}
 
-Omdat de ingangen van de onderliggende schakeling rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
+Elk van de registers kan enkel de waarde van zijn voorganger aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De ingangen van de aritmetische schakeling (de $\mathbb{F}_{2^m}$ kern in dit geval) zijn rechtstreeks verbonden met registers \'e\'en en twee. Aan register \'e\'en zijn tevens ook de uitgang van de aritmetische schakeling en de ingang van de volledige schakeling aangesloten. De enige manier om nieuwe waarden in de registers op te slaan, is dus via de aanpassing van de waarde van register \'e\'en. %Tevens worden ingangen $A$ en $B$ voor de $\mathbb{F}_{2^m}$ kern vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
+
+Het voordeel van zo'n ontwerp ten opzichte van RAM is de veel kleinere oppervlakte. Bij RAM stijgt de oppervlakte van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de oppervlakte van de multiplexers echter constant met als resultaat een veel kleinere implementatie.
+
+Omdat de ingangen van de onderliggende $\mathbb{F}_{2^m}$ kern rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
 \[\begin{aligned}
 s	&= \sum_{i = 1}^{n - 1} \sum_{j = i + 1}^n (j - i - 1)
 	&\qquad c	&= \sum_{i = 0}^{n - 1} i\\
