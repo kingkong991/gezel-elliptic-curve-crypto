@@ -336,12 +336,12 @@ De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in 
 
 Tanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
 
-Buiten registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$ is er ook een register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
+Buiten zes registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$, is er ook \'e\'en register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
 
 \begin{algorithm}[h]
 	\caption{Uitwerking van de verdubbelstap voor supersinguliere krommen in het Miller algoritme}
 	\label{algoritme-implementatie-miller-double-detail}
-	\KwIn{$x_V, y_V \in E(\mathbb{F}_{2^m})$}
+	\KwIn{$x_V, y_V \in E(\mathbb{F}_{2^m})$; $x_{\phi_a}, y_{\phi_a} \in \mathbb{F}_{2^m}$}
 	\KwOut{$x_{2V}, y_{2V} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$\lambda \in \mathbb{F}_{2^m}$}
 	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
@@ -371,7 +371,7 @@ In tegenstelling tot de verdubbelstap zijn hier twee tijdelijke registers nodig,
 \begin{algorithm}[h]
 	\caption{Uitwerking van de optelstap voor supersinguliere krommen in het Miller algoritme}
 	\label{algoritme-implementatie-miller-add-detail}
-	\KwIn{$x_V, y_V, x_P, y_P \in E(\mathbb{F}_{2^m})$}
+	\KwIn{$x_V, y_V, x_P, y_P \in E(\mathbb{F}_{2^m})$; $x_{\phi_a}, y_{\phi_a} \in \mathbb{F}_{2^m}$}
 	\KwOut{$x_{V + P}, y_{V + P} \in E(\mathbb{F}_{2^m})$; $G \in \mathbb{F}_{2^{4m}}$}
 	\KwData{$\lambda, a \in \mathbb{F}_{2^m}$}
 	$G_a \leftarrow x_V$; $G_b \leftarrow y_V$\;
@@ -387,7 +387,7 @@ In tegenstelling tot de verdubbelstap zijn hier twee tijdelijke registers nodig,
 
 \subsubsection{Inversie}
 
-De meest tijdrovende stap in de optelstap is de inversie.  Zoals reeds vermeld in \refsect{sectie-cryptografie-gf}, kan een inversie in een Galois veld berekend worden door toepassing van de kleine stelling van Fermat:
+De meest tijdrovende stap in de optelstap is de inversie.  Een inversie in een Galois veld kan berekend worden door toepassing van de kleine stelling van Fermat:
 
 \[\begin{aligned}
 a^{2^m}		&= a\\
@@ -397,7 +397,7 @@ a^{2^m - 2}	&= a^{-1}\\
 
 % $2^{163} -2 = 11 692 013 098 647 223 345 629 478 661 730 264 157 247 460 343 806$
 
-De naieve manier om dit te berekenen zou zijn om $a$ $2^m - 2$ keer met zichzelf te vermenigvuldigingen. In dit geval zou dat betekenen dat er $2^{163} - 2$ vermenigvuldigingen moeten uitgevoerd worden, wat uiteraard onhaalbaar is.
+De na\"ieve manier om dit te berekenen zou zijn om $a$ in totaal $2^m - 2$ maal met zichzelf te vermenigvuldigingen. In dit geval zou dat betekenen dat er $2^{163} - 2$ vermenigvuldigingen moeten uitgevoerd worden, wat uiteraard onhaalbaar is.
 
 Een tweede manier bestaat er in de exponent te ontbinden in machten van 2 en 3. In dat geval zouden er nog 237 vermenigvuldigen nodig zijn.
 
@@ -721,7 +721,7 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginv
 	\label{algoritme-implementatie-miller-v-power}
 	\KwIn{$I = I_a + I_b x + I_c y + I_d xy \in \mathbb{F}_{2^{4m}}$}
 	\KwOut{$I = I^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
-	\KwData{$a, b, c, d, e \in \mathbb{F}_{2^m}$}
+	\KwData{$a, b, \ldots, e \in \mathbb{F}_{2^m}$}
 	$a \leftarrow I_a \cdot I_b$; $b \leftarrow I_a + I_b$\comm{1 M, 1 A}\;
 	$c \leftarrow b^2$; $d \leftarrow I_a \cdot I_d$\comm{1 M, 1 S}\;
 	$I_b \leftarrow I_b \cdot I_c$; $e \leftarrow I_c + I_d$\comm{1 M, 1 A}\;
@@ -772,7 +772,7 @@ e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
 	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
 \end{aligned}\]
 
-De minimum benodigde opslagruimte om deze berekeningen uit te voeren bestaat uit vier registers voor het eindresultaat $R = e(P, Q)$ en negenentwintigmiljard tijdelijke registers voor $a, b, \ldots, zhx$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. Het resulterend algoritme is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
+Indien zowal $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = e(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
 
 %TODO: Variabelen tellen
 
@@ -780,24 +780,24 @@ De minimum benodigde opslagruimte om deze berekeningen uit te voeren bestaat uit
 	\caption{Uitwerking van $I \cdot J \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-f4m-mult}
 	\KwIn{$I = I_a + I_b x + I_c y + I_d xy, J = J_a + J_b x + J_c y + J_d xy \in \mathbb{F}_{2^{4m}}$}
-	\KwOut{$R = I \cdot J \in \mathbb{F}_{2^{4m}}$}
-	\KwData{$a, b, \ldots, zhx \in \mathbb{F}_{2^m}$}
-	$k_3 \leftarrow J_c + J_d$; $k_5 \leftarrow J_b + J_d$\comm{2 A}\;
-	$m_3 \leftarrow I_d \cdot J_d$; $k_4 \leftarrow I_b + I_d$\comm{1 M, 1 A}\;
-	$k_1 \leftarrow I_c + I_d$; $m_1 \leftarrow I_b \cdot J_b$\comm{1 M, 1 A}\;
-	$k_0 \leftarrow I_a + I_b$; $k_2 \leftarrow J_a + J_b$\comm{2 A}\;
-	$k_7 \leftarrow J_a + J_c$; $m_2 \leftarrow I_c \cdot J_c$\comm{1 M, 1 A}\;
-	$m_0 \leftarrow I_a \cdot J_a$; $k_6 \leftarrow I_a + I_c$\comm{1 M, 1 A}\;
-	$l_3 \leftarrow k_6 \cdot k_7$; $l_2 \leftarrow k_4 \cdot k_5$\comm{2 M}\;
-	$l_0 \leftarrow k_0 \cdot k_2$; $n_0 \leftarrow k_0 + k_1$\comm{1 M, 1 A}\;
-	$l_1 \leftarrow k_1 \cdot k_3$; $n_1 \leftarrow k_2 + k_3$\comm{1 M, 1 A}\;
-	$p_0 \leftarrow n_0 \cdot n_1$; $q_0 \leftarrow m_0 + l_1$\comm{1 M, 1 A}\;
-	$q_1 \leftarrow q_0 + l_0$; $r_1 \leftarrow m_2 + q_1$\comm{2 A}\;
-	$q_3 \leftarrow m_1 + m_2$; $r_3' \leftarrow m_3 + p_0$\comm{2 A}\;
-	$r_3'' \leftarrow r_3' + q_1$; $r_3 \leftarrow r_3'' + l_3$\comm{2 A}\;
-	$r_2' \leftarrow l_3 + q_0$; $r_2'' \leftarrow r_2' + l_2$\comm{2 A}\;
-	$r_2 \leftarrow r_2'' + q_3$; $r_0' \leftarrow m_3 + q_3$\comm{2 A}\;
-	$r_0 \leftarrow r_0' + m_0$\comm{1 A}\;
+	\KwOut{$I = I \cdot J \in \mathbb{F}_{2^{4m}}$}
+	\KwData{$a, b, \ldots, f \in \mathbb{F}_{2^m}$}
+	$a \leftarrow J_c + J_d$; $b \leftarrow J_b + J_d$\comm{2 A}\;
+	$J_d \leftarrow I_d \cdot J_d$; $c \leftarrow I_b + I_d$\comm{1 M, 1 A}\;
+	$I_d \leftarrow I_c + I_d$; $d \leftarrow I_b \cdot J_b$\comm{1 M, 1 A}\;
+	$e \leftarrow I_a + I_b$; $f \leftarrow J_a + J_b$\comm{2 A}\;
+	$I_b \leftarrow J_a + J_c$; $J_c \leftarrow I_c \cdot J_c$\comm{1 M, 1 A}\;
+	$J_a \leftarrow I_a \cdot J_a$; $I_a \leftarrow I_a + I_c$\comm{1 M, 1 A}\;
+	$I_c \leftarrow I_a \cdot I_b$; $J_b \leftarrow c \cdot b$\comm{2 M}\;
+	$I_a \leftarrow e \cdot f$; $I_b \leftarrow I_d \cdot a$ \comm{2 M}\;
+	$I_d \leftarrow e + I_d$; $e \leftarrow J_a + I_b$\comm{2 A}\;
+	$I_b \leftarrow f + a$; $I_d \leftarrow I_b \cdot I_d$\comm{1 M, 1 A}\;
+	$a \leftarrow e + I_a$; $I_b \leftarrow J_c + a$\comm{2 A}\;
+	$I_a \leftarrow d + J_c$; $I_d \leftarrow I_d + J_d$\comm{2 A}\;
+	$I_d \leftarrow I_d + a$; $I_d \leftarrow I_c + I_d$\comm{2 A}\;
+	$I_c \leftarrow I_c + e$; $I_c \leftarrow I_c + J_b$\comm{2 A}\;
+	$I_c \leftarrow I_c + I_a$; $I_a \leftarrow J_d + I_a$\comm{2 A}\;
+	$I_a \leftarrow I_a + J_a$\comm{1 A}\;
 \end{algorithm}
 
 \subsection{Geheugen}
@@ -810,13 +810,13 @@ De geheugenvereisten van de for-lus en de finale machtsverheffing kunnen los van
 
 Van de vijf algoritmes die opgeroepen worden in de for-lus, vereist de de vermenigvuldiging van $F$ en $G$ het grootste aantal tijdelijke registers, namelijk drie. Het minimum aantal registers om alle bewerkingen in de lus te kunnen uitvoeren is dus vijftien: zes voor $P, \phi(Q)$ en $V$, twee voor $G$, vier voor $F$ en drie tijdelijke registers.
 
-Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van 'meest geheugenvereistende' algoritme lopen. In dit geval zijn er opnieuw vijftien registers nodig: acht voor $I$ en $J$ en zeven miljard voor de tussenresultaten.
+Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van `meest geheugenvereistende' algoritme lopen. In dit geval zijn er opnieuw veertien registers nodig: acht voor $I$ en $J$ en zes voor de tussenresultaten.
 
 Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de $\mathbb{F}_{2^m}$ kern.
 
 \subsubsection{Ontwerp van geheugenblok}
 
-Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld dat ge\"illustreerd wordt in \reffig{figuur-implementatie-miller-geheugen-circ}.
+Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld dat ge\"illustreerd wordt in \reffig{figuur-implementatie-miller-geheugen-circ}. Het voordeel van zo'n ontwerp ten opzichte van RAM is de veel kleinere oppervlakte. Bij RAM stijgt de complexiteit van de oppervlakte van de multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie.
 
 \begin{figure}[h]
 	\centering
@@ -825,8 +825,6 @@ Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien 
 \end{figure}
 
 Elk van de registers kan enkel de waarde van zijn voorganger aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De ingangen van de aritmetische schakeling (de $\mathbb{F}_{2^m}$ kern in dit geval) zijn rechtstreeks verbonden met registers \'e\'en en twee. Aan register \'e\'en zijn tevens ook de uitgang van de aritmetische schakeling en de ingang van de volledige schakeling aangesloten. De enige manier om nieuwe waarden in de registers op te slaan, is dus via de aanpassing van de waarde van register \'e\'en. %Tevens worden ingangen $A$ en $B$ voor de $\mathbb{F}_{2^m}$ kern vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
-
-Het voordeel van zo'n ontwerp ten opzichte van RAM is de veel kleinere oppervlakte. Bij RAM stijgt de oppervlakte van de benodigde multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de oppervlakte van de multiplexers echter constant met als resultaat een veel kleinere implementatie.
 
 Omdat de ingangen van de onderliggende $\mathbb{F}_{2^m}$ kern rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
 \[\begin{aligned}
