@@ -833,5 +833,72 @@
     <bib_year> 2004 </bib_year>
     <bib_extra key="publisher">National Institute for Standards and Technology</bib_extra>
   </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>rsa</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>A method for obtaining digital signatures and public-key cryptosystems</bib_title>
+    <bib_authors>Rivest, R. L. and Shamir, A. and Adleman, L.</bib_authors>
+    <bib_journal>Communications of the ACM</bib_journal>
+    <bib_volume>21</bib_volume>
+    <bib_number>2</bib_number>
+    <bib_pages>120-126</bib_pages>
+    <bib_year>1978</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>pgp</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>PGP source code and internals</bib_title>
+    <bib_authors>Zimmermann, Philip</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>1995</bib_year>
+    <bib_extra key="address">Cambridge, MA, USA</bib_extra>
+    <bib_extra key="publisher">MIT Press</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>shamir</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Identity-based cryptosystems and signature schemes</bib_title>
+    <bib_authors>Shamir, Adi</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>47-53</bib_pages>
+    <bib_year>1985</bib_year>
+    <bib_extra key="address">New York, NY, USA</bib_extra>
+    <bib_extra key="booktitle">Proceedings of CRYPTO 84 on Advances in cryptology</bib_extra>
+    <bib_extra key="Isbn">0-387-15658-5</bib_extra>
+    <bib_extra key="publisher">Springer-Verlag New York, Inc.</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>boneh</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>10.1137/S0097539701398521</bib_doi>
+    <bib_title>Identity-Based Encryption from the Weil Pairing</bib_title>
+    <bib_authors>Boneh, Dan and Franklin, Matthew</bib_authors>
+    <bib_journal>SIAM J. Comput.</bib_journal>
+    <bib_volume>32</bib_volume>
+    <bib_number>3</bib_number>
+    <bib_pages>586-615</bib_pages>
+    <bib_year>2003</bib_year>
+    <bib_extra key="Publisher">Society for Industrial and Applied Mathematics</bib_extra>
+  </doc>
 </doclist>
 </library>

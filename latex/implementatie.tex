@@ -714,8 +714,6 @@ I^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
 
 Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginvariable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en vijf voor tussenresultaten. De totale kost komt neer op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
 
-%TODO: Variabelen tellen
-
 \begin{algorithm}[h]
 	\caption{Uitwerking van $I^{2^m + 1} \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-v-power}
@@ -774,8 +772,6 @@ e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
 
 Indien zowal $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = e(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
 
-%TODO: Variabelen tellen
-
 \begin{algorithm}
 	\caption{Uitwerking van $I \cdot J \in \mathbb{F}_{2^{4m}}$}
 	\label{algoritme-implementatie-miller-f4m-mult}
@@ -810,7 +806,7 @@ De geheugenvereisten van de for-lus en de finale machtsverheffing kunnen los van
 
 Van de vijf algoritmes die opgeroepen worden in de for-lus, vereist de de vermenigvuldiging van $F$ en $G$ het grootste aantal tijdelijke registers, namelijk drie. Het minimum aantal registers om alle bewerkingen in de lus te kunnen uitvoeren is dus vijftien: zes voor $P, \phi(Q)$ en $V$, twee voor $G$, vier voor $F$ en drie tijdelijke registers.
 
-Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van `meest geheugenvereistende' algoritme lopen. In dit geval zijn er opnieuw veertien registers nodig: acht voor $I$ en $J$ en zes voor de tussenresultaten.
+Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van `meest geheugenvereistende' algoritme lopen. In dit geval zijn er veertien registers nodig: acht voor $I$ en $J$ en zes voor de tussenresultaten.
 
 Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de $\mathbb{F}_{2^m}$ kern.
 
