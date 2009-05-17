@@ -204,7 +204,8 @@
 
 \begin{document}
 \dontprintsemicolon   % Don't print ; after each line in algorithms
-\selectlanguage{dutch}  % Set hypenation patterns
+\selectlanguage{dutch}  % Set hyphenation patterns
+\hyphenation{}
 
 % Include gedeelte (begint op nieuwe pagina
 % Indien gewoon invoegen op huidige plaats \input
@@ -219,8 +220,6 @@
 
 % Copyright
 \include{copyright}
-
-\pagestyle{fancy}
 
 \ifthenelse{\boolean{dankwoord}}{
 \include{dankwoord}  % Dankwoord
@@ -241,26 +240,24 @@
 \clearpage
 
 \include{lijstafkortingen} % Lijst van afkortingen
-
 \include{lijstsymbolen}    % Lijst van symbolen
 }{}
 
+\pagestyle{fancy}
 \pagenumbering{arabic}
 
-\include{inleiding}             % Inleiding & motivatie
+\include{inleiding}       % Inleiding & motivatie
 
-%\include{cryptografie-inleiding} % Algemene informatie over cryptografie
-\include{pairings}  % Informatie over pairings 
+\include{pairings}        % Wiskundige informatie over pairings 
 
 \include{implementatie}		% Hardware implementatie
 \include{resultaten}      % Resultaten vd implementatie
+\include{conclusie}       % Conclusie
 
-\include{conclusie}             % Conclusie
+\appendix                 % Start appendices
 
-\appendix                        % Start appendices
-
-%\include{code}       % Implementatie code
-%\include{debugging}  % Manier van debugging
+%\include{code}            % Implementatie code
+%\include{debugging}       % Manier van debugging
 
 % BibTex referenties
 \bibliography{references}

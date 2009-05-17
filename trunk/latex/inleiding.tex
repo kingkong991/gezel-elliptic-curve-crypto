@@ -1,11 +1,12 @@
 \Chapter{Inleiding}
 
- In dit inleidende hoofdstuk zal enige achtergrond informatie verschaft worden omtrend cryptografie. Verder zal het concept van identiteits-gebaseerde cryptografie duidelijk gemaakt worden. Er zal uitgelegd worden waarom de recente ondekking van pairings hier zo belangrijk voor is. Ten slotte zal een kort overzicht gegeven worden van in de literatuur terug te vinden implementaties van pairings. In het volgende hoofdstuk wordt de werking van pairings dan wiskundig uitgespit.
+ In dit inleidende hoofdstuk zal enige achtergrond informatie verschaft worden omtrent cryptografie. Verder zal het concept van identiteitsgebaseerde cryptografie duidelijk gemaakt worden. Er zal uitgelegd worden waarom de recente ondekking van pairings hier zo belangrijk voor is. Ten slotte zal een kort overzicht gegeven worden van in de literatuur terug te vinden implementaties van pairings. In het volgende hoofdstuk wordt de werking van pairings dan wiskundig uitgespit.
+
 \section{Basisachtergrond cryptografie}
 
-Sinds het begin der tijden is er een nood geweest aan manieren om berichten versleuteld te verzenden tussen twee partijen. Voorbeelden van enkele klassieke encryptiemethoden zijn het Atbashcijfer~\cite{athbash} (Babyloni\"e, 600 v.\ Chr.), het Caesarcijfer~\cite{caesar} (Rome, 56 n.\ Chr.) en het dubbele transpositie cijfer~\cite{kahn} (oa.\ gebruikt door weerstandsgroepen in WO II). E\'en eigenschap die al deze methodes met elkaar gemeen hebben, is het gebruik dezelfde sleutel voor versleutelen en ontcijferen. Ook door vele moderne encryptiemethodes, zoals bijvoorbeeld 3DES~\cite{3des} en AES~\cite{aes}, gebruiken dit principe. Dit principe noemt men symetrische versleuteling.
+Sinds het begin der tijden is er een nood geweest aan manieren om berichten versleuteld te verzenden tussen twee partijen. Voorbeelden van enkele klassieke encryptiemethoden zijn het Atbashcijfer~\cite{athbash} (Babyloni\"e, 600 v.\ Chr.), het Caesarcijfer~\cite{caesar} (Rome, 56 n.\ Chr.) en het dubbele transpositiecijfer~\cite{kahn} (o.a.\ gebruikt door weerstandsgroepen in WO II). E\'en eigenschap die al deze methodes met elkaar gemeen hebben, is het gebruik van dezelfde sleutel voor versleutelen en ontcijferen. Ook vele moderne encryptiemethodes, zoals bijvoorbeeld 3DES~\cite{3des} en AES~\cite{aes}, gebruiken dit principe, dat men symmetrische versleuteling noemt.
 
-De algemene werking van symetrische cryptografie is weergegeven in \reffig{fig-encryptie-applicaties-sym-cipher}. Alice zendt een bericht $B$ naar Bob door het te versleutelen, vercijferd met een door hen beiden gekende sleutel $k$. Bob op zijn beurt ontcijfert met diezelfde sleutel het bericht. Indien Eve de vooraf afgesproken sleutel kent, kan zij alle communicatie tussen Alice en Bob ontcijferen. Er is dus nood aan een manier om veilig een sleutel $k$ te kunnen afspreken tussen twee partijen.
+De algemene werking van symmetrische cryptografie is weergegeven in \reffig{fig-encryptie-applicaties-sym-cipher}. Alice zendt een bericht $B$ naar Bob door het te versleutelen, vercijferd met een door hen beiden gekende sleutel $k$. Bob op zijn beurt ontcijfert met diezelfde sleutel het bericht. Indien Eve de vooraf afgesproken sleutel kent, kan zij alle communicatie tussen Alice en Bob ontcijferen. Er is dus nood aan een manier om veilig een sleutel $k$ te kunnen afspreken tussen twee partijen.
 
 \begin{figure}[h]
 	\centering
@@ -13,7 +14,7 @@ De algemene werking van symetrische cryptografie is weergegeven in \reffig{fig-e
 		\caption{Algemene werking van symmetrische cryptografie\label{fig-encryptie-applicaties-sym-cipher}}
 \end{figure}
 
-Een oplossing voor het veilig afspreken van een gedeelde sleutel was tot 1976 niet gekend. Toen stelden Diffie en Hellman hun algoritme voor sleutel uitwisseling over een onbeveiligd kanaal \cite{diffie-hellman}. Deze ontdekking plaveide de weg voor assymetrische cryptografie (ook wel publieke sleutel cryptografie genoemd). De algemene werking van dit type cryptografie wordt ge\"illustreerd in \reffig{fig-encryptie-applicaties-asym-cipher}. Wanneer Bob een bericht naar Alice wil versturen, zoekt hij eerst haar publieke sleutel op in een databank. Vervolgens versleutelt hij zijn bericht met Alices publieke sleutel. Enkel Alice kan met behulp van haar private sleutel dan het bericht ontcijferen.
+Een oplossing voor het veilig afspreken van een gedeelde sleutel was tot 1976 niet gekend. Toen stelden Diffie en Hellman hun algoritme voor sleuteluitwisseling over een onbeveiligd kanaal voor \cite{diffie-hellman}. Deze ontdekking plaveide de weg voor asymmetrische cryptografie (ook wel publieke sleutel cryptografie genoemd). Met behulp van dit type cryptografie kunnen eveneens boodschappen versleuteld worden door gestuurd. Dit wordt ge\"illustreerd in \reffig{fig-encryptie-applicaties-asym-cipher}. Wanneer Alice een bericht naar Bob wil versturen, zoekt ze eerst zijn publieke sleutel op in een databank. Vervolgens versleutelt ze haar bericht met Bobs publieke sleutel. Enkel Bob kan met behulp van zijn private sleutel dan het bericht ontcijferen.
 
 \begin{figure}[h]
 	\centering
@@ -21,25 +22,77 @@ Een oplossing voor het veilig afspreken van een gedeelde sleutel was tot 1976 ni
 		 \caption{Algemene werking van asymmetrische cryptografie\label{fig-encryptie-applicaties-asym-cipher}}
 \end{figure}
 
-Een systeem als dit biedt het grote voordeel dat er geen nood is om de gebruikte (publieke) sleutel geheim te houden. Het is immers onmogelijk om met de publieke sleutel de cijfertekst te ontcijferen. Eve heeft er in dit geval dus geen baat bij de gebruikte publieke sleutel te onderscheppen. 
+Een systeem als dit biedt het grote voordeel dat er geen nood is om de gebruikte (publieke) sleutel geheim te houden. Het is namelijk onmogelijk om met de publieke sleutel de cijfertekst te ontcijferen. Eve heeft er in dit geval dus geen baat bij de gebruikte publieke sleutel te onderscheppen. 
 
-Om te verzekeren dat de publieke sleutels van elke mogelijk ontvanger voorradig zijn, dient een soort een centrale databank voorzien te worden. Indien iemand het voor anderen mogelijk wil maken hem versleutelde berichten te versturen, genereert die persoon eerst een publieke en private sleutel. De publieke sleutel wordt vervolgens naar de database gestuurd, waar iedereen hem kan ophalen.
+Een andere toepassing van asymmetrische cryptografie is het plaatsen en verifi\"eren van digitale handtekeningen. Digitale handtekeningen zijn vergelijkbaar met klassieke handtekeningen. Ze kunnen, indien juist ge\-\"im\-ple\-men\-teerd, gebruikt worden om te verifi\"eren dat een bepaald bericht effectief door de persoon verstuurd is die de verzender beweert te zijn. Ook kan aan de hand van een digitale handtekening worden nagegaan of de inhoud van een bericht niet gewijzigd werd door een derde persoon tijdens de verzending. ECDSA \cite{ecdsa} en RSA \cite{rsa} zijn enkele van de vele cryptografische algoritmes die toelaten digitale handtekeningen te genereren.
 
-% TODO: Meer uitleg? (Wiskunde?)
+Om te verzekeren dat de publieke sleutels van elke mogelijke ontvanger voorradig zijn, dient een soort een centrale databank voorzien te worden. Indien iemand het voor anderen mogelijk wil maken hem versleutelde berichten te versturen, genereert die persoon eerst een publieke en private sleutel. De publieke sleutel wordt vervolgens naar de database gestuurd, waar iedereen hem kan ophalen.
 
-%Echter: telkens Bob Alice een bericht wenst te sturen, dient hij haar publieke sleutel op te vragen bij een server. Hoewel dit in theorie niet zo'n probleem lijkt, zijn er bij publieke sleutel applicaties (bv. PGP\footnote{Pretty Good Privacy: \url{http://www.prettygoodprivacy.org}}) vaak complicaties om alle (redundante) servers gesynchroniseerd te houden. Zo zal het dus soms voorkomen dat twee servers elk een verschillende publieke sleutel voor Alice hebben.
+\section{Identiteitsgebaseerde cryptografie}
 
-
-\section{Identiteits gebaseerde cryptografie}
-
-Een nadeel van de publieke sleutel cryptografie zoals voorgesteld in de vorige paragraaf zit hem in het sleutelbeheer. Er is geen manier om zeker te zijn dat wanneer de publieke sleutel van Alice opgevraagd wordt de verkregen sleutel effectief die van Alice is. Indien Eve bijvoorbeeld haar publieke sleutel in de database laat opslaan onder Alices naam, zal Bob berichten voor Alice versleutelen met Eves publieke sleutel. Een mogelijke oplossing hiervoor is bijvoorbeeld het ``web of trust'', zoals ge\"implementeerd door de software PGP \cite{pgp}. Daarbij kunnen mensen aangeven of ze een bepaalde publieke sleutel betrouwbaar vinden of niet. Een sleutel die vergezeld wordt door meerdere getuigenissen van betrouwbaarheid zal dat dan waarschijnlijk ook zijn. Verder kunnen sleutels opgenomen worden in een zogenaamde ``revocation list'', waardoor wordt aangegeven dat die sleutel niet meer geldig is.
+Een nadeel van de publieke sleutel cryptografie zoals voorgesteld in de vorige paragraaf zit hem in het sleutelbeheer. Er is geen manier om zeker te zijn dat wanneer de publieke sleutel van Bob opgevraagd wordt de verkregen sleutel effectief die van Bob is. Indien Eve bijvoorbeeld haar publieke sleutel in de database laat opslaan onder Bobs naam, zal Alice berichten voor Bob versleutelen met Eves publieke sleutel. Een mogelijke oplossing hiervoor is bijvoorbeeld het ``web of trust'', zoals ge\"implementeerd door de software PGP \cite{pgp}. Daarbij kunnen mensen aangeven of ze een bepaalde publieke sleutel betrouwbaar vinden of niet. Een sleutel die vergezeld wordt van meerdere getuigenissen van betrouwbaarheid zal dat dan waarschijnlijk ook zijn. Verder kunnen sleutels opgenomen worden in een zogenaamde ``revocation list'', waardoor wordt aangegeven dat die sleutel niet meer geldig is.
 
 Uiteraard is ook zo een systeem niet volledig waterdicht. Iemand kan bijvoorbeeld onder verschillende identiteiten sleutels insturen en vervolgens met al die verschillende identiteiten zijn sleutels een certificaat van vertrouwen geven. Indien iemands publieke sleutel zou afgeleid kunnen worden van bekende gegevens omtrent zijn identiteit dan zou dit probleem niet bestaan.
 
-In 1984 stelde Shamir een methode voor waarbij dit mogelijk was \cite{shamir}. Het basisidee is als volgt: in plaats van een centrale databank voor publieke sleutels is er een centrale server die private sleutels voor elke gebruiker genereerd aan de hand van geheime parameters. Gebruikers kunnen hun private sleutel dus niet zelf berekenen. De centrale server publiceert ook informatie omtrent hoe iemands identiteitsgegevens kunnen worden omgezet naar een publieke sleutel. Wanneer een gebruiker wil deelnemen aan beveiligde communicatie, meldt hij zich aan bij de centrale server en verkrijgt hij zijn private sleutel alsook de parameters om publieke sleutels te berekenen. Voor zowel de private sleutel als de parameters wordt er van uit gegaan dat deze levenslang gelden. Een gebruiker dient zich dus slechts eenmalig aan te melden.
+In 1984 stelde Shamir een methode voor waarbij dit mogelijk zou zijn \cite{shamir}. Het basisidee is als volgt: in plaats van een centrale databank voor publieke sleutels is er een centrale server die private sleutels voor elke gebruiker genereert aan de hand van geheime parameters. Gebruikers kunnen hun private sleutel dus niet zelf berekenen. De centrale server publiceert ook informatie omtrent hoe iemands identiteitsgegevens kunnen worden omgezet naar een publieke sleutel. Wanneer een gebruiker wil deelnemen aan beveiligde communicatie, meldt hij zich aan bij de centrale server en verkrijgt hij zijn private sleutel alsook de parameters om publieke sleutels te berekenen. Voor zowel de private sleutel als de parameters wordt er van uit gegaan dat deze levenslang gelden. Een gebruiker dient zich dus slechts \'e\'enmalig aan te melden.
 
-Uiteraard is ook dit concept niet zonder problemen. Indien bijvoorbeeld de geheime parameters van de centrale server achterhaald worden, is het onmogelijk gebruikers daarvan op de hoogte te brengen. In tegenstelling tot publieke sleutel cryptografie wordt de centrale server nooit gecontacteerd voor een versleuteling en kan dus ook niet met ``revocation lists'' gewerkt worden. Het is dus niet mogelijk bepaalde sleutels (of identiteiten in dit geval) ongeldig te verklaren. Er zijn verschillende oplossingen gepubliceerd voor verscheidene van deze problemen \cite{maas, bla, blie, bloe}. Men kan bijvoorbeeld om de zoveel maanden elke gebruiker nieuwe sleutels bezorgen.
+Uiteraard is ook dit concept niet zonder problemen. Indien bijvoorbeeld de geheime parameters van de centrale server achterhaald worden, is het onmogelijk gebruikers daarvan op de hoogte te brengen. Een mogelijke oplossing is elke gebruiker om de zoveel tijd te voorzien van een nieuwe geheime sleutel. In dat geval stelt zich echter een nieuw probleem, want dan moet een methode bedacht worden om alle nieuwe sleutels bij de gebruikers te krijgen. 
 
-Door deze problemen is identiteits gebaseerde cryptografie eerder geschikt voor kleine groepen mensen, bijvoorbeeld intern in een bedrijf. In dat geval kost het weinig moeite iedereen op regelmatige tijdstippen van nieuwe sleutels te voorzien. 
+Door deze problemen is de toepassing van identiteitsgebaseerde cryptografie eerder geschikt voor kleine groepen mensen, bijvoorbeeld intern in een bedrijf. In dat geval kost het weinig moeite iedereen op regelmatige tijdstippen van nieuwe sleutels te voorzien.
 
-Hoewel het idee reeds in 1984 gepubliceerd werd, zou het echter tot 2001 duren eer Boneh en Franklin een effici\"ent algoritme voor identiteits-gebaseerde cryptografie zouden voorstellen \cite{boneh}.
+Een andere ideale toepassing is het gebruik van dit type cryptografie in netwerken van sensoren. Zo'n netwerk kan bestaan uit honderden nodes met een beperkte reken- en vermogenscapaciteit. Indien publieke sleutel cryptografie als vanouds zou worden gebruikt, zou dit leiden tot veel extra communicatie tussen de nodes en een centrale server. Telkens de nodes meetgegevens naar de server willen sturen, zouden ze diezelfde server eerst moeten contacteren om zijn publieke sleutel te weten te komen. In het omgekeerde geval zou de server telkens hij een node wil contacteren hetzelfde moeten doen.  Als echter identiteitsgebaseerde cryptografie wordt toegepast, is al die extra communicatie niet meer nodig, aangezien de benodigde publieke sleutels berekend kunnen worden uit een unieke ID.
+
+Een uitvoerig overzicht van identiteitsgebaseerde cryptografie en de mogelijkheden die ze biedt, valt buiten het bestek van thesis. Een uitstekend startpunt voor meer informatie is \cite{maas}.
+
+\section{Pairings\label{inleiding-pairings}}
+
+Hoewel het idee reeds in 1984 gepubliceerd werd, zou het echter tot 2001 duren eer Boneh en Franklin een effici\"ent algoritme voor identiteitsgebaseerde cryptografie voorstelden \cite{boneh}. Zij stelden een schema op dat toeliet de idee\"en van Shamir ook effectief te implementeren. In hun voorstel maakten ze gebruik van de Weil pairing \cite{weil}. Al gauw verschenen er variaties op het oorspronkelijke schema. Daarin werd het gebruik van andere pairings voorgesteld, zoals bijvoorbeeld de Tate \cite{tate} of de $\eta_T$ \cite{eta} pairing. Wat pairings juist zijn en hoe ze gebruikt kunnen worden, zal in het volgende hoofdstuk uitvoerig aan bod komen.
+
+Alvorens de wiskunde achter pairings in te duiken, wordt eerst nog een overzicht gegeven van de huidige ``state of the art'' van implementaties van pairings. Daarbij zal gekeken worden naar de mogelijkheden van implementaties op een microchip en in een FPGA. Implementaties van pairings op computers zijn per definitie niet in een omgeving met beperkte ressources toepasbaar. Ze hebben dus weinig te maken met deze thesis, die als uitgangspunt compacte implementaties heeft. Vandaar dat dit type implementaties dan ook niet bestudeerd zal worden.
+
+\subsection{Microchip implementaties}
+
+Implementaties van pairings voor gebruik op een MICA node \cite{mica}, specifiek ontwikkeld voor gebruik in netwerken van sensoren, worden voorgesteld in \cite{tinytate}, \cite{tinypbc} en \cite{nanoecc}. De processor op deze node is een ATMega128L microchip \cite{atmega}. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik en de batterijspanning gegeven in \cite{nanoecc} wordt het vermogenverbruik geschat op ongeveer $23.60$ $mW$.
+
+\begin{table}[h]
+	\caption[Resultaten uit de literatuur voor implementaties ontwikkeld op een MICA node]{Resultaten uit de literatuur voor implementaties ontwikkeld op een MICA node \cite{mica}}
+	\label{tabel-resultaten-sensor}
+
+	\centering
+	\begin{tabular}{lllll}
+		\toprule
+		& \multirow{2}{*}{TinyTate \cite{tinytate}}	& \multirow{2}{*}{TinyPBC \cite{tinypbc}} &	\multicolumn{2}{c}{NanoECC \cite{nanoecc}}\\
+		\cmidrule{4-5}
+		& & & \multicolumn{1}{c}{Binair} & \multicolumn{1}{c}{Priem}\\
+			\midrule
+		Veld					& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit\\
+		Pairing				& Tate							& $\eta_T$ 						& Tate							& Tate\\
+		Rekentijd ($s$)	& 30.21							& 5.45							& 10.96							& 17.93\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsection{FPGA implementaties}
+
+In de literatuur zijn vrij veel ontwerpen voor FPGA's terug te vinden. Het probleem is echter dat men zich bij het ontwerp hiervan steeds toelegt op het behalen van een zo hoog mogelijke snelheid, wat resulteert in een grote oppervlakte. Dit type implementaties is dus minder geschikt zijn voor toepassingen met beperkte ressources.
+
+Toch wordt in \reftbl{tabel-resultaten-fpga} een sumier overzicht gegeven van een zeer beperkt aantal ontwerpen. Bij de selectie hiervan werd vooral gekozen voor ontwerpen waarin in een vrij klein veld gerekend werd. Er dient in acht te worden genomen dat bij al deze implementaties snelheid, en niet een compacte, zuinige implementatie, het voornaamste doel is. 
+
+\begin{table}[h]
+	\caption{Resultaten uit de literatuur voor implementaties ontwikkeld voor FPGA's}
+	\label{tabel-resultaten-fpga}
+
+	\centering
+	\begin{tabular}{llllll}
+		\toprule
+		&	\multicolumn{1}{c}{Veld}	& \multicolumn{1}{c}{Pairing}	& $\begin{array}{@{}c@{}}\text{Opp.}\\\text{[slices]}\end{array}$	& $\begin{array}{@{}c@{}}f\\\text{[MHz]}\end{array}$	& $\begin{array}{@{}c@{}}\text{Reken-}\\\text{tijd }[\mu s]\end{array}$\\
+		\midrule
+		Ronan \emph{et al.} \cite{ronan}				& $\mathbb{F}_{2^{103}}$	& Mod. Tate	& 21021	& 51	& 206\\
+		Shu \emph{et al.} \cite{shu}					& $\mathbb{F}_{2^{239}}$	& Mod. Tate	& 25287	& 84	& 41\\
+		Keller \emph{et al.} \cite{keller}			& $\mathbb{F}_{2^{251}}$	& Mod. Tate	& 27725	& 40	& 2370\\
+		Grabher en Page \cite{grabher}				& $\mathbb{F}_{3^{97}}$		& Mod. Tate	& 4481	& 150	& 432\\
+		Beuchat \emph{et al.} \cite{beuchat-eta}	& $\mathbb{F}_{3^{97}}$		& $\eta_T$	& 1833	& 145	& 192\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+

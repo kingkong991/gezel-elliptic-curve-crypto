@@ -900,5 +900,83 @@
     <bib_year>2003</bib_year>
     <bib_extra key="Publisher">Society for Industrial and Applied Mathematics</bib_extra>
   </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>weil</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>10.1007/s00145-004-0315-8</bib_doi>
+    <bib_title>The Weil Pairing, and Its Efficient Calculation</bib_title>
+    <bib_authors>Miller, Victor S.</bib_authors>
+    <bib_journal>Journal of Cryptology</bib_journal>
+    <bib_volume>17</bib_volume>
+    <bib_number>4</bib_number>
+    <bib_pages>235-261</bib_pages>
+    <bib_year>2004</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>mica</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>10.1109/MM.2002.1134340</bib_doi>
+    <bib_title>Mica: a wireless platform for deeply embedded networks</bib_title>
+    <bib_authors>Hill, J. L. and Culler, D. E.</bib_authors>
+    <bib_journal>Micro, IEEE</bib_journal>
+    <bib_volume>22</bib_volume>
+    <bib_number>6</bib_number>
+    <bib_pages>12-24</bib_pages>
+    <bib_year>2002</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>atmega</key>
+    <notes></notes>
+    <bib_type>manual</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>ATMega128 datasheet</bib_title>
+    <bib_authors>Atmel</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year></bib_year>
+    <bib_extra key="url">http://www.atmel.com</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>lenstra</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Selecting Cryptographic Key Sizes</bib_title>
+    <bib_authors>Lenstra, Arjen K. and Verheul, Eric R.</bib_authors>
+    <bib_journal>Journal of Cryptology</bib_journal>
+    <bib_volume>14</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>255-293</bib_pages>
+    <bib_year>2001</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>low-power</key>
+    <notes></notes>
+    <bib_type>book</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Low Power Methodology Manual: For System-on-Chip Design</bib_title>
+    <bib_authors>Keating, Michael and Flynn, David and Aitken, Rob and Gibbons, Alan and Shi, Kaijian</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2007</bib_year>
+    <bib_extra key="Isbn">0387718184, 9780387718187</bib_extra>
+    <bib_extra key="publisher">Springer Publishing Company, Incorporated</bib_extra>
+  </doc>
 </doclist>
 </library>

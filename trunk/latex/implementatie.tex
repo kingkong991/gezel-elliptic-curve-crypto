@@ -12,9 +12,9 @@ Alvorens kan begonnen worden met de implementatie, moeten bepaalde parameters va
 
 Een belangrijke parameter is het veld waarover gewerkt zal worden. Omdat de berekeningen in een veld $\mathbb{F}_2$ (en extensies ervan) veel eenvoudiger zijn dan die in een veld modulo een priemgetal, wordt ervoor gekozen in zulk een veld te werken.
 
-Ook moet een kromme vastgelegd worden. Er wordt gekozen voor een supersinguliere elliptische kromme. Dat type krommen heeft een kleine embedding degree en geeft aanleiding tot simpele rekenregels voor de verdubbeling en optelling van punten. De vergelijking van zo een kromme $E$ over een veld $\mathbb{F}_{2^m}$ wordt gegeven door
+Ook moet een kromme vastgelegd worden. Er wordt gekozen voor een supersinguliere elliptische kromme. Dat type krommen heeft een kleine inbeddingsgraad en geeft aanleiding tot simpele rekenregels voor de verdubbeling en optelling van punten \cite{maas, hankerson-book}. Een vergelijking van zo een kromme $E$ over een veld $\mathbb{F}_{2^m}$ wordt gegeven door
 \[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b,\]
-waarbij $b \in \{0, 1\}$. De embedding degree $k = 4$ voor dit type krommen. Verder worden de volgende hulp variabelen bepaald:
+waarbij $b \in \{0, 1\}$. De inbeddingsgraad $k = 4$ voor dit type krommen. Verder worden de volgende hulp variabelen bepaald:
 \[\begin{aligned}
 \delta	&= b	\qquad	& m \equiv 1, 7 \quad(\bmod \; 8)\\
 			&= 1 - b		& m \equiv 3, 5 \quad(\bmod \; 8)\\
@@ -24,27 +24,11 @@ De orde van de kromme is gelijk aan \cite{bertoni, beuchat}:
 \[\begin{aligned}
 \#E(\mathbb{F}_{2^m})	&= 2^m + \nu \sqrt{2^{m + 1}} + 1
 \end{aligned}\]
-Om de Tate pairing te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit sommaties bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
+Om de Tate pairing te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
 
-Alvorens dit kan gebeuren, moet een woordlengte $m$ vastgelegd worden. Deze bepaald de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. In \reftbl{tabel-implementatie-parameters-keylength} zijn enkele vaak gebruikte woordlengtes voor pairings met hun bijhorende cryptografische sterkte terug te vinden. Er wordt gekozen voor $m = 163$. Dit laat een mooi compromis toe tussen sterkte en compactheid van de implementatie.
+Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met 86 bits symmetrische cryptografie. Dit zou neerkomen op een geganrandeerde veiligheid tot 2021. De algoritmen en schakelingen die volgen kunnen allen perfect toegepast worden op grotere velden, dus indien gewenst kan $m$ verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
 
-\begin{table}[h]
-	\caption{Vergelijking van woordlengtes $m$ en de bijhorende cryptografische sterkte van de Tate pairing}
-	\label{tabel-implementatie-parameters-keylength}
-
-	\centering
-	\begin{tabular}{ll}
-		\toprule
-		$m$ [bit]	& $\begin{array}{@{}c@{}}\text{sterkte}\\\text{[bit]}\end{array}$\\
-		\midrule
-		81		& 324\\
-		163	& 652\\
-		239	& 956\\
-		\bottomrule		
-	\end{tabular}
-\end{table}
-
-Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiepunt subgroep over $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
+Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiesubgroep over $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
 \[\begin{aligned}
 l	&= \#E = 2^{163} + \sqrt{2^{163 + 1}} + 1\\
 	&= 2^{163} + 2^{82} + 1.\\
@@ -54,38 +38,38 @@ Nu het veld waarover gewerkt wordt, bepaald is, kan een reductie veelterm $P$ ge
 \[P = z^{163} + z^7 + z^6 + z^3 + 1.\]
 
 Ook moet het extensieveld $\mathbb{F}_{2^{k m}}$ gedefinieerd worden waarover de Tate pairing berekend zal worden. Aangezien $k = 4$, kan het veld opgebouwd worden in twee stappen. Eerst wordt $\mathbb{F}_{2^{2m}}$ bepaald als volgt:
-\[\mathbb{F}_{2^{2m}} \cong \mathbb{F}_{2^m}[x]/(x^2 + x ^ 1)\]
+\[\mathbb{F}_{2^{2m}} \cong \mathbb{F}_{2^m}[x]/(x^2 + x + 1)\]
 en hierop wordt het volgende extensieveld gebouwd:
 \[\mathbb{F}_{2^{4m}} \cong \mathbb{F}_{2^{2m}}[y]/(y^2 + (x + 1)y + 1).\]
 Een element van $\mathbb{F}_{2^{4m}}$ kan dus voorgesteld worden als vier elementen van $\mathbb{F}_{2^m}$.
 
-Ten slotte moet een distortiemap voor gebruik in de berekening van de Tate pairing bepaald worden. Hiervoor wordt dezelfde gekozen als in \cite{bertoni}. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie volgende transformatie:
+Ten slotte moet een distortiemap $\phi$ bepaald worden. Hiervoor wordt dezelfde gekozen als in \cite{bertoni}. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie volgende transformatie:
 \[\phi : (x_A, y_A) \to (x_A + s^2, y_A + x_A s + t^6)\]
 met $s, t \in \mathbb{F}_{2^{4m}}$. Daarbij moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
-\[\begin{gathered}
+\[\left\{\begin{array}{l}
 s^4 + s = 0\\
-t^2 + t + s^6 + s^2 = 0.
-\end{gathered}\]
+t^2 + t + s^6 + s^2 = 0
+\end{array}\right.\]
 Een mogelijke oplossing hiervoor is:
 \[\begin{aligned}
-s	&= x + 1\\
-t	&= xy.
+s	&= x + 1,\\
+t	&= xy
 \end{aligned}\]
 Een distortie van $A$ kan dus ook geschreven worden als:
 \[\begin{aligned}
-x_\phi	&= x_A + x\\
+x_\phi	&= x_A + x,\\
 y_\phi	&= (x_A + y_A) + x_A \cdot x + xy.
 \end{aligned}\]
-Merk op dat de co\"effici\"ent van $1$ van $x_\phi$ en die van $x$ van $y_\phi$ beiden gelijk zijn aan $x_A$. Door deze handige vorm zullen in de implementatie slechts twee registers nodig zijn om de distortie van het punt $Q$ bij te houden.
+Merk op dat de constante term van $x_\phi$ en de co\"efficient van $x$ van $y_\phi$ beiden gelijk zijn aan $x_A$. Door deze handige vorm zullen in de implementatie slechts twee registers nodig zijn om de distortie van het punt $Q$ bij te houden.
 
 \section{Beperkingen\label{sectie-implementatie-beperkingen}}
 
 Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of een smartcard. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is vermogenverbruik, om dit te beperken bestaan specifieke technieken. Het verbruik hangt ook samen met de oppervlakte, dus het beperken daarvan zal het verbruik ten goede komen. In eerste instantie zal dus getracht worden de implementatie zo compact mogelijk te maken. Het verbruik kan verder ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus zal dit aspect bij het ontwerp van de schakelingen genegeerd worden.
 
-Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0.13 \mu m$ low leakage technologie van Faraday Technology Corporation. De ordening van de elementen zal echter grotendeels behouden voor andere technologi\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
+Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0,13 \mu m$ low leakage technologie van Faraday Technology Corporation. De ordening van de elementen zal echter grotendeels behouden worden voor andere technologie\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
 
 \begin{table}[h]
-	\caption[Oppervlakte van elementen in een ASIC schakeling]{Grootte van elementen in een ASIC schakeling ($0.13 \mu m$ low leakage technologie van Faraday Corporation \cite{cell-databook})}
+	\caption[Oppervlakte van elementen in een ASIC schakeling]{Grootte van elementen in een ASIC schakeling ($0,13 \mu m$ low leakage technologie van Faraday Corporation \cite{cell-databook})}
 	\label{tabel-implementatie-beperkingen-elementen-gatecount}
 
 	\centering
@@ -94,19 +78,19 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 		Element			& Opp. $\left[\frac{\text{gate}}{\text{bit}}\right]$\\
 		\midrule
 		D flip-flop met reset	& 6\\
-		D flip-flop zonder reset	& 5.5\\
-		full adder		& 5.5\\
-		D latch			& 4.25\\
+		D flip-flop zonder reset	& 5,5\\
+		full adder		& 5,5\\
+		D latch			& 4,25\\
 		3 ingang MUX	& 4\\
-		2 ingang XNOR	& 3.75\\
-		2 ingang XOR	& 3.75\\
-		2 ingang MUX	& 2.25\\
-		2 ingang OR		& 1.25\\
-		2 ingang AND	& 1.25\\
+		2 ingang XNOR	& 3,75\\
+		2 ingang XOR	& 3,75\\
+		2 ingang MUX	& 2,25\\
+		2 ingang OR		& 1,25\\
+		2 ingang AND	& 1,25\\
 		2 ingang NOR	& 1\\
 		2 ingang NAND	& 1\\
-		NOT				& 0.75\\
-		\bottomrule		
+		NOT				& 0,75\\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -137,7 +121,7 @@ Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn 
 	}
 \end{algorithm}
 
-In \refsect{sectie-implementatie-miller-forlus} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, m.a.w.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
+In \refsect{subsectie-implementatie-miller-forlus} zal blijken dat het vaak nodig zal zijn om het resultaat $R$ te vermenigvuldigen met $z$, m.a.w.\ alle bits 1 plaats naar links te verschuiven. Een voor de hand liggende schakeling die dit alles implementeert, is te zien in \reffig{figuur-implementatie-malu-basic}. Ingang $P_{\text{in}}$ dient afhankelijk van de graad van $T$ ingesteld te worden op $0$ of $P$. De ingangen $T$ en $P_{\text{in}}$ zijn $m$ bits aangezien het resultaat voor de vermenigvuldiging met $z$ steeds van graad $< m$ is en bit $m + 1$ dus toch steeds 0 zou zijn. De hoogste graad term na de shift wordt naar buiten gebracht als $mod_{\text{u}}$. De implementatie bestaat uit $2m$ XOR poorten.
 
 \begin{figure}[h]
 	\centering
@@ -165,7 +149,7 @@ De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optim
 
 De eerder ontworpen MALU schakeling laat toe optellingen te doen, maar het Miller algoritme vereist dat er ook vermenigvuldigingen worden uitgerekend. Delingen en machtsverheffingen kunnen met behulp van vermenigvuldiging berekend worden en dienen dus niet rechtstreeks ge\"implementeerd te worden. Indien dus zowel optellingen als vermenigvuldigingen berekend kunnen worden, is alles voorhanden om de Tate pairing te berekenen.
 
-Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A \cdot B = R$} berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Door de modulo operatie telkens op het tussenresultaat uit te voeren, is het steeds van graad $\leq m$ en kan het opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
+Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A \cdot B = R$} berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Door de modulo bewerking telkens op het tussenresultaat uit te voeren, is het steeds van graad $\leq m$ en kan het opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
 
 \begin{algorithm}[h]
 	\caption{``Shift and add'' vermenigvuldiging in $\mathbb{F}_{2^m}$}
@@ -234,7 +218,7 @@ is. Met andere woorden, er dient nu niet enkel gekozen te kunnen worden tussen d
 Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een $d$ te kiezen waarvoor $m \bmod d = 1$. Als voorbeeld worden enkele voor de hand liggende en optimale keuzes vergeleken voor $d$ indien $m = 163$ in \reftbl{tabel-implementatie-woordbreedte-d}.
 
 \begin{table}[h]
-	\caption{Voor de hand liggende versus optimale waarden voor woordbreedte $d$ indien \mbox{$m=163$}}
+	\caption{Locatie van het resultaat van een vermenigvuldiging voor $d$ MALU's indien \mbox{$m=163$}}
 	\label{tabel-implementatie-woordbreedte-d}
 
 	\centering
@@ -247,7 +231,7 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 		\bottomrule
 		\multicolumn{7}{c}{}\\
 		\toprule
-		\multicolumn{7}{c}{Ideale waarden voor $d$}\\
+		\multicolumn{7}{c}{Optimale waarden voor $d$}\\
 		\midrule
 		$d$			& 2	& 3	& 6	& 9	& 18	& 27\\
 		$m \bmod d$	& 1	& 1	& 1	& 1	& 1	& 1\\
@@ -268,13 +252,13 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 	\KwOut{$e(P, Q)$}
 	%\KwData{$I \in E(\mathbb{F}_{2^{163}})[l]$; $F, G \in \mathbb{F}_{2^{4 \cdot 163}}$}
 	$F \leftarrow 1$\;
-	$I \leftarrow P$\;
+	$V \leftarrow P$\;
 	\For{$i \leftarrow 162$ \KwTo $0$}{
-		$F \leftarrow F^2 \cdot G_{I,I}(\phi(Q))$\;\nllabel{lijn-implementatie-miller-algemeen-double-1}
-		$I \leftarrow 2I$\;\nllabel{lijn-implementatie-miller-algemeen-double-2}
+		$F \leftarrow F^2 \cdot G_{V,V}(\phi(Q))$\;\nllabel{lijn-implementatie-miller-algemeen-double-1}
+		$V \leftarrow 2 \cdot V$\;\nllabel{lijn-implementatie-miller-algemeen-double-2}
 		\If{$i = 82$}{\nllabel{lijn-implementatie-miller-algemeen-add-if}
-			$F \leftarrow F \cdot G_{I,P}(\phi(Q))$\;\nllabel{lijn-implementatie-miller-algemeen-add-1}
-			$I \leftarrow I + P$\;\nllabel{lijn-implementatie-miller-algemeen-add-2}
+			$F \leftarrow F \cdot G_{V,P}(\phi(Q))$\;\nllabel{lijn-implementatie-miller-algemeen-add-1}
+			$V \leftarrow V + P$\;\nllabel{lijn-implementatie-miller-algemeen-add-2}
 		}
 	}
 	$e(P, Q) \leftarrow F^{\frac{2^{4 \cdot 163} - 1}{2^{163} + 2^{82} + 1}}$\;
@@ -306,23 +290,21 @@ De verdubbelstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algeme
 \[\begin{aligned}
 	\lambda &= x_V^2 + 1\\
 	x_{2V} &= \lambda ^2\\
-	y_{2V} &= \lambda (x_{2V} + x_V) + y_V + 1\\
-	G_{V,V}(\phi(Q)) &= \lambda (x_{\phi} + x_V) + (y_{\phi} + y_V)\\
+	y_{2V} &= \lambda \cdot (x_{2V} + x_V) + y_V + 1\\
+	G_{V,V}(\phi(Q)) &= \lambda \cdot (x_{\phi} + x_V) + (y_{\phi} + y_V)\\
 \end{aligned}\]
 
 In dit geval kan $y_{2V}$ ook berekend worden als:
-
 \[\begin{aligned}
 y_{2V}	&= y_V^4 + x_V^4\\
-			&= (y_V + x_V)^4\\	
+			&= (y_V + x_V)^4\\
 \end{aligned}\]
-
 Aangezien dit echter twee kwadrateringen en een optelling kost tegenover een vermenigvuldiging en twee optellingen, wordt de voorkeur gegeven aan de eerste methode.
 
 Door de specifieke vorm van $\phi(Q)$ kan $G$ uitgeschreven worden als:
 
 \[\begin{aligned}
-	G_a	&=	\lambda (x_{\phi_a} + x_V) + (y_{\phi_a} + y_V)\qquad&
+	G_a	&=	\lambda \cdot (x_{\phi_a} + x_V) + (y_{\phi_a} + y_V)\qquad&
 				G_c	&= \lambda \cdot x_{\phi_c} + y_{\phi_c}\\
 	G_b	&=	\lambda \cdot x_{\phi_b} + y_{\phi_b}&
 						&= 0\\
@@ -360,11 +342,11 @@ De optelstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} e
 \[\begin{aligned}
 	\lambda &= \frac{y_V + y_P}{x_V + x_P}\\
 	x_{V + P} &= \lambda ^2 + x_V + x_P\\
-	y_{V + P} &= \lambda (x_{V + P} + x_P) + y_P + 1\\
-	G_{V,P}(\phi(Q)) &= \lambda (x_{\phi} + x_P) + (y_{\phi} + y_P)\\
+	y_{V + P} &= \lambda \cdot (x_{V + P} + x_P) + y_P + 1\\
+	G_{V,P}(\phi(Q)) &= \lambda \cdot (x_{\phi} + x_P) + (y_{\phi} + y_P)\\
 \end{aligned}\]
 
-Net zoals bij de verdubbelstap kan $G$ hier in 2 variabelen opgeslagen worden. Hoewel de optelstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}.
+Net zoals bij de verdubbelstap kan $G$ hier in twee variabelen opgeslagen worden. Hoewel de optelstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}.
 
 In tegenstelling tot de verdubbelstap zijn hier twee tijdelijke registers nodig, een voor $\lambda$ en een voor $a$. Verder zijn er twee registers nodig voor $x_P$ en $y_P$. Alles samen dienen er tien optellingen, drie vermenigvuldigingen, twee kwadrateringen en een inversie uitgerekend te worden.
 
@@ -475,7 +457,7 @@ F \cdot G	&= (F_a + F_b x + F_c y + F_d xy) \cdot (G_a + G_b x + xy)\\
 		&\quad + (F_a + F_b + F_c G_b + F_d G_a + F_d G_b + F_d)xy\\
 \end{aligned}\]
 
-Indien hier nu de Karatsuba-Ofman techniek (\cite{karatsuba-oldest, zuras}) op wordt toegepast, bekomt men:
+Indien hier nu de Karatsuba-Ofman techniek \cite{karatsuba-oldest, zuras} op wordt toegepast, bekomt men:
 
 \[\begin{aligned}
 F \cdot G &= (F_a G_a + F_b G_b + F_d)\\
@@ -606,7 +588,7 @@ Een methode om deze vier resultaten uit te rekenen is te zien in \refalg{algorit
 	$G_{n_a} \leftarrow G_{n_a} + J_{t_a}$; $G_{n_b} \leftarrow G_{n_b} + J_{t_b}$\comm{2 A}\;
 \end{algorithm}
 
-\subsubsection{Inversie in $\mathbb{F}_{2^m}$}
+\subsubsection{Inversie in $\mathbb{F}_{2^{2m}}$}
 
 Vervolgens moet de inverse van $G_n$ berekend worden, wat een inversie in $\mathbb{F}_{2^{2m}}$ is \cite{beuchat}.
 
@@ -620,7 +602,7 @@ A_a B_b + A_b B_a + B_b A_a = 0\\
 De oplossing van dit stelsel is
 
 \[\begin{aligned}
-B_a	&= w^{-1} \cdot (A_a + A_b)\\
+B_a	&= w^{-1} \cdot (A_a + A_b),\\
 B_b	&= w^{-1} \cdot A_b\\
 \end{aligned}\]
 
@@ -677,7 +659,7 @@ y^{2^m}	&= 1 + x + y + xy\\
 \end{aligned}\]
 en met $I = I_a + I_b x + I_c y + I_d xy$, vindt men dus:
 \[I^{2^m} = (I_a + I_b + I_c) + (I_b + I_c + I_d) x + I_c y + (I_c + I_d) xy.\]
-Vervolgens vermenigvuldigd men dit met de originele $I$, wat resulteert in $I^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
+Vervolgens vermenigvuldigt men dit met de originele $I$, wat resulteert in $I^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
 \[\begin{aligned}
 r_a	&= (I_a + I_b + I_c) \cdot I_a + (I_b + I_c + I_d) \cdot I_b + I_c^2 + (I_c + I_d) \cdot I_d\\
 r_b	&= (I_a + I_b + I_c) \cdot I_b + (I_b + I_c + I_d) \cdot I_a + (I_b + I_c + I_d) \cdot I_b\\
@@ -764,13 +746,13 @@ p_0	&= n_0 \cdot n_1\\
 \end{aligned}\]
 
 Gebruik makende van deze waarden, kan de vermenigvuldiging voor $e(P, Q)$ geschreven worden als:
-
 \[\begin{aligned}
 e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
-	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
+	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y\\
+	&\quad + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
 \end{aligned}\]
 
-Indien zowal $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = e(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
+Indien zowel $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = e(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
 
 \begin{algorithm}
 	\caption{Uitwerking van $I \cdot J \in \mathbb{F}_{2^{4m}}$}
@@ -806,23 +788,23 @@ De geheugenvereisten van de for-lus en de finale machtsverheffing kunnen los van
 
 Van de vijf algoritmes die opgeroepen worden in de for-lus, vereist de de vermenigvuldiging van $F$ en $G$ het grootste aantal tijdelijke registers, namelijk drie. Het minimum aantal registers om alle bewerkingen in de lus te kunnen uitvoeren is dus vijftien: zes voor $P, \phi(Q)$ en $V$, twee voor $G$, vier voor $F$ en drie tijdelijke registers.
 
-Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van `meest geheugenvereistende' algoritme lopen. In dit geval zijn er veertien registers nodig: acht voor $I$ en $J$ en zes voor de tussenresultaten.
+Bij de berekening van de finale machtsverheffing gaat de vermenigvuldiging van $I$ en $J$ met de titel van `meest geheugenvereisende' algoritme lopen. In dit geval zijn er veertien registers nodig: acht voor $I$ en $J$ en zes voor de tussenresultaten.
 
 Het minimum aantal registers $n$ is dus vijftien. In totaal bevat de complete schakeling zestien registers van grootte $m$: vijftien in de controller voor het Miller algoritme en \'e\'en in de $\mathbb{F}_{2^m}$ kern.
 
-\subsubsection{Ontwerp van geheugenblok}
+\subsubsection{Ontwerp van het geheugenblok}
 
 Voor het ontwerp van het geheugenblok wordt RAM al op voorhand verworpen gezien dit zowel groot is als veel vermogen verbruikt. Er wordt verder gebouwd op de idee\"en aangebracht in \cite{lee}. Daarin wordt een circulair ontwerp voorgesteld dat ge\"illustreerd wordt in \reffig{figuur-implementatie-miller-geheugen-circ}. Het voordeel van zo'n ontwerp ten opzichte van RAM is de veel kleinere oppervlakte. Bij RAM stijgt de complexiteit van de oppervlakte van de multiplexers kwadratisch met het aantal registers. Bij een ontwerp van dit type is de complexiteit van de multiplexers echter constant met als resultaat een veel kleinere implementatie.
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{geheugen-circ}
-		\caption{Circulair registerblok ontwerp en mogelijke operaties\label{figuur-implementatie-miller-geheugen-circ}}
+		\caption{Circulair registerblokontwerp en mogelijke bewerkingen\label{figuur-implementatie-miller-geheugen-circ}}
 \end{figure}
 
-Elk van de registers kan enkel de waarde van zijn voorganger aannemen (de zogenaamde \emph{shift} operatie). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De ingangen van de aritmetische schakeling (de $\mathbb{F}_{2^m}$ kern in dit geval) zijn rechtstreeks verbonden met registers \'e\'en en twee. Aan register \'e\'en zijn tevens ook de uitgang van de aritmetische schakeling en de ingang van de volledige schakeling aangesloten. De enige manier om nieuwe waarden in de registers op te slaan, is dus via de aanpassing van de waarde van register \'e\'en. %Tevens worden ingangen $A$ en $B$ voor de $\mathbb{F}_{2^m}$ kern vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
+Elk van de registers kan enkel de waarde van zijn voorganger aannemen (de zogenaamde \emph{shift} bewerking). Tevens kunnen de waarden van eerste twee registers omgewisseld worden (\emph{swap}) en kan de waarde van register twee naar register \'e\'en gekopieerd worden (\emph{copy}). De ingangen van de wiskundige schakeling (de $\mathbb{F}_{2^m}$ kern in dit geval) zijn rechtstreeks verbonden met registers \'e\'en en twee. Aan register \'e\'en zijn tevens ook de uitgang van de wiskundige schakeling en de ingang van de volledige schakeling aangesloten. De enige manier om nieuwe waarden in de registers op te slaan, is dus via de aanpassing van de waarde van register \'e\'en. %Tevens worden ingangen $A$ en $B$ voor de $\mathbb{F}_{2^m}$ kern vast verbonden met twee op voorhand bepaalde registers, alsook de uitgang $R$. 
 
-Omdat de ingangen van de onderliggende $\mathbb{F}_{2^m}$ kern rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokslagen $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
+Omdat de ingangen van de onderliggende $\mathbb{F}_{2^m}$ kern rechtstreeks verbonden zijn met twee registers, is het noodzakelijk om voor elke bewerking de nodige waarden naar die registers over te brengen. Het gemiddeld aantal klokcycli $\overline{t}$ dat daar voor nodig is, kan op de manier die volgt bepaald worden. Eerst wordt de gemiddelde afstand $\overline{r}$ tussen twee variabelen $x_0$ en $x_1$ bepaald. Die is gelijk aan de som $s$ van de mogelijke afstanden $r$ gedeeld door het aantal mogelijke posities $c$ die twee variabelen kunnen bezetten:
 \[\begin{aligned}
 s	&= \sum_{i = 1}^{n - 1} \sum_{j = i + 1}^n (j - i - 1)
 	&\qquad c	&= \sum_{i = 0}^{n - 1} i\\
@@ -833,18 +815,18 @@ dus
 \[\overline{r}	= \frac{n - 2}{3}.\]
 Merk op dat deze formules slechts een benadering geven. Zo wordt bijvoorbeeld niet in rekening gebracht dat wanneer beide waarden in de eerste twee registers zitten, er geen doorschuivingen moeten gebeuren.
 
-Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een \emph{swap} operatie uitgevoerd moeten. Daartoe dient $x_1$ telkens eerst verplaatst te worden tot register twee. Er zijn dus $\overline{r} \cdot n$ doorschuif operaties nodig. Dit is opnieuw een ruwe schatting, die voor kleine $n$ niet zal kloppen. Algemeen kan echter gesteld worden dat
-\[\overline{t} \in \mathcal{O} \Bigl( \frac{n^2}{3} \Bigr).\]
+Per positie die $x_0$ en $x_1$ van elkaar verwijderd zijn, zal een \emph{swap} bewerking uitgevoerd moeten worden. Daartoe dient $x_1$ telkens eerst verplaatst te worden naar register twee. Er zijn dus $\overline{r} \cdot n$ doorschuif bewerkingen nodig. Dit is opnieuw een ruwe schatting, die voor kleine $n$ niet zal kloppen. Algemeen kan echter gesteld worden dat
+\[\overline{t} \in O \Bigl( \frac{n^2}{3} \Bigr).\]
 
-Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen die op de registers worden uitgevoerd. Elke doorschuif operatie kost $n$ zulke bewerkingen, m.a.w.\ het gemiddeld aantal schrijfbewerkingen $\overline{w}$ dat uitgevoerd moet worden voor gestart kan worden met de berekening van een optelling of vermenigvuldiging, is
-\[\overline{w} \in \mathcal{O} \Bigl( \frac{n^3}{3} \Bigr).\]
+Verder is het energieverbruik recht evenredig met het aantal schrijfbewerkingen die op de registers worden uitgevoerd. Elke doorschuif bewerking kost $n$ zulke bewerkingen, m.a.w.\ het gemiddeld aantal schrijfbewerkingen $\overline{w}$ dat uitgevoerd moet worden voor gestart kan worden met de berekening van een optelling of vermenigvuldiging, is
+\[\overline{w} \in O \Bigl( \frac{n^3}{3} \Bigr).\]
 
-Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokslagen in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de \emph{swap} (en \emph{copy}) operatie toelaten tussen alle aan elkaar grenzende registers. Verder kunnen \emph{swap} operaties tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
+Gezien het feit dat er vijftien registers zijn (tegenover zes in \cite{lee}), zou dit zeer veel energie kosten. Verder zou het veel klokcycli in beslag nemen om beide waarden in de correcte registers op te slaan, hoewel zoals eerder bepaald tijdsduur niet van zeer groot belang is. Om dit probleem op te lossen, wordt het mogelijk gemaakt dat elk register ook de waarde van zijn voorganger kan opslaan. Dit is equivalent aan de \emph{swap} (en \emph{copy}) bewerking toelaten tussen alle aan elkaar grenzende registers. Verder kunnen \emph{swap} bewerkingen tussen twee paar registers in parallel uitgevoerd worden. Uiteraard wordt hiervoor een prijs betaald, er moet nu namelijk per register een extra multiplexer en een selectie signaal voorzien worden.  Het resulterend ontwerp is te zien in \reffig{figuur-implementatie-miller-geheugen-circ-optimized}.
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=12cm]{geheugen-circ-optimized}
-		\caption{Circulair registerblok geoptimaliseerd voor energieverbruik\label{figuur-implementatie-miller-geheugen-circ-optimized}}
+		\caption{Circulair registerblok geoptimaliseerd voor laag energieverbruik\label{figuur-implementatie-miller-geheugen-circ-optimized}}
 \end{figure}
 
 In dit geval zal de afstand $r$ van een waarde $x$ tot het eerste register gelijk zijn aan $\textsf{min}(j - 1, n - j + 1)$ omdat nu in beide richtingen geschoven kan worden. De gemiddelde afstand $\overline{r}$ is dan
@@ -853,12 +835,12 @@ In dit geval zal de afstand $r$ van een waarde $x$ tot het eerste register gelij
 	&= \frac{2}{n} \cdot \sum_{i = 1}^{\frac{n}{2}} (j - 1)\\
 	&= \frac{n - 1}{4}.
 \end{aligned}\]
-Aangezien de omwissel operaties in parallel uitgevoerd kunnen worden, is het gemiddeld aantal klokslagen in dit geval
-\[\overline{t} \in \mathcal{O}  \Bigl( \frac{n}{4} \Bigr)\]
-en, rekening houdend met het feit dat elke omwissel operatie twee schrijfbewerkingen vraagt en er twee variabelen naar de juiste positie gebracht moeten worden,
-\[\overline{w} \in \mathcal{O}(n).\]
+Aangezien de omwisselbewerkingen in parallel uitgevoerd kunnen worden, is het gemiddeld aantal klokcycli in dit geval
+\[\overline{t} \in O  \Bigl( \frac{n}{4} \Bigr).\]
+Rekening houdend met het feit dat elke omwisselbewerking twee schrijfbewerkingen vraagt en er twee variabelen naar de juiste positie gebracht moeten worden, geldt
+\[\overline{w} \in O(n).\]
 
-Tegenover het originele ontwerp voor het registerblok, zal dit ontwerp veel minder klokslagen verloren laten gaan aan het in de juiste positie brengen van de benodigde variabelen. Ook zal het, ten koste van meer multiplexers, significant minder energie verbruiken. De extra multiplexers zullen echter ook energie vragen, dus in hoeverre dit het totale verbruik naar beneden haalt, moet van implementatie tot implementatie bekeken worden. 
+Tegenover het originele ontwerp voor het registerblok, zal dit ontwerp veel minder klokcycli verloren laten gaan aan het in de juiste positie brengen van de benodigde variabelen. Ook zal het, ten koste van meer multiplexers, minder energie verbruiken. De extra multiplexers zullen echter ook energie vragen, dus in hoeverre dit het totale energieverbruik naar beneden haalt, moet van implementatie tot implementatie bekeken worden. 
 
 Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de $\mathbb{F}_{2^m}$ kern verbonden. Om vermenigvuldigingen tot een succesvol einde te brengen, moet het register dat met de $A$ ingang verbonden is elke klokslag met $d$ bits naar links doorgeschoven kunnen worden. Hierbij gaat de originele waarde van het register echter wel verloren. Wanneer de algoritmes die het meeste tijdelijke opslag vragen echter nauwkeurig worden bekeken, zal men merken dat dit geen probleem vormt. Vandaar dat er voor gekozen wordt om het derde tijdelijk register uit de doorschuif lus te halen, er moeten dan minder doorschuivingen doorgevoerd worden om elke waarde in de juiste positie te brengen. Verder moet het ook mogelijk zijn waarden die op de ingang van de Miller controller aangelegd worden op te slaan en het resultaat op de uitgang te zetten. Ten slotte moet het resultaat van een berekening in $\mathbb{F}_{2^m}$ opgeslagen kunnen worden. Teneinde dat mogelijk te maken, wordt de uitgang $R$ van de $\mathbb{F}_{2^m}$ kern aan het derde tijdelijk register gekoppeld. Rekend houdend met deze zaken, wordt het ontwerp van de eerste twee registers aangepast zoals te zien in \reffig{figuur-implementatie-geheugen-eerste-twee}.
 
@@ -870,9 +852,11 @@ Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de
 
 \subsection{FSM}
 
-Met alle details over de hardware bekend, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zal een zeer groot deel van de te implementeren states voor niets anders dienen dan het verschuiven van geheugen. Het uiteindelijke resultaat bevat 553 states. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op individueel state niveau gebeuren. Ook zal zoveel mogelijk getracht worden reeds ge\"implementeerde states opnieuw te gebruiken.
+Nut alle details over de hardware bekend zijn, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zal een zeer groot deel van de te implementeren toestanden voor niets anders dienen dan het verschuiven van geheugen. Het uiteindelijke resultaat bevat 553 toestanden. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op individueel state niveau gebeuren. Ook zal zoveel mogelijk getracht worden reeds ge\"implementeerde toestanden opnieuw te gebruiken.
 
-Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbel- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en het nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen via dezelfde states uitgewerkt worden, ongeacht of nu de verdubbel- of de optelstap uitgevoerd wordt.
+Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. De aanduidingen $start$ en $next$ staan voor de ingangen van de schakeling (zie \reffig{figuur-implementatie-miller-controller}). De aanduiding $\#next = 3$ wil zeggen: `aantal maal dat $next$ hoog werd is gelijk aan drie'. Een register $o$ geeft aan of de optelstap moet uitgevoerd worden en er is een teller $i$ die bijhoudt hoeveel stappen in de for-lus nog uitgevoerd moeten worden.
+
+Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbel- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en de nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen via dezelfde toestanden uitgewerkt worden, ongeacht of nu voordien de verdubbel- of de optelstap uitgevoerd werd.
 
 \begin{figure}[h]
 	\centering
@@ -882,21 +866,19 @@ Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder ve
 
 \section{Optimalisaties\label{sectie-implementatie-optimalisaties}}
 
-Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw op de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\textsf{log}_2(m)$ bit niet veel bijdragen aan noch de uiteindelijke oppervlakte noch het verbruik zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
+Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw in de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\textsf{log}_2(m)$ bit (voor tellers) niet veel bijdragen aan de uiteindelijke oppervlakte of het energieverbruik, zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
 
-Een register is doorgaans opgebouwd uit een hoeveelheid D-type master-slave flip-flops. Dit type flip-flops is opgebouwd uit twee latches. De eerst latch (master) is verbonden met de ingang $D$ en slaat de waarde daarvan op zolang $CLK$ laag is. De tweede latch (slave) is verbonden met de uitgang $Q$  en neemt de waarde van de eerste latch over eens $CLK$ hoog is. Het effect is dus dat de uitgang $Q$ op een stijgende klokflank de waarde van $D$ overneemt. Er bestaan verschillende gespecialiseerde types: met reset ingang, met enable ingang, met test ingang, $\ldots$ In de paragrafen die volgen, wordt er van uit gegaan dat alle registers uit dit type flip-flops zijn opgebouwd.
+Een register is doorgaans opgebouwd uit een aantal D-type master-slave flip-flops. In de gebruikte bibliotheek \cite{cell-databook} is dit type flip-flops opgebouwd uit twee latches. De eerste latch (master) is verbonden met de ingang $D$ en laat de waarde daarvan door zolang $CLK$ laag is. De tweede latch (slave) is verbonden met de uitgang $Q$  en neemt de waarde van de eerste latch over eens $CLK$ hoog is. Het effect is dus dat de uitgang $Q$ op een stijgende klokflank de waarde van $D$ overneemt. Er bestaan verschillende gespecialiseerde types: met resetingang, met enable ingang, met test ingang, $\ldots$ In de paragrafen die volgen, wordt er van uit gegaan dat alle registers uit dit type flip-flops zijn opgebouwd.
 
 \subsection{Registers zonder reset}
 
-Een makkelijke eerste aanpassing is het verwijderen van de reset ingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder reset ingang 0.5 gates minder per bit dan \'e\'en met, een verkleining van $8.5\%$.
+Een makkelijke eerste aanpassing is het verwijderen van de resetingangen van de registers. Zoals reeds gezien in \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} kost een D flip-flop zonder resetingang 0,5 gate minder per bit dan \'e\'en met, een verkleining van $8,5\%$.
 
-In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896.5 = 81.5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden om $F$ in te stellen aan het begin van het algoritme.
+In het geval van $m = 163$ kijkt men dan aan tegen een besparing van $978 - 896,5 = 81,5$ gates per register. Merk echter wel op dat ten minste \'e\'en register moet overblijven dat wel op 0 (en 1) ingesteld kan worden om $F$ in te stellen aan het begin van het algoritme.
 
 \subsection{Clock gating\label{subsectie-implementatie-optimalisatie-clock-gating}}
 
-%TODO: Is this correct? The thing about losing multiplexers, etc.
-
-Normaal wordt een register elke klokslag geladen met de waarde aan zijn ingang. Het is dus noodzakelijk het register naar zichzelf terug te koppelen, zodat het mogelijk is reeds opgeslagen waarde in het register te bewaren. Een techniek, genaamd clock gating, laat toe deze terugkoppeling (en de daarbij horende multiplexer) achterwege te laten. Bij deze techniek wordt het kloksignaal enkel gepropageerd naar een register wanneer een daarbij horende enable ingang hoog is. Zolang het enable signaal laag gehouden wordt, blijft de waarde van het register dus constant.
+Normaal wordt een register elke klokslag geladen met de waarde aan zijn ingang. Het is dus noodzakelijk het register naar zichzelf terug te koppelen, zodat het mogelijk is een reeds opgeslagen waarde in het register te bewaren. Een techniek, genaamd clock gating, laat toe deze terugkoppeling (en de daarbij horende multiplexer) achterwege te laten \cite{low-power}. Bij deze techniek wordt het kloksignaal enkel gepropageerd naar een register wanneer een daarbij horende enable ingang hoog is. Zolang het enable signaal laag gehouden wordt, blijft de waarde van het register dus constant.
 
 Deze techniek laat ook toe het verbruik van de schakeling drastisch te verlagen. Er zullen immers veel minder interne poorten zijn (bv. in de multiplexer) die elke klokslag van waarde dienen te veranderen.
 
@@ -908,7 +890,7 @@ De eenvoudigste schakeling waarmee clock gating ge\"implementeerd kan worden is 
 		\caption{Schakeling voor clock gating - Basis ontwerp\label{figuur-implementatie-optimalisatie-cg-basic}}
 \end{figure}
 
-Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke onregelmatigheden dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
+Dit probleem kan verholpen worden met de schakeling voorgesteld in \reffig{figuur-implementatie-optimalisatie-cg-no-glitch}. De latch zorgt er hier voor dat het enable signaal pas wordt doorgelaten nadat het kloksignaal laag geweest is. Hierdoor worden mogelijke onregelmatigheden dus tegengehouden voor de ze klokingang van het register kunnen bereiken.
 
 \begin{figure}[h]
 	\centering
@@ -916,7 +898,7 @@ Dit probleem kan overkomen worden met de schakeling voorgesteld in \reffig{figuu
 		\caption{Schakeling voor clock gating - Verbeterd ontwerp\label{figuur-implementatie-optimalisatie-cg-no-glitch}}
 \end{figure}
 
-Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt bewezen dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-optimalisatie-cg-power-dis}: wanneer de klok laag is, veranderen telkens de ingang verandert twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang hoog is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
+Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparing door te voeren, zoals aangetoond in \cite{mueller}. In die paper wordt bewezen dat het energie verbruik van een D-type master-slave flip-flop veel hoger is wanneer het kloksignaal laag is, dan wanneer het hoog is. De reden hiervan is duidelijk te zien in \reffig{figuur-implementatie-optimalisatie-cg-power-dis}: wanneer de klok laag is, veranderen, telkens de ingang verandert, twee interne poorten van staat en wijzigen de gate capaciteiten van twee andere poorten. Indien de klokingang hoog is, wijzigt een veranderend ingangssignaal enkel de gate capaciteit van de eerste interne poort.
 
 \begin{figure}[h]
 	\centering
@@ -928,7 +910,7 @@ Ten slotte is er een derde oplossing die toelaat een nog grotere energiebesparin
 			\includegraphics[width=5.7cm]{cg-pow-dis-one}
 			%\label{subfig-2-implementatie-optimalisatie-cg-power-dis}
 		}
-		\caption[Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang]{Stroomverbruikende componenten van een D-type master-slave flip-flop bij constante waarde van de klok ingang \protect\cite{mueller}\label{figuur-implementatie-optimalisatie-cg-power-dis}}
+		\caption[Vermogenverbruikende onderdelen van een D-type master-slave flip-flop bij constante waarde van de klok ingang]{Vermogenverbruikende onderdelen van een D-type master-slave flip-flop bij constante waarde van de klokingang \protect\cite{mueller}. De dikke lijnen geven de vermogenverbruikende onderdelen aan.\label{figuur-implementatie-optimalisatie-cg-power-dis}}
 \end{figure}
 
 De werking van de twee vorige schakelingen is zo dat de klokingang laag gehouden wordt zolang het enable signaal laag is. De oplossing ligt in de schakeling in \reffig{figuur-implementatie-optimalisatie-cg-low-power}, die exact doet wat nodig is: de klokingang hoog houden zolang geen nieuwe waarde moet opgeslagen worden. Om het voorkomen van onregelmatigheden te garanderen, moet het enable signaal stabiel worden voor het CLK signaal hoog wordt. Indien bepaalde kloksignaalbeperkingen worden opgelegd bij het synthetiseren van het circuit is dit normaal gezien echter geen probleem.
