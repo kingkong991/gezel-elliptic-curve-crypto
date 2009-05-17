@@ -1,4 +1,4 @@
-\Chapter{Pairings}
+\Chapter{Pairings\label{hfdst-pairings}}
 
 In dit hoofdstuk zal de werking van pairings wiskundig uit de doeken gedaan worden. Meer specifiek zal de Tate pairing bestudeerd worden. Er zal duidelijk gemaakt worden hoe de pairing berekend kan worden. Vervolgens worden enkele schema's voorgesteld die gebruikt kunnen worden voor versleuteling van gegevens en de aanmaak van digitale handtekeningen. In het volgende hoofdstuk wordt dan een schakeling ontworpen waarmee de Tate pairing berekend kan worden.
 
@@ -15,8 +15,8 @@ Een eindig veld $\mathbb{F}_q$ wordt gedefinieerd door zijn karakteristiek $q$. 
 
 Volgens de kleine stelling van Fermat geldt in elk eindig veld $a^q = a$. Van deze gelijkheid zal in het volgende hoofdstuk handig gebruikt gemaakt worden wanneer de inverse van een element moet berekend worden. Het voordeel van werken in een binair veld, m.a.w.\ $q = 2$, is dat optellingen en aftrekkingen equivalent zijn en zeer makkelijk uit te voeren zijn. Het is immers zo dat $1 + 1 = 2 \bmod 2 = 0$ en $0 - 1 = -1 \bmod 2 = 1$. Beiden kunnen dus berekend worden via een XOR operatie.
 
-Verder kunnen extensies van graad $m$ van een veld gedefinieerd worden. In het geval $q = 2$ bekomt men dan een nieuw veld $\mathbb{F}_{2^m}$. Er dient dan ook een reductie veelterm $P$ opgegeven te worden. Een extensieveld wordt gedefinieerd als:
-\[\mathbb{F}_{q^m} \cong \mathbb{F}_q [z] / (P). \]
+Verder kunnen extensies van graad $m$ van een veld gedefinieerd worden. In het geval $q = 2$ bekomt men dan een nieuw veld $\mathbb{F}_{2^m}$. Er dient dan ook een reductieveelterm $R$ opgegeven te worden. Een extensieveld wordt gedefinieerd als:
+\[\mathbb{F}_{q^m} \cong \mathbb{F}_q [z] / (R). \]
 
 \paragraph{Voorbeeld} Om de constructie van een extensieveld enigszins te verduidelijken wordt een klein voorbeeld gegeven. Er wordt gewerkt in karakteristiek $q = 2$. Stel $P = z^2 + z + 1$. Het extensieveld is dus gedefinieerd als:
 \[\mathbb{F}_{2^2} \cong \mathbb{F}_2 [z] / (z^2 + z + 1). \]
@@ -38,7 +38,7 @@ De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die 
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=8cm]{tangent-and-add}
+		\includegraphics[width=8cm]{tangent-and-chord}
 		\caption{``tangent-and-add'' methode op een elliptische kromme\label{figuur-pairings-tangent-and-chord}}
 \end{figure}
 
@@ -78,11 +78,11 @@ De definitie van de Tate pairing over elliptische krommen is als volgt:
 \[e(A, B): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l \cdot E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l\]
 Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse in $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms wordt over de gereduceerde Tate pairing gesproken wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
 
-Bewijzen voor het correct zijn van de Tate pairing zijn onder andere te vinden in \cite{maas, maas27, maas28, maas34}.
+Het formeel bewijzen van de Tate pairing valt buiten het bestek van deze thesis. Voor meer informatie wordt onder andere verwezen naar \cite{maas, ruck, hess}.
 
-\section{Berekening van de Tate pairing}
+\section{Berekening van de Tate pairing\label{sectie-pairings-berekening}}
 
-Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme  in z'n werk gaat.
+Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme in z'n werk gaat.
 
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing}
@@ -95,6 +95,53 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 	$S \gets Q + Q'$\;
 	$F \gets 1$; $V \gets P$\;	
 	\For{$i = t - 1$ to $0$}{
-		$F \gets F^2 \cdot $\;
+		$F \gets F^2 \cdot \frac{G_{V,V}(S) \cdot G_{2 \cdot V}(Q')}{G_{2 \cdot V}(S) \cdot G_{V,V}(Q')}$\;
+		$V \gets 2 \cdot V$\;
+		\If{$m_i = 1$}{
+			$F \gets F \cdot \frac{G_{V,P}(S) \cdot G_{V + P}(Q')}{G_{V + P}(S) \cdot G_{V,P}(Q')}$\;
+			$V \gets V + P$\;
+		}
 	}
+	\KwRet{$F^{\frac{q^k - 1 }{l}}$}
 \end{algorithm}
+
+Daarbij staat $G_{A, B}(C)$ voor de evaluatie van het punt $C$ in de vergelijking van de rechte door de punten $A$ en $B$. Indien $G_{2 \cdot A}$ vermeld staat, wil dit de vergelijking door de raaklijn aan $2 \cdot A$ zeggen.
+
+Hoewel als argumenten van het algoritme elementen van $\mathbb{F}_{q^k}$ staan aangegeven, zal doorgaans voor elementen uit het subveld $\mathbb{F}_q$ gekozen worden. Het resultaat van de pairing zal dus $k$ keer groter zijn dan de opgegeven argumenten. 
+
+In \cite{barreto-efficient} wordt aangetoont dat, mits het gebruik van de supersinguliere kromme
+\[E: y^3 + y = x^3 + x + b,\]
+het algoritme sterk vereenvoudigd kan worden. Er dient dan een distortiemap $\phi$ toegepast te worden op het punt $Q$. Voor een veld $\mathbb{F}_{2^m}$ dient de mapping te voldoen aan volgende voorwaarden:
+\[\phi : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6)\]
+met $s, t \in \mathbb{F}_{2^{km}}$. Daarbij moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
+\[\left\{\begin{array}{l}
+s^4 + s = 0\\
+t^2 + t + s^6 + s^2 = 0
+\end{array}\right.\]
+
+Een tweede voordeel van het gebruik van de vermelde kromme is haar lage inbeddingsgraad $k = 4$. Hoe groter $k$, hoe meer bewerkingen het immers kost om de pairing te berekenen.
+
+Met deze parameters vastgelegd, kan Millers algoritme vereenvoudigd worden tot \refalg{algoritme-pairings-miller-beter}.
+
+\begin{algorithm}[h]
+	\caption{Millers algoritme voor de Tate pairing - Effici\"entere versie}
+	\label{algoritme-pairings-miller-beter}
+	\KwIn{$l \in \mathbb{Z}$; $P, Q \in \mathbb{F}_{2^m}$}
+	\KwOut{$e(P, Q) \in \mathbb{F}_{2^{km}}^*$}
+	\KwData{$i, t \in \mathbb{Z}$; $F, S, V \in \mathbb{F}_{2^{km}}$}
+	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
+	$F \gets 1$; $V \gets P$\;	
+	\For{$i = t - 1$ to $0$}{
+		$F \gets F^2 \cdot G_{V,V}(\phi(Q))$\;
+		$V \gets 2 \cdot V$\;
+		\If{$m_i = 1$}{
+			$F \gets F \cdot G_{V,P}(\phi(Q))$\;
+			$V \gets V + P$\;
+		}
+	}
+	\KwRet{$F^{\frac{2^{km} - 1 }{l}}$}
+\end{algorithm}
+
+\section{Toepassingen van pairings}
+
+Nu de wiskundige achtergrond van de Tate pairing enigszins verduidelijkt is, zullen enkele voorbeelden gegeven worden van het gebruik ervan.
