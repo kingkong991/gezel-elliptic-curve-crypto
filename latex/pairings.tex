@@ -1,1 +1,58 @@
 \Chapter{Pairings}
+
+In dit hoofdstuk zal de werking van pairings wiskundig uit de doeken gedaan worden. Meer specifiek zal de Tate pairing bestudeerd worden. Er zal duidelijk gemaakt worden hoe de pairing berekend kan worden. Vervolgens worden enkele schema's voorgesteld die gebruikt kunnen worden voor versleuteling van gegevens en de aanmaak van digitale handtekeningen. In het volgende hoofdstuk wordt dan een schakeling ontworpen waarmee de Tate pairing berekend kan worden.
+
+Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaande uiteenzetting wordt opnieuw verwezen naar \cite{maas}. Het is ook uit dit werk dat de informatie uit de volgende paragrafen afkomstig is, tenzij anders vermeld.
+
+\section{Inleidende wiskunde}
+
+Alvorens de wiskundige theorie van pairings uit de doeken gedaan kan worden, dient die van elliptische krommen duidelijk gemaakt te worden. Het is met behulp van deze constructies dat pairings berekend kunnen worden. Elliptische krommen worden doorgaans echter gedefinieerd over een eindig veld. Vandaar dat de noodzakelijk theorie van beiden hier even heel kort herhaald wordt.
+
+\subsection{Eindige velden}
+
+Een eindig veld $\mathbb{F}_q$ wordt gedefinieerd door zijn karakteristiek $q$. Die karakteristiek is bij cryptografische toepassingen doorgaans een groot priemgetal $p$ of 2, hoewel tegenwoordig ook onderzoek gedaan wordt naar toepassingen met een karakteristiek 3.
+
+Volgens de kleine stelling van Fermat geldt in elk eindig veld $a^q = a$. Van deze gelijkheid zal in het volgende hoofdstuk handig gebruikt gemaakt worden wanneer de inverse van een element moet berekend worden. Het voordeel van werken in een binair veld, m.a.w.\ $q = 2$, is dat optellingen en aftrekkingen equivalent zijn en zeer makkelijk uit te voeren zijn. Het is immers zo dat $1 + 1 = 2 \bmod 2 = 0$ en $0 - 1 = -1 \bmod 2 = 1$. Beiden kunnen dus berekend worden via een XOR operatie.
+
+Verder kunnen extensies van graad $m$ van een veld gedefinieerd worden. In het geval $q = 2$ bekomt men dan een nieuw veld $\mathbb{F}_{2^m}$. Er dient dan ook een reductie veelterm $P$ opgegeven te worden. Een extensieveld wordt gedefinieerd als:
+\[\mathbb{F}_{q^m} \cong \mathbb{F}_q [z] / (P). \]
+
+\paragraph{Voorbeeld} Om de constructie van een extensieveld enigszins te verduidelijken wordt een klein voorbeeld gegeven. Er wordt gewerkt in karakteristiek $q = 2$. Stel $P = z^2 + z + 1$. Het extensieveld is dus gedefinieerd als:
+\[\mathbb{F}_{2^2} \cong \mathbb{F}_2 [z] / (z^2 + z + 1). \]
+Verder $A = z$ en $B = z + 1$. De resultaten van de optelling en vermenigvuldiging van $A$ en $B$ zijn dan respectievelijk:
+\[\begin{aligned}
+A + B &= 2z + 1 \qquad & A \cdot B &= z^2 + z\\
+&= 1	& &= 2z + 1\\
+\end{aligned}\]
+
+\subsection{Elliptische krommen}
+
+Een elliptische kromme $E$ wordt gevormd door de verzameling van punten die voldoen aan de vergelijking:
+\[E: Y^2 Z + a_1 XYZ + a_2 Y Z^2 = X^3 + a_3 X^2 Z + a_4 X Z^2 + a_5 Z^3.\]
+Het enige punt waarvoor $Z = 0$ en de vergelijking geldt ($X = 0,  Y = 1, Z = 0$), wordt het punt op oneindig $\mathcal{O}$ genoemd. Indien wordt gesteld dat $x = \frac{X}{Z}$ en $y = \frac{Y}{Z}$, bekomt men de affiene Weierstrass vergelijking:
+\[E: y^2 + a_1 xy + a_2 y = x^3 + a_3 x^2 + a_4 x + a_5.\]
+Merk op dat in deze vorm het punt $\mathcal{O}$ niet meer voldoet aan de vergelijking, ook al behoort het nog steeds tot de kromme. De kromme dient zo gedefinieerd te zijn dat $\forall A \in E$ de parti\"ele afgeleiden $\frac{\partial P}{\partial X}$, $\frac{\partial P}{\partial Y}$ en $\frac{\partial P}{\partial Z}$ nooit allen tegelijkertijd gelijk zijn aan nul.
+
+De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die wordt weergegeven in \reffig{figuur-pairings-tangent-and-chord}. De bewerking wordt additief geschreven en heeft als neutral element het punt op oneindig $\mathcal{O}$. Afhankelijk van het veld waarover de kromme gedefinieerd is, zullen de formules om de ``tangent-and-chord'' methode uit te voeren anders zijn. 
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=8cm]{tangent-and-add}
+		\caption{``tangent-and-add'' methode op een elliptische kromme\label{figuur-pairings-tangent-and-chord}}
+\end{figure}
+
+Aan de hand van de vorige bewerking kan een scalaire vermenigvuldiging vastgelegd worden, met $a \in \mathbb{Z}$:
+\[\begin{aligned}
+a \cdot A	&= A + \ldots + A\\
+0 \cdot A	&= \mathcal{O}\\
+-a \cdot A	&= a \cdot -A
+\end{aligned}\]
+
+De orde $n$ van een punt $A$ op de kromme is gelijk aan de minimum waarde waarvoor $n \cdot A = \mathcal{O}$. Het is mogelijk dat $n = \infty$. Van alle punten waarvoor $n$ een deler is van $k$ wordt gezegd dat ze in de $k$-torsiesubgroep van $E$ zitten. Zo een subgroep wordt genoteerd als:
+\[E[k] = \{ A \in E : k \cdot A = \mathcal{O} \}.\]
+
+Het aantal punten $\#E$ op $E$ wordt de orde van de kromme genoemd. Voor een kromme over een veld $\mathbb{F}_q$ is $\#E = q + 1 - t$, met $t$ de ``trace'' van de kromme. Indien $q \mid t$ wordt de kromme supersingulier genoemd.
+
+\section{Definitie van pairings}
+
+
