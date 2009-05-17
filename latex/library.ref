@@ -398,34 +398,35 @@
   <doc>
     <filename>file:///home/anthony/thesis/references/P.%20Barreto%20et%20Al%20-%20Efficient%20Algortihms%20For%20Pairing-Based%20Cryptosystems.pdf</filename>
     <relative_filename>P.%20Barreto%20et%20Al%20-%20Efficient%20Algortihms%20For%20Pairing-Based%20Cryptosystems.pdf</relative_filename>
-    <key>P.Barretoet</key>
+    <key>barreto-efficient</key>
     <notes></notes>
-    <bib_type>Article</bib_type>
+    <bib_type>inproceedings</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>P. Barreto et Al - Efficient Algortihms For Pairing-Based Cryptosystems</bib_title>
-    <bib_authors></bib_authors>
+    <bib_title>Efficient Algorithms for Pairing-Based Cryptosystems</bib_title>
+    <bib_authors>Barreto, Paulo S. L. M. and Kim, Hae Yong and Lynn, Ben and Scott, Michael</bib_authors>
     <bib_journal></bib_journal>
     <bib_volume></bib_volume>
     <bib_number></bib_number>
-    <bib_pages></bib_pages>
+    <bib_pages>354-368</bib_pages>
     <bib_year>2002</bib_year>
-    <bib_extra key="key">barreto-efficient</bib_extra>
+    <bib_extra key="booktitle">CRYPTO ’02: Proceedings of the 22nd Annual International Cryptology Conference on Advances in Cryptology</bib_extra>
+    <bib_extra key="Isbn">3-540-44050-X</bib_extra>
+    <bib_extra key="publisher">Springer-Verlag</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/P.%20Barreto%20et%20Al%20-%20Efficient%20Pairing%20Computation%20On%20Supersingular%20Abelian%20Varieties.pdf</filename>
     <relative_filename>P.%20Barreto%20et%20Al%20-%20Efficient%20Pairing%20Computation%20On%20Supersingular%20Abelian%20Varieties.pdf</relative_filename>
-    <key>P.Barretoet-1</key>
+    <key>eta</key>
     <notes></notes>
-    <bib_type>Article</bib_type>
+    <bib_type>article</bib_type>
     <bib_doi></bib_doi>
-    <bib_title>P. Barreto et Al - Efficient Pairing Computation On Supersingular Abelian Varieties</bib_title>
-    <bib_authors></bib_authors>
-    <bib_journal></bib_journal>
-    <bib_volume></bib_volume>
-    <bib_number></bib_number>
-    <bib_pages></bib_pages>
-    <bib_year>2005</bib_year>
-    <bib_extra key="key">barreto-supersingular</bib_extra>
+    <bib_title>Efficient pairing computation on supersingular Abelian varieties.</bib_title>
+    <bib_authors>Barreto, Paulo S. L. M. and Galbraith, Steven D. and \&apos;Oh\&apos;Eigeartaigh, Colm and Scott, Michael</bib_authors>
+    <bib_journal>Des. Codes Cryptography</bib_journal>
+    <bib_volume>42</bib_volume>
+    <bib_number>3</bib_number>
+    <bib_pages>239-271</bib_pages>
+    <bib_year>2007</bib_year>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/S.%20Galbraith%20et%20Al%20-%20Implementing%20The%20Tate%20Pairing.pdf</filename>
@@ -977,6 +978,66 @@
     <bib_year>2007</bib_year>
     <bib_extra key="Isbn">0387718184, 9780387718187</bib_extra>
     <bib_extra key="publisher">Springer Publishing Company, Incorporated</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>ate</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>The Eta Pairing Revisited</bib_title>
+    <bib_authors>Hess, F. and Smart, N. P. and Vercauteren, F.</bib_authors>
+    <bib_journal>IEEE Transactions on Information Theory</bib_journal>
+    <bib_volume>52</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>4595-4602</bib_pages>
+    <bib_year>2006</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>tate</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>The Tate pairing and the discrete logarithm applied to elliptic curve cryptosystem</bib_title>
+    <bib_authors>Frey, G. and Muller, M. and Ruck, H.</bib_authors>
+    <bib_journal>IEEE Transactions on Information Theory</bib_journal>
+    <bib_volume>45</bib_volume>
+    <bib_number>5</bib_number>
+    <bib_pages>1717-1719</bib_pages>
+    <bib_year>1999</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>ecdsa</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Generic Groups, Collision Resistance, and ECDSA</bib_title>
+    <bib_authors>Brown, Daniel R. L.</bib_authors>
+    <bib_journal>Des. Codes Cryptography</bib_journal>
+    <bib_volume>35</bib_volume>
+    <bib_number>1</bib_number>
+    <bib_pages>119-152</bib_pages>
+    <bib_year>2005</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>miller</key>
+    <notes></notes>
+    <bib_type>unpublished</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Short Programs for Functions on Curves</bib_title>
+    <bib_authors>Miller V.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>1986</bib_year>
   </doc>
 </doclist>
 </library>

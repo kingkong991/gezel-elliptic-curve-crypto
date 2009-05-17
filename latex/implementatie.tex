@@ -12,9 +12,9 @@ Alvorens kan begonnen worden met de implementatie, moeten bepaalde parameters va
 
 Een belangrijke parameter is het veld waarover gewerkt zal worden. Omdat de berekeningen in een veld $\mathbb{F}_2$ (en extensies ervan) veel eenvoudiger zijn dan die in een veld modulo een priemgetal, wordt ervoor gekozen in zulk een veld te werken.
 
-Ook moet een kromme vastgelegd worden. Er wordt gekozen voor een supersinguliere elliptische kromme. Dat type krommen heeft een kleine inbeddingsgraad en geeft aanleiding tot simpele rekenregels voor de verdubbeling en optelling van punten \cite{maas, hankerson-book}. Een vergelijking van zo een kromme $E$ over een veld $\mathbb{F}_{2^m}$ wordt gegeven door
+Ook moet een kromme vastgelegd worden. Er wordt gekozen voor een supersinguliere elliptische kromme. Dat type krommen heeft laat een kleine inbeddingsgraad toe en geeft aanleiding tot simpele rekenregels voor de verdubbeling en optelling van punten \cite{maas, hankerson-book}. Een vergelijking van zo een kromme $E$ over een veld $\mathbb{F}_{2^m}$ wordt gegeven door
 \[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b,\]
-waarbij $b \in \{0, 1\}$. De inbeddingsgraad $k = 4$ voor dit type krommen. Verder worden de volgende hulp variabelen bepaald:
+waarbij $b \in \{0, 1\}$. Verder worden de volgende hulp variabelen bepaald:
 \[\begin{aligned}
 \delta	&= b	\qquad	& m \equiv 1, 7 \quad(\bmod \; 8)\\
 			&= 1 - b		& m \equiv 3, 5 \quad(\bmod \; 8)\\
@@ -33,6 +33,7 @@ Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in
 l	&= \#E = 2^{163} + \sqrt{2^{163 + 1}} + 1\\
 	&= 2^{163} + 2^{82} + 1.\\
 \end{aligned}\]
+In dit geval is inbeddingsgraad $k = 4$ \cite{bertoni}.
 
 Nu het veld waarover gewerkt wordt, bepaald is, kan een reductie veelterm $P$ gekozen worden. Bij de keuze daarvan werd uitgegaan van de aangeraden parameters in \cite{sec2}. De veelterm is:
 \[P = z^{163} + z^7 + z^6 + z^3 + 1.\]
