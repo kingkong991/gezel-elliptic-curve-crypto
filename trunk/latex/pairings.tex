@@ -2,7 +2,7 @@
 
 In dit hoofdstuk zal de werking van pairings wiskundig uit de doeken gedaan worden. Meer specifiek zal de Tate pairing bestudeerd worden. Er zal duidelijk gemaakt worden hoe de pairing berekend kan worden. Vervolgens worden enkele schema's voorgesteld die gebruikt kunnen worden voor versleuteling van gegevens en de aanmaak van digitale handtekeningen. In het volgende hoofdstuk wordt dan een schakeling ontworpen waarmee de Tate pairing berekend kan worden.
 
-Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaande uiteenzetting wordt opnieuw verwezen naar \cite{maas}. Het is ook uit dit werk dat de informatie uit de volgende paragrafen afkomstig is, tenzij anders vermeld.
+Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaande uiteenzetting wordt als startpunt opnieuw verwezen naar \cite{maas}. Het is ook uit dit werk dat de informatie uit de volgende paragrafen afkomstig is, tenzij anders vermeld.
 
 \section{Inleidende wiskunde}
 
@@ -49,8 +49,8 @@ a \cdot A	&= A + \ldots + A\\
 -a \cdot A	&= a \cdot -A
 \end{aligned}\]
 
-De orde $o$ van een punt $A$ op de kromme is gelijk aan de minimum waarde waarvoor $o \cdot A = \mathcal{O}$. Het is mogelijk dat $o = \infty$. Van alle punten waarvoor $o$ een deler is van $n$ wordt gezegd dat ze in de $n$-torsiesubgroep van $E$ zitten. Zo een subgroep wordt genoteerd als:
-\[E[n] = \{ A \in E : n \cdot A = \mathcal{O} \}.\]
+De orde $n$ van een punt $A$ op de kromme is gelijk aan de minimum waarde waarvoor $n \cdot A = \mathcal{O}$. Het is mogelijk dat $n = \infty$. Van alle punten waarvoor $n$ een deler is van $l$ wordt gezegd dat ze in de $l$-torsiesubgroep van $E$ zitten. Zo een subgroep wordt genoteerd als:
+\[E[l] = \{ A \in E : l \cdot A = \mathcal{O} \}.\]
 
 Het aantal punten $\#E$ op $E$ wordt de orde van de kromme genoemd. Voor een kromme over een veld $\mathbb{F}_q$ is $\#E = q + 1 - t$, met $t$ de ``trace'' van de kromme. Indien $q \mid t$ wordt de kromme supersingulier genoemd. Voor bepaalde types krommen bestaat er een gesloten formule voor $\#E$.
 
@@ -59,7 +59,7 @@ Ten slotte wordt nog de inbeddingsgraad $k$ gedefinieerd als het kleinste gehele
 \section{Definitie van pairings}
 
 Een pairing is in dit geval een functie $f(A, B)$ met als argumenten twee punten uit een additieve groep en als resultaat een punt in een multiplicatieve groep:
-\[f(A, B): \mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T.\]
+\[f(A, B): \mathbb{G}_1 \times \mathbb{G}_2 \mapsto \mathbb{G}_T.\]
 Een pairing moet tevens volgende eigenschappen bezitten: bilineariteit, non-degeneratie en moet goed gedefinieerd zijn. De betekenis van deze drie begrippen is:
 
 \begin{enumerate}
@@ -75,9 +75,26 @@ Het zijn de drie eigenschappen waaraan pairings moeten voldoen die het zo moeili
 De vermelde $\eta_T$ en Ate pairing zijn variaties op de Tate pairing die gebruikt kunnen worden indien voor specifieke elliptische krommen gekozen wordt. Indien aan de juiste voorwaarden voldaan wordt, zal de schakeling die in het volgende hoofdstuk wordt voorgesteld dus ook gebruikt kunnen worden om deze pairings te berekenen.
 
 De definitie van de Tate pairing over elliptische krommen is als volgt:
-\[e(A, B): E(\mathbb{F}_{q^k})[n] \times E(\mathbb{F}_{q^k})/n \cdot E(\mathbb{F}_{q^k}) \rightarrow \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^n\]
-Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse in $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^n$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^n$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{n}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $n$-eenheidswortel.
+\[e(A, B): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l \cdot E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l\]
+Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse in $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms wordt over de gereduceerde Tate pairing gesproken wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
+
+Bewijzen voor het correct zijn van de Tate pairing zijn onder andere te vinden in \cite{maas, maas27, maas28, maas34}.
 
 \section{Berekening van de Tate pairing}
 
 Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme  in z'n werk gaat.
+
+\begin{algorithm}[h]
+	\caption{Millers algoritme voor de Tate pairing}
+	\label{algoritme-pairings-miller}
+	\KwIn{$l \in \mathbb{Z}$; $P, Q \in \mathbb{F}_{q^k}$}
+	\KwOut{$e(P, Q) \in \mathbb{F}_{q^k}^*$}
+	\KwData{$i, t \in \mathbb{Z}$; $F, S, V \in \mathbb{F}_{q^k}$}
+	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
+	$Q' \gets \textsf{rand}(E)$\;
+	$S \gets Q + Q'$\;
+	$F \gets 1$; $V \gets P$\;	
+	\For{$i = t - 1$ to $0$}{
+		$F \gets F^2 \cdot $\;
+	}
+\end{algorithm}
