@@ -6,7 +6,7 @@ Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaand
 
 \section{Inleidende wiskunde}
 
-Alvorens de wiskundige theorie van pairings uit de doeken gedaan kan worden, dient die van elliptische krommen duidelijk gemaakt te worden. Het is met behulp van deze constructies dat pairings berekend kunnen worden. Elliptische krommen worden doorgaans echter gedefinieerd over een eindig veld. Vandaar dat de noodzakelijk theorie van beiden hier even heel kort herhaald wordt.
+Alvorens de wiskundige theorie van pairings nader bekeken wordt, dient die van elliptische krommen duidelijk gemaakt te worden. Het is met behulp van deze constructies dat pairings berekend kunnen worden. Elliptische krommen worden doorgaans gedefinieerd over een eindig veld. Vandaar dat de noodzakelijk theorie van beiden hier even heel kort herhaald wordt.
 
 \subsection{Eindige velden}
 
@@ -20,7 +20,7 @@ Volgens de kleine stelling van Fermat geldt in elk eindig veld $a^q = a$. Van de
 Verder kunnen extensies van graad $m$ van een veld gedefinieerd worden. In het geval $q = 2$ bekomt men dan een nieuw veld $\mathbb{F}_{2^m}$. Er dient dan ook een reductieveelterm $R$ opgegeven te worden. Een extensieveld wordt gedefinieerd als:
 \[\mathbb{F}_{q^m} \cong \mathbb{F}_q [z] / (R). \]
 
-\paragraph{Voorbeeld} Om de constructie van een extensieveld enigszins te verduidelijken wordt een klein voorbeeld gegeven. Er wordt gewerkt in karakteristiek $q = 2$. Stel $P = z^2 + z + 1$. Het extensieveld is dus gedefinieerd als:
+\paragraph{Voorbeeld} Om de constructie van een extensieveld enigszins te verduidelijken wordt een klein voorbeeld gegeven. Er wordt gewerkt in karakteristiek $q = 2$. Stel $R = z^2 + z + 1$. Het extensieveld is dus gedefinieerd als:
 \[\mathbb{F}_{2^2} \cong \mathbb{F}_2 [z] / (z^2 + z + 1). \]
 Verder $A = z$ en $B = z + 1$. De resultaten van de optelling en vermenigvuldiging van $A$ en $B$ zijn dan respectievelijk:
 \[\begin{aligned}
@@ -34,7 +34,7 @@ Een elliptische kromme $E$ wordt gevormd door de verzameling van punten die vold
 \[E: Y^2 Z + a_1 XYZ + a_2 Y Z^2 = X^3 + a_3 X^2 Z + a_4 X Z^2 + a_5 Z^3.\]
 Het enige punt waarvoor $Z = 0$ en de vergelijking geldt ($X = 0,  Y = 1, Z = 0$), wordt het punt op oneindig $\mathcal{O}$ genoemd. Indien wordt gesteld dat $x = \frac{X}{Z}$ en $y = \frac{Y}{Z}$, bekomt men de affiene Weierstrass vergelijking:
 \[E: y^2 + a_1 xy + a_2 y = x^3 + a_3 x^2 + a_4 x + a_5.\]
-Merk op dat in deze vorm het punt $\mathcal{O}$ niet meer voldoet aan de vergelijking, ook al behoort het nog steeds tot de kromme. De kromme dient zo gedefinieerd te zijn dat $\forall A \in E$ de parti\"ele afgeleiden $\frac{\partial P}{\partial X}$, $\frac{\partial P}{\partial Y}$ en $\frac{\partial P}{\partial Z}$ nooit allen tegelijkertijd gelijk zijn aan nul.
+Merk op dat in deze vorm het punt $\mathcal{O}$ niet meer voldoet aan de vergelijking, ook al behoort het nog steeds tot de kromme. De kromme dient zo gedefinieerd te zijn dat $\forall A \in E$ de parti\"ele afgeleiden $\frac{\partial A}{\partial X}$, $\frac{\partial A}{\partial Y}$ en $\frac{\partial A}{\partial Z}$ nooit allen tegelijkertijd gelijk zijn aan nul.
 
 De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die wordt weergegeven in \reffig{figuur-pairings-tangent-and-chord}. De bewerking wordt additief geschreven en heeft als neutral element het punt op oneindig $\mathcal{O}$. De formules om het resultaat van de ``tangent-and-chord'' methode te berekenen zijn afhankelijk van het type elliptische kromme.
 
@@ -60,33 +60,36 @@ Ten slotte wordt nog de Tate-inbeddingsgraad $k$ gedefinieerd. Stel $l \in \math
 
 \section{Definitie van pairings}
 
-Een pairing is in dit geval een functie $f(A, B)$ met als argumenten twee punten uit een additieve groep en als resultaat een punt in een multiplicatieve groep:
-\[f(A, B): \mathbb{G}_1 \times \mathbb{G}_2 \mapsto \mathbb{G}_T.\]
-Een pairing moet tevens volgende eigenschappen bezitten: bilineariteit, non-degeneratie en moet goed gedefinieerd zijn. De betekenis van deze drie begrippen is:
-
-\begin{enumerate}
-	\item Bilineariteit: $\forall A_1, A_2, A \in \mathbb{G}_1$ en $\forall B_1, B_2, B \in \mathbb{G}_2$ geldt $f(A_1 + A_2, B) \equiv f(A_1, B) \cdot f(A_2, B)$ en $f(A, B_1 + B_2) \equiv f(A, B_1) \cdot f(A, B_2)$.
-
-	\item Non-degeneratief: $\forall A \in \mathbb{G}_1, \: \exists B \in \mathbb{G}_2$ waarvoor $f(A, B) \neq 1$.
-
-	\item Goed gedefinieerd: $\forall B \in \mathbb{G}_2$ is $f(A, B) = 1$ als en slechts als $A = \mathcal{O}$.
-\end{enumerate}
-
-Het zijn de drie eigenschappen waaraan pairings moeten voldoen die het zo moeilijk maken ze te genereren. Ten tijde van dit schrijven waren onder meer volgende pairings bekend: Weil, Tate, $\eta_T$ \cite{eta} en Ate \cite{ate}. In deze thesis zal gewerkt worden met de Tate pairing, waarvan bewezen is dat ze effici\"enter te berekenen is dan de Weil pairing.
+Ten tijde van dit schrijven waren onder meer volgende pairings bekend: Weil, Tate, $\eta_T$ \cite{eta} en Ate \cite{ate}. In deze thesis zal gewerkt worden met de Tate pairing, waarvan bewezen is dat ze effici\"enter te berekenen is dan de Weil pairing.
 
 De vermelde $\eta_T$ en Ate pairing zijn variaties op de Tate pairing die gebruikt kunnen worden indien voor specifieke elliptische krommen gekozen wordt. Indien aan de juiste voorwaarden voldaan wordt, zal de schakeling die in het volgende hoofdstuk wordt voorgesteld dus ook gebruikt kunnen worden om deze pairings te berekenen.
 
+De Tate pairing is een functie $e(P, Q)$ met als argumenten twee punten uit een additieve groep en als resultaat een punt in een multiplicatieve groep:
+\[e(P, Q): \mathbb{G}_1 \times \mathbb{G}_2 \mapsto \mathbb{G}_T.\]
+Een pairing moet tevens volgende eigenschappen bezitten: goed gedefinieerd, non-degenererend en bilineariteit. Het is de combinatie van deze drie eigenschappen die het zo moeilijk maakt de pairing te defini\"eren. De betekenis van deze drie eigenschappen is:
+\begin{enumerate}
+	\item Goed gedefinieerd: $e(\mathcal{O}, Q) = 1 \: \forall \: Q \in \mathbb{G}_2$; $e(P, \mathcal{O}) = 1 \: \forall \: P \in \mathbb{G}_1$.
+	
+	\item Non-degenererend: $\forall \: P \in \mathbb{G}_1, \: \exists \: Q \in \mathbb{G}_2$ waarvoor $e(P, Q) \neq 1$.
+	
+	\item Bilineariteit: $\forall \: P_1, P_2, P \in \mathbb{G}_1$ en $\forall \: Q_1, Q_2, Q \in \mathbb{G}_2$ geldt:
+		\[\begin{aligned}
+			&e(P_1 + P_2, Q) \equiv e(P_1, Q) \cdot e(P_2, Q) \qquad \text{ en }\\
+			&e(P, Q_1 + Q_2) \equiv e(P, Q_1) \cdot e(P, Q_2).
+		\end{aligned}\]
+\end{enumerate}
+
 De Tate pairing over elliptische krommen wordt als volgt geschreven:
-\[e(A, B): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l \cdot E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l.\]
+\[e(P, Q): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l \cdot E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l.\]
 Er wordt dus gewerkt met punten uit een $l$-torsiesubgroep van $E$.
 
-Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse in $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms wordt over de gereduceerde Tate pairing gesproken wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
+Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms wordt over de gereduceerde Tate pairing gesproken wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
 
 Het formeel bewijzen van de Tate pairing valt buiten het bestek van deze thesis. Voor meer informatie wordt onder andere verwezen naar \cite{maas, ruck, hess}.
 
 \section{Berekening van de Tate pairing\label{sectie-pairings-berekening}}
 
-Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme in z'n werk gaat.
+Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme werkt.
 
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing}
@@ -123,10 +126,10 @@ s^4 + s = 0\\
 t^2 + t + s^6 + s^2 = 0
 \end{array}\right.\]
 
-Een bijkomend voordeel van het gebruik van de vermelde kromme is haar lage inbeddingsgraad $k = 4$. Hoe groter $k$, hoe meer bewerkingen het immers kost om de pairing te berekenen.
+Een bijkomend voordeel van het gebruik van de vermelde kromme is haar lage inbeddingsgraad $k = 4$. Hoe groter $k$, hoe meer bewerkingen het immers kost om de pairing te berekenen. Tevens zorgt de distortiemap er voor dat $e(P, P) \neq 1$, wat wordt omgeschreven als sterk niet-degenererend.
 
-Met deze parameters vastgelegd, kan Millers algoritme vereenvoudigd worden tot \refalg{algoritme-pairings-miller-beter}.
-
+De resulterende effici\"entere versie van Millers algoritme is gegeven in \refalg{algoritme-pairings-miller-beter}.
+Het is de combinatie van deze drie eigenschappen die het zo moeilijk maakt de pairing te defini\"eren.
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing - Effici\"entere versie}
 	\label{algoritme-pairings-miller-beter}
@@ -148,24 +151,106 @@ Met deze parameters vastgelegd, kan Millers algoritme vereenvoudigd worden tot \
 
 \section{Veiligheid van pairings}
 
-Nu de wiskundige achtergrond van de Tate pairing enigszins verduidelijkt is, zal getoond worden waarom pairings gebruikt kunnen worden in cryptografische toepassingen.
+Nu de wiskundige achtergrond van de Tate pairing enigszins verduidelijkt is, zal getoond worden waarom pairings veilig genoeg zijn om gebruikt te kunnen worden in cryptografische toepassingen.
 
 Eerst dienen echter de begrippen een moeilijk en een gemakkelijk probleem gedefinieerd te worden. Een moeilijk probleem is een probleem waarvoor geen algoritme bekend is dat een oplossing kan vinden in polynomiale tijd. Voor een gemakkelijk probleem bestaan er wel algoritmen die in polynomiale tijd een oplossing leveren.
 
 De veiligheid van pairings vindt zijn oorsprong in het discrete logaritme (DL) probleem. Dit wordt gedefinieerd als volgt. Definieer de multiplicatieve groep $\mathbb{G}$ van orde $n$, met $n$ priem en $g$ een generator voor $\mathbb{G}$. Stel nu $h \in \mathbb{G}$ en dat $n$ priem is. In theorie is het niet nodig dat $n$ priem is. Indien dit niet het geval is, kan het probleem echter gereduceerd worden tot een probleem met $n$ priem via de Chinese reststelling. Stel nu $x \in \mathbb{Z}_n^*$, zodat $h = g^x$. Het discrete logaritme probleem bestaat er dan in $x$ te vinden, gegeven $g$ en $h$. Dit wordt geschreven als DL$(h) = x$.
 
-Het DL probleem wordt algemeen aanzien als moeilijk. De snelste algoritmes die dit probleem kunnen oplossen voor een willekeurige groep $\mathbb{G}$ (d.w.z.\ die geen specifieke eigenschappen van het veld uitbuiten) hebben een complexiteit $O(\sqrt{n})$, met $n$ de orde van de groep. Aangezien $n$ exponentieel groeit met de grootte van de groep, geldt hetzelfde voor de uitvoeringstijd van de algoritmes. Enkele voorbeelden van zulke algoritmes zijn Baby-step giant-step \cite{baby-step} en Pollards rho algoritme \cite{pollard-rho}. Voor bepaalde groepen zijn algoritmes bekend met subexponenti\"ele tijdscomplexiteit. In het geval de groep gedefinieerd is als de punten op een supersinguliere elliptische krommen, kan men bijvoorbeeld MOV- \cite{mov} of FR-reductie \cite{fr} gebruiken. In dat geval is het noodzakelijk de grootte van de groep waarover de kromme gedefinieerd is groot genoeg te nemen, zodat het computationeel onhaalbaar is het DL probleem op te lossen.
+Het DL probleem wordt algemeen aanzien als moeilijk. De snelste algoritmes die dit probleem kunnen oplossen voor een willekeurige groep $\mathbb{G}$ (d.w.z.\ die geen specifieke eigenschappen van het veld uitbuiten) hebben een complexiteit $O(\sqrt{n})$, met $n$ de orde van de groep. Aangezien $n$ exponentieel groeit met de grootte van de groep, geldt hetzelfde voor de uitvoeringstijd van de algoritmes. Enkele voorbeelden van zulke algoritmes zijn Baby-step giant-step \cite{baby-step} en Pollards rho algoritme \cite{pollard-rho}. Voor bepaalde groepen zijn algoritmes bekend met subexponenti\"ele tijdscomplexiteit. In het geval de groep gedefinieerd is als de punten op een supersinguliere elliptische krommen, kan men bijvoorbeeld MOV- \cite{mov} of FR-reductie \cite{ruck} gebruiken. In dat geval is het noodzakelijk de grootte van de groep waarover de kromme gedefinieerd is groot genoeg te nemen, zodat het computationeel onhaalbaar is het DL probleem op te lossen.
 
 Een probleem verwant aan het DL probleem is het computationele Diffie-Hellman (CDH) probleem. Stel $a, b \in \mathbb{Z}^*_n$. In dit geval worden $g, g^a, g^b \in \mathbb{G}$ gegeven. Het probleem is nu een element $h \in \mathbb{G}$ te vinden waarvoor $h = g^{ab}$. Het probleem wordt uitgedrukt als CDH$(g^a, g^b) = h$.
 
 Aangezien het CDH probleem kan opgelost worden indien het DL probleem kan opgelost worden, is het dus zeker niet moeilijker. Indien het CDH probleem moeilijk is, is het DL probleem dat dus ook. Of het omgekeerde geldt, is niet geweten. Tot nu toe zijn echter geen methodes gekend die het CDH probleem sneller oplossen dan de methodes die het DL probleem oplossen. De twee worden dan ook als equivalent beschouwd.
 
-Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$ beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$.
+Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$ beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$. Dit wordt uitgedruk als DDH$(g^a, g^b, g^c) = 1$ indien waar en DDH$(g^a, g^b, g^c) = 0$ in het andere geval.
 
-Het DDH probleem kan opgelost worden aan de hand van het CDH probleem door $h =$ CDH$(g^a, g^b)$ te berekenen en na te gaan of $h = g^c$. Het is dus duidelijk dat het DDH probleem zeker niet moeilijker is dan het CDH probleem. Er zijn echter bepaalde groepen bekend waarvan geweten is dat het DDH probleem makkelijk is en het CDH probleem moeilijk. Deze groepen worden ``gap Diffie-Hellman'' groepen genoemd. Dat pairings zo een groep vormen, is als volgt te zien:
-\[e(a \cdot P, b \cdot P) = e(P, b \cdot P)^a = e(P, ab \cdot P) = e(P, c \cdot P) \text{ als en slechts als } c = 
-
+Het DDH probleem kan opgelost worden aan de hand van het CDH probleem door $h =$ CDH$(g^a, g^b)$ te berekenen en na te gaan of $h = g^c$. Het is dus duidelijk dat het DDH probleem zeker niet moeilijker is dan het CDH probleem. Er zijn echter bepaalde groepen bekend waarvan geweten is dat het DDH probleem makkelijk is en het CDH probleem moeilijk. Deze groepen worden ``gap Diffie-Hellman'' groepen genoemd. Pairings genereren zo een groep, het CDH probleem over elliptische krommen wordt immers als moeilijk beschouwd en ze laten toe DDH$(aP, bP, cP)$ makkelijk te beantwoorden:
+\[\begin{aligned}
+e(aP, bP) &= e(P, bP)^a\\
+								&= e(P, abP)\\
+								&= e(P, cP)
+\end{aligned}\]
+%\[e(aP, b P) &= e(P, b P)^a = e(P, ab  P) = e(P, c P)\]
+als en slechts als $ab = c$.
 
 \section{Toepassingen van pairings}
 
-Om duidelijk te maken waarom pairings zo handig zijn, worden nog enkele toepassingen ervan gegeven.
+Hoewel de theorie van pairings enigszins is uitgelegd, blijft nog steeds de vraag hoe ze juist gebruikt kunnen worden in cryptografische algoritmen. In deze paragraaf zullen enkele mogelijkheden voorgesteld worden. Opnieuw wordt er op gewezen dat dit zeker geen volledige lijst van mogelijkheden is en meer informatie te vinden is in \cite{maas}.
+
+\subsection{Encryptie}
+
+Verschillende encryptieschema's met pairings zijn bekend. Hier wordt BasicIdent voorgesteld, het eerste bekende schema voor identiteits-gebaseerde encryptie in 2001 gepubliceerd door Boneh en Franklin \cite{boneh}. Het schema bestaat uit vier algoritmen. Het eerste, `setup', initialiseert de systeemparameters, waaronder de geheime hoofdsleutel voor de centrale server. Ten tweede is er het `extract' algoritme dat gebruikt wordt om gebruikers te voorzien van een geheime sleutel. De laatste twee, `encrypt' en `decrypt', laten toe, zoals de naam het zegt, berichten te versleutelen en ontcijferen. De vier algoritmen worden hieronder verder uitgelegd.
+
+\paragraph{Setup} Eerst wordt een $k$-bit lang priemgetal $q$ gekozen. Er wordt een additieve en een multiplicatieve groep van orde $q$ gedefinieerd, respectievelijk $\mathbb{G}_1$ en  $\mathbb{G}_2$. Ten slotte is er nog een generator $P$ van $\mathbb{G}_1$ nodig.
+
+Vervolgens wordt de geheime hoofdsleutel $s \in \mathbb{Z}^*_q$ van de server willekeurig gekozen en stelt men $P_{\text{pub}} = sP$. Tevens is er nood aan twee cryptografische hashfuncties: $H_1 : \{ 0,1 \}^* \mapsto \mathbb{G}_1^*$ en $H_2 : \mathbb{G}_2 \mapsto \{ 0, 1 \}^n$. De waarde van $n$ kan willekeurig gekozen worden en zal de lengte van het te versleutelen bericht bepalen. Deze waarde heeft dus geen invloed op de veiligheid van het systeem.
+
+Een bericht $M = \{ 0,1 \}^n$ en de sleuteltekst $C \in \mathbb{G}_1^* \times \{ 0,1 \}^n$.
+
+De publieke systeemparameters zijn: $q$, $\mathbb{G}_1$, $\mathbb{G}_2$, $n$, $P$, $P_{\text{pub}}$, $H_1$ en $H_2$. Elke gebruiker heeft toegang tot deze parameters.
+
+\paragraph{Extract} De server berekent een gebruiker zijn geheime sleutel als:
+\[d_{\text{ID}} = s Q_{\text{ID}},\]
+met $Q_{\text{ID}} = H_1(\text{ID})$. ID is een bitstring die uniek de identiteit van de gebruiker bepaalt en $s$ de geheime hoofdsleutel. Enkel de server kan dus geheime sleutels berekenen.
+
+\paragraph{Encrypt} Kies een willekeurige $r \in \mathbb{Z}_q^*$ en stel $Q_{\text{ID}} = H_1(\text{ID})$. De sleuteltekst $C$ van bericht $M$ is dan:
+\[C = \langle rP, M \xor H_2(g_{\text{ID}}^r) \rangle,\]
+met $g_{\text{ID}}^r = e(Q_{\text{ID}}, P_{\text{pub}})$.
+
+\paragraph{Decrypt} Een sleuteltekst $C = \langle U, V \rangle$ wordt ontcijfert als volgt:
+\[M = V \xor H_2\big( e(d_{\text{ID}}, U) \big).\]
+Dat het resultaat wel degelijk klopt is als volgt te bewijzen:
+\[\begin{aligned}
+e(d_{\text{ID}}, U)	&= e(sQ_{\text{ID}}, rP)\\
+							&= e(Q_{\text{ID}}, P)^{sr}\\
+							&= e(Q_{\text{ID}}, P_{\text{pub}})^r\\
+							&= g_{\text{ID}}^r.
+\end{aligned}\]
+Het bericht $M$ ondergaat dus twee maal een exclusieve OR met $g_{\text{ID}}^r$.
+
+Het is mogelijk uitbreidingen aan dit systeem toe te voegen. Zo kan bijvoorbeeld bij de berekening van iemands publieke sleutel een datum bij de ID toegevoegd worden. De ontvanger dient de centrale server dan om een specifieke sleutel te vragen om het ontvangen berichten te ontcijferen. Afhankelijk van de datum van aanvraag kan de server dan ontvangst geven aan deze aanvraag of weigeren. Merk op dat in dit geval de ontvanger wel steeds de server moet contacteren alvorens ontcijfering mogelijk is.
+
+Buiten dit BasicIdent schema bestaat er ook een FullIdent schema dat extra veiligheid biedt in het geval een aanvaller de ontcijfering van enkele sleutelteksten kan bemachtigen. Dit wordt onder meer in detail besproken in \cite{maas}.
+
+\subsection{Digitale handtekeningen}
+
+Net zoals er verschillende schema's bestaan voor identeits-gebaseerde  encryptie, bestaan er ook verscheidene voor digitale handtekeningen. Hier wordt dat van Cha en Cheon \cite{cha} gepresenteerd. Opnieuw bestaat het schema uit vier algoritmes, `setup', `extract', `sign' en `verify'. Daarbij zijn de `setup' en `extract' algoritmes identiek aan die van het BasicIdent schema, met als extra publieke parameter een hashfunctie $H_3 : \{ 0,1 \} ^* \times \mathbb{G}_1 \mapsto \mathbb{Z}_q ^*$. De `sign' en `verify' algoritmes werken als volgt:
+
+\paragraph{Sign} Kies een willekeurige $r \in \mathbb{Z}_q^*$ en bereken $U = r Q_{\text{ID}}$. Stel vervolgens $h = H_3(M, U)$ en $V = (r + h) \cdot d_{\text{ID}}$. De handtekening is dan $\sigma = \langle U, V \rangle$.
+
+\paragraph{Verify} Een handtekening bij een bericht $M$ is geldig indien
+\[e(P, V) = e(P_{\text{pub}}, U + h Q_{\text{ID}}),\]
+met $h$ zoals gedefinieerd in het `sign' algoritme. Dat dit klopt kan geverifieerd worden als volgt:
+\[\begin{aligned}
+e(P, V)	&= e(P, (r + h) \cdot d_{\text{ID}})\\
+			&= e(P, (r + h) \cdot s Q_{\text{ID}})\\
+			&= e(P, (r + h) \cdot Q_{\text{ID}})^s\\
+			&= e(P_{\text{pub}}, U + h Q_{\text{ID}})\\
+\end{aligned}\]
+
+\subsection{Sleutelafspraak}
+
+Naast sleutelafspraak zoals die bestaat in publieke sleutelcryptografie laten pairings enkele opmerkelijke schema's toe om sleutels af te spreken. Twee daarvan worden hier gepresenteerd.
+
+\subsubsection{Niet-interactieve sleutelafspraak}
+
+Een niet-interactief sleutelafspraak is een sleutelafspraak waarbij de betrokken partijen geen contact met elkaar dienen te hebben. Dit heeft als voordeel dat een man-in-the-middle aanval onmogelijk is. Volgende techniek werd voorgesteld in \cite{sakai}. Twee partijen A en B spreken een gezamenlijke sleutel $k$ af door middel van volgende formules:
+\[\begin{aligned}
+k	&= e(d_{\text{A}}, Q_{\text{B}})\\
+	&= e(s Q_{\text{A}}, Q_{\text{B}})\\
+	&= e(Q_{\text{A}}, d_{\text{B}}).\\
+\end{aligned}\]
+
+Aangezien beiden hun persoonlijke geheime sleutel bezitten en de publieke sleutel van de andere persoon kunnen berekenen, is er dus geen communicatie noodzakelijk. Een nadeel van dit schema is dat de afgesproken sleutel steeds dezelfde zal zijn. In \cite{smart} wordt een schema voorgesteld om de sleutel dynamisch te maken, daarbij is echter wel communicatie vereist.
+
+\subsubsection{Driepartijdige sleutelafspraak}
+
+Met behulp van pairings is het mogelijk tussen drie partijen een sleutel af te spreken in slechts \'e\'en communicatieronde \cite{joux}, daar waar er normaal minstens twee rondes nodig zijn. Dit gaat als volgt in zijn werk: de drie partijen publiceren respectievelijk $aP$, $bP$ en $cP$, met willekeurige $a, b, c \in \mathbb{Z}_q^*$. De gedeelde geheime sleutel $k$ is dan:
+\[\begin{aligned}
+k	&= e(bP, cP)^a\\
+	&= e(aP, cP)^b\\
+	&= e(aP, bP)^c\\
+	&= e(P, P)^{abc}
+\end{aligned}\]
+Merk op dat dit schema geen gebruik maakt van identiteiten en dus niet tot identiteits-gebaseerde cryptografie behoord. Tevens is het niet bestand tegen man-in-the-middle aanvallen. In \cite{paterson} wordt met behulp van publieke sleutel cryptografie een resistent schema gecre\"eerd.
