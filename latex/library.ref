@@ -155,7 +155,6 @@
     <bib_pages>115-127</bib_pages>
     <bib_year>2007</bib_year>
     <bib_extra key="booktitle">WISA</bib_extra>
-    <bib_extra key="editor">Kim, Sehun and Yung, Moti and Lee, Hyung-Woo</bib_extra>
     <bib_extra key="publisher">Springer</bib_extra>
     <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
   </doc>
@@ -309,7 +308,7 @@
     <bib_number></bib_number>
     <bib_pages>318-323</bib_pages>
     <bib_year>2007</bib_year>
-    <bib_extra key="booktitle">Network Computing and Applications, 2007. NCA 2007. Sixth IEEE International Symposium on</bib_extra>
+    <bib_extra key="booktitle">Sixth IEEE International Symposium on Network Computing and Applications, 2007. NCA 2007. </bib_extra>
     <bib_extra key="publisher">IEEE Computer Society</bib_extra>
   </doc>
   <doc>
@@ -726,7 +725,6 @@
     <bib_pages>398-411</bib_pages>
     <bib_year>2005</bib_year>
     <bib_extra key="booktitle">CHES</bib_extra>
-    <bib_extra key="editor">Rao, Josyula R. and Sunar, Berk</bib_extra>
     <bib_extra key="Isbn">3-540-28474-5</bib_extra>
     <bib_extra key="publisher">Springer</bib_extra>
     <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
@@ -999,7 +997,7 @@
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>The Tate pairing and the discrete logarithm applied to elliptic curve cryptosystem</bib_title>
-    <bib_authors>Frey, G. and Muller, M. and Ruck, H.</bib_authors>
+    <bib_authors>Frey, G. and Muller, M. and R{\&quot;{u}}ck, H.</bib_authors>
     <bib_journal>IEEE Transactions on Information Theory</bib_journal>
     <bib_volume>45</bib_volume>
     <bib_number>5</bib_number>
@@ -1044,7 +1042,7 @@
     <bib_type>article</bib_type>
     <bib_doi></bib_doi>
     <bib_title>A remark concerning $m$-divisibility and the discrete logarithm in the divisor class group of curves</bib_title>
-    <bib_authors>Frey, Gerhard and Rück, Hans-Georg</bib_authors>
+    <bib_authors>Frey, Gerhard and R{\&quot;{u}}ck, Hans-Georg</bib_authors>
     <bib_journal>Mathematics of Computation</bib_journal>
     <bib_volume>62</bib_volume>
     <bib_number>206</bib_number>
@@ -1122,19 +1120,88 @@
   <doc>
     <filename></filename>
     <relative_filename></relative_filename>
-    <key>fr</key>
+    <key>paterson</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Authenticated Three Party Key Agreement Protocols from Pairings</bib_title>
+    <bib_authors>Al-riyami, Sattam S. and Paterson, Kenneth G.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages></bib_pages>
+    <bib_year>2003</bib_year>
+    <bib_extra key="booktitle">Cryptology ePrint Archive, Report 2003/167</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>sakai</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Cryptosystems based on Pairing</bib_title>
+    <bib_authors>Sakai, R. and Ohgishi, K. and Kasahara, K.</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>26-28</bib_pages>
+    <bib_year>2000</bib_year>
+    <bib_extra key="address">Okinawa, Japan</bib_extra>
+    <bib_extra key="booktitle">2000 Symposium on Cryptography and Information Security (SCIS2000)</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>cha</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>An Identity-Based Signature from Gap Diffie-Hellman Groups</bib_title>
+    <bib_authors>Cha, Jae Choon and Cheon, Jung Hee</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>18-30</bib_pages>
+    <bib_year>2003</bib_year>
+    <bib_extra key="address">London, UK</bib_extra>
+    <bib_extra key="booktitle">PKC ’03: Proceedings of the 6th International Workshop on Theory and Practice in Public Key Cryptography</bib_extra>
+    <bib_extra key="Isbn">3-540-00324-X</bib_extra>
+    <bib_extra key="publisher">Springer-Verlag</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>smart</key>
     <notes></notes>
     <bib_type>article</bib_type>
-    <bib_doi>http://dx.doi.org/10.2307/2153546</bib_doi>
-    <bib_title>A remark concerning m-divisibility and the discrete logarithm in the divisor class group of curves</bib_title>
-    <bib_authors>Frey, Gerhard and R{\&quot;u}ck, Hans-Georg</bib_authors>
-    <bib_journal>Math. Comput.</bib_journal>
-    <bib_volume>62</bib_volume>
-    <bib_number>206</bib_number>
-    <bib_pages>865-874</bib_pages>
-    <bib_year>1994</bib_year>
-    <bib_extra key="Issn">0025-5718</bib_extra>
-    <bib_extra key="Publisher">American Mathematical Society</bib_extra>
+    <bib_doi></bib_doi>
+    <bib_title>An identity based authenticated key agreement protocol based on the Weil pairing</bib_title>
+    <bib_authors>Smart, N. P.</bib_authors>
+    <bib_journal>Electronics Letters</bib_journal>
+    <bib_volume>38</bib_volume>
+    <bib_number>13</bib_number>
+    <bib_pages>630-632</bib_pages>
+    <bib_year>2002</bib_year>
+    <bib_extra key="Issn">00135194</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>joux</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>A One Round Protocol for Tripartite Diffie-Hellman</bib_title>
+    <bib_authors>Joux, Antoine</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>385-394</bib_pages>
+    <bib_year>2000</bib_year>
+    <bib_extra key="booktitle">ANTS-IV: Proceedings of the 4th International Symposium on Algorithmic Number Theory</bib_extra>
+    <bib_extra key="Isbn">3-540-67695-3</bib_extra>
+    <bib_extra key="publisher">Springer-Verlag</bib_extra>
   </doc>
 </doclist>
 </library>
