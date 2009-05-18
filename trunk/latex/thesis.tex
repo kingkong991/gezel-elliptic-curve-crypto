@@ -24,8 +24,10 @@
 \usepackage{ifthen}	% Conditionele stuff
 \newboolean{makeall}	% Als dit true is, wordt inhoudsopgave etc toegevoegd
 \newboolean{dankwoord}
-\setboolean{makeall}{false}
-\setboolean{dankwoord}{false}
+\newboolean{spacepar}	% Spatie tussen paragrafen in plaats van indentatie
+\setboolean{makeall}{true}
+\setboolean{dankwoord}{true}
+\setboolean{spacepar}{false}
 
 \input{kmapmacros}	% Karnaugh map macros
 
@@ -36,6 +38,9 @@
 %\addtolength{\parskip}{10pt}
 %\addtolength{\intextsep}{10pt}
 %\addtolength{\belowcaptionskip}{-10pt}
+
+% Hyphenation
+%\hyphenation{}
 
 % Math stuff
 \newcommand{\xor}{\oplus}
@@ -241,6 +246,12 @@
 
 \include{lijstafkortingen} % Lijst van afkortingen
 \include{lijstsymbolen}    % Lijst van symbolen
+}{}
+
+\ifthenelse{\boolean{spacepar}}{
+	% Paragraph spacing
+	\setlength{\parindent}{0pt}
+	\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
 }{}
 
 \pagestyle{fancy}

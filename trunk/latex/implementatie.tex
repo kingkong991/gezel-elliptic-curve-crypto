@@ -20,15 +20,15 @@ waarbij $b \in \{0, 1\}$.  Dat type krommen heeft een kleine inbeddingsgraad $k 
 			&= 1 - b		& m \equiv 3, 5 \quad(\bmod \; 8)\\
 \nu		&= (-1)^{\delta}\\
 \end{aligned}\]
-De orde van de kromme is gelijk aan \cite{bertoni, beuchat}:
+De orde van de kromme is gelijk aan \cite{barreto-efficient}:
 \[\begin{aligned}
 \#E(\mathbb{F}_{2^m})	&= 2^m + \nu \sqrt{2^{m + 1}} + 1
 \end{aligned}\]
-Om de Tate pairing te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
+Om de Tate pairing effici\"ent te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
 
 Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met 86 bits symmetrische cryptografie. Dit zou neerkomen op een geganrandeerde veiligheid tot 2021. De algoritmen en schakelingen die volgen kunnen allen perfect toegepast worden op grotere velden, dus indien gewenst kan $m$ verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
 
-Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiesubgroep over $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
+Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiesubgroep van $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
 \[\begin{aligned}
 l	&= \#E = 2^{163} + \sqrt{2^{163 + 1}} + 1\\
 	&= 2^{163} + 2^{82} + 1.\\
@@ -215,12 +215,12 @@ Stel bijvoorbeeld $d = 4$ (en $m = 	163$). Het resultaat van een optelling zal n
 \[R_{3_{\text{ready}}} = mod{\text{u}_3} \text{ \# } R_{3_{162:1}},\]
 terwijl dit voor een optelling
 \[R_{1_{\text{ready}}} = mod_{\text{u}_1} \text{ \# } R_{1_{162:1}}\]
-is. Met andere woorden, er dient nu niet enkel gekozen te kunnen worden tussen de ingangen $A$, $R_d$ of $R_{1_{\text{ready}}}$, maar ook voor $R_{3_{\text{ready}}}$.
+is. Met andere woorden, als ingang voor $T$ dient nu niet enkel gekozen te kunnen worden tussen de ingangen $A$, $R_d$ of $R_{1_{\text{ready}}}$, maar ook voor $R_{3_{\text{ready}}}$.
 
 Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een $d$ te kiezen waarvoor $m \bmod d = 1$. Als voorbeeld worden enkele voor de hand liggende en optimale keuzes vergeleken voor $d$ indien $m = 163$ in \reftbl{tabel-implementatie-woordbreedte-d}.
 
 \begin{table}[h]
-	\caption{Locatie van het resultaat van een vermenigvuldiging voor $d$ MALU's indien \mbox{$m=163$}}
+	\caption{Nummer $m \bmod d$ van de MALU waar het resultaat van een vermenigvuldiging zich bevindt voor $d$ MALU's indien \mbox{$m=163$}}
 	\label{tabel-implementatie-woordbreedte-d}
 
 	\centering
@@ -251,7 +251,7 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 	\caption{Miller algoritme voor de Tate pairing met parameters ingevuld}
 	\label{algoritme-implementatie-miller-algemeen}
 	\KwIn{$P, Q \in E(\mathbb{F}_{2^{163}})$}
-	\KwOut{$e(P, Q)$}
+	\KwOut{$e(P, Q) \in \mathbb{F}_{2^{4 \cdot 163}}^*$}
 	$F \gets 1$\;
 	$V \gets P$\;
 	\For{$i \gets 162$ \KwTo $0$}{
@@ -262,8 +262,8 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 			$V \gets V + P$\;\nllabel{lijn-implementatie-miller-algemeen-add-2}
 		}
 	}
-	$e(P, Q) \gets F^{\frac{2^{4 \cdot 163} - 1}{2^{163} + 2^{82} + 1}}$\;
-	\KwRet{$e(P, Q)$}
+	$F \gets F^{\frac{2^{4 \cdot 163} - 1}{2^{163} + 2^{82} + 1}}$\;
+	\KwRet{$F$}
 \end{algorithm}
 
 Merk op dat op lijn~\ref{lijn-implementatie-miller-algemeen-add-if} slechts \'e\'en waarde moet nagekeken worden, aangezien $l = 2^{163} + 2^{82} + 1$.
@@ -853,21 +853,21 @@ Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de
 
 \subsection{FSM}
 
-Nut alle details over de hardware bekend zijn, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zal een zeer groot deel van de te implementeren toestanden voor niets anders dienen dan het verschuiven van geheugen. Het uiteindelijke resultaat bevat 553 toestanden. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op individueel state niveau gebeuren. Ook zal zoveel mogelijk getracht worden reeds ge\"implementeerde toestanden opnieuw te gebruiken.
+Nu alle details over de hardware bekend zijn, kan overgegaan worden tot het ontwerp van een FSM. Daarbij zal een zeer groot deel van de te implementeren toestanden voor niets anders dienen dan het verschuiven van geheugen. Het uiteindelijke resultaat bevat 553 toestanden. Om het geheel overzichtelijk te houden, zal het ontwerp dan ook niet tot op individueel state niveau gebeuren.
 
-Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. De aanduidingen $start$ en $next$ staan voor de ingangen van de schakeling (zie \reffig{figuur-implementatie-miller-controller}). De aanduiding $\#next = 3$ wil zeggen: `aantal maal dat $next$ hoog werd is gelijk aan drie'. Een register $o$ geeft aan of de optelstap moet uitgevoerd worden en er is een teller $i$ die bijhoudt hoeveel stappen in de for-lus nog uitgevoerd moeten worden.
+Aangezien een beeld meer zegt dan duizend woorden, wordt het resultaat zonder veel extra uitleg gepresenteerd in \reffig{figuur-miller-fsm}. De aanduidingen $start$ en $next$ staan voor de ingangen van de schakeling (zie \reffig{figuur-implementatie-miller-controller}). De aanduiding $\#next = 3$ wil zeggen: `aantal maal dat $next$ hoog werd is gelijk aan drie'. De $next$ ingang wordt gebruikt om te signaleren dat een nieuwe ingangswaarde op de ingang van de schakeling staat of dat een volgend deel van het resultaat op de uitgang mag gezet worden. Een register $o$ geeft aan of de optelstap moet uitgevoerd worden en er is een teller $i$ die bijhoudt hoeveel stappen in de for-lus nog uitgevoerd moeten worden.
 
-Wat wel enige extra aandacht verdient, is de opsplitsing van de verdubbel- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en de nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen via dezelfde toestanden uitgewerkt worden, ongeacht of nu voordien de verdubbel- of de optelstap uitgevoerd werd.
+Wat wel enige extra aandacht verdient, is de implementatie van de verdubbel- en optelstap. Wanneer \refalg{algoritme-implementatie-miller-double-detail} en \ref{algoritme-implementatie-miller-add-detail} opnieuw bekeken worden, valt het op dat buiten de berekening van $\lambda$ en de nieuwe $x$-co\"ordinaat van $V$ alle andere berekeningen zeer gelijkaardig zijn. Meer nog, indien de paren $(x_V, y_V)$ en $(x_P, y_P)$ vervangen worden door een algemene $(x_A, y_A)$, dan bestaan beide algoritmes uit dezelfde bewerkingen na het berekenen van $\lambda$ en $x_V$. Aangezien na de berekening van $\lambda$ nog steeds twee registers vrij zijn voor gebruik, kunnen deze aangewend worden om de toepasselijke $x$ en $y$ co\"ordinaten in op te slaan. Op die manier kunnen de verdere berekeningen via dezelfde toestanden uitgewerkt worden, ongeacht of nu voordien de verdubbel- of de optelstap uitgevoerd werd.
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[scale=1]{miller-fsm}
+		\includegraphics[scale=1.1]{miller-fsm}
 		\caption{FSM ontwerp van de controller voor het Miller algoritme\label{figuur-miller-fsm}}
 \end{figure}
 
 \section{Optimalisaties\label{sectie-implementatie-optimalisaties}}
 
-Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw in de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\textsf{log}_2(m)$ bit (voor tellers) niet veel bijdragen aan de uiteindelijke oppervlakte of het energieverbruik, zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
+Nu de schakeling volledig ontworpen is, kan overgegaan worden tot optimalisering. Daarbij wordt opnieuw in de eerste plaats getracht de oppervlakte kleiner te maken, maar er zal ook aandacht gegeven worden aan het beperken van het energieverbruik van de schakeling. De optimalisaties die in de volgende paragrafen voorgesteld worden, zullen allemaal iets te maken hebben met de registers. Omdat de enkele registers van grootte $1$ of $\log _2(m)$ bit (voor tellers) niet veel bijdragen aan de uiteindelijke oppervlakte of het energieverbruik, zullen de optimalisaties specifiek gericht zijn op het effici\"enter maken van het geheugenblok in de controller voor de Miller loop.
 
 Een register is doorgaans opgebouwd uit een aantal D-type master-slave flip-flops. In de gebruikte bibliotheek \cite{cell-databook} is dit type flip-flops opgebouwd uit twee latches. De eerste latch (master) is verbonden met de ingang $D$ en laat de waarde daarvan door zolang $CLK$ laag is. De tweede latch (slave) is verbonden met de uitgang $Q$  en neemt de waarde van de eerste latch over eens $CLK$ hoog is. Het effect is dus dat de uitgang $Q$ op een stijgende klokflank de waarde van $D$ overneemt. Er bestaan verschillende gespecialiseerde types: met resetingang, met enable ingang, met test ingang, $\ldots$ In de paragrafen die volgen, wordt er van uit gegaan dat alle registers uit dit type flip-flops zijn opgebouwd.
 
