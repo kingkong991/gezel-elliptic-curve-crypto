@@ -266,21 +266,18 @@
     <relative_filename>L.%20Batina%20et%20Al%20-%20Low-Cost%20Elliptic%20Curve%20Cryptography%20For%20Wireless%20Sensor%20Networks.pdf</relative_filename>
     <key>batina-lowcost</key>
     <notes></notes>
-    <bib_type>article</bib_type>
+    <bib_type>inproceedings</bib_type>
     <bib_doi>10.1007/11964254\_3</bib_doi>
-    <bib_title>Low-Cost Elliptic Curve Cryptography for Wireless Sensor Networks</bib_title>
+    <bib_title>Low-Cost Elliptic Curve Cryptography for Wireless Sensor Networks.</bib_title>
     <bib_authors>Batina, Lejla and Mentens, Nele and Sakiyama, Kazuo and Preneel, Bart and Verbauwhede, Ingrid</bib_authors>
     <bib_journal>Security and Privacy in Ad-Hoc and Sensor Networks</bib_journal>
     <bib_volume>4357</bib_volume>
     <bib_number></bib_number>
     <bib_pages>6-17</bib_pages>
     <bib_year>2006</bib_year>
-    <bib_extra key="Abstract">This work describes a low-cost Public-Key Cryptography (PKC) based solution for security services such as key-distribution and authentication as required for wireless sensor networks. We propose a custom hardware assisted approach to implement Elliptic Curve Cryptography (ECC) in order to obtain stronger cryptography as well as to minimize the power. Our compact and low-power ECC processor contains a Modular Arithmetic Logic Unit (MALU) for ECC field arithmetic. The best solution features 6718 gates for the MALU and control unit (data memory not included) in 0.13 Œºm CMOS technology over the field</bib_extra>
-    <bib_extra key="booktitle">Third European Workshop Security and Privacy in Ad Hoc and Sensor Networks (ESAS &apos;06)</bib_extra>
-    <bib_extra key="Citeulike-article-id">4001338</bib_extra>
-    <bib_extra key="Keywords">cryptography, curve, elliptic, embedded, security</bib_extra>
-    <bib_extra key="Posted-at">2009-02-03 16:16:40</bib_extra>
-    <bib_extra key="Priority">0</bib_extra>
+    <bib_extra key="booktitle">ESAS</bib_extra>
+    <bib_extra key="publisher">Springer</bib_extra>
+    <bib_extra key="Series">Lecture Notes in Computer Science</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyPBC.pdf</filename>
@@ -1072,6 +1069,72 @@
     <bib_extra key="Keyword">Cryptography</bib_extra>
     <bib_extra key="Month">August</bib_extra>
     <bib_extra key="Pubtype">101</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>pollard-rho</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Monte Carlo Methods for Index Computation (mod $p$)</bib_title>
+    <bib_authors>Pollard, John</bib_authors>
+    <bib_journal>Math. Computation</bib_journal>
+    <bib_volume>32</bib_volume>
+    <bib_number>143</bib_number>
+    <bib_pages>918-924</bib_pages>
+    <bib_year>1978</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>baby-step</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi></bib_doi>
+    <bib_title>Class number, a theory of factorization, and genera</bib_title>
+    <bib_authors>Shanks, Daniel</bib_authors>
+    <bib_journal>Proceedings of Symposia in Pure Mathematics</bib_journal>
+    <bib_volume>20</bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>415-440</bib_pages>
+    <bib_year>1969</bib_year>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>mov</key>
+    <notes></notes>
+    <bib_type>inproceedings</bib_type>
+    <bib_doi>http://doi.acm.org/10.1145/103418.103434</bib_doi>
+    <bib_title>Reducing elliptic curve logarithms to logarithms in a finite field</bib_title>
+    <bib_authors>Menezes, Alfred and Vanstone, Scott and Okamoto, Tatsuaki</bib_authors>
+    <bib_journal></bib_journal>
+    <bib_volume></bib_volume>
+    <bib_number></bib_number>
+    <bib_pages>80-89</bib_pages>
+    <bib_year>1991</bib_year>
+    <bib_extra key="address">New York, NY, USA</bib_extra>
+    <bib_extra key="booktitle">STOC ’91: Proceedings of the twenty-third annual ACM symposium on Theory of computing</bib_extra>
+    <bib_extra key="Isbn">0-89791-397-3</bib_extra>
+    <bib_extra key="publisher">ACM</bib_extra>
+  </doc>
+  <doc>
+    <filename></filename>
+    <relative_filename></relative_filename>
+    <key>fr</key>
+    <notes></notes>
+    <bib_type>article</bib_type>
+    <bib_doi>http://dx.doi.org/10.2307/2153546</bib_doi>
+    <bib_title>A remark concerning m-divisibility and the discrete logarithm in the divisor class group of curves</bib_title>
+    <bib_authors>Frey, Gerhard and R{\&quot;u}ck, Hans-Georg</bib_authors>
+    <bib_journal>Math. Comput.</bib_journal>
+    <bib_volume>62</bib_volume>
+    <bib_number>206</bib_number>
+    <bib_pages>865-874</bib_pages>
+    <bib_year>1994</bib_year>
+    <bib_extra key="Issn">0025-5718</bib_extra>
+    <bib_extra key="Publisher">American Mathematical Society</bib_extra>
   </doc>
 </doclist>
 </library>

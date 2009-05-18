@@ -32,7 +32,7 @@
 
 \node[]			(e3)		[left=of init]	{}; 
 
-\draw		($(init.west -| fsqr.west) - (3mm, 0)$)	-- node[at start, anchor=south west, yshift=-0.7mm, xshift=-1mm] {\small start}	(init.west);
+\draw		($(init.west -| fsqr.west) - (3mm, 0)$)	-- 	(init.west);
 \draw		(init.south) -- node[] {\footnotesize $\#next = 3$} (loop.north);
 
 \draw		($(loop.south) - (2mm, 0)$) |- ($(ldouble.north) + (0, 2.5mm)$) -- (ldouble.north);
