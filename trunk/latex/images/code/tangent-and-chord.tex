@@ -1,0 +1,44 @@
+\tikzset {
+	dot/.style={inner sep=0mm, outer sep=0pt, text height=0mm, text width=0mm, minimum height=1mm, fill, circle},
+}
+
+\begin{tikzpicture}[domain=-1.342:1.7]
+\begin{scope}[x=5mm, y=5mm]
+	% Data
+	\draw [thick, color=black!90] plot[samples=200] (\x, {sqrt(max(0, \x ^3 - \x + 1))});
+	\draw [thick, color=black!90] plot[samples=200] (\x, {-sqrt(max(0, \x ^3 - \x + 1))});
+	%\draw [densely dotted, color=black!90, samples at={2, 3, 4, 6, 8, 16, 32, 64, 163}] plot[ycomb] ({ln(\x) / ln(10)}, {26.003 + 2.998 * ceil(163 / \x)});
+\end{scope}
+
+% Axis
+\begin{scope}[x=5mm, y=5mm]
+	% Axis
+	\draw [latex'-latex'] (0, -2.5) -- (0, 2.5);
+	\draw [latex'-latex'] (-2.5,0) -- (3, 0);%) node[above] {$d$}; 
+	
+	\draw (-3, 2.5) node[anchor=north west, scale=0.7] {\small P + Q = R};
+
+	% Y-axis
+	\foreach \y in {-4, -3, ..., -1, 1, 2, ..., 4} {
+%		\draw[yshift=\y * 2.5mm] (-0.5mm, 0) -- (0, 0);
+	}
+
+	% X-axis
+	\foreach \x in {-4, -3, ..., -1, 1, 2, ..., 5} {
+%		\draw[xshift=\x * 2.5mm] (0, 0) -- (0, 0.5mm);% node[below] {\x};
+	}
+\end{scope}
+
+% Lijn
+\begin{scope}[x=5mm, y=5mm]
+	% Lijn
+	\draw [densely dotted, semithick, color=black!50] (-1.2, {sqrt(max(0, -1.2 ^3 - -1.2 + 1))}) -- (1.05, 1.04) -- ++(0, -2.08);
+
+	% P
+	\draw (-1.2, {sqrt(max(0, -1.2 ^3 - -1.2 + 1))}) node[dot] {} node[above, xshift=-1mm, scale=0.7] {\small P};
+	% Q
+	\draw (0.18, {sqrt(max(0, 0.18 ^3 - 0.18 + 1))}) node[dot] {} node[above, xshift=1mm, scale=0.7] {\small Q};
+	% R
+	\draw (1.05, -1.04) node[dot] {} node[xshift=2mm, yshift=1mm, scale=0.7] {\small R};
+\end{scope}
+\end{tikzpicture}

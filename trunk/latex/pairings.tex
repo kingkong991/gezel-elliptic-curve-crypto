@@ -82,9 +82,9 @@ Een pairing moet tevens volgende eigenschappen bezitten: goed gedefinieerd, non-
 De Tate pairing over elliptische krommen wordt als volgt geschreven:
 \[e(P, Q): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l.\]
 
-Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms wordt over de gereduceerde Tate pairing gesproken wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
+Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms spreekt men over de gereduceerde Tate pairing wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
 
-Het formeel bewijzen van de Tate pairing valt buiten het bestek van deze thesis. Voor meer informatie wordt onder andere verwezen naar \cite{maas, ruck, hess}.
+Het formeel bewijzen van de Tate pairing valt buiten het bestek van deze thesis. Voor meer informatie zie onder andere \cite{maas, ruck, hess}.
 
 \section{Berekening van de Tate pairing\label{sectie-pairings-berekening}}
 
