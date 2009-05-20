@@ -40,7 +40,7 @@ De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die 
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=8cm]{tangent-and-chord}
+		\includegraphics[scale=2]{tangent-and-chord}
 		\caption{``tangent-and-add'' methode op een elliptische kromme\label{figuur-pairings-tangent-and-chord}}
 \end{figure}
 
@@ -74,8 +74,8 @@ Een pairing moet tevens volgende eigenschappen bezitten: goed gedefinieerd, non-
 	
 	\item Bilineariteit: $\forall \: P_1, P_2, P \in \mathbb{G}_1$ en $\forall \: Q_1, Q_2, Q \in \mathbb{G}_2$ geldt:
 		\[\begin{aligned}
-			&e(P_1 + P_2, Q) \equiv e(P_1, Q) \cdot e(P_2, Q) \qquad \text{ en }\\
-			&e(P, Q_1 + Q_2) \equiv e(P, Q_1) \cdot e(P, Q_2).
+			e(P_1 + P_2, Q) &\equiv e(P_1, Q) \cdot e(P_2, Q) \qquad \text{ en }\\
+			e(P, Q_1 + Q_2) &\equiv e(P, Q_1) \cdot e(P, Q_2).
 		\end{aligned}\]
 \end{enumerate}
 
@@ -95,7 +95,7 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 	\label{algoritme-pairings-miller}
 	\KwIn{$l \in \mathbb{Z}$; $P, Q \in E(\mathbb{F}_{q^k})[l]$}
 	\KwOut{$e(P, Q) \in \mathbb{F}_{q^k}^*$}
-	\KwData{$i, t \in \mathbb{Z}$; $F, S, V \in \mathbb{F}_{q^k}$}
+	\KwData{$i, t \in \mathbb{Z}$; $F, Q', S, V \in \mathbb{F}_{q^k}$}
 	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
 	$Q' \gets \textsf{rand}(E)$\;
 	$S \gets Q + Q'$\;
@@ -134,7 +134,7 @@ Het is de combinatie van deze drie eigenschappen die het zo moeilijk maakt de pa
 	\label{algoritme-pairings-miller-beter}
 	\KwIn{$l \in \mathbb{Z}$; $P, Q \in E(\mathbb{F}_{2^m})[l]$}
 	\KwOut{$e(P, Q) \in \mathbb{F}_{2^{km}}^*$}
-	\KwData{$i, t \in \mathbb{Z}$; $F, S, V \in \mathbb{F}_{2^{km}}$}
+	\KwData{$i, t \in \mathbb{Z}$; $F, V \in \mathbb{F}_{2^{km}}$}
 	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
 	$F \gets 1$; $V \gets P$\;	
 	\For{$i = t - 1$ to $0$}{
@@ -156,13 +156,13 @@ Eerst dienen echter de begrippen een moeilijk en een gemakkelijk probleem gedefi
 
 De veiligheid van pairings vindt zijn oorsprong in het discrete logaritme (DL) probleem. Dit wordt gedefinieerd als volgt. Definieer de multiplicatieve groep $\mathbb{G}$ van orde $n$, met $n$ priem en $g$ een generator voor $\mathbb{G}$. Stel nu $h \in \mathbb{G}$ en dat $n$ priem is. In theorie is het niet nodig dat $n$ priem is. Indien dit niet het geval is, kan het probleem echter gereduceerd worden tot een probleem met $n$ priem via de Chinese reststelling. Stel nu $x \in \mathbb{Z}_n^*$, zodat $h = g^x$. Het discrete logaritme probleem bestaat er dan in $x$ te vinden, gegeven $g$ en $h$. Dit wordt geschreven als DL$(h) = x$.
 
-Het DL probleem wordt algemeen aanzien als moeilijk. De snelste algoritmes die dit probleem kunnen oplossen voor een willekeurige groep $\mathbb{G}$ (d.w.z.\ die geen specifieke eigenschappen van het veld uitbuiten) hebben een complexiteit $O(\sqrt{n})$, met $n$ de orde van de groep. Aangezien $n$ exponentieel groeit met de grootte van de groep, geldt hetzelfde voor de uitvoeringstijd van de algoritmes. Enkele voorbeelden van zulke algoritmes zijn Baby-step giant-step \cite{baby-step} en Pollards rho algoritme \cite{pollard-rho}. Voor bepaalde groepen zijn algoritmes bekend met subexponenti\"ele tijdscomplexiteit. In het geval de groep gedefinieerd is als de punten op een supersinguliere elliptische krommen, kan men bijvoorbeeld MOV- \cite{mov} of FR-reductie \cite{ruck} gebruiken. In dat geval is het noodzakelijk de grootte van de groep waarover de kromme gedefinieerd is groot genoeg te nemen, zodat het computationeel onhaalbaar is het DL probleem op te lossen.
+Het DL probleem wordt algemeen aanzien als moeilijk. De snelste algoritmes die dit probleem kunnen oplossen voor een willekeurige groep $\mathbb{G}$ (d.w.z.\ die geen specifieke eigenschappen van het veld uitbuiten) hebben een complexiteit $O(\sqrt{n})$, met $n$ de orde van de groep. Aangezien $n$ exponentieel groeit met de grootte van de groep, geldt hetzelfde voor de uitvoeringstijd van de algoritmes. Enkele voorbeelden van zulke algoritmes zijn Baby-step giant-step \cite{baby-step} en Pollards rho algoritme \cite{pollard-rho}. Voor bepaalde groepen zijn algoritmes bekend met subexponenti\"ele tijdscomplexiteit. In het geval de groep gedefinieerd is als de punten op een supersinguliere elliptische krommen, kan men bijvoorbeeld MOV- \cite{mov} of FR-reductie \cite{ruck} gebruiken. In dat geval is het noodzakelijk de grootte van de groep waarover de kromme gedefinieerd is groot genoeg te nemen, zodat het computationeel onhaalbaar blijft het DL probleem op te lossen.
 
 Een probleem verwant aan het DL probleem is het computationele Diffie-Hellman (CDH) probleem. Stel $a, b \in \mathbb{Z}^*_n$. In dit geval worden $g, g^a, g^b \in \mathbb{G}$ gegeven. Het probleem is nu een element $h \in \mathbb{G}$ te vinden waarvoor $h = g^{ab}$. Het probleem wordt uitgedrukt als CDH$(g^a, g^b) = h$.
 
 Aangezien het CDH probleem kan opgelost worden indien het DL probleem kan opgelost worden, is het dus zeker niet moeilijker. Indien het CDH probleem moeilijk is, is het DL probleem dat dus ook. Of het omgekeerde geldt, is niet geweten. Tot nu toe zijn echter geen methodes gekend die het CDH probleem sneller oplossen dan de methodes die het DL probleem oplossen. De twee worden dan ook als equivalent beschouwd.
 
-Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$ beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$. Dit wordt uitgedruk als DDH$(g^a, g^b, g^c) = 1$ indien waar en DDH$(g^a, g^b, g^c) = 0$ in het andere geval.
+Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$, beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$. Dit wordt uitgedruk als DDH$(g^a, g^b, g^c) = 1$ indien waar en DDH$(g^a, g^b, g^c) = 0$ in het andere geval.
 
 Het DDH probleem kan opgelost worden aan de hand van het CDH probleem door $h =$ CDH$(g^a, g^b)$ te berekenen en na te gaan of $h = g^c$. Het is dus duidelijk dat het DDH probleem zeker niet moeilijker is dan het CDH probleem. Er zijn echter bepaalde groepen bekend waarvan geweten is dat het DDH probleem makkelijk is en het CDH probleem moeilijk. Deze groepen worden ``gap Diffie-Hellman'' groepen genoemd. Pairings genereren zo een groep, het CDH probleem over elliptische krommen wordt immers als moeilijk beschouwd en ze laten toe DDH$(aP, bP, cP)$ makkelijk te beantwoorden:
 \[\begin{aligned}
@@ -175,11 +175,11 @@ als en slechts als $ab = c$.
 
 \section{Toepassingen van pairings}
 
-Hoewel de theorie van pairings enigszins is uitgelegd, blijft nog steeds de vraag hoe ze juist gebruikt kunnen worden in cryptografische algoritmen. In deze paragraaf zullen enkele mogelijkheden voorgesteld worden. Opnieuw wordt er op gewezen dat dit zeker geen volledige lijst van mogelijkheden is en meer informatie te vinden is in \cite{maas}.
+Hoewel de theorie van pairings enigszins is uitgelegd, blijft nog steeds de vraag hoe van hun eigenschappen gebruik gemaakt kan worden in cryptografische algoritmen. In deze paragraaf zullen enkele mogelijkheden voorgesteld worden. Opnieuw wordt er op gewezen dat dit zeker geen volledige lijst van mogelijkheden is en meer informatie te vinden is in \cite{maas}.
 
 \subsection{Encryptie}
 
-Verschillende encryptieschema's met pairings zijn bekend. Hier wordt BasicIdent voorgesteld, het eerste bekende schema voor identiteits-gebaseerde encryptie in 2001 gepubliceerd door Boneh en Franklin \cite{boneh}. Het schema bestaat uit vier algoritmen. Het eerste, `setup', initialiseert de systeemparameters, waaronder de geheime hoofdsleutel voor de centrale server. Ten tweede is er het `extract' algoritme dat gebruikt wordt om gebruikers te voorzien van een geheime sleutel. De laatste twee, `encrypt' en `decrypt', laten toe, zoals de naam het zegt, berichten te versleutelen en ontcijferen. De vier algoritmen worden hieronder verder uitgelegd.
+Verschillende encryptieschema's met pairings zijn bekend. Hier wordt BasicIdent voorgesteld, het eerste bekende schema voor identiteits-gebaseerde encryptie, in 2001 gepubliceerd door Boneh en Franklin \cite{boneh}. Het schema bestaat uit vier algoritmen. Het eerste, `setup', initialiseert de systeemparameters, waaronder de geheime hoofdsleutel voor de centrale server. Ten tweede is er het `extract' algoritme dat gebruikt wordt om gebruikers te voorzien van een geheime sleutel. De laatste twee, `encrypt' en `decrypt', laten toe, zoals de naam het zegt, berichten te versleutelen en ontcijferen. De vier algoritmen worden hieronder verder uitgelegd.
 
 \paragraph{Setup} Eerst wordt een $k$-bit lang priemgetal $q$ gekozen. Er wordt een additieve en een multiplicatieve groep van orde $q$ gedefinieerd, respectievelijk $\mathbb{G}_1$ en  $\mathbb{G}_2$. Ten slotte is er nog een generator $P$ van $\mathbb{G}_1$ nodig.
 
@@ -208,9 +208,9 @@ e(d_{\text{ID}}, U)	&= e(sQ_{\text{ID}}, rP)\\
 \end{aligned}\]
 Het bericht $M$ ondergaat dus twee maal een exclusieve OR met $g_{\text{ID}}^r$.
 
-Het is mogelijk uitbreidingen aan dit systeem toe te voegen. Zo kan bijvoorbeeld bij de berekening van iemands publieke sleutel een datum bij de ID toegevoegd worden. De ontvanger dient de centrale server dan om een specifieke sleutel te vragen om het ontvangen berichten te ontcijferen. Afhankelijk van de datum van aanvraag kan de server dan ontvangst geven aan deze aanvraag of weigeren. Merk op dat in dit geval de ontvanger wel steeds de server moet contacteren alvorens ontcijfering mogelijk is.
+Het is mogelijk uitbreidingen aan dit systeem toe te voegen. Zo kan bijvoorbeeld bij de berekening van iemands publieke sleutel een datum bij de ID gevoegd worden. De ontvanger dient de centrale server dan om een specifieke sleutel te vragen om het ontvangen berichten te ontcijferen. Afhankelijk van de datum van aanvraag kan de server deze aanvraag dan inwilligen of weigeren. Merk op dat in dit geval de ontvanger wel steeds de server moet contacteren alvorens ontcijfering mogelijk is.
 
-Buiten dit BasicIdent schema bestaat er ook een FullIdent schema dat extra veiligheid biedt in het geval een aanvaller de ontcijfering van enkele sleutelteksten kan bemachtigen. Dit wordt onder meer in detail besproken in \cite{maas}.
+%Buiten dit BasicIdent schema bestaat er ook een FullIdent schema dat extra veiligheid biedt in het geval een aanvaller de ontcijfering van enkele sleutelteksten kan bemachtigen. Dit wordt onder meer in detail besproken in \cite{maas}.
 
 \subsection{Digitale handtekeningen}
 
@@ -234,7 +234,7 @@ Naast sleutelafspraak zoals die bestaat in publieke sleutelcryptografie laten pa
 
 \subsubsection{Niet-interactieve sleutelafspraak}
 
-Een niet-interactief sleutelafspraak is een sleutelafspraak waarbij de betrokken partijen geen contact met elkaar dienen te hebben. Dit heeft als voordeel dat een man-in-the-middle aanval onmogelijk is. Volgende techniek werd voorgesteld in \cite{sakai}. Twee partijen A en B spreken een gezamenlijke sleutel $k$ af door middel van volgende formules:
+Een niet-interactief sleutelafspraak is een sleutelafspraak waarbij de betrokken partijen geen contact met elkaar dienen op te nemen om de sleutel af te spreken. Dit heeft als voordeel dat een man-in-the-middle aanval onmogelijk is. Volgende techniek werd voorgesteld in \cite{sakai}. Twee partijen A en B spreken een gezamenlijke sleutel $k$ af door middel van volgende formules:
 \[\begin{aligned}
 k	&= e(d_{\text{A}}, Q_{\text{B}})\\
 	&= e(s Q_{\text{A}}, Q_{\text{B}})\\
@@ -252,4 +252,4 @@ k	&= e(bP, cP)^a\\
 	&= e(aP, bP)^c\\
 	&= e(P, P)^{abc}
 \end{aligned}\]
-Merk op dat dit schema geen gebruik maakt van identiteiten en dus niet tot identiteits-gebaseerde cryptografie behoord. Tevens is het niet bestand tegen man-in-the-middle aanvallen. In \cite{paterson} wordt met behulp van publieke sleutel cryptografie een resistent schema gecre\"eerd.
+Merk op dat dit schema geen gebruik maakt van identiteiten en dus niet tot identiteits-gebaseerde cryptografie behoord. Tevens is het niet bestand tegen man-in-the-middle aanvallen. In \cite{paterson} wordt met behulp van publieke sleutel cryptografie een resistent schema uitgewerkt.
