@@ -161,10 +161,10 @@
 		(and9.output) [outputline] -- node[output] {F$_{\text{reset}}$} (and9.output -| o2.base);
 
 \draw [bit] (buf1.west -| e5.base) -- node[input] {ready} (buf1.west)
-		(buf1.output) [outputline] -- node[output] {s$_1$} (buf1.output -| o2.base);
+		(buf1.output) [line cap=rect, outputline] -- node[output] {s$_1$} (buf1.output -| o2.base);
 
 \draw [bit] (buf2.west -| e5.base) -- node[input] {start} (buf2.west)
-		(buf2.output) [outputline] -- node[output] {cycle$_{\text{reset}}$} (buf2.output -| o2.base);
+		(buf2.output) [line cap=rect, outputline] -- node[output] {cycle$_{\text{reset}}$} (buf2.output -| o2.base);
 
 % Vertical line
 \draw [bit] (7.5,0 |- e1.base) -- (7.5,-9 |- e11.base);

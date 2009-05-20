@@ -292,7 +292,7 @@
     <bib_number></bib_number>
     <bib_pages>173-180</bib_pages>
     <bib_year>2008</bib_year>
-    <bib_extra key="booktitle">Networked Sensing Systems, 2008. INSS 2008. 5th International Conference on</bib_extra>
+    <bib_extra key="booktitle">5th International Conference on Networked Sensing Systems</bib_extra>
   </doc>
   <doc>
     <filename>file:///home/anthony/thesis/references/L.%20Oliviera%20et%20Al%20-%20TinyTate.pdf</filename>
@@ -308,7 +308,7 @@
     <bib_number></bib_number>
     <bib_pages>318-323</bib_pages>
     <bib_year>2007</bib_year>
-    <bib_extra key="booktitle">Sixth IEEE International Symposium on Network Computing and Applications, 2007. NCA 2007. </bib_extra>
+    <bib_extra key="booktitle">Sixth IEEE International Symposium on Network Computing and Applications</bib_extra>
     <bib_extra key="publisher">IEEE Computer Society</bib_extra>
   </doc>
   <doc>
@@ -668,7 +668,7 @@
     <bib_type>article</bib_type>
     <bib_doi>10.1016/j.sysarc.2006.09.003</bib_doi>
     <bib_title>Hardware acceleration of the Tate pairing on a genus 2 hyperelliptic curve</bib_title>
-    <bib_authors>Ronan, Robert and O’Eigeartaigh, Colm and Murphy, Colin C. and Scott, Michael and Kerins, Tim</bib_authors>
+    <bib_authors>Ronan, Robert and {\&apos;{O}}h{\&apos;{E}}igeartaigh, Colm and Murphy, Colin C. and Scott, Michael and Kerins, Tim</bib_authors>
     <bib_journal>Journal of Systems Architecture</bib_journal>
     <bib_volume>53</bib_volume>
     <bib_number>2-3</bib_number>
