@@ -1,0 +1,65 @@
+\newcommand{\iconman}[2]{\draw	[thick]	(#1, #2) circle (2.5mm)
+		($(#1, #2) - (2.5mm, 7.5mm)$) [rounded corners=1pt] -- ++(-1.5mm, 0) [rounded corners=2pt] -- ++(0, 4mm) -- ++(1.5mm, 1mm) -- ++(5mm, 0) -- ++(1.5mm, -1mm) [rounded corners=1pt] -- ++(0, -4mm) -- ++(-1.5mm, 0)
+		($(#1, #2) - (2.5mm, 2.6mm)$) [rounded corners=1pt] -- ++(0, -5.9mm) -- ++(5mm, 0) -- ++(0, 5.85mm);}
+
+\newcommand{\iconmantwo}[2]{\draw	[thick]	(#1, #2) circle (2.5mm)
+		($(#1, #2) - (2.5mm, 7.5mm)$) [rounded corners=1pt] -- ++(-1.5mm, 0) [rounded corners=2pt] -- ++(0, 4mm) -- ++(1.5mm, 1mm) [sharp corners] -- ++(5mm, 0) [rounded corners=1pt] -- ++(0, -5.9mm) --  ++(-5mm, 0) -- ++(0, 5.85mm)
+		[rounded corners=2pt] ($(#1, #2) + (2.5mm, -4.5mm)$) -- ++(1.5mm, 1mm) [rounded corners=1pt] -- ++(0, 3mm) -- ++(-1.5mm, 0) -- ++(0, -2mm);
+		%($(#1, #2) + (2.5mm, 0.5mm)$) arc (140:-140:0.5mm);
+		%++(1.5mm, -1mm) [rounded corners=1pt] -- ++(0, -4mm) -- ++(-1.5mm, 0)
+%		($(#1, #2) - (2.5mm, 2.6mm)$) [rounded corners=1pt] -- ++(0, -5.9mm)
+}
+
+\newcommand{\iconfile}[2]{\draw [thick] [rounded corners=1pt] ($(#1, #2) + (0, -1mm)$) |- ++(5mm, -2mm) |- ++(-2.5mm, 4mm) |- ++(-2.5mm, -1mm) -- cycle;}
+
+\newcommand{\iconfiles}[2]{\draw [thick, fill=white] [rounded corners=1pt] ($(#1, #2) + (0, -1mm)$) |- ++(5mm, -2mm) |- ++(-2.5mm, 4mm) |- ++(-2.5mm, -1mm) -- cycle;
+\draw [thick, fill=white, xshift=-0.5mm, yshift= -0.5mm] [rounded corners=1pt] ($(#1, #2) + (0, -1mm)$) |- ++(5mm, -2mm) |- ++(-2.5mm, 4mm) |- ++(-2.5mm, -1mm) -- cycle;
+\draw [thick, fill=white, xshift=-1mm, yshift=-1mm] [rounded corners=1pt] ($(#1, #2) + (0, -1mm)$) |- ++(5mm, -2mm) |- ++(-2.5mm, 4mm) |- ++(-2.5mm, -1mm) -- cycle;
+}
+
+\newcommand{\iconkey}[2]{\draw [scale=1] [line width=0.4mm] (#1, #2) circle (0.5mm)
+		($(#1, #2) - (0, 0.5mm)$) -- ++(0, -1.5mm) -- ++(-0.5mm, 0)
+		($(#1, #2) - (0, 1.45mm)$) -- ++(-0.5mm, 0);}
+
+\newcommand{\iconlockclosed}[2]{\draw [thick] [rounded corners=1pt] (#1, #2) rectangle ++(3mm, -2.5mm);
+\draw	[line width=0.45mm] ($(#1, #2) + (0.5mm, 0)$) -- ++(0, 0.7mm) arc (180:0:1mm) -- ++(0, -0.7mm);}
+
+\newcommand{\iconlockopen}[2]{\draw [thick] [rounded corners=1pt] (#1, #2) rectangle ++(3mm, -2.5mm);
+\draw	[line width=0.45mm] ($(#1, #2) + (0.5mm, 0)$) -- ++(0, 0.7mm) arc (180:30:1mm);}
+
+\begin{tikzpicture}[>=latex']
+\hspace{-4mm}
+
+\iconman{0mm}{0}
+\iconlockclosed{5mm}{-9.5mm}
+
+\iconkey{14mm}{1mm}
+\iconfiles{20mm}{-1mm}
+\iconmantwo{20mm}{-15mm}
+
+\iconman{40mm}{0}
+\iconlockopen{32mm}{-9.5mm}
+\iconkey{33.5mm}{1mm}
+
+\draw (14mm, -1mm) node[below, scale=0.5] {\small $k_P$};
+\draw (22mm, 4mm) node[below, scale=0.5] {\small $\begin{array}{c}\text{Publieke}\\[-1.4mm]\text{sleutels}\end{array}$};
+\draw (33.5mm, -1mm) node[below, scale=0.5] {\small $k_G$};
+
+
+\draw [<-] (5mm, -4mm) -- (18mm, -4mm);
+
+\draw (0, -10.7mm) node {\small M};
+\draw (6.5mm, -10.7mm) node[scale=0.6] {\small $k_P$};
+\draw [->]	(2mm, -10.7mm) -- (4.5mm, -10.7mm);
+\draw [->]	(8.5mm, -10.7mm) -- node[above, scale=0.5] {\small Cijfertekst C} (31.5mm, -10.7mm);
+\draw (33.5mm, -10.7mm) node[scale=0.6] {\small $k_G$};
+\draw [->]	(35.5mm, -10.7mm) -- (38mm, -10.7mm);
+\draw (40mm, -10.7mm) node {\small M};
+
+\draw (0, -4.5mm) node[scale=0.5] {\small Alice};
+\draw (40mm, -4.5mm) node[scale=0.5] {\small Bob};
+\draw (20mm, -19.5mm) node[scale=0.5] {\small Eve};
+
+\draw [densely dotted, color=black!50] (-5.5mm, 3.5mm) rectangle ++(16mm, -16.5mm);
+\draw [densely dotted, color=black!50] ($(35mm, 0) + (-5.5mm, 3.5mm)$) rectangle ++(16mm, -16.5mm);
+\end{tikzpicture}
