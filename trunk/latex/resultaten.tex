@@ -204,16 +204,17 @@ De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}
 		\centering
 		\begin{tabular}{llllll}
 			\toprule
-			&	\multicolumn{2}{c}{Thesis (1 MALU, CG 3)}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
+			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
 			\cmidrule(r){2-3}
 			& \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 1,\\f = 10\text{kHz}\end{array}$} & \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 2,\\f = 5.44\text{MHz}\end{array}$} & & &\\
 	 		\midrule
 			Veld																				& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
+%			Veiligheid [bit]																& 652								& 652								& 922							& ?								& 922\\
 			Pairing																			& Tate							& Tate							& $\eta_T$					& Optimal Ate 					& Tate\\
 			Technologie																		& $0,13 \mu m$					& $0,13 \mu m$					& $0,18 \mu m$				& $0,13 \mu m$					& $0,25 \mu m$\\
-			Opp. [gates]																	& $27\,734$						& $28\,155$						& $193\,765$				& $97\,000$						& \emph{$10mm^2$}\footnotemark[2]\\
+			Opp. [gates]																	& $27\,734$						& $28\,155$						& $193\,765$				& $97\,000$						& \emph{$10mm^2$}\footnotemark[3]\\
 			$f$ [MHz]																		& 0,01							& 5,44							& 200							& 338								& 78\\
-			Rekentijd [$\mu s$]															& $51,5 \cdot 10^6$			& $50 \cdot 10^3$				& 46,7						& $15,8 \cdot 10^3$			& 250\footnotemark[3]\\
+			Rekentijd [$\mu s$]															& $51,5 \cdot 10^6$			& $50 \cdot 10^3$				& 46,7						& $15,8 \cdot 10^3$			& 250\footnotemark[4]\\
 			Vermogen [$mW$]																& $206 \cdot 10^{-6}$		& $48,6 \cdot 10^{-3}$		& 672							& \emph{onbekend}				& \emph{onbekend}\\
 %			Score $\left[ mJ \cdot \text{gates} \right]$\footnotemark[4]	& 284								& 382								& 162							& ?								& ?\\
 %			Score $\left[ \frac{nW}{\text{MHz} \cdot \text{gate}} \right]$\footnotemark[4]	& 0.74	& 0.32							& 17.34						& ?								& ?\\
@@ -222,11 +223,46 @@ De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}
 		\end{tabular}
 	\end{narrow}
 	
-	\footnotesize \footnotemark[2] De gegeven oppervlakte is die van de complete schakeling inclusief routing.
+	\footnotesize \footnotemark[2] Implementatie zonder resets en met toepassing van clock gating schakeling drie.
 	
-	\footnotemark[3] Exclusief de finale machtsverheffing.
+	\footnotemark[3] De gegeven oppervlakte is die van de complete schakeling inclusief routing.
+	
+	\footnotemark[4] Exclusief de finale machtsverheffing.
 	
 %	\footnotemark[4] Des te lager de score, des te conservatiever springt de implementatie om met energie. De score wordt berekend als score $= \frac{\text{verbruik}}{\text{frequentie} \cdot \text{oppervlakte}}$. 
 \end{table}
 
-De hier voorgestelde implementaties zijn niet alleen ongeveer een factor zeven kleiner dan degene voorgesteld in \cite{beuchat-asic}, hun vermogenverbruik is ongelofelijk veel lager. Uiteraard moet er wel op gewezen worden dat het ontwerp uit \cite{beuchat-asic} door het gebruik van een groter veld een grotere veiligheid biedt en, zoals reeds vermeld, niet ontworpen is met compactheid of laag vermogenverbruik in gedachten. Het is dus zeker niet de bedoeling het ontwerp af te breken. Het is echter wel duidelijk dat de ontwerpen voorgesteld in deze thesis met kop en schouders uitsteken boven dat van \cite{beuchat-asic} indien compactheid en laag vermogenverbruik prioriteit genieten.
+Alvorens te vergelijken moet er uiteraard wel op gewezen worden dat het ontwerp uit \cite{beuchat-asic} zoals reeds vermeld niet ontworpen is met compactheid of laag vermogenverbruik in gedachten. Het is dus zeker niet de bedoeling het ontwerp af te breken. 
+
+De hier voorgestelde implementaties zijn niet alleen ongeveer een factor zeven kleiner dan degene voorgesteld in \cite{beuchat-asic}, hun vermogenverbruik is ongelofelijk veel lager. Het energieverbruik per bit veiligheid kan berekend worden als:
+\[En = \frac{\text{vermogen} \cdot \text{rekentijd}}{\text{veiligheid}}.\]
+Opgegeven waarden voor veiligheid zijn zeer veranderlijk van paper tot paper. In dit geval zullen waarden gebruikt worden die door de auteurs van \cite{beuchat-asic} worden opgegeven in \cite{beuchat}. Daar wordt gesteld dat het ontwerp uit deze thesis een veiligheid heeft van 652 bit en dat van \cite{beuchat-asic} 922 bit.
+
+De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie}. Er dient op gewezen te worden dat in het ontwerp uit \cite{beuchat-asic} met de $\eta_T$ pairing gewerkt wordt, die ongeveer een factor twee sneller berekend kan worden. Het is duidelijk dat het ontwerp uit deze thesis het potentieel heeft veel effici\"enter te zijn. Het gebruik van meer MALU's doet de de effici\"entie duidelijk stijgen. Dit is te verklaren door het feit dat meer MALU's relatief gezien zeer weinig extra vermogen verbruiken, maar de rekentijd wel gevoelig doen verlagen. Indien een iets grotere oppervlakte dus geen bezwaar is, kan de effici\"entie van de schakeling nog flink verhoogd worden. Tevens kan, indien rekentijd geen punt is, tegelijkertijd de frequentie verlaagd worden, wat de effici\"entie nog meer ten goede zal komen. 
+
+\begin{table}[h]
+	\caption{Vergelijking van energie-effici\"entie van de implementatie voorgesteld in deze thesis met ASIC implementaties uit de literatuur}
+	\label{tabel-resultaten-energie}
+
+	\begin{narrow}{-2cm}{-2cm}
+		\centering
+		\begin{tabular}{llll}
+			\toprule
+			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}\\
+			\cmidrule(r){2-3}
+			& \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 1,\\f = 10\text{kHz}\end{array}$} & \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 2,\\f = 5.44\text{MHz}\end{array}$} &\\
+	 		\midrule
+			Vermogen [$mW$]																& $206 \cdot 10^{-6}$		& $48,6 \cdot 10^{-3}$		& 672\\
+			Rekentijd [$\mu s$]															& $51,5 \cdot 10^6$			& $50 \cdot 10^3$				& 46,7\\
+			Veiligheid [bit]																& 652								& 652								& 922\\
+			Effici\"entie $\left[ \frac{nJ}{\text{bit}}\right]$\footnotemark[3]	& 16,3					& 3,73							& 34,0\\
+			\bottomrule		
+		\end{tabular}
+	\end{narrow}
+		
+	\footnotesize \footnotemark[2] Implementatie zonder resets en met toepassing van clock gating schakeling drie.
+	
+	\footnotemark[3] Des te lager, des te conservatiever springt de implementatie om met energie. %De effici\"entie wordt berekend als: $\frac{\text{vermogen} \cdot \text{rekentijd}}{\text{veiligheid}}$.
+\end{table}
+
+Het is duidelijk dat de ontwerpen voorgesteld in deze thesis met kop en schouders uitsteken boven andere gepubliceerde ontwerpen indien compactheid en laag vermogen- en/of energieverbruik prioriteit genieten.

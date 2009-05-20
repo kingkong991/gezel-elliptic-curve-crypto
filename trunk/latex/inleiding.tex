@@ -6,23 +6,21 @@
 
 Sinds het begin der tijden is er een nood geweest aan manieren om berichten versleuteld te verzenden tussen twee partijen. Voorbeelden van enkele klassieke encryptiemethoden zijn het Atbashcijfer~\cite{athbash} (Babyloni\"e, 600 v.\ Chr.), het Caesarcijfer~\cite{caesar} (Rome, 56 n.\ Chr.) en het dubbele transpositiecijfer~\cite{kahn} (o.a.\ gebruikt door weerstandsgroepen in WO II). E\'en eigenschap die al deze methodes met elkaar gemeen hebben, is het gebruik van dezelfde sleutel voor versleutelen en ontcijferen. Ook vele moderne encryptiemethodes, zoals bijvoorbeeld 3DES~\cite{3des} en AES~\cite{aes}, gebruiken dit principe, dat men symmetrische versleuteling noemt.
 
-De algemene werking van symmetrische cryptografie is weergegeven in \reffig{fig-encryptie-applicaties-sym-cipher}. Alice zendt een bericht $B$ naar Bob door het te versleutelen, vercijferd met een door hen beiden gekende sleutel $k$. Bob op zijn beurt ontcijfert met diezelfde sleutel het bericht. Indien Eve de vooraf afgesproken sleutel kent, kan zij alle communicatie tussen Alice en Bob ontcijferen. Er is dus nood aan een manier om veilig een sleutel $k$ te kunnen afspreken tussen twee partijen.
+In \reffig{fig-encryptie-applicaties-sym-cipher} wordt de algemene werking van een symmetrische encryptie getoond. Alice zendt een bericht M naar Bob door het te versleutelen, vercijferd met een door hen beiden gekende sleutel $k$. Bob op zijn beurt ontcijfert met diezelfde sleutel de cijfertekst C. Indien Eve de vooraf afgesproken sleutel kent, kan zij alle communicatie tussen Alice en Bob ontcijferen. Er is dus nood aan een manier om veilig een sleutel $k$ te kunnen afspreken tussen twee partijen.
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=7cm]{symmetric-cipher-model}
-		\caption{Algemene werking van symmetrische cryptografie\label{fig-encryptie-applicaties-sym-cipher}}
+		\includegraphics[scale=1.4]{symmetric-cipher-model}
+		\caption{Algemene werking van symmetrische encryptie\label{fig-encryptie-applicaties-sym-cipher}}
 \end{figure}
 
-Een oplossing voor het veilig afspreken van een gedeelde sleutel was tot 1976 niet gekend. Toen stelden Diffie en Hellman hun algoritme voor sleuteluitwisseling over een onbeveiligd kanaal voor \cite{diffie-hellman}. Deze ontdekking plaveide de weg voor asymmetrische cryptografie (ook wel publieke sleutel cryptografie genoemd). Met behulp van dit type cryptografie kunnen eveneens boodschappen versleuteld worden door gestuurd. Dit wordt ge\"illustreerd in \reffig{fig-encryptie-applicaties-asym-cipher}. Wanneer Alice een bericht naar Bob wil versturen, zoekt ze eerst zijn publieke sleutel op in een databank. Vervolgens versleutelt ze haar bericht met Bobs publieke sleutel. Enkel Bob kan met behulp van zijn private sleutel dan het bericht ontcijferen.
+Een oplossing voor het veilig afspreken van een gedeelde sleutel was tot 1976 niet gekend. Toen stelden Diffie en Hellman hun algoritme voor sleuteluitwisseling over een onbeveiligd kanaal voor \cite{diffie-hellman}. Deze ontdekking plaveide de weg voor asymmetrische cryptografie (ook wel publieke sleutel cryptografie genoemd). Met behulp van dit type cryptografie kunnen eveneens boodschappen versleuteld worden. Dit wordt ge\"illustreerd in \reffig{fig-encryptie-applicaties-asym-cipher}. Wanneer Alice een bericht M naar Bob wil versturen, zoekt ze eerst zijn publieke sleutel $k_P$ op in een databank. Vervolgens versleutelt ze haar bericht met die publieke sleutel. Enkel Bob kan met behulp van zijn geheime sleutel $k_G$ dan het bericht ontcijferen. Een systeem als dit biedt het grote voordeel dat er geen nood is om de gebruikte (publieke) sleutel geheim te houden. Het is namelijk onmogelijk om met de publieke sleutel de cijfertekst te ontcijferen. Eve heeft er in dit geval dus geen baat bij de gebruikte publieke sleutel te onderscheppen. 
 
 \begin{figure}[h]
 	\centering
-		 \includegraphics[width=7cm]{asymmetric-cipher-model}
-		 \caption{Algemene werking van asymmetrische cryptografie\label{fig-encryptie-applicaties-asym-cipher}}
+		 \includegraphics[scale=1.4]{asymmetric-cipher-model}
+		 \caption{Algemene werking van asymmetrische encryptie\label{fig-encryptie-applicaties-asym-cipher}}
 \end{figure}
-
-Een systeem als dit biedt het grote voordeel dat er geen nood is om de gebruikte (publieke) sleutel geheim te houden. Het is namelijk onmogelijk om met de publieke sleutel de cijfertekst te ontcijferen. Eve heeft er in dit geval dus geen baat bij de gebruikte publieke sleutel te onderscheppen. 
 
 Een andere toepassing van asymmetrische cryptografie is het plaatsen en verifi\"eren van digitale handtekeningen. Digitale handtekeningen zijn vergelijkbaar met klassieke handtekeningen. Ze kunnen, indien juist ge\-\"im\-ple\-men\-teerd, gebruikt worden om te verifi\"eren dat een bepaald bericht effectief door de persoon verstuurd is die de verzender beweert te zijn. Ook kan aan de hand van een digitale handtekening worden nagegaan of de inhoud van een bericht niet gewijzigd werd door een derde persoon tijdens de verzending. ECDSA \cite{ecdsa} en RSA \cite{rsa} zijn enkele van de vele cryptografische algoritmes die toelaten digitale handtekeningen te genereren.
 
