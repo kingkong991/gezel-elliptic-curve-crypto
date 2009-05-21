@@ -28,7 +28,7 @@ De orde van de kromme is gelijk aan \cite{barreto-efficient}:
 \end{aligned}\]
 Om de Tate pairing effici\"ent te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
 
-Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met 86 bits symmetrische cryptografie. Dit zou neerkomen op een geganrandeerde veiligheid tot 2021. De algoritmen en schakelingen die volgen kunnen allen perfect toegepast worden op grotere velden, dus indien gewenst kan $m$ verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
+Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met 86 bits symmetrische cryptografie. Dit zou neerkomen op een gegarandeerde veiligheid tot 2021. De algoritmen en schakelingen die volgen kunnen allen perfect toegepast worden op grotere velden, dus indien gewenst kan $m$ verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
 
 Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiesubgroep van $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
 \[\begin{aligned}
@@ -62,16 +62,16 @@ Een distortie van $A$ kan dus ook geschreven worden als:
 x_\phi	&= x_A + x,\\
 y_\phi	&= (x_A + y_A) + x_A \cdot x + xy.
 \end{aligned}\]
-Merk op dat de constante term van $x_\phi$ en de co\"efficient van $x$ van $y_\phi$ beiden gelijk zijn aan $x_A$. Door deze handige vorm zullen in de implementatie slechts twee registers nodig zijn om de distortie van het punt $Q$ bij te houden.
+Merk op dat de constante term van $x_\phi$ en de co\"effici\"ent van $x$ van $y_\phi$ beiden gelijk zijn aan $x_A$. Door deze handige vorm zullen in de implementatie slechts twee registers nodig zijn om de distortie van het punt $Q$ bij te houden.
 
 \section{Beperkingen\label{sectie-implementatie-beperkingen}}
 
 Het doel is de uiteindelijke schakeling zo klein mogelijk te maken, zodat ze gebruikt kan worden in bv.\ netwerken van sensoren of een smartcard. Beperking van de oppervlakte is dus de belangrijkste factor. Een tweede belangrijke factor is vermogenverbruik, om dit te beperken bestaan specifieke technieken. Het verbruik hangt ook samen met de oppervlakte, dus het beperken daarvan zal het verbruik ten goede komen. In eerste instantie zal dus getracht worden de implementatie zo compact mogelijk te maken. Het verbruik kan verder ook verlaagd worden door een lagere kloksnelheid voor de schakeling te gebruiken, wat uiteraard de rekensnelheid niet bevordert. De rekensnelheid is echter geen prioriteit en dus zal dit aspect bij het ontwerp van de schakelingen genegeerd worden.
 
-Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van $0,13 \mu m$ low leakage technologie van Faraday Technology Corporation. De ordening van de elementen zal echter grotendeels behouden worden voor andere technologie\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
+Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, hoe beter. Het is dus cruciaal de elementen te identificeren die het meeste plaats innemen in een ASIC schakeling. In \reftbl{tabel-implementatie-beperkingen-elementen-gatecount} is de grootte van de belangrijkste elementen te vinden. Deze cijfers gelden enkel bij gebruik van 0,13 $\mu m$ low leakage technologie van Faraday Technology Corporation. De ordening van de elementen zal echter grotendeels behouden worden voor andere technologie\"en. Uit de tabel blijkt dat het gebruik van flip-flops (registers), adders en multiplexers zoveel mogelijk beperkt moet worden.
 
 \begin{table}[h]
-	\caption[Oppervlakte van elementen in een ASIC schakeling]{Grootte van elementen in een ASIC schakeling ($0,13 \mu m$ low leakage technologie van Faraday Corporation \cite{cell-databook})}
+	\caption[Oppervlakte van elementen in een ASIC schakeling]{Grootte van elementen in een ASIC schakeling (0,13 $\mu m$ low leakage technologie van Faraday Corporation \cite{cell-databook})}
 	\label{tabel-implementatie-beperkingen-elementen-gatecount}
 
 	\centering
@@ -96,9 +96,9 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 	\end{tabular}
 \end{table}
 
-\section{Modulaire Arithmetische Logische Unit\label{sectie-implementatie-malu}}
+\section{Modulaire Aritmetische Logische Unit\label{sectie-implementatie-malu}}
 
-De kern van de hardware implementatie wordt gevormd door de Modular Arithmetic Logical Unit (MALU) \cite{sakiyama, batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
+De kern van de hardware implementatie wordt gevormd door de Modulaire Aritmetische Logische Unit (MALU) \cite{sakiyama, batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
 Aangezien er in het veld $\mathbb{F}_{2^m}$ gewerkt wordt, is een optelling equivalent aan een XOR bewerking. De bewerking die moet uitgevoerd kunnen worden is:
 
@@ -137,7 +137,7 @@ Aangezien voor het ontwerp het veld en de modulo veelterm op voorhand bepaald zi
 \[\Delta = m - (\textsf{Hamm}(P) - 1)\]
 XOR poorten uitgespaard.
 
-In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\textsf{Hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ minder dan het oorsponkelijk aantal).
+In dit geval is $m = 163$ en $P = z^{163} + z^7 + z^6 + z^3 + 1$. Er zijn dus $\textsf{Hamm}(P) - 1 = 4$ XOR poorten nodig, wat een besparing van $163 - 4 =  159$ XOR poorten oplevert ($51\%$ minder dan het oorspronkelijk aantal).
 
 De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optimized}.
 
@@ -185,7 +185,7 @@ Wanneer de optelling en vermenigvuldiging nu in een schakeling gegoten worden, d
 
 Verderop zal gezien worden dat in het Miller algoritme verscheidene keren de som $R + 1$ moet berekend worden. Daarom wordt aan de schakeling een ingang $plus\_one$ toegevoegd die hierin helpt voorzien. De uiteindelijke schakeling is te zien in \reffig{figuur-implementatie-wrapper-gf2m}. Er wordt zo veel mogelijk bespaard op registers. Het register $cycle$ (equivalent aan $i$ in \refalg{algoritme-implementatie-gf2m-multiply}) is $\lceil \log _2 (m) \rceil$ bits lang en register $T$ $m$ bits. De waarde van $T_m$ wordt opgeslagen in register $mod$. Alle overige registers zijn 1 bit groot. Merk dus op dat de variabele $T$ uit \refalg{algoritme-implementatie-gf2m-multiply} hier gevormd wordt door de combinatie van de registers $T$ en $mod$. 
 
-Voor $A$ wordt geen appart register voorzien en in plaats van $A_i$ wordt steeds bit $A_m$ ingelezen voor de vermenigvuldiging. De schakeling die van deze schakeling gebruik maakt, dient dus te voorzien in een methode om elke klokslag de juiste $A_i$ aan te bieden op $A_m$. Dit kan simpelweg gebeuren door elke klokslag na de start van de berekening het register dat $A$ bevat \'e\'en positie naar links door te schuiven.
+Voor $A$ wordt geen apart register voorzien en in plaats van $A_i$ wordt steeds bit $A_m$ ingelezen voor de vermenigvuldiging. De schakeling die van deze schakeling gebruik maakt, dient dus te voorzien in een methode om elke klokslag de juiste $A_i$ aan te bieden op $A_m$. Dit kan simpelweg gebeuren door elke klokslag na de start van de berekening het register dat $A$ bevat \'e\'en positie naar links door te schuiven.
 
 \begin{figure}[h]
 	\centering
@@ -211,7 +211,7 @@ Wanneer met behulp van de schakeling in \reffig{figuur-implementatie-wrapper-gf2
 		\caption{Aaneenschakeling van $d$ MALU's ter versnelling van de vermenigvuldiging\label{figuur-implementatie-wrapper-gf2m-d}}
 \end{figure}
 
-De rekentijd van het Miller algoritme zal door toepassing van deze techniek gevoelig verkort kunnen worden. Hoe groter $m$ en hoe meer vermenigvuldigigen er uitgevoerd dienen te worden, des te significanter de tijdswinst die geboekt kan worden. Uiteraard gaat het gebruik van deze techniek wel in tegen de eerder opgelegde beperking aan de grootte van de uiteindelijke schakeling. Het is echter niet zo dat er enkel $d - 1$ extra MALU blokken dienen toegevoegd te worden, afhankelijk van $d$ en $m$ dient ook een extra multiplexer in de schakeling gestoken te worden. Dit is zoals opgemerkt in \refsect{sectie-implementatie-beperkingen} een zeer slechte zaak voor de  oppervlakte.
+De rekentijd van het Miller algoritme zal door toepassing van deze techniek gevoelig verkort kunnen worden. Hoe groter $m$ en hoe meer vermenigvuldigingen er uitgevoerd dienen te worden, des te significanter de tijdswinst die geboekt kan worden. Uiteraard gaat het gebruik van deze techniek wel in tegen de eerder opgelegde beperking aan de grootte van de uiteindelijke schakeling. Het is echter niet zo dat er enkel $d - 1$ extra MALU blokken dienen toegevoegd te worden, afhankelijk van $d$ en $m$ dient ook een extra multiplexer in de schakeling gestoken te worden. Dit is zoals opgemerkt in \refsect{sectie-implementatie-beperkingen} een zeer slechte zaak voor de  oppervlakte.
 
 Stel bijvoorbeeld $d = 4$ (en $m = 	163$). Het resultaat van een optelling zal net zoals in het standaard ontwerp (\reffig{figuur-implementatie-wrapper-gf2m}) aanwezig zijn aan de uitgang van MALU \nr 1. Het resultaat van een vermenigvuldiging zal echter aan de uitgang van MALU \nr 3 verschijnen, aangezien $163 \bmod 4 = 3$. Het eindresultaat dat in register $T$ dient opgeslagen te worden, is voor een vermenigvuldiging dus
 \[R_{3_{\text{ready}}} = mod{\text{u}_3} \text{ \# } R_{3_{162:1}},\]
@@ -256,7 +256,7 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 	\KwOut{$\hat{e}(P, Q) \in \mathbb{F}_{2^{4 \cdot 163}}^*$}
 	$F \gets 1$\;
 	$V \gets P$\;
-	\For{$i \gets 162$ \KwTo $0$}{
+	\For{$i \gets 162$ tot $0$}{
 		$F \gets F^2 \cdot G_{V,V}(\phi(Q))$\;\nllabel{lijn-implementatie-miller-algemeen-double-1}
 		$V \gets 2 \cdot V$\;\nllabel{lijn-implementatie-miller-algemeen-double-2}
 		\If{$i = 82$}{\nllabel{lijn-implementatie-miller-algemeen-add-if}
@@ -319,7 +319,7 @@ Door de specifieke vorm van $\phi(Q)$ kan $G$ uitgeschreven worden als:
 
 De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in plaats van in vier. De vorm van $G$ zal ook toelaten de vermenigvuldiging $F \cdot G$ grotendeels te vereenvoudigen, zoals later gezien zal worden.
 
-Tanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
+Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
 
 Buiten zes registers voor $x_{2V}$, $y_{2V}$, $x_{\phi_a}$, $y_{\phi_a}$, $G_a$ en $G_b$, is er ook \'e\'en register nodig om $\lambda$ in op te slaan. In totaal moeten er zes optellingen, twee vermenigvuldigingen en twee kwadrateringen uitgerekend worden.
 
@@ -718,7 +718,7 @@ Ook bij de implementatie van dit algoritme wordt er van uit gegaan dat de beginv
 
 \subsubsection{Berekening van $J^{2^{\frac{m + 1}{2}}}$}
 
-De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J$. Helaas is het in dit geval niet mogelijk om de bewerking even snel uit te voeren als de kwadratering van $I$. De handigste oplossing in dit geval is $J$ simpelweg $\frac{m + 1}{2}$ opeenvolgende keren te kwadrateren. Hiervoor kan \refalg{algoritme-implementatie-miller-f-square} gebruikt worden. In totaal zal deze stap $2 \cdot (m + 1)$ vermenigvuldigigen en optellingen vragen, wat voor de gekozen $m = 163$ neerkomt op 328 maal beide bewerkingen.
+De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J$. Helaas is het in dit geval niet mogelijk om de bewerking even snel uit te voeren als de kwadratering van $I$. De handigste oplossing in dit geval is $J$ simpelweg $\frac{m + 1}{2}$ opeenvolgende keren te kwadrateren. Hiervoor kan \refalg{algoritme-implementatie-miller-f-square} gebruikt worden. In totaal zal deze stap $2 \cdot (m + 1)$ vermenigvuldigingen en optellingen vragen, wat voor de gekozen $m = 163$ neerkomt op 328 maal beide bewerkingen.
 
 \subsubsection{Vermenigvuldiging van $I \cdot J$}
 
@@ -845,7 +845,7 @@ Rekening houdend met het feit dat elke omwisselbewerking twee schrijfbewerkingen
 
 Tegenover het originele ontwerp voor het registerblok, zal dit ontwerp veel minder klokcycli verloren laten gaan aan het in de juiste positie brengen van de benodigde variabelen. Ook zal het, ten koste van meer multiplexers, minder energie verbruiken. De extra multiplexers zullen echter ook energie vragen, dus in hoeverre dit het totale energieverbruik naar beneden haalt, moet van implementatie tot implementatie bekeken worden. 
 
-Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de $\mathbb{F}_{2^m}$ kern verbonden. Om vermenigvuldigingen tot een succesvol einde te brengen, moet het register dat met de $A$ ingang verbonden is elke klokslag met $d$ bits naar links doorgeschoven kunnen worden. Hierbij gaat de originele waarde van het register echter wel verloren. Wanneer de algoritmes die het meeste tijdelijke opslag vragen echter nauwkeurig worden bekeken, zal men merken dat dit geen probleem vormt. Vandaar dat er voor gekozen wordt om het derde tijdelijk register uit de doorschuif lus te halen, er moeten dan minder doorschuivingen doorgevoerd worden om elke waarde in de juiste positie te brengen. Verder moet het ook mogelijk zijn waarden die op de ingang van de Miller controller aangelegd worden op te slaan en het resultaat op de uitgang te zetten. Ten slotte moet het resultaat van een berekening in $\mathbb{F}_{2^m}$ opgeslagen kunnen worden. Teneinde dat mogelijk te maken, wordt de uitgang $R$ van de $\mathbb{F}_{2^m}$ kern aan het derde tijdelijk register gekoppeld. Rekend houdend met deze zaken, wordt het ontwerp van de eerste twee registers aangepast zoals te zien in \reffig{figuur-implementatie-geheugen-eerste-twee}.
+Registers \'e\'en en twee worden respectievelijk met de $A$ en $B$ ingang van de $\mathbb{F}_{2^m}$ kern verbonden. Om vermenigvuldigingen tot een succesvol einde te brengen, moet het register dat met de $A$ ingang verbonden is elke klokslag met $d$ bits naar links doorgeschoven kunnen worden. Hierbij gaat de originele waarde van het register echter wel verloren. Wanneer de algoritmes die het meeste tijdelijke opslag vragen echter nauwkeurig worden bekeken, zal men merken dat dit geen probleem vormt. Vandaar dat er voor gekozen wordt om het derde tijdelijk register uit de doorschuif lus te halen, er moeten dan minder doorschuivingen doorgevoerd worden om elke waarde in de juiste positie te brengen. Verder moet het ook mogelijk zijn waarden die op de ingang van de Miller controller aangelegd worden op te slaan en het resultaat op de uitgang te zetten. Ten slotte moet het resultaat van een berekening in $\mathbb{F}_{2^m}$ opgeslagen kunnen worden. Teneinde dat mogelijk te maken, wordt de uitgang $R$ van de $\mathbb{F}_{2^m}$ kern aan het derde tijdelijk register gekoppeld. Rekening houdend met deze zaken, wordt het ontwerp van de eerste twee registers aangepast zoals te zien in \reffig{figuur-implementatie-geheugen-eerste-twee}.
 
 \begin{figure}[h]
 	\centering

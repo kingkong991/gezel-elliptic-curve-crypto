@@ -36,7 +36,7 @@ Het enige punt waarvoor $Z = 0$ en de vergelijking geldt ($X = 0,  Y = 1, Z = 0$
 \[E: y^2 + a_1 xy + a_2 y = x^3 + a_3 x^2 + a_4 x + a_5.\]
 Merk op dat in deze vorm het punt $\mathcal{O}$ niet meer voldoet aan de vergelijking, ook al behoort het nog steeds tot de kromme. De kromme dient zo gedefinieerd te zijn dat $\forall A \in E$ de parti\"ele afgeleiden $\frac{\partial A}{\partial X}$, $\frac{\partial A}{\partial Y}$ en $\frac{\partial A}{\partial Z}$ nooit allen tegelijkertijd gelijk zijn aan nul.
 
-De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die wordt weergegeven in \reffig{figuur-pairings-tangent-and-chord}. De bewerking wordt additief geschreven en heeft als neutral element het punt op oneindig $\mathcal{O}$. De formules om het resultaat van de ``tangent-and-chord'' methode te berekenen zijn afhankelijk van het type elliptische kromme.
+De natuurlijke bewerking op een kromme is de ``tangent-and-chord'' methode, die wordt weergegeven in \reffig{figuur-pairings-tangent-and-chord}. De bewerking wordt additief geschreven en heeft als neutraal element het punt op oneindig $\mathcal{O}$. De formules om het resultaat van de ``tangent-and-chord'' methode te berekenen zijn afhankelijk van het type elliptische kromme.
 
 \begin{figure}[h]
 	\centering
@@ -100,7 +100,7 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 	$Q' \gets \textsf{rand}(E)$\;
 	$S \gets Q + Q'$\;
 	$F \gets 1$; $V \gets P$\;	
-	\For{$i = t - 1$ to $0$}{
+	\For{$i = t - 1$ tot $0$}{
 		$F \gets F^2 \cdot \frac{G_{V,V}(S) \cdot G_{2 \cdot V}(Q')}{G_{2 \cdot V}(S) \cdot G_{V,V}(Q')}$\;
 		$V \gets 2 \cdot V$\;
 		\If{$l_i = 1$}{
@@ -113,7 +113,7 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 
 Daarbij staat $G_{A, B}(C)$ voor de evaluatie van het punt $C$ in de vergelijking van de rechte door de punten $A$ en $B$. Indien $G_{2 \cdot A}$ vermeld staat, wil dit de vergelijking door de raaklijn aan $2 \cdot A$ zeggen.
 
-In \cite{barreto-efficient} wordt aangetoont dat indien gewerkt wordt in het veld $\mathbb{F}_{2^m}$ het algoritme sterk vereenvoudigd kan worden. Er moet dan gebruik gemaakt worden van de supersinguliere kromme
+In \cite{barreto-efficient} wordt aangetoond dat indien gewerkt wordt in het veld $\mathbb{F}_{2^m}$ het algoritme sterk vereenvoudigd kan worden. Er moet dan gebruik gemaakt worden van de supersinguliere kromme
 \[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b\]
 met $b \in \{0, 1\}$. Verder dient ook een distortiemap $\phi$ toegepast te worden op het punt $Q$. Voor een veld $\mathbb{F}_{2^m}$ dient de mapping te voldoen aan volgende voorwaarden:
 \[\phi : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6)\]
@@ -138,7 +138,7 @@ De resulterende effici\"entere versie van Millers algoritme is gegeven in \refal
 	\KwData{$i, t \in \mathbb{Z}$; $F, V \in \mathbb{F}_{2^{km}}$}
 	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
 	$F \gets 1$; $V \gets P$\;	
-	\For{$i = t - 1$ to $0$}{
+	\For{$i = t - 1$ tot $0$}{
 		$F \gets F^2 \cdot G_{V,V}(\phi(Q))$\;
 		$V \gets 2 \cdot V$\;
 		\If{$l_i = 1$ en $i \neq 0$}{
@@ -159,11 +159,11 @@ De veiligheid van pairings vindt zijn oorsprong in het discrete logaritme (DL) p
 
 Het DL probleem wordt algemeen aanzien als moeilijk. De snelste algoritmes die dit probleem kunnen oplossen voor een willekeurige groep $\mathbb{G}$ (d.w.z.\ die geen specifieke eigenschappen van het veld uitbuiten) hebben een complexiteit $O(\sqrt{n})$, met $n$ de orde van de groep. Aangezien $n$ exponentieel groeit met de grootte van de groep, geldt hetzelfde voor de uitvoeringstijd van de algoritmes. Enkele voorbeelden van zulke algoritmes zijn Baby-step giant-step \cite{baby-step} en Pollards rho algoritme \cite{pollard-rho}. Voor bepaalde groepen zijn algoritmes bekend met subexponenti\"ele tijdscomplexiteit. In het geval de groep gedefinieerd is als de punten op een supersinguliere elliptische krommen, kan men bijvoorbeeld MOV- \cite{mov} of FR-reductie \cite{ruck} gebruiken. In dat geval is het noodzakelijk de grootte van de groep waarover de kromme gedefinieerd is groot genoeg te nemen, zodat het computationeel onhaalbaar blijft het DL probleem op te lossen.
 
-Een probleem verwant aan het DL probleem is het computationele Diffie-Hellman (CDH) probleem. Stel $a, b \in \mathbb{Z}^*_n$. In dit geval worden $g, g^a, g^b \in \mathbb{G}$ gegeven. Het probleem is nu een element $h \in \mathbb{G}$ te vinden waarvoor $h = g^{ab}$. Het probleem wordt uitgedrukt als CDH$(g^a, g^b) = h$.
+Een probleem verwant aan het DL probleem is het computationeel Diffie-Hellman (CDH) probleem. Stel $a, b \in \mathbb{Z}^*_n$. In dit geval worden $g, g^a, g^b \in \mathbb{G}$ gegeven. Het probleem is nu een element $h \in \mathbb{G}$ te vinden waarvoor $h = g^{ab}$. Het probleem wordt uitgedrukt als CDH$(g^a, g^b) = h$.
 
 Aangezien het CDH probleem kan opgelost worden indien het DL probleem kan opgelost worden, is het dus zeker niet moeilijker. Indien het CDH probleem moeilijk is, is het DL probleem dat dus ook. Of het omgekeerde geldt, is niet geweten. Tot nu toe zijn echter geen methodes gekend die het CDH probleem sneller oplossen dan de methodes die het DL probleem oplossen. De twee worden dan ook als equivalent beschouwd.
 
-Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$, beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$. Dit wordt uitgedruk als DDH$(g^a, g^b, g^c) = 1$ indien waar en DDH$(g^a, g^b, g^c) = 0$ in het andere geval.
+Ten derde is er dan het beslissings Diffie-Hellman (DDH) probleem. Stel $a, b, c \in \mathbb{Z}^*_n$. Nu dient, gegeven $g, g^a, g^b, g^c \in \mathbb{G}$, beslist te worden of $g^c = g^{ab} \: (\bmod \: n)$. Dit wordt uitgedrukt als DDH$(g^a, g^b, g^c) = 1$ indien waar en DDH$(g^a, g^b, g^c) = 0$ in het andere geval.
 
 Het DDH probleem kan opgelost worden aan de hand van het CDH probleem door $h =$ CDH$(g^a, g^b)$ te berekenen en na te gaan of $h = g^c$. Het is dus duidelijk dat het DDH probleem zeker niet moeilijker is dan het CDH probleem. Er zijn echter bepaalde groepen bekend waarvan geweten is dat het DDH probleem makkelijk is en het CDH probleem moeilijk. Deze groepen worden ``gap Diffie-Hellman'' groepen genoemd. Pairings genereren zo een groep, het CDH probleem over elliptische krommen wordt immers als moeilijk beschouwd en ze laten toe DDH$(aP, bP, cP)$ makkelijk te beantwoorden:
 \[\begin{aligned}
@@ -235,7 +235,7 @@ Naast sleutelafspraak zoals die bestaat in publieke sleutelcryptografie laten pa
 
 \subsubsection{Niet-interactieve sleutelafspraak}
 
-Een niet-interactief sleutelafspraak is een sleutelafspraak waarbij de betrokken partijen geen contact met elkaar dienen op te nemen om de sleutel af te spreken. Dit heeft als voordeel dat een man-in-the-middle aanval onmogelijk is. Volgende techniek werd voorgesteld in \cite{sakai}. Twee partijen A en B spreken een gezamenlijke sleutel $k$ af door middel van volgende formules:
+Een niet-interactieve sleutelafspraak is een sleutelafspraak waarbij de betrokken partijen geen contact met elkaar dienen op te nemen om de sleutel af te spreken. Dit heeft als voordeel dat een man-in-the-middle aanval onmogelijk is. Volgende techniek werd voorgesteld in \cite{sakai}. Twee partijen A en B spreken een gezamenlijke sleutel $k$ af door middel van volgende formules:
 \[\begin{aligned}
 k	&= e(d_{\text{A}}, Q_{\text{B}})\\
 	&= e(s Q_{\text{A}}, Q_{\text{B}})\\

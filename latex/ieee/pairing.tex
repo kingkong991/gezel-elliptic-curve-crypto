@@ -7,19 +7,19 @@ As mentioned, we will be creating an accelerator for the Tate pairing. Recently,
 The Tate pairing $e(P, Q)$ is defined as a mapping from two additive groups $\mathbb{G}_1, \mathbb{G}_2$ to a multiplicative group $\mathbb{G}_T$. To be suitable for use in cryptography, it should have the following three properties:
 \begin{itemize}
 	\item Well-defined:%
-		\[\begin{aligned}
+		\begin{displaymath}\begin{aligned}
 			e(\mathcal{O}, Q) &= 1 \: \forall \: Q \in \mathbb{G}_2\\
 			e(P, \mathcal{O}) &= 1 \: \forall \: P \in \mathbb{G}_1.
-		\end{aligned}\]
+		\end{aligned}\end{displaymath}
 	
 	\item Non-degenerate:%
-		\[\forall \: P \in \mathbb{G}_1, \: \exists \: Q \in \mathbb{G}_2 \text{ for which } e(P, Q) \neq 1.\]
+		\begin{displaymath}\forall \: P \in \mathbb{G}_1, \: \exists \: Q \in \mathbb{G}_2 \text{ for which } e(P, Q) \neq 1.\end{displaymath}
 	
 	\item Bilinear: $\forall \: P_1, P_2, P \in \mathbb{G}_1$ and $\forall \: Q_1, Q_2, Q \in \mathbb{G}_2$:%
-		\[\begin{aligned}
+		\begin{displaymath}\begin{aligned}
 			e(P_1 + P_2, Q) &\equiv e(P_1, Q) \cdot e(P_2, Q)\\
 			e(P, Q_1 + Q_2) &\equiv e(P, Q_1) \cdot e(P, Q_2).
-		\end{aligned}\]
+		\end{aligned}\end{displaymath}
 \end{itemize}
 The point $\mathcal{O}$ is the point at infinity on the elliptic curve $E$ over which the pairing is defined.
 
@@ -31,7 +31,7 @@ The notation $E(\mathbb{F}_q) [l]$ meaning the group of points $P \in E(\mathbb{
 
 \subsection{Parameters}
 
-Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, the elliptic curve and the field over which it is defined need to be defined. Due to the simplicity of it's arithmetic, we choose a field $\mathbb{F}_{2^m}$. We are then forced to use the curve \cite{barreto-efficient}:
+Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, the elliptic curve and the field over which it is defined need to be defined. Due to the simplicity of its arithmetic (only XORing), we choose a field $\mathbb{F}_{2^m}$. We are then forced to use the curve \cite{barreto-efficient}:
 \begin{displaymath}
 E(\mathbb{F}_{2^m}) : y^3 + y = x^3 + x + b,
 \end{displaymath}
@@ -62,6 +62,76 @@ The type of supersingular curve that's being used has an embedding degree $k = 4
 \mathbb{F}_{2^{4 m}} \cong \mathbb{F}_{2^{2 m}}[y]/\left(y^2 + (x + 1)y + 1\right)
 \end{gathered}\end{displaymath}
 
+Last, but not least, we need a distortion map $\phi$:
+\begin{displaymath}
+\phi(Q) : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6).
+\end{displaymath}
+The parameters $s, t \in \mathbb{F}_{2^{km}}$ need to be a solution to:
+\begin{displaymath}\begin{cases}
+s^4 + s = 0\\
+t^2 + t + s^6 + s^2 = 0.
+\end{cases}\end{displaymath}
+One possible solution is:
+\begin{displaymath}\begin{cases}
+s = x + 1\\
+t = xy.
+\end{cases}\end{displaymath}
+
+
 \subsection{Arithmetic}
 
-The alog
+Miller's algorithm as modified by Barreto \emph{et al.} is listed in \refalg{algorithm-miller}. The notation $G_{A,B}(S)$ signifies the evaluation of the point $S$ in the equation for the line though the points $U$ and $V$.
+
+\begin{algorithm}[h]
+	\caption[Optimized Miller's algorithm]{Optimized Miller's algorithm \cite{barreto-efficient}}
+	\label{algorithm-miller}
+	\begin{algorithmic}[1]
+		%\KwIn{
+		%\KwOut{}
+		%\KwData{$i, t \in \mathbb{Z}$; $F, V \in \mathbb{F}_{2^{km}}$}
+		\REQUIRE $l \in \mathbb{Z}$; $P, Q \in E(\mathbb{F}_{2^m})[l]$
+		\ENSURE $F = \hat{e}(P, Q) \in \mathbb{F}_{2^{km}}^*$
+		\STATE $t \gets \left\lfloor \log _2 (l) \right\rfloor$
+		\STATE $F \gets 1$
+		\STATE $V \gets P$
+		\FOR{$i = t - 1$ to $0$}
+			\STATE $F \gets F^2 \cdot G_{V,V}(\phi(Q))$
+			\STATE $V \gets 2 \cdot V$
+			\IF{$l_i = 1$ and $i \neq 0$}
+				\STATE $F \gets F \cdot G_{V,P}(\phi(Q))$
+				\STATE $V \gets V + P$
+			\ENDIF
+		\ENDFOR
+		\STATE $F \gets F^{\frac{2^{km} - 1 }{l}}$
+		\RETURN $F$
+	\end{algorithmic}
+\end{algorithm}
+
+The formula's for the double and the add step were taken from \cite{bertoni}. Those for the double step (lines 5 and 6) are:
+\begin{displaymath}\begin{cases}
+	\lambda &= x_V^2 + 1\\
+	x_{2V} &= \lambda ^2\\
+	y_{2V} &= \lambda \cdot (x_{2V} + x_V) + y_V + 1\\
+	G_{V,V}(\phi(Q)) &= \lambda \cdot (x_{\phi} + x_V) + (y_{\phi} + y_V),
+\end{cases}\end{displaymath}
+and those for the add step (lines 8 and 9):
+\begin{displaymath}\begin{cases}
+	\lambda &= \frac{y_V + y_P}{x_V + x_P}\\
+	x_{V + P} &= \lambda ^2 + x_V + x_P\\
+	y_{V + P} &= \lambda \cdot (x_{V + P} + x_P) + y_P + 1\\
+	G_{V,P}(\phi(Q)) &= \lambda \cdot (x_{\phi} + x_P) + (y_{\phi} + y_P).
+\end{cases}\end{displaymath}
+The add step only needs to be executed once, in this case, since
+\begin{displaymath}l = \#E = 2^{163} + 2^{82} + 1.\end{displaymath}
+
+The division in the add step is calculated with an inversion, which is calculated with Fermat's little theorem. One inversion takes 9 multiplications and 162 squarings.
+
+The final exponentiation $F^M$ is split up as in \cite{beuchat}:
+\begin{displaymath}\begin{aligned}
+M	&= \frac{2^{4m} - 1}{l}\\
+	&= \frac{(2^{2m} + 1)(2^{2m} - 1)}{l}\\
+	&= (2^{2m} - 1)(2^m - 2^{\frac{m + 1}{2}} + 1)\\
+	&= (2^{2m} - 1)(2^m + 1) + (1 - 2^{2m})2^{\frac{m + 1}{2}}\\
+\end{aligned}\end{displaymath}
+
+%In order to minimize the memory footprint, and thus the area of the implementation, all sub steps were optimized to use as little temporary values as possible. In total fifteen registers are necessary.
