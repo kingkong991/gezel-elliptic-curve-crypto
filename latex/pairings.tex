@@ -93,9 +93,9 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing}
 	\label{algoritme-pairings-miller}
-	\KwIn{$l \in \mathbb{Z}$; $P, Q \in E(\mathbb{F}_{q^k})[l]$}
+	\KwIn{$l \in \mathbb{Z}$; $P \in E(\mathbb{F}_{q^k})[l]$; $Q \in E(\mathbb{F}_{q^k})/l E(\mathbb{F}_{q^k})$}
 	\KwOut{$e(P, Q) \in \mathbb{F}_{q^k}^*$}
-	\KwData{$i, t \in \mathbb{Z}$; $F, Q', S, V \in \mathbb{F}_{q^k}$}
+	\KwData{$i, t \in \mathbb{Z}$; $Q' \in E(\mathbb{F}_{q^k})$; $V \in E(\mathbb{F}_{q^k})[l]$; $F \in \mathbb{F}_{q^k}$}
 	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
 	$Q' \gets \textsf{rand}(E)$\;
 	$S \gets Q + Q'$\;
@@ -113,8 +113,6 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 
 Daarbij staat $G_{A, B}(C)$ voor de evaluatie van het punt $C$ in de vergelijking van de rechte door de punten $A$ en $B$. Indien $G_{2 \cdot A}$ vermeld staat, wil dit de vergelijking door de raaklijn aan $2 \cdot A$ zeggen.
 
-Hoewel als argumenten van het algoritme elementen van $\mathbb{F}_{q^k}$ staan aangegeven, zal doorgaans voor elementen uit het subveld $\mathbb{F}_q$ gekozen worden. Het resultaat van de pairing zal dus $k$ keer groter zijn dan de opgegeven argumenten. 
-
 In \cite{barreto-efficient} wordt aangetoont dat indien gewerkt wordt in het veld $\mathbb{F}_{2^m}$ het algoritme sterk vereenvoudigd kan worden. Er moet dan gebruik gemaakt worden van de supersinguliere kromme
 \[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b\]
 met $b \in \{0, 1\}$. Verder dient ook een distortiemap $\phi$ toegepast te worden op het punt $Q$. Voor een veld $\mathbb{F}_{2^m}$ dient de mapping te voldoen aan volgende voorwaarden:
@@ -127,13 +125,16 @@ t^2 + t + s^6 + s^2 = 0
 
 Een bijkomend voordeel van het gebruik van de vermelde kromme is haar lage inbeddingsgraad $k = 4$. Hoe groter $k$, hoe meer bewerkingen het immers kost om de pairing te berekenen. Tevens zorgt de distortiemap er voor dat $e(P, P) \neq 1$, wat wordt omgeschreven als sterk niet-degenererend.
 
+Ten slotte dienen lichtelijk andere argument opgegeven worden, deze aangepaste Tate pairing is namelijk gedefinieerd als:
+\[\hat{e}(P, Q): E(\mathbb{F}_q)[l] \times E(\mathbb{F}_q)[l] \mapsto \mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l.\]
+
 De resulterende effici\"entere versie van Millers algoritme is gegeven in \refalg{algoritme-pairings-miller-beter}.
-Het is de combinatie van deze drie eigenschappen die het zo moeilijk maakt de pairing te defini\"eren.
+
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing - Effici\"entere versie}
 	\label{algoritme-pairings-miller-beter}
 	\KwIn{$l \in \mathbb{Z}$; $P, Q \in E(\mathbb{F}_{2^m})[l]$}
-	\KwOut{$e(P, Q) \in \mathbb{F}_{2^{km}}^*$}
+	\KwOut{$\hat{e}(P, Q) \in \mathbb{F}_{2^{km}}^*$}
 	\KwData{$i, t \in \mathbb{Z}$; $F, V \in \mathbb{F}_{2^{km}}$}
 	$t \gets \left\lfloor \log _2 (l) \right\rfloor$\;
 	$F \gets 1$; $V \gets P$\;	
