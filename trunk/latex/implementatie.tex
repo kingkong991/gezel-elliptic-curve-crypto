@@ -252,8 +252,8 @@ Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te v
 \begin{algorithm}[h]
 	\caption{Miller algoritme voor de Tate pairing met parameters ingevuld}
 	\label{algoritme-implementatie-miller-algemeen}
-	\KwIn{$P, Q \in E(\mathbb{F}_{2^{163}})$}
-	\KwOut{$e(P, Q) \in \mathbb{F}_{2^{4 \cdot 163}}^*$}
+	\KwIn{$P, Q \in E(\mathbb{F}_{2^{163}})[2^{163} + 2^7 + 2^6 + 2^3 + 1]$}
+	\KwOut{$\hat{e}(P, Q) \in \mathbb{F}_{2^{4 \cdot 163}}^*$}
 	$F \gets 1$\;
 	$V \gets P$\;
 	\For{$i \gets 162$ \KwTo $0$}{
@@ -494,9 +494,9 @@ Mist het gebruik van een vierde tijdelijk register zou het mogelijk zijn de bere
 
 \subsection{Finale machtsverheffing\label{subsectie-implementatie-miller-finale-exp}}
 
-Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $e(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen. De gebruikte methodes zijn gebaseerd op die in \cite{beuchat}, aangepast aan het gekozen extensieveld en geoptimaliseerd om het registerverbruik zo laag mogelijk te houden.
+Eens de for-loop voltooid is, moet $F$ nog gereduceerd worden zodat het eindresultaat $\hat{e}(P, Q)$ uniek is. Hoe dit gebeurt, wordt onderzocht in de volgende paragrafen. De gebruikte methodes zijn gebaseerd op die in \cite{beuchat}, aangepast aan het gekozen extensieveld en geoptimaliseerd om het registerverbruik zo laag mogelijk te houden.
 
-De reductie op het einde van het Miller algoritme bestaat uit de machtsverheffing $e(P, Q) = F^M$, met
+De reductie op het einde van het Miller algoritme bestaat uit de machtsverheffing $\hat{e}(P, Q) = F^M$, met
 \[\begin{aligned}
 M	&= \frac{2^{4m} - 1}{l}\\
 	&= \frac{(2^{2m} + 1)(2^{2m} - 1)}{l}\\
@@ -505,7 +505,7 @@ M	&= \frac{2^{4m} - 1}{l}\\
 \end{aligned}\]
 
 Aangezien $\nu = 1$ in dit geval, kan de machtsverheffing dus berekend worden als
-\[e(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}\]
+\[\hat{e}(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}\]
 
 Er zal onderzocht worden hoe elk van deze termen berekend kan worden. Stel
 \[\begin{aligned}
@@ -725,7 +725,7 @@ De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J
 De finale stap is de vermenigvuldiging van de twee resulterende variabelen $I$ en $J$. Dit is een vermenigvuldiging in $\mathbb{F}_{2^{4m}}$ en deze kan als volgt geformuleerd worden:
 
 \[\begin{aligned}
-e(P, Q)	&= I \cdot J\\
+\hat{e}(P, Q)	&= I \cdot J\\
 	&= (I_a J_a + I_b J_b + I_c J_c + I_d J_d)\\
 	&\quad + (I_a J_b + I_b J_a + I_b J_b + I_c J_d + I_d J_c + I_d J_d)x\\
 	&\quad + (I_a J_c + I_b J_d + I_c J_a + I_c J_c + I_d J_d + I_d J_b + I_d J_c)y\\
@@ -748,14 +748,14 @@ n_0	&= I_a + I_b + I_c + I_d
 p_0	&= n_0 \cdot n_1\\
 \end{aligned}\]
 
-Gebruik makende van deze waarden, kan de vermenigvuldiging voor $e(P, Q)$ geschreven worden als:
+Gebruik makende van deze waarden, kan de vermenigvuldiging voor $\hat{e}(P, Q)$ geschreven worden als:
 \[\begin{aligned}
-e(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
+\hat{e}(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
 	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y\\
 	&\quad + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
 \end{aligned}\]
 
-Indien zowel $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = e(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
+Indien zowel $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = \hat{e}(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
 
 \begin{algorithm}
 	\caption{Uitwerking van $I \cdot J \in \mathbb{F}_{2^{4m}}$}

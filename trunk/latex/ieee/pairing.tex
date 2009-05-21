@@ -1,6 +1,37 @@
 \section{Parameters and arithmetic for the Tate pairing\label{section-pairings}}
 
-Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, we decided to define the pairing over a supersingular elliptic curve in a finite field modulo two:
+As mentioned, we will be creating an accelerator for the Tate pairing. Recently, variants on that pairing have been published, such as the $\eta_T$ \cite{eta} and Ate \cite{ate} pairings. However, seeing as they are very recent discoveries, we felt it more appropriate to focus on the better known Tate pairing.
+
+\subsection{Definition of the Tate pairing}
+
+The Tate pairing $e(P, Q)$ is defined as a mapping from two additive groups $\mathbb{G}_1, \mathbb{G}_2$ to a multiplicative group $\mathbb{G}_T$. To be suitable for use in cryptography, it should have the following three properties:
+\begin{itemize}
+	\item Well-defined:%
+		\[\begin{aligned}
+			e(\mathcal{O}, Q) &= 1 \: \forall \: Q \in \mathbb{G}_2\\
+			e(P, \mathcal{O}) &= 1 \: \forall \: P \in \mathbb{G}_1.
+		\end{aligned}\]
+	
+	\item Non-degenerate:%
+		\[\forall \: P \in \mathbb{G}_1, \: \exists \: Q \in \mathbb{G}_2 \text{ for which } e(P, Q) \neq 1.\]
+	
+	\item Bilinear: $\forall \: P_1, P_2, P \in \mathbb{G}_1$ and $\forall \: Q_1, Q_2, Q \in \mathbb{G}_2$:%
+		\[\begin{aligned}
+			e(P_1 + P_2, Q) &\equiv e(P_1, Q) \cdot e(P_2, Q)\\
+			e(P, Q_1 + Q_2) &\equiv e(P, Q_1) \cdot e(P, Q_2).
+		\end{aligned}\]
+\end{itemize}
+The point $\mathcal{O}$ is the point at infinity on the elliptic curve $E$ over which the pairing is defined.
+
+Instead of calculating the Tate pairing as proposed by Miller in '86 \cite{miller}, we will be using an optimized version of Miller's algorithm as proposed by Barreto \emph{et al.} \cite{barreto-efficient}. The Tate pairing is then a mapping:
+\begin{displaymath}
+\hat{e}(P, Q) : E(\mathbb{F}_q) [l] \times E(\mathbb{F}_q) [l] \mapsto \mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l.
+\end{displaymath}
+The notation $E(\mathbb{F}_q) [l]$ meaning the group of points $P \in E(\mathbb{F}_q)$ for which $l P = \mathcal{O}$. The result of the pairing is an element of the equivalence group $\mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l$, in which two elements $a \equiv b$ iif $a = bc^l$ with $c \in \mathbb{F}_{q^k}^*$. To eliminate this ambiguity, we will elevate the result of the pairing to the power $\frac{q^k - 1}{l}$, the result of which will be an $l$th root of unity $\mu_l$.
+
+\subsection{Parameters}
+
+Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, the elliptic curve and the field over which it is defined need to be defined. Due to the simplicity of it's arithmetic, we choose a field $\mathbb{F}_{2^m}$. We are then forced to use the curve \cite{barreto-efficient}:
 \begin{displaymath}
 E(\mathbb{F}_{2^m}) : y^3 + y = x^3 + x + b,
 \end{displaymath}
@@ -12,20 +43,25 @@ with $b \in \{0,1\}$. We also define \cite{beuchat}:
 				\end{cases}\\
 \nu		&= (-1)^{\delta}
 \end{aligned}\end{displaymath}
-The value of $b$ set to whatever value maximizes the order of the curve \cite{beuchat, barreto-efficient}:
+The value of $b$ set to whatever value maximizes the order of the curve:
 \begin{displaymath}
 \#E(\mathbb{F}_{2^m}) = 2^m + \nu \sqrt{2^{m+1}} + 1.
 \end{displaymath}
-So, before the value of $b$ can be decided on, $m$ is to be set.
+So, before the value of $b$ can be decided on, $m$ is to be set. We also define $l = \#E$.
 
 Considering that the final implementation should be as small as possible, we settle on $m = 163$, which, according to \cite{lenstra}, should still provide reasonable security. If necessary, the hardware which will be proposed in \refsect{section-hardware} can easily be adapted to larger fields. From \cite{sec2} the reduction polynomial is chosen to be 
 \begin{displaymath}
 R = z^{163} + z^7 + z^6 + z^3 + 1.
 \end{displaymath}
 
-This type of supersingular curve has an embedding degree $k = 4$. The result of the Tate pairing will be an element in $\mathbb{F}_{2^{4 m}}$. We define this field by means of tower extensions \cite{bertoni}:
+Now that's been decided on these parameters, we can see that $b$ needs to equal one.
+
+The type of supersingular curve that's being used has an embedding degree $k = 4$. The result of the Tate pairing will thus be an element in $\mathbb{F}_{2^{4 m}}^*$. We define this field by means of tower extensions \cite{bertoni}:
 \begin{displaymath}\begin{gathered}
 \mathbb{F}_{2^{2 m}} \cong \mathbb{F}_{2^{m}}[x]/\left(x^2 + x + 1\right)\\
 \mathbb{F}_{2^{4 m}} \cong \mathbb{F}_{2^{2 m}}[y]/\left(y^2 + (x + 1)y + 1\right)
 \end{gathered}\end{displaymath}
-Zo
+
+\subsection{Arithmetic}
+
+The alog
