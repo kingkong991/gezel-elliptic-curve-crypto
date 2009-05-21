@@ -1,0 +1,111 @@
+% To check for overfull hboxes, add draft to the document options
+\documentclass[a4paper, 10pt]{IEEEtran}
+\usepackage[english]{babel}   % Taal van het document (opmaakregels ed.)
+%\usepackage{fancyhdr} % Fancy headers & footers
+
+\usepackage{graphicx}
+\usepackage[tight]{subfigure}	% Multiple figures in one float
+
+\usepackage{color}
+\usepackage{colortbl}	% Use colors in table
+\usepackage{multirow}	% Multiple rows and columns in tables
+\usepackage{booktabs}	% Professional looking tables
+
+\usepackage{amsmath,amsfonts}    % Wiskunde
+
+\usepackage{listings}            % Code Listings
+%\usepackage[subfigure]{tocloft}		% Lijsten van willekeurige dingen + optie om errors met subfigure te vermijden
+%\usepackage{url}                % Opmaak van URLs
+
+\usepackage[pdftex, pdfborder={0 0 0}]{hyperref}	% Links in pdf
+
+% Titel etc
+\title{Compact implementations of pairings}
+\author{Anthony Van Herrewege\thanks{Anthony Van Herrewege can be contacted at anthonyvh@gmail.com.}}
+\date{22 May 2009}
+
+% Math stuff
+\newcommand{\xor}{\oplus}
+
+% Citatie commando's
+\newcommand{\reffig}[1]{Fig.~\ref{#1}}
+\newcommand{\reftbl}[1]{Table~\ref{#1}}
+\newcommand{\refalg}[1]{Alg.~\ref{#1}}
+\newcommand{\refsect}[1]{Section~\ref{#1}}
+\newcommand{\refhfdst}[1]{Chapter~\ref{#1}}
+\newcommand{\refform}[1]{Formula~\ref{#1}}
+
+% Misc commando's
+\newcommand{\nr}{n$^{\circ}$~}
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}	% Voetnoten met symbolen ipv nummers
+
+% Narrow environment for wide tables & figures
+% Usage: \begin{narrow}{-left cm}{-right cm}
+\newenvironment{narrow}[2]{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{#1}%
+    \setlength{\rightmargin}{#2}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]
+}{\end{list}}
+
+% BibTex opmaak
+\bibliographystyle{IEEEtran} % Unsorted IEEE style
+
+% Fix for unsorted bibliographies & citations in captions
+\def\@starttoc#1{%
+  \begingroup
+    \@fileswfalse
+    \makeatletter
+    \@input{\jobname.#1}%
+  \endgroup
+  \if@filesw
+    \expandafter\newwrite\csname tf@#1\endcsname
+    \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+  \fi
+  \@nobreakfalse
+}
+
+% Plaats van afbeeldingen
+\graphicspath{{../images/}}
+\DeclareGraphicsExtensions{.pdf,.eps,.png}
+
+% Fix caption spacing bij tabellen
+%\setlength{\belowcaptionskip}{6pt}
+
+% Regel nummering van figuren
+%\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+%\newcommand{\Chapter}[1]{\chapter{#1} \setcounter{figure}{0}}
+
+\begin{document}
+\selectlanguage{english}  % Set hyphenation patterns
+
+% Include gedeelte (begint op nieuwe pagina
+% Indien gewoon invoegen op huidige plaats \input
+
+\maketitle
+
+\input{abstract}
+
+\input{content}
+
+% BibTex referenties
+\bibliography{../references}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{anthony}}]
+{Anthony Van Herrewege} Testen maar
+
+Nog eentje
+\end{IEEEbiography}
+
+
+% Lege achterpagina
+%\clearpage
+%\mbox{~}
+%\thispagestyle{empty}
+
+\end{document}
