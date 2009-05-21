@@ -16,8 +16,10 @@ Ook moet een kromme vastgelegd worden. Er wordt gekozen voor de reeds eerder ver
 \[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b,\]
 waarbij $b \in \{0, 1\}$.  Dat type krommen heeft een kleine inbeddingsgraad $k = 4$ en geeft aanleiding tot simpele rekenregels voor de verdubbeling en optelling van punten \cite{barreto-efficient, hankerson-book}. Verder worden de volgende hulp variabelen bepaald:
 \[\begin{aligned}
-\delta	&= b	\qquad	& m \equiv 1, 7 \quad(\bmod \; 8)\\
-			&= 1 - b		& m \equiv 3, 5 \quad(\bmod \; 8)\\
+\delta	&= \begin{cases}
+				b		\qquad &m \equiv 1, 7 \pmod 8\\
+				1 - b			&m \equiv 3, 5	\pmod 8
+				\end{cases}\\
 \nu		&= (-1)^{\delta}\\
 \end{aligned}\]
 De orde van de kromme is gelijk aan \cite{barreto-efficient}:
