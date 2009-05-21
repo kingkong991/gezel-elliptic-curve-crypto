@@ -1,0 +1,31 @@
+\section{Parameters and arithmetic for the Tate pairing\label{section-pairings}}
+
+Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, we decided to define the pairing over a supersingular elliptic curve in a finite field modulo two:
+\begin{displaymath}
+E(\mathbb{F}_{2^m}) : y^3 + y = x^3 + x + b,
+\end{displaymath}
+with $b \in \{0,1\}$. We also define \cite{beuchat}:
+\begin{displaymath}\begin{aligned}
+\delta	&= \begin{cases}
+				b		\qquad &m \equiv 1, 7 \pmod 8\\
+				1 - b			&m \equiv 3, 5	\pmod 8
+				\end{cases}\\
+\nu		&= (-1)^{\delta}
+\end{aligned}\end{displaymath}
+The value of $b$ set to whatever value maximizes the order of the curve \cite{beuchat, barreto-efficient}:
+\begin{displaymath}
+\#E(\mathbb{F}_{2^m}) = 2^m + \nu \sqrt{2^{m+1}} + 1.
+\end{displaymath}
+So, before the value of $b$ can be decided on, $m$ is to be set.
+
+Considering that the final implementation should be as small as possible, we settle on $m = 163$, which, according to \cite{lenstra}, should still provide reasonable security. If necessary, the hardware which will be proposed in \refsect{section-hardware} can easily be adapted to larger fields. From \cite{sec2} the reduction polynomial is chosen to be 
+\begin{displaymath}
+R = z^{163} + z^7 + z^6 + z^3 + 1.
+\end{displaymath}
+
+This type of supersingular curve has an embedding degree $k = 4$. The result of the Tate pairing will be an element in $\mathbb{F}_{2^{4 m}}$. We define this field by means of tower extensions \cite{bertoni}:
+\begin{displaymath}\begin{gathered}
+\mathbb{F}_{2^{2 m}} \cong \mathbb{F}_{2^{m}}[x]/\left(x^2 + x + 1\right)\\
+\mathbb{F}_{2^{4 m}} \cong \mathbb{F}_{2^{2 m}}[y]/\left(y^2 + (x + 1)y + 1\right)
+\end{gathered}\end{displaymath}
+Zo
