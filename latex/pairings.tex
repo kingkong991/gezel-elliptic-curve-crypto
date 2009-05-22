@@ -114,14 +114,14 @@ Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \ci
 Daarbij staat $G_{A, B}(C)$ voor de evaluatie van het punt $C$ in de vergelijking van de rechte door de punten $A$ en $B$. Indien $G_{2 \cdot A}$ vermeld staat, wil dit de vergelijking door de raaklijn aan $2 \cdot A$ zeggen.
 
 In \cite{barreto-efficient} wordt aangetoond dat indien gewerkt wordt in het veld $\mathbb{F}_{2^m}$ het algoritme sterk vereenvoudigd kan worden. Er moet dan gebruik gemaakt worden van de supersinguliere kromme
-\[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b\]
+\[E(\mathbb{F}_{2^m}): y^3 + y = x^3 + x + b,\]
 met $b \in \{0, 1\}$. Verder dient ook een distortiemap $\phi$ toegepast te worden op het punt $Q$. Voor een veld $\mathbb{F}_{2^m}$ dient de mapping te voldoen aan volgende voorwaarden:
-\[\phi : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6)\]
+\[\phi : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6),\]
 met $s, t \in \mathbb{F}_{2^{km}}$. Daarbij moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
-\[\left\{\begin{array}{l}
+\[\begin{cases}
 s^4 + s = 0\\
-t^2 + t + s^6 + s^2 = 0
-\end{array}\right.\]
+t^2 + t + s^6 + s^2 = 0.
+\end{cases}\]
 
 Een bijkomend voordeel van het gebruik van de vermelde kromme is haar lage inbeddingsgraad $k = 4$. Hoe groter $k$, hoe meer bewerkingen het immers kost om de pairing te berekenen. Tevens zorgt de distortiemap er voor dat $e(P, P) \neq 1$, wat wordt omgeschreven als sterk niet-degenererend.
 
@@ -226,7 +226,7 @@ met $h$ zoals gedefinieerd in het `sign' algoritme. Dat dit klopt kan geverifiee
 e(P, V)	&= e(P, (r + h) \cdot d_{\text{ID}})\\
 			&= e(P, (r + h) \cdot s Q_{\text{ID}})\\
 			&= e(P, (r + h) \cdot Q_{\text{ID}})^s\\
-			&= e(P_{\text{pub}}, U + h Q_{\text{ID}})\\
+			&= e(P_{\text{pub}}, U + h Q_{\text{ID}}).
 \end{aligned}\]
 
 \subsection{Sleutelafspraak}
@@ -239,7 +239,7 @@ Een niet-interactieve sleutelafspraak is een sleutelafspraak waarbij de betrokke
 \[\begin{aligned}
 k	&= e(d_{\text{A}}, Q_{\text{B}})\\
 	&= e(s Q_{\text{A}}, Q_{\text{B}})\\
-	&= e(Q_{\text{A}}, d_{\text{B}}).\\
+	&= e(Q_{\text{A}}, d_{\text{B}}).
 \end{aligned}\]
 
 Aangezien beiden hun persoonlijke geheime sleutel bezitten en de publieke sleutel van de andere persoon kunnen berekenen, is er dus geen communicatie noodzakelijk. Een nadeel van dit schema is dat de afgesproken sleutel steeds dezelfde zal zijn. In \cite{smart} wordt een schema voorgesteld om de sleutel dynamisch te maken, daarbij is echter wel communicatie vereist.
@@ -251,6 +251,7 @@ Met behulp van pairings is het mogelijk tussen drie partijen een sleutel af te s
 k	&= e(bP, cP)^a\\
 	&= e(aP, cP)^b\\
 	&= e(aP, bP)^c\\
-	&= e(P, P)^{abc}
+	&= e(P, P)^{abc}.
 \end{aligned}\]
+
 Merk op dat dit schema geen gebruik maakt van identiteiten en dus niet tot identiteits-gebaseerde cryptografie behoord. Tevens is het niet bestand tegen man-in-the-middle aanvallen. In \cite{paterson} wordt met behulp van publieke sleutel cryptografie een resistent schema uitgewerkt.

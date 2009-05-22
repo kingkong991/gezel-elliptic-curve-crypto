@@ -101,10 +101,9 @@ Algemeen kan dus gesteld worden dat hoe kleiner het uiteindelijke resultaat is, 
 De kern van de hardware implementatie wordt gevormd door de Modulaire Aritmetische Logische Unit (MALU) \cite{sakiyama, batina-lowcost}. Dit circuit laat toe basis bewerkingen uit te voeren op getallen. Gezien de beperking die is opgelegd aan de oppervlakte van de schakeling, wordt enkel de optelling ge\"implementeerd. Later wordt met behulp daarvan elke andere nodige berekening verwezenlijkt.
 
 Aangezien er in het veld $\mathbb{F}_{2^m}$ gewerkt wordt, is een optelling equivalent aan een XOR bewerking. De bewerking die moet uitgevoerd kunnen worden is:
-
 \[\begin{aligned}
 T + B	&= T \xor B\\
-		&= R \mod P
+		&= R \mod P.
 \end{aligned}\]
 
 Merk op dat bij een optelling de graad van $R$ enkel kleiner of gelijk kan zijn aan die van $T$ en $B$. Indien $B$ van graad $< m$ is (dus $\in \mathbb{F}_{2^m}$) en $T$ van graad $\leq m$ ($\in \mathbb{F}_{2^{m+1}}$), is de optelling te implementeren als in \refalg{algoritme-implementatie-malu-modulo}.
@@ -293,7 +292,7 @@ De verdubbelstap wordt gevormd door lijnen \ref{lijn-implementatie-miller-algeme
 	\lambda = x_V^2 + 1\\
 	x_{2V} = \lambda ^2\\
 	y_{2V} = \lambda \cdot (x_{2V} + x_V) + y_V + 1\\
-	G_{V,V}(\phi(Q)) = \lambda \cdot (x_{\phi} + x_V) + (y_{\phi} + y_V)
+	G_{V,V}(\phi(Q)) = \lambda \cdot (x_{\phi} + x_V) + (y_{\phi} + y_V).
 \end{cases}\]
 
 Het is ook mogelijk $y_{2V}$ te berekenen als:
@@ -312,10 +311,10 @@ Door de specifieke vorm van $\phi(Q)$ kan $G$ uitgeschreven worden als:
 			&= \lambda + y_{\phi_b}&
 				G_d	&= \lambda \cdot x_{\phi_d} + y_{\phi_d}\\
 			&=	\lambda + x_{\phi_a}&
-						&= 1\\
+						&= 1.\\
 \end{aligned}\]
 
-De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in plaats van in vier. De vorm van $G$ zal ook toelaten de vermenigvuldiging $F \cdot G$ grotendeels te vereenvoudigen, zoals later gezien zal worden.
+De variabele $G$ kan dus opgeslagen worden in twee registers van grootte $m$ in plaats van in vier. De vorm van $G$ zal ook toelaten de vermenigvuldiging $F \cdot G$ grotendeels te vereenvoudigen, zoals later gezien wordt.
 
 Wanneer dit in rekening gebracht wordt en het algoritme op register niveau wordt uitgeschreven, bekomt men uiteindelijk \refalg{algoritme-implementatie-miller-double-detail}. Hierbij werd specifiek gelet op een minimum gebruik van tijdelijke registers.
 
@@ -343,7 +342,7 @@ De optelstap bestaat uit lijnen \ref{lijn-implementatie-miller-algemeen-add-1} e
 	\lambda = \frac{y_V + y_P}{x_V + x_P}\\
 	x_{V + P} = \lambda ^2 + x_V + x_P\\
 	y_{V + P} = \lambda \cdot (x_{V + P} + x_P) + y_P + 1\\
-	G_{V,P}(\phi(Q)) = \lambda \cdot (x_{\phi} + x_P) + (y_{\phi} + y_P)
+	G_{V,P}(\phi(Q)) = \lambda \cdot (x_{\phi} + x_P) + (y_{\phi} + y_P).
 \end{cases}\]
 
 Net zoals bij de verdubbelstap kan $G$ hier in twee variabelen opgeslagen worden. Hoewel de optelstap slechts \'e\'en maal moet worden uitgevoerd, is het uiteraard cruciaal dat ook hier zo weinig mogelijk tijdelijke variabelen gebruikt worden. Op die manier blijft de grootte van de uiteindelijke schakeling het kleinst. De uitgewerkte versie van het algoritme wordt gegeven in \refalg{algoritme-implementatie-miller-add-detail}.
@@ -373,7 +372,7 @@ De meest tijdrovende stap in de optelstap is de inversie.  Een inversie in een G
 \[\begin{aligned}
 a^{2^m}		&= a\\
 a^{2^m - 1}	&= 1\\
-a^{2^m - 2}	&= a^{-1}\\
+a^{2^m - 2}	&= a^{-1}.
 \end{aligned}\]
 
 % $2^{163} -2 = 11 692 013 098 647 223 345 629 478 661 730 264 157 247 460 343 806$
@@ -383,11 +382,11 @@ De na\"ieve manier om dit te berekenen zou zijn om $a$ in totaal $2^m - 2$ maal 
 Een tweede manier bestaat er in de exponent te ontbinden in machten van 2 en 3. In dat geval zouden er nog 237 vermenigvuldigen nodig zijn.
 
 Er is echter een derde, optimale manier die toegepast kan worden indien de exponent van de vorm $2^m - 2$ is \cite{batina-pkc, itoh}. Dit gaat als volgt in zijn werk. Stel:
-\[a^{2^m - 2} = (a^{2^{m - 1} - 1})^2\]
+\[a^{2^m - 2} = (a^{2^{m - 1} - 1})^2.\]
 Als wordt aangenomen dat $m$ oneven is, is de exponent van twee na het gelijkheidsteken dus even. Zolang de exponent even is, kan recursief volgende formule toegepast worden:
-\[a^{2^i - 1} = (a^{2^{\frac{i}{2}} - 1})^{2^{\frac{i}{2}}} \cdot a^{2^{\frac{i}{2}} - 1}\]
+\[a^{2^i - 1} = (a^{2^{\frac{i}{2}} - 1})^{2^{\frac{i}{2}}} \cdot a^{2^{\frac{i}{2}} - 1}.\]
 Indien $a$ oneven is, dient volgende formule toegepast te worden:
-\[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a\]
+\[a^{2^i - 1} = (a^{2^{i - 1} - 1})^2 \cdot a.\]
 Uiteindelijk eindigt men dan bij $a^2$. Het totaal aantal bewerkingen voor een inversie in $\mathbb{F}_{2^m}$ is $\lfloor\log_2(m - 1)\rfloor + \textsf{Hamm}(m - 1) + 1$ vermenigvuldigingen en $m - 1$ kwadrateringen.
 
 In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegeven in \refalg{algoritme-implementatie-miller-inversie}. Het aantal berekeningen in dat geval is 9 vermenigvuldigingen en 162 kwadrateringen. Er is een register nodig om $a$ bij de houden en twee voor de tussenresultaten $a^{2^i - 1}$ en $(a^{2^i - 1})^{2^i}$.
@@ -412,7 +411,6 @@ In het geval van $m = 163$ is de uiteindelijke keten van bewerkingen zoals gegev
 \subsubsection{Kwadratering van $F$}
 
 Bij het uitvoeren van lijn~\ref{lijn-implementatie-miller-algemeen-double-1} van \refalg{algoritme-implementatie-miller-algemeen} moet ook telkens het kwadraat van $F$ berekend worden. De afleiding van de formule daarvoor gaat als volgt:
-
 \[\begin{aligned}
 F^2	&= (F_a + F_b x + F_c y + F_d xy) \cdot (F_a + F_b x + F_c y + F_d xy)\\
 		&= F_a^2 + F_a F_b x + F_a F_c y + F_a F_d xy + F_b F_a x + F_b^2 x^2 + F_b F_c xy\\
@@ -422,7 +420,7 @@ F^2	&= (F_a + F_b x + F_c y + F_d xy) \cdot (F_a + F_b x + F_c y + F_d xy)\\
 			&\quad + (F_a F_b + F_b F_a + F_b^2 + F_c F_d + F_d F_c + F_d^2)x\\
 			&\quad + (F_a F_c + F_b F_d + F_c F_a + F_c^2 + F_c F_d + F_d F_b + F_d F_c)y\\
 			&\quad + (F_a F_d + F_b F_c + F_b F_d + F_c F_b + F_c^2 + F_d F_a + F_d F_b + F_d^2)xy\\
-		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x + F_c^2 y + (F_c^2 + F_d^2)xy\\
+		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x + F_c^2 y + (F_c^2 + F_d^2)xy.
 \end{aligned}\]
 
 Mits de originele waarde van $F$ overschreven mag worden, is het mogelijk dit te berekenen zonder gebruik van tijdelijke variabelen. Er zijn dus enkel vier registers nodig voor $F$. Hoe dat in z'n werk gaat is te zien in \refalg{algoritme-implementatie-miller-f-square}. E\'en kwadratering van $F$ vraagt vier optellingen en vier kwadrateringen in $\mathbb{F}_{2^m}$.
@@ -445,7 +443,6 @@ Mits de originele waarde van $F$ overschreven mag worden, is het mogelijk dit te
 \subsubsection{Vermenigvuldiging $F \cdot G$}
 
 Zoals eerder opgemerkt, is $G$ in zowel de verdubbel- als optelstap niet van volledige rang in het extensieveld. De vermenigvuldiging van F met G kan daardoor vereenvoudigd worden, namelijk als volgt:
-
 \[\begin{aligned}
 F \cdot G	&= (F_a + F_b x + F_c y + F_d xy) \cdot (G_a + G_b x + xy)\\
 	&= F_a G_a + F_a G_b x + F_a xy + F_b G_a x + F_b G_b x^2 + F_b x^2y + F_c G_a y\\
@@ -453,16 +450,15 @@ F \cdot G	&= (F_a + F_b x + F_c y + F_d xy) \cdot (G_a + G_b x + xy)\\
 	&= (F_a G_a + F_b G_b + F_d)\\
 		&\quad + (F_a G_b + F_b G_a + F_b G_b + F_c + F_d)x\\
 		&\quad + (F_b + F_c G_a + F_c + F_d G_b)y\\
-		&\quad + (F_a + F_b + F_c G_b + F_d G_a + F_d G_b + F_d)xy\\
+		&\quad + (F_a + F_b + F_c G_b + F_d G_a + F_d G_b + F_d)xy.
 \end{aligned}\]
 
 Indien hier nu de Karatsuba-Ofman techniek \cite{karatsuba-oldest, zuras} op wordt toegepast, bekomt men:
-
 \[\begin{aligned}
 F \cdot G &= (F_a G_a + F_b G_b + F_d)\\
 				&\quad + ((F_a + F_b) \cdot (G_a + G_b) + F_a G_a + F_c + F_d)x\\
 				&\quad + (F_c G_a + F_d G_b + F_b + F_c)y\\
-				&\quad + ((F_c + F_d) \cdot (G_a + G_b) + F_c G_a + F_a + F_b + F_d)xy\\
+				&\quad + ((F_c + F_d) \cdot (G_a + G_b) + F_c G_a + F_a + F_b + F_d)xy.
 \end{aligned}\]
 
 Deze formule kan uitgerekend wordt met gebruik van drie tijdelijke registers ($a$, $b$ en $c$). Verder zijn er vier registers nodig voor $F$ en twee voor $G$. Merk op dat de oude waarde van $F$ overschreven wordt door het resultaat. In totaal zijn er zes vermenigvuldigingen en veertien optellingen nodig. \refalg{algoritme-implementatie-miller-fg} beschrijft welke berekeningen juist uitgevoerd moeten worden.
@@ -497,16 +493,16 @@ De reductie op het einde van het Miller algoritme bestaat uit de machtsverheffin
 M	&= \frac{2^{4m} - 1}{l}\\
 	&= \frac{(2^{2m} + 1)(2^{2m} - 1)}{l}\\
 	&= (2^{2m} - 1)(2^m - \nu 2^{\frac{m + 1}{2}} + 1)\\
-	&= (2^{2m} - 1)(2^m + 1) + \nu(1 - 2^{2m})2^{\frac{m + 1}{2}}\\
+	&= (2^{2m} - 1)(2^m + 1) + \nu(1 - 2^{2m})2^{\frac{m + 1}{2}}.
 \end{aligned}\]
 
 Aangezien $\nu = 1$ in dit geval, kan de machtsverheffing dus berekend worden als
-\[\hat{e}(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}\]
+\[\hat{e}(P, Q) = \left(F^{2^{2m} - 1}\right)^{2^m + 1} \cdot \left(F^{1 - 2^{2m}}\right)^{2^{\frac{m + 1}{2}}}.\]
 
 Er zal onderzocht worden hoe elk van deze termen berekend kan worden. Stel
 \[\begin{aligned}
 F	&= (F_a + F_b x) + (F_c + F_d x)y\\
-	&= U_0 + U_1y,\\
+	&= U_0 + U_1y,
 \end{aligned}\]
 met $U_0, U_1 \in \mathbb{F}_{2^{2m}}$. Met $y^{2^{2m}} = y + x + 1$ is $F^{2^{2m}} = U_0 + U_1 + U_1x + U_1y$. 	Men vindt dus:
 \[\begin{aligned}
@@ -514,7 +510,7 @@ I  &= F^{2^{2m} - 1} = \frac{F^{2^{2m}}}{F}\\
 	&= \frac{U_0 + U_1 + U_1x + U_1y}{U_0 + U_1y}\\
 	&= \frac{(U_0 + U_1 + U_1x + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
 %	&= \frac{U_0^2 + U_1^2 + U_1^2x + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
-	&= \frac{U_0^2 + U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
+	&= \frac{U_0^2 + U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y
 \end{aligned}\]
 en
 \[\begin{aligned}
@@ -522,7 +518,7 @@ J  &= F^{1 - 2^{2m}} = \frac{F}{F^{2^{2m}}}\\
 	&= \frac{U_0 + U_1y}{U_0 + U_1 + U_1x + U_1y}\\
 	&= \frac{(U_0 + U_1y)^2}{(U_0 + U_1 + U_1x + U_1y) \cdot (U_0 + U_1y)}\\
 %	&= \frac{U_0^2 + U_1^2 + + U_1^2y + U_1^2xy}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\\
-	&= \frac{U_0^2 + U_1^2}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y\\
+	&= \frac{U_0^2 + U_1^2}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x} + \left[\frac{U_1^2 + U_1^2x}{U_0^2 + U_1^2 + U_0 U_1 + U_0 U_1 x}\right]y.
 \end{aligned}\]
 
 Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk echter op dat de noemers van alle breuken in zowel $I$ als $J$ identiek zijn. Er zal dus slechts \'e\'en inversie in $\mathbb{F}_{2^{2m}}$ uitgerekend moeten worden. Ook zijn de tweede termen van $I$ en $J$ identiek. In totaal moeten dus drie elementen in $\mathbb{F}_{2^{2m}}$ opgeslagen worden alvorens de termen  vermenigvuldigd kunnen worden. Dit wil zeggen dat er dus zes registers van grootte $m$ nodig zijn.
@@ -530,10 +526,9 @@ Er moeten dus vier termen in $\mathbb{F}_{2^{2m}}$ berekend worden. Merk echter 
 \subsubsection{Termen van de deelbreuken}
 
 Ten eerste worden de drie tellers $I_t$, $J_t$ en $G_t$ uitgewerkt. Hierbij staan $I_t$ en $J_t$ voor de teller van de eerste breuk van respectievelijk $I$ en $J$, $G_t$ staat voor de teller van de gemeenschappelijke tweede breuk en $G_n$ voor de gemeenschappelijke noemer. Met andere woorden:
-
 \[\begin{aligned}
 I = \frac{I_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y\\
-J = \frac{J_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y\\
+J = \frac{J_t}{G_n} + \left[ \frac{G_t}{G_n} \right] y.
 \end{aligned}\]
 
 Het kwadraat van een element $A \in \mathbb{F}_{2^{2m}}$ is
@@ -544,7 +539,7 @@ A^2	&= a_0^2 + a_1^2 x^2\\
 en de vermenigvuldiging van $A, B \in \mathbb{F}_{2^{2m}}$:
 \[\begin{aligned}
 A \cdot B	&= a_0 b_0 + a_0 b_1 x + a_1 b_0 x + a_1 b_1 x^2\\
-				&= (a_0 b_0 + a_1 b_1) + (a_0 b_1 + a_1 b_0 + a_1 b_1)x\\
+				&= (a_0 b_0 + a_1 b_1) + (a_0 b_1 + a_1 b_0 + a_1 b_1)x.
 \end{aligned}\]
 
 Zodoende bekomt men:
@@ -554,11 +549,10 @@ I_t	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x] + [F_d^2 + F_c^2
 J_t	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
 		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2) + (F_b^2 + F_d^2)x\\
 G_t	&= [(F_c^2 + F_d^2) + F_d^2x] + [F_d^2 + F_c^2x]\\
-		&= F_c^2 + (F_c^2 + F_d^2)x\\
+		&= F_c^2 + (F_c^2 + F_d^2)x.
 \end{aligned}\]
 
 Voor de gemeenschappelijke noemer $G_n$ vindt men:
-
 \[\begin{aligned}
 G_n	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
 			&\quad + [(F_a F_c + F_b F_d) + (F_a F_d + F_b F_c + F_b F_d)x]\\
@@ -566,7 +560,7 @@ G_n	&= [(F_a^2 + F_b^2) + F_b^2 x] + [(F_c^2 + F_d^2) + F_d^2x]\\
 		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + F_a F_c + F_a F_d + F_b F_c)\\
 			&\quad + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
 		&= (F_a^2 + F_b^2 + F_c^2 + F_d^2 + (F_a + F_b) \cdot (F_c + F_d) + F_b F_d)\\
-			&\quad + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x\\
+			&\quad + (F_b^2 + F_d^2 + F_a F_c + F_b F_d)x.
 \end{aligned}\]
 
 Een methode om deze vier resultaten uit te rekenen is te zien in \refalg{algoritme-implementatie-miller-final-noemers}. Er zijn vier registers nodig voor $F$ en acht voor $I_t$, $J_t$, $G_t$ en $G_n$. Tevens moet er nog \'e\'en tijdelijk register voorzien worden voor $a$. De uitkomsten kunnen bepaald worden na twaalf optellingen, drie vermenigvuldigingen en vier kwadrateringen.
@@ -620,11 +614,10 @@ met $w = A_a^2 + (A_a + A_b) \cdot A_b$. Een inversie in $\mathbb{F}_{2^{2m}}$ k
 Gewapend met al deze waarden is het mogelijk $I = I_0 + I_1 y$ en $J = J_0 + J_1 y$ te berekenen. In totaal zijn hier zes vermenigvuldigingen in $\mathbb{F}_{2^{2m}}$ nodig. 
 
 Stel $A = A_a + A_b x, B = B_a + B_b x \in \mathbb{F}_{2^{2m}}$. De vermenigvuldiging kan dan geschreven worden als:
-
 \[\begin{aligned}
 C	&= (A_a + A_b x) + (B_a + B_b x)\\
 	&= (A_a B_a + A_b B_b) + (A_a B_b + A_b B_a + A_b B_b)x\\
-	&= (A_a B_a + A_b B_b) + \bigl( (A_a + A_b) \cdot (B_a + B_b) + A_a B_a \bigr) x\\
+	&= (A_a B_a + A_b B_b) + \bigl( (A_a + A_b) \cdot (B_a + B_b) + A_a B_a \bigr) x.
 \end{aligned}\]
 
 In dit geval dienen zowel $I_t$, $J_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd te worden. Vooropgesteld dat de tellers na vermenigvuldiging met $G_n$ niet meer nodig zijn en dus overschreven mogen worden, kan \refalg{algoritme-implementatie-miller-f2m-mult} gebruikt worden. Er zijn dan zes registers nodig voor de uitkomsten, twee voor $G_n^{-1}$ en twee tijdelijke register voor $a$ en $b$. De vermenigvuldiging in $\mathbb{F}_{2^{2m}}$ kan berekend worden in drie vermenigvuldigingen en vier optellingen.
@@ -646,14 +639,14 @@ In dit geval dienen zowel $I_t$, $J_t$ als $G_t$ met $G_n^{-1}$ vermenigvuldigd 
 Nu $I$ en $J$ bekend zijn, moeten ze beiden tot de correcte macht verheven worden. Voor $I$ is dat $2^m + 1$, wat simpelweg mogelijk zou zijn door $I^{2^m}$ te berekenen en dit resultaat te vermenigvuldigen met $I$. Dit zou een vermenigvuldiging van twee elementen in $\mathbb{F}_{2^{4m}}$ zijn, wat, zoals verderop zal gezien worden, negen vermenigvuldigingen en twee\"entwintig optellingen kost. Er is echter een snellere manier.
 
 Uitgaande van de gelijkheid $A^{2^m} = A$ voor $A \in \mathbb{F}_{2^{m}}$, weet men dat de vier elementen van $I$ na de machtsverheffing simpelweg zullen bestaan uit sommen van de beginwaarden. Via volgende gelijkheden:
-
 \[\begin{aligned}
 x^{2^m}	&= 1 + x\\
 y^{2^m}	&= 1 + x + y + xy\\
-(xy)^{2^m}	&= x + xy\\
+(xy)^{2^m}	&= x + xy
 \end{aligned}\]
 en met $I = I_a + I_b x + I_c y + I_d xy$, vindt men dus:
 \[I^{2^m} = (I_a + I_b + I_c) + (I_b + I_c + I_d) x + I_c y + (I_c + I_d) xy.\]
+
 Vervolgens vermenigvuldigt men dit met de originele $I$, wat resulteert in $I^{2^m + 1} = r_a + r_b x + r_c y + r_d xy$:
 \[\begin{aligned}
 r_a	&= (I_a + I_b + I_c) \cdot I_a + (I_b + I_c + I_d) \cdot I_b + I_c^2 + (I_c + I_d) \cdot I_d\\
@@ -662,14 +655,15 @@ r_b	&= (I_a + I_b + I_c) \cdot I_b + (I_b + I_c + I_d) \cdot I_a + (I_b + I_c + 
 r_c	&= (I_a + I_b + I_c) \cdot I_c + (I_b + I_c + I_d) \cdot I-d + I_a I_c + I_c^2 + I_c I_d\\
 		&\quad + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_c\\
 r_d	&= (I_a + I_b + I_c) \cdot I_d + (I_b + I_c + I_d) \cdot I_c + (I_b + I_c + I_d) \cdot I_d\\
-		&\quad + I_b I_c + I_c^2 + (I_c + I_d) \cdot I_a + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_d.\\
+		&\quad + I_b I_c + I_c^2 + (I_c + I_d) \cdot I_a + (I_c + I_d) \cdot I_b + (I_c + I_d) \cdot I_d.
 \end{aligned}\]
+
 Dit kan vereenvoudigd worden tot:
 \[\begin{aligned}
 r_a	&= I_a^2 + I_a I_b + I_a I_c + I_b^2 + I_b I_c + I_b I_d + I_c^2 + I_c I_d + I_d^2\\
 r_b	&= I_a I_c + I_a I_d + I_b I_d + I_c I_d + I_c^2 + I_d^2\\
 r_c	&= I_c^2 + I_c I_d + I_d^2\\
-r_d	&= I_a I_c + I_b I_c + I_b I_d.\\
+r_d	&= I_a I_c + I_b I_c + I_b I_d.
 \end{aligned}\]
 
 Voor de toepassing van de Karatsuba-Ofman techniek worden de volgende tussenresultaten uitgerekend:
@@ -680,13 +674,14 @@ m_2	&= I_a I_d
 			&m_3	&= I_b I_c\\
 m_4	&= I_c I_d\\
 s_0	&= (I_a + I_b)^2
-			&s_1	&= (I_c + I_d)^2.\\
+			&s_1	&= (I_c + I_d)^2.
 \end{aligned}\]
+
 Aan de hand van deze waarden kan het uiteindelijke resultaat berekend worden:
 \[\begin{aligned}
 I^{2^m + 1}	&= (m_0 + m_1 + m_2 + m_4 + s_0 + s_1)\\
 				&\quad + (m_0 + m_3 + m_4 + s_1) x \\
-				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy.\\
+				&\quad + (m_4 + s_1) y + (m_0 + m_2) xy.
 \end{aligned}\]
 
 Ook bij de implementatie van dit algoritme wordt ervan uitgegaan dat de beginvariable, $I$ in dit geval, niet behouden dient te worden. Er zijn dan uiteindelijk vier registers nodig voor het resultaat en vijf voor tussenresultaten. De totale kost komt neer op vijf vermenigvuldigingen, twee kwadrateringen en negen optellingen. \refalg{algoritme-implementatie-miller-v-power} geeft een overzicht van de bewerkingen.
@@ -715,17 +710,15 @@ De voorlaatste berekening die gemaakt moet worden, is de machtsverheffing van $J
 \subsubsection{Vermenigvuldiging van $I \cdot J$}
 
 De finale stap is de vermenigvuldiging van de twee resulterende variabelen $I$ en $J$. Dit is een vermenigvuldiging in $\mathbb{F}_{2^{4m}}$ en deze kan als volgt geformuleerd worden:
-
 \[\begin{aligned}
 \hat{e}(P, Q)	&= I \cdot J\\
 	&= (I_a J_a + I_b J_b + I_c J_c + I_d J_d)\\
 	&\quad + (I_a J_b + I_b J_a + I_b J_b + I_c J_d + I_d J_c + I_d J_d)x\\
 	&\quad + (I_a J_c + I_b J_d + I_c J_a + I_c J_c + I_d J_d + I_d J_b + I_d J_c)y\\
-	&\quad + (I_a J_d + I_b J_c + I_b J_d + I_c J_b + I_c J_c + I_d J_a + I_d J_b + I_d J_d)xy\\
+	&\quad + (I_a J_d + I_b J_c + I_b J_d + I_c J_b + I_c J_c + I_d J_a + I_d J_b + I_d J_d)xy.
 \end{aligned}\]
 
 Om de berekening via de Karatsuba-Ofman techniek te versnellen, worden eerst volgende tussenresultaten uitgerekend:
-
 \[\begin{aligned}
 m_0	&= I_a J_a
 	&m_1	&= I_b J_b\\
@@ -737,14 +730,14 @@ l_2	&= (I_a + I_d) \cdot (J_a + J_d)
 	&l_3	&= (I_a + I_c) \cdot (J_a + J_c)\\
 n_0	&= I_a + I_b + I_c + I_d
 	&n_1	&= J_a + J_b + J_c + J_d\\
-p_0	&= n_0 \cdot n_1\\
+p_0	&= n_0 \cdot n_1.
 \end{aligned}\]
 
 Gebruik makende van deze waarden, kan de vermenigvuldiging voor $\hat{e}(P, Q)$ geschreven worden als:
 \[\begin{aligned}
 \hat{e}(P, Q)	&= (m_0 + m_1 + m_2 + m_3) + (m_0 + m_2 + l_0 + l_1)x\\
 	&\quad + (m_0 + m_1 + m_2 + l_1 + l_2 + l_3)y\\
-	&\quad + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy\\
+	&\quad + (m_0 + m_3 + l_0 + l_1 + l_3 + p_0)xy.
 \end{aligned}\]
 
 Indien zowel $I$ als $J$ overschreven mogen worden, is de minimum benodigde opslagruimte om deze berekeningen uit te voeren vier registers voor het eindresultaat $I = \hat{e}(P, Q)$ en zes tijdelijke registers voor $a, b, \ldots, f$. Dit alles samen vergt negen vermenigvuldigingen en twee\"entwintig optellingen, twee meer dan in \cite{beuchat}. De methode is terug te vinden in \refalg{algoritme-implementatie-miller-f4m-mult}.
@@ -804,7 +797,7 @@ Omdat de ingangen van de onderliggende $\mathbb{F}_{2^m}$ kern rechtstreeks verb
 s	&= \sum_{i = 1}^{n - 1} \sum_{j = i + 1}^n (j - i - 1)
 	&\qquad c	&= \sum_{i = 0}^{n - 1} i\\
 	&= \frac{n \cdot (n - 1) \cdot (n - 2)}{6}
-	&	&= n \cdot \frac{n - 1}{2}\\
+	&	&= n \cdot \frac{n - 1}{2},
 \end{aligned}\]
 dus
 \[\overline{r}	= \frac{n - 2}{3}.\]
