@@ -17,7 +17,7 @@ The synthesis to an ASIC implementation was performed with Synopsys Design Visio
 \reftbl{table-breakdown} contains a breakdown of the component area for the circuit with one MALU. What's striking is that the controller (registers and FSM) contains 92\% of the circuit's gates. The large size of the FSM can be explained by the design of the memory. Lots of states are necessary to move every value to its correct position in the register file. It should also be noted that the area of one MALU is almost negligible compared to the rest of the circuit. It's probably a good idea to add some extra MALUs to a real-life implementation to speed up the calculations. We will investigate this possibility in the next few paragraphs.
 
 \begin{table}[h]
-	\caption{Component breakdown for an implementation with one MALU}
+	\caption{Component size breakdown for an implementation with one MALU}
 	\label{table-breakdown}
 	\centering
 	\begin{tabular}{llr}
@@ -37,19 +37,41 @@ The synthesis to an ASIC implementation was performed with Synopsys Design Visio
 	\end{tabular}
 \end{table}
 
-A few implementations with multiple MALUs and a clock frequency of 10 kHz were synthesized, the results of which are plotted in \reffig{figure-mult-malu}. As can be seen, extra MALUs don't add a lot of area. For example, the implementation with six MALUs is only 12\% bigger than the one with one MALU. Power consumption also rises pretty slow, the implementation with six MALUs requires only 17\% more power. The lower power consumption for the implementations with two MALUs is probably due to a quirk in the synthesis tool.
+A few implementations with multiple MALUs and a clock frequency of 10 kHz were synthesized, the results of which are listed in \reftbl{table-mult-malu}. As can be seen, extra MALUs don't add a lot of area. For example, the implementation with six MALUs is only 12\% bigger than the one with one MALU. Power consumption also rises pretty slow, the implementation with six MALUs requires only 17\% more power. The lower power consumption for the implementations with two MALUs is probably due to a quirk in the synthesis tool.
 
-\begin{figure}[h]
+%\begin{figure}[h]
+%	\centering
+%		\fbox{\includegraphics[width=3.3in]{results-md-english}}
+%		\caption{Synthesis results for multiple MALUs and $f = 10$ kHz\label{figure-mult-malu}}
+%\end{figure}
+
+\begin{table}[h]
+	\caption{Synthesis results for implementations with $d$ MALUs}
+	\label{table-mult-malu}
 	\centering
-		\fbox{\includegraphics[width=3.3in]{results-md-english}}
-		\caption{Synthesis results for multiple MALUs and $f = 10$ kHz\label{figure-mult-malu}}
-\end{figure}
+	\begin{tabular}{llrlrlrl}
+		\toprule
+		\multirow{2}{*}{$d$} & \multicolumn{2}{c}{\multirow{2}{*}{Area [gates]}}	& \multicolumn{4}{c}{Power @ 10 kHz [$nW$]}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Time}\\\text{savings}\end{array}$}\\
+		\cmidrule{4-7}
+		&	& & \multicolumn{2}{c}{Dynamic}	& \multicolumn{2}{c}{Leakage}	&\\
+		\midrule
+		1			& $27\,734$	& 			& 96	& 			& 110	& 			& \\
+		2			& $28\,423$	& 102\%	& 90	& 94\%	& 113	& 103\%	& 47,2\%\\
+		3			& $29\,071$	& 105\%	& 103	& 107\%	& 118	& 107\%	& 62,9\%\\
+		4			& $30\,278$	& 109\%	& 108	& 113\%	& 122	& 111\%	& 71,1\%\\
+		6			& $30\,956$	& 112\%	& 112	& 117\%	& 127	& 115\%	& 78,6\%\\
+		8			& $32\,782$	& 118\%	& 122	& 127\%	& 136	& 124\%	& 82,7\%\\
+		16			& $37\,798$	& 136\%	& 162	& 169\%	& 163	& 148\%	& 88,5\%\\
+		32			& $47\,833$	& 172\%	& 212	& 221\%	& 213	& 194\%	& 91,5\%\\
+		\hline		
+	\end{tabular}
+\end{table}
 
-At a frequency of 10 kHz, it takes an implementation with one MALU 51.5 seconds to complete one pairing calculation. Since this is probably unacceptable in a real-life application, \reftbl{table-mult-malu} lists the results for two implementations that both take 50 ms to finish one calculation. It is obvious that the implementation with two MALUs comes out a lot better, unless a small area is an extremely important factor. Due to the fact that its clock frequency is much lower, power consumption is cut in half compared to the implementation with one MALU.
+At a frequency of 10 kHz, it takes an implementation with one MALU 51.5 seconds to complete one pairing calculation. Since this is probably unacceptable in a real-life application, \reftbl{table-speed-malu} lists the synthesis results for two implementations that both take 50 ms to finish one calculation. It is obvious that the implementation with two MALUs comes out a lot better, unless a small area is an extremely important factor. Due to the fact that its clock frequency is much lower, power consumption is cut in half compared to the implementation with one MALU.
 
 \begin{table}[h]
 	\caption{Synthesis results for two implementations with a calculation time of 50 ms}
-	\label{table-mult-malu}
+	\label{table-speed-malu}
 
 	\centering
 	\begin{tabular}{lll@{$\;\;$}l}
