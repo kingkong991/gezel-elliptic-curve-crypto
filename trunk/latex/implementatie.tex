@@ -1,8 +1,8 @@
 \Chapter{Implementatie\label{hfdst-implementatie}}
 
-In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van de Tate pairing uit de doeken gedaan. Het uiteindelijke doel is een zo compact mogelijke  ASIC implementatie te verkrijgen.
+In dit hoofdstuk wordt de implementatie van een schakeling voor de berekening van de Tate paring uit de doeken gedaan. Het uiteindelijke doel is een zo compact mogelijke  ASIC implementatie te verkrijgen.
 
-Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het gekozen veld. Ten slotte is er dan nog de schakeling die alle berekeningen voor het Miller algoritme (zie \refsect{sectie-pairings-berekening}) in goede banen leidt. In het volgende hoofdstuk zal de resulterende schakeling dan beoordeeld worden.
+Er zal onderzocht worden welke basisbewerkingen nodig zijn en hoe deze verwezenlijkt kunnen worden in hardware. Vervolgens wordt een schakeling ontworpen die aan de hand hiervan alle nodige berekeningen kan uitvoeren in het gekozen veld. Ten slotte is er dan nog de schakeling die alle berekeningen voor het Miller algoritme (zie \refsect{sectie-paringen-berekening}) in goede banen leidt. In het volgende hoofdstuk zal de resulterende schakeling dan beoordeeld worden.
 
 Allereerst worden echter noodzakelijke parameters vastgelegd, zodat alle bewerkingen exact gedefini\"eerd kunnen worden. Vervolgens wordt bekeken welke beperkingen aan de schakeling opgelegd moeten worden.
 
@@ -26,9 +26,9 @@ De orde van de kromme is gelijk aan \cite{barreto-efficient}:
 \[\begin{aligned}
 \#E(\mathbb{F}_{2^m})	&= 2^m + \nu \sqrt{2^{m + 1}} + 1
 \end{aligned}\]
-Om de Tate pairing effici\"ent te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
+Om de Tate paring effici\"ent te kunnen berekenen, moet de variabele $b$ zo gekozen worden dat $\#E$ enkel uit optellingen bestaat. Met andere woorden: $b$ moet zo gekozen worden dat $\nu = 1$.
 
-Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met 86 bits symmetrische cryptografie. Dit zou neerkomen op een gegarandeerde veiligheid tot 2021. De algoritmen en schakelingen die volgen kunnen allen perfect toegepast worden op grotere velden, dus indien gewenst kan $m$ verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
+Alvorens dit kan gebeuren, moet de grootte $m$ van het veld $\mathbb{F}_{2^m}$ vastgelegd worden. Die bepaalt de cryptografische sterkte alsook de grootte van het eindresultaat. Des te groter $m$, des te groter uiteraard de benodigde registers om alle data in op te slaan. Uitgaande van de data in \cite{lenstra} wordt gekozen voor $m = 163$. Dit geeft een cryptografische sterkte vergelijkbaar met RSA(652). Hoewel dit niet zeer sterk is, kunnen de algoritmen en schakelingen die volgen allen perfect toegepast worden op grotere velden. Indien gewenst kan $m$ dus verhoogd worden. Dit zal echter navenante effecten hebben op de grootte en het vermogenverbruik van de uiteindelijke implementatie.
 
 Nu $m$ vastgelegd is, kan hetzelfde gedaan worden voor $b$. Om een aftrekking in de formule voor $\#E$ te voorkomen, dient $b = 1$ te zijn in dit geval. Meteen kan dan ook een $l$-torsiesubgroep van $E$ vastgelegd worden. Daarbij moet er op gelet worden dat $l \mid \#E$. De eenvoudigste keuze is:
 \[\begin{aligned}
@@ -39,13 +39,13 @@ l	&= \#E = 2^{163} + \sqrt{2^{163 + 1}} + 1\\
 Nu het veld waarover gewerkt wordt, bepaald is, kan een reductieveelterm $R$ gekozen worden. Bij de keuze daarvan werd uitgegaan van de aangeraden parameters in \cite{sec2}. De veelterm is:
 \[R = z^{163} + z^7 + z^6 + z^3 + 1.\]
 
-Ook moet het extensieveld $\mathbb{F}_{2^{k m}}$ gedefinieerd worden waarover de Tate pairing berekend zal worden. Aangezien $k = 4$, kan het veld opgebouwd worden in twee stappen. Eerst wordt $\mathbb{F}_{2^{2m}}$ bepaald als volgt:
+Ook moet het extensieveld $\mathbb{F}_{2^{k m}}$ gedefinieerd worden waarover de Tate paring berekend zal worden. Aangezien $k = 4$, kan het veld opgebouwd worden in twee stappen. Eerst wordt $\mathbb{F}_{2^{2m}}$ bepaald als volgt:
 \[\mathbb{F}_{2^{2m}} \cong \mathbb{F}_{2^m}[x]/(x^2 + x + 1)\]
 en hierop wordt het volgende extensieveld gebouwd:
 \[\mathbb{F}_{2^{4m}} \cong \mathbb{F}_{2^{2m}}[y]/(y^2 + (x + 1)y + 1).\]
 Een element van $\mathbb{F}_{2^{4m}}$ kan dus voorgesteld worden als vier elementen van $\mathbb{F}_{2^m}$.
 
-Ten slotte moet een distortiemap $\phi$ bepaald worden. Zoals reeds vermeld in \refhfdst{hfdst-pairings} dient die volgens \cite{barreto-efficient} als volgt te zijn. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie de transformatie:
+Ten slotte moet een distortiemap $\phi$ bepaald worden. Zoals reeds vermeld in \refhfdst{hfdst-paringen} dient die volgens \cite{barreto-efficient} als volgt te zijn. Een punt $A \in \mathbb{F}_{2^m}$ ondergaat onder de distortie de transformatie:
 \[\phi : (x_Q, y_Q) \mapsto (x_Q + s^2, y_Q + x_Q s + t^6)\]
 met $s, t \in \mathbb{F}_{2^{4m}}$. Daarbij moeten $s$ en $t$ voldoen aan volgende vergelijkingen:
 \[\left\{\begin{array}{l}
@@ -150,7 +150,7 @@ De resulterende schakeling is te zien in \reffig{figuur-implementatie-malu-optim
 
 \subsection{Basisontwerp\label{subsectie-implementatie-gf2m-basisontwerp}}
 
-De eerder ontworpen MALU schakeling laat toe optellingen te doen, maar het Miller algoritme vereist dat er ook vermenigvuldigingen worden uitgerekend. Delingen en machtsverheffingen kunnen met behulp van vermenigvuldiging berekend worden en dienen dus niet rechtstreeks ge\"implementeerd te worden. Indien dus zowel optellingen als vermenigvuldigingen berekend kunnen worden, is alles voorhanden om de Tate pairing te berekenen.
+De eerder ontworpen MALU schakeling laat toe optellingen te doen, maar het Miller algoritme vereist dat er ook vermenigvuldigingen worden uitgerekend. Delingen en machtsverheffingen kunnen met behulp van vermenigvuldiging berekend worden en dienen dus niet rechtstreeks ge\"implementeerd te worden. Indien dus zowel optellingen als vermenigvuldigingen berekend kunnen worden, is alles voorhanden om de Tate paring te berekenen.
 
 Door toepassing van een ``shift and add'' algoritme, kan de waarde van \mbox{$A \cdot B = R$} berekend worden met behulp van de MALU schakeling. In \refalg{algoritme-implementatie-gf2m-multiply} is te zien hoe dit juist in z'n werk gaat. Door de modulobewerking telkens op het tussenresultaat uit te voeren, is het steeds van graad $\leq m$ en kan het opgeslagen worden in $T$. Op het einde moet het resultaat door $z$ gedeeld worden, wat neerkomt op een verschuiving van alle bits met 1 plaats naar rechts.
 
@@ -246,10 +246,10 @@ Indien men toch wenst het vermenigvuldigen te versnellen, is het aangeraden een 
 
 \subsection{Algemeen ontwerp\label{subsectie-implementatie-miller-ontwerp}}
 
-Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (zie \refsect{sectie-pairings-berekening}) uitvoert. Het algoritme met invulling van de vastgelegde parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
+Nu een schakeling voorhanden is die toelaat alle benodigde berekeningen uit te voeren, rest nog een schakeling te ontwerpen die het Miller algoritme (zie \refsect{sectie-paringen-berekening}) uitvoert. Het algoritme met invulling van de vastgelegde parameters, zonder uitwerking van de berekeningen, wordt gegeven in \refalg{algoritme-implementatie-miller-algemeen}.
 
 \begin{algorithm}[h]
-	\caption{Miller algoritme voor de Tate pairing met parameters ingevuld}
+	\caption{Miller algoritme voor de Tate paring met parameters ingevuld}
 	\label{algoritme-implementatie-miller-algemeen}
 	\KwIn{$P, Q \in E(\mathbb{F}_{2^{163}})[2^{163} + 2^7 + 2^6 + 2^3 + 1]$}
 	\KwOut{$\hat{e}(P, Q) \in \mathbb{F}_{2^{4 \cdot 163}}^*$}

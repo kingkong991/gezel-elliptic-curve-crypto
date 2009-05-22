@@ -1,6 +1,6 @@
 \Chapter{Inleiding}
 
- In dit inleidende hoofdstuk zal enige achtergrondinformatie verschaft worden omtrent cryptografie. Verder wordt het concept identiteitsgebaseerde cryptografie duidelijk gemaakt. Er zal uitgelegd worden waarom de recente ontdekking van pairings hier zo belangrijk voor is. Ten slotte geeft een kort overzicht aan wat in de literatuur terug te vinden is qua implementaties van pairings. In het volgende hoofdstuk wordt de werking van pairings dan wiskundig uitgespit.
+ In dit inleidende hoofdstuk zal enige achtergrondinformatie verschaft worden omtrent cryptografie. Verder wordt het concept identiteitsgebaseerde cryptografie duidelijk gemaakt. Er zal uitgelegd worden waarom de recente ontdekking van het constructieve gebruik van paringen hier zo belangrijk voor is. Ten slotte geeft een kort overzicht aan wat in de literatuur terug te vinden is qua implementaties van paringen. In het volgende hoofdstuk wordt de werking van paringen dan wiskundig uitgespit.
 
 \section{Basisachtergrond cryptografie}
 
@@ -40,17 +40,17 @@ Door deze problemen is de toepassing van identiteitsgebaseerde cryptografie eerd
 
 Een andere ideale toepassing is het gebruik van dit type cryptografie in netwerken van sensoren. Zo'n netwerk kan bestaan uit honderden nodes met een beperkte reken- en vermogenscapaciteit. Indien publieke sleutel cryptografie als vanouds zou worden gebruikt, zou dit leiden tot veel extra communicatie tussen de nodes en een centrale server. Telkens de nodes meetgegevens naar de server willen sturen, zouden ze diezelfde server eerst moeten contacteren om zijn publieke sleutel te weten te komen. In het omgekeerde geval zou de server telkens hij een node wil contacteren hetzelfde moeten doen.  Als echter identiteitsgebaseerde cryptografie wordt toegepast, is al deze extra communicatie niet meer nodig, aangezien men de benodigde publieke sleutels kan berekenen met behulp van een unieke ID.
 
-Een uitvoerig overzicht van identiteitsgebaseerde cryptografie en de bijhorende mogelijkheden en problemen valt buiten het bestek van thesis. In het volgende hoofdstuk zullen wel enkele mogelijkheden naderbij bestudeerd worden. Een uitstekend startpunt voor meer informatie is Maas \cite{maas}.
+Een uitvoerig overzicht van identiteitsgebaseerde cryptografie en de bijhorende mogelijkheden en problemen valt buiten het bestek van thesis. In het volgende hoofdstuk zullen wel enkele mogelijkheden van naderbij bestudeerd worden. Een uitstekend startpunt voor meer informatie is de thesis van Maas~\cite{maas}.
 
-\section{Pairings\label{inleiding-pairings}}
+\section{paringen\label{inleiding-paringen}}
 
-Hoewel het idee reeds in 1984 gepubliceerd werd, zou het echter tot 2001 duren eer Boneh en Franklin een effici\"ent algoritme voor identiteitsgebaseerde cryptografie voorstelden \cite{boneh}. Zij stelden een schema op dat toeliet de idee\"en van Shamir ook effectief te implementeren. In hun voorstel maakten ze gebruik van de Weil pairing \cite{weil}. Al gauw verschenen er variaties op het oorspronkelijke schema. Daarin werd het gebruik van andere pairings voorgesteld, zoals bijvoorbeeld de Tate \cite{tate} of de $\eta_T$ \cite{eta} pairing. Wat pairings juist zijn en hoe ze gebruikt kunnen worden, zal in het volgende hoofdstuk uitvoerig aan bod komen.
+Hoewel het idee reeds in 1984 gepubliceerd werd, zou het echter tot 2001 duren eer Boneh en Franklin een effici\"ent algoritme voor identiteitsgebaseerde cryptografie voorstelden \cite{boneh}. Zij stelden een schema op dat toeliet de idee\"en van Shamir ook effectief te implementeren. In hun voorstel maakten ze gebruik van de Weil paring \cite{weil}. Al gauw verschenen er variaties op het oorspronkelijke schema. Daarin werd het gebruik van andere paringen voorgesteld, zoals bijvoorbeeld de Tate \cite{tate} of de $\eta_T$ \cite{eta} paring. Wat paringen juist zijn en hoe ze gebruikt kunnen worden, zal in het volgende hoofdstuk uitvoerig aan bod komen.
 
-Alvorens de wiskunde achter pairings in te duiken, wordt eerst nog een overzicht gegeven van de huidige ``state of the art'' van implementaties van pairings. De mogelijkheden van implementaties op een microchip en een FPGA passeren de revue. Implementaties van pairings op computers zijn per definitie niet in een omgeving met beperkte ressources toepasbaar. Ze hebben dus weinig te maken met deze thesis, die als uitgangspunt compacte implementaties heeft. Vandaar dat dit type implementaties dan ook niet bestudeerd zal worden.
+Alvorens de wiskunde achter paringen in te duiken, wordt eerst nog een overzicht gegeven van de huidige ``state of the art'' van implementaties van paringen. De mogelijkheden van implementaties op een microchip en een FPGA passeren de revue. Implementaties van paringen op computers zijn per definitie niet in een omgeving met beperkte ressources toepasbaar. Ze hebben dus weinig te maken met deze thesis, die als uitgangspunt compacte implementaties heeft. Vandaar dat dit type implementaties dan ook niet bestudeerd zal worden.
 
 \subsection{Microchip implementaties}
 
-Implementaties van pairings voor gebruik op een MICA node \cite{mica}, specifiek ontwikkeld voor gebruik in netwerken van sensoren, worden voorgesteld in \cite{tinytate}, \cite{tinypbc} en \cite{nanoecc}. De processor op deze node is een ATMega128L microchip \cite{atmega}. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik en de batterijspanning gegeven in \cite{nanoecc}, is het vermogenverbruik waarschijnlijk ongeveer $23.60$ $mW$.
+Implementaties van paringen voor gebruik op een MICA node \cite{mica}, specifiek ontwikkeld voor gebruik in netwerken van sensoren, worden voorgesteld in \cite{tinytate}, \cite{tinypbc} en \cite{nanoecc}. De processor op deze node is een ATMega128L microchip \cite{atmega}. Een overzicht van de resultaten is gegeven in \reftbl{tabel-resultaten-sensor}. Rekening houdend met het stroomverbruik en de batterijspanning gegeven in \cite{nanoecc}, is het vermogenverbruik waarschijnlijk ongeveer $23.60$ $mW$.
 
 \begin{table}[h]
 	\caption[Resultaten uit de literatuur voor implementaties ontwikkeld op een MICA node]{Resultaten uit de literatuur voor implementaties ontwikkeld op een MICA node \cite{mica}}
@@ -64,8 +64,8 @@ Implementaties van pairings voor gebruik op een MICA node \cite{mica}, specifiek
 		& & & \multicolumn{1}{c}{Binair} & \multicolumn{1}{c}{Priem}\\
 			\midrule
 		Veld					& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{2^{271}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{p}$ 160 bit\\
-		Pairing				& Tate							& $\eta_T$ 						& Tate							& Tate\\
-		Rekentijd ($s$)	& 30.21							& 5.45							& 10.96							& 17.93\\
+		paring				& Tate							& $\eta_T$ 						& Tate							& Tate\\
+		Rekentijd ($s$)	& 30,21							& 5,45							& 10,96							& 17,93\\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -83,7 +83,7 @@ Toch wordt in \reftbl{tabel-resultaten-fpga} een summier overzicht gegeven van e
 	\centering
 	\begin{tabular}{llllll}
 		\toprule
-		&	\multicolumn{1}{c}{Veld}	& \multicolumn{1}{c}{Pairing}	& $\begin{array}{@{}c@{}}\text{Opp.}\\\text{[slices]}\end{array}$	& $\begin{array}{@{}c@{}}f\\\text{[MHz]}\end{array}$	& $\begin{array}{@{}c@{}}\text{Reken-}\\\text{tijd }[\mu s]\end{array}$\\
+		&	\multicolumn{1}{c}{Veld}	& \multicolumn{1}{c}{paring}	& $\begin{array}{@{}c@{}}\text{Opp.}\\\text{[slices]}\end{array}$	& $\begin{array}{@{}c@{}}f\\\text{[MHz]}\end{array}$	& $\begin{array}{@{}c@{}}\text{Reken-}\\\text{tijd }[\mu s]\end{array}$\\
 		\midrule
 		Ronan \emph{et al.} \cite{ronan}				& $\mathbb{F}_{2^{103}}$	& Tate		& 21021	& 51	& 206\\
 		Shu \emph{et al.} \cite{shu}					& $\mathbb{F}_{2^{239}}$	& Tate		& 25287	& 84	& 41\\
