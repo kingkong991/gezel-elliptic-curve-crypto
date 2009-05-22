@@ -1,1 +1,101 @@
-\section{Results\label{section-results}}
+\section{Results and comparison\label{section-results}}
+
+In this section the synthesis results of the circuit will be presented. We will also compare these results to implementations found in the literature. First, however, formula's to determine the circuit's calculation time will be given.
+
+Note that the power consumption estimates are to be taken with a grain of salt, since it's very hard for the synthesis tool to come up with accurate numbers.
+
+\subsection{Calculation time}
+
+The amount of cycles it takes the circuit to calculate one pairing depends on the size of the field $\mathbb{F}_{2^m}$ and the number of MALUs $d$ used in the arithmetic core. A formula for the number of cycles is
+\begin{displaymath}c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil,\end{displaymath}
+with the last two constants being the number of additions and multiplications respectively. The benefits of adding extra MALUs to the circuit quickly diminish due to the large constant factors present in the formula.
+
+\subsection{Synthesis results}
+
+The synthesis to an ASIC implementation was performed with Synopsys Design Vision with the maximum area constrained to zero. 
+
+\reftbl{table-breakdown} contains a breakdown of the component area for the circuit with one MALU. What's striking is that the controller (registers and FSM) contains 92\% of the circuit's gates. The large size of the FSM can be explained by the design of the memory. Lots of states are necessary to move every value to its correct position in the register file. It should also be noted that the area of one MALU is almost negligible compared to the rest of the circuit. It's probably a good idea to add some extra MALUs to a real-life implementation to speed up the calculations. We will investigate this possibility in the next few paragraphs.
+
+\begin{table}[h]
+	\caption{Component breakdown for an implementation with one MALU}
+	\label{table-breakdown}
+	\centering
+	\begin{tabular}{llr}
+		\toprule
+		Component					& \multicolumn{2}{c}{Area [gates]}\\
+		\midrule
+		MALU				 			& 458			& 1.7\%\\
+		$\mathbb{F}_{2^m}$ core	&				& \\
+		$\quad$ Logic				& 783			& 2.8\%\\
+		$\quad$ Registers			& 962			& 3.5\%\\
+		Controller					&				& \\
+		$\quad$ Logic				& $13\,044$	& 47\%\\
+		$\quad$ Registers			& $12\,487$	& 45\%\\
+		\midrule
+		Total							& $27\,734$	& 100\%\\
+		\bottomrule		
+	\end{tabular}
+\end{table}
+
+A few implementations with multiple MALUs and a clock frequency of 10 kHz were synthesized, the results of which are plotted in \reffig{figure-mult-malu}. As can be seen, extra MALUs don't add a lot of area. For example, the implementation with six MALUs is only 12\% bigger than the one with one MALU. Power consumption also rises pretty slow, the implementation with six MALUs requires only 17\% more power. The lower power consumption for the implementations with two MALUs is probably due to a quirk in the synthesis tool.
+
+\begin{figure}[h]
+	\centering
+		\fbox{\includegraphics[width=3.3in]{results-md-english}}
+		\caption{Synthesis results for multiple MALUs and $f = 10$ kHz\label{figure-mult-malu}}
+\end{figure}
+
+At a frequency of 10 kHz, it takes an implementation with one MALU 51.5 seconds to complete one pairing calculation. Since this is probably unacceptable in a real-life application, \reftbl{table-mult-malu} lists the results for two implementations that both take 50 ms to finish one calculation. It is obvious that the implementation with two MALUs comes out a lot better, unless a small area is an extremely important factor. Due to the fact that it's clock frequency is much lower, power consumption is cut in half compared to the implementation with one MALU.
+
+\begin{table}[h]
+	\caption{Synthesis results for two implementations with a calculation time of 50 ms}
+	\label{table-mult-malu}
+
+	\centering
+	\begin{tabular}{lll@{$\;\;$}l}
+		\toprule
+		& 1 MALU	& \multicolumn{2}{l}{2 MALUs}\\
+		\midrule
+		$f$ [MHz]				& 10.3						& 5.44						& 53\% \\ 
+		Area [gates]			& $27\,430$					& $28\,155$					& 103\% \\
+		Power [$\mu W$]		& 								& 								& \\
+		$\quad$ Dynamic		& 98.2						& 48.5						& 49\% \\
+		$\quad$ Leakage		& $107 \cdot 10^{-3}$	& $111 \cdot 10^{-3}$	& 104\% \\
+		\bottomrule	
+	\end{tabular}
+\end{table}
+
+\subsection{Comparisons}
+
+Unfortunately, at the time of this writing, only three ASIC implementations had been published. All of those three focus on speed and it is thus hard to compare them to this design. Since neither Kammler \emph{et al.} \cite{kammler}, nor K\"om\"urc\"u and Savas \cite{savas} list full specifications, it is impossible to compare against their implementations. The implementation by Beuchat {et al.} \cite{beuchat-asic} does come with full specifications however, and it is thus with this implementation that comparisons will be made. An overview is given in \reftbl{table-asic}. It should be noted that the implementation in \cite{kammler} is smaller with its 97k gates than the one in \cite{beuchat-asic}.
+
+\begin{table}[h]
+	\caption{Comparison of our implementation with other published ASIC implementations}
+	\label{table-asic}
+		\centering
+		\begin{tabular}{llll}
+			\toprule
+			&	\multicolumn{2}{c}{This work}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Beuchat}\\\text{\emph{et al.} \cite{beuchat-asic}}\end{array}$}\\
+			\cmidrule(r){2-3}
+			& \multicolumn{1}{c}{1 MALU} & \multicolumn{1}{c}{2 MALUs} &\\
+	 		\midrule
+			Field																				& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$\\
+			Pairing																			& Tate							& Tate							& $\eta_T$\\
+			Security [bit]\footnotemark[2]											& 652								& 652								& 922\\
+			Technology																		& 0.13 $\mu m$					& 0.13 $\mu m$					& 0.18 $\mu m$\\
+			Area [gates]																	& $27\,430$						& $28\,155$						& $193\,765$\\
+			$f$ [MHz]																		& 10.3							& 5.44							& 200\\
+			Calc. time [$\mu s$]															& $50 \cdot 10^3$				& $50 \cdot 10^3$				& 46.7\\
+			Power [$mW$]																	& $98.3 \cdot 10^{-3}$		& $48.6 \cdot 10^{-3}$		& 672\\
+			Efficiency $\left[ \frac{nJ}{\text{bit}}\right]$\footnotemark[3]	& 7.54						& 3.73							& 34.0\\
+			\bottomrule		
+		\end{tabular}
+		\\[3pt]			
+		\footnotesize \footnotemark[2] Taken from \cite{beuchat} which is by the same authors as \cite{beuchat-asic}.
+		
+		\footnotemark[3] The lower, the more energy efficient the implementation is. See text. 
+\end{table}
+
+As is immediately obvious, the implementations in this work are much smaller than the one by Beuchat \emph{et al.} To assess the efficiency of the implementations for application in constrained environments, we calculate the energy efficiency per bit security, which is given by
+\begin{displaymath}\text{EE} = \frac{\text{power} \times \text{calc. time}}{\text{security}}.\end{displaymath}
+It's obvious that for use in constrained environments our design is head and shoulders above the design by Beuchat \emph{et al.} With some more MALUs in the implementation, the efficiency will easily be up to twenty times better than theirs. In their defense however, they focused heavily on speed and thus such results are to be expected. It is certainly not the aim of the author to make light of their work.
