@@ -6,7 +6,7 @@ In dit hoofdstuk zullen verscheidene ASIC implementaties van de schakeling, die 
 
 Het ontwerp werd geprogrammeerd in GEZEL \cite{gezel}. Simulaties en compilatie naar VHDL werden uitgevoerd met GEZEL 2.0. De optimalisaties werden manueel uitgevoerd in de VHDL code, aangezien dit in GEZEL niet mogelijk was.
 
-Alle ontwerpen werden gesynthetiseerd met behulp van Synopsys Design Vision (versie Y-2006.06). De gebruikte bibliotheek was de \emph{$0.13 \mu m$ low leakage} bibliotheek van Faraday Technology \cite{cell-databook}. De maximale oppervlakte werd ingesteld op nul, wat als netto effect een resultaat met minimum oppervlakte gaf. Verder werd voor het kloksignaal, indien niet anders vermeld, een frequentie van 10 kHz gebruikt.
+Alle ontwerpen werden gesynthetiseerd met behulp van Synopsys Design Vision (versie Y-2006.06). De gebruikte bibliotheek was de \emph{$0.13 \mu m$ low leakage} bibliotheek van Faraday Technology \cite{cell-databook}. De maximale oppervlakte werd ingesteld op nul, wat als netto-effect een resultaat met minimum oppervlakte gaf. Verder werd voor het kloksignaal, indien niet anders vermeld, een frequentie van 10 kHz gebruikt.
 
 \section{Gerapporteerd vermogen}
 
@@ -20,7 +20,7 @@ Het verkregen resultaat zal niet volledig kloppen, maar komt zeer dicht in de bu
 
 \section{Benodigde rekentijd}
 
-Alvorens de syntheseresultaten te presenteren, wordt even uitgewijd over het noodzakelijk aantal klokcycli $c$ om \'e\'en pairing te berekenen. Merk op dat de formules die volgen enkel kloppen voor willekeurige $m$ indien $\textsf{Hamm}(l) = 3$, wat het geval is voor de gekozen parameters (zie \refsect{sectie-implementatie-parameters}).
+Alvorens de syntheseresultaten te presenteren, wordt even uitgeweid over het noodzakelijk aantal klokcycli $c$ om \'e\'en pairing te berekenen. Merk op dat de formules die volgen enkel kloppen voor willekeurige $m$ indien $\textsf{Hamm}(l) = 3$, wat het geval is voor de gekozen parameters (zie \refsect{sectie-implementatie-parameters}).
 
 Het totaal aantal cycli voor een schakeling met veldgrootte $m$ en aantal MALU's $d$ wordt gegeven door:
 \[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil.\]
@@ -96,7 +96,7 @@ Verder valt het ook op dat de implementaties met clock gating niet kleiner zijn 
 
 %clock gating methode drie bespaart enkel energie tegenover de andere methodes indien de ingang van een register wijzigt wanneer dat register geen nieuwe waarde moet opslaan. De enige ingang die echter vaak wijzigt is die van het register verbonden met de uitgang van de $\mathbb{F}_{2^m}$ kern tijdens een vermenigvuldiging. Zolang een vermenigvuldiging aan de gang is, moet ditzelfde register echter telkens zijn eigen waarde verschoven met \'e\'en positie naar links opslaan. Met andere woorden: op het moment dat de clock gating schakeling zijn besparende werk zou kunnen verrichten, wordt het register sowieso elke klokslag beschreven met een nieuwe waarde. Het effect is dus dat in dit geval de schakeling effectief geen of amper vermogensbesparing teweeg brengt tegenover de andere clock gating schakelingen. Verder is het ook goed mogelijk dat de synthese software bij het berekenen van het verbruik niet nauwkeurig genoeg tewerk gaat om het effect van de schakeling op de interne gates van de flip flop in rekening te kunnen brengen.
 
-Ten slotte wordt nog ontleed hoeveel oppervlakte de individuele onderdelen van de schakeling innemen. \reftbl{tabel-resultaten-onderdelen} geeft een overzicht van de grootte van de verschillende delen van implementatie CG~3. Het valt op dat de zestien registers en de FSM, die bestaat uit 553 toestanden, samen goed zijn voor 95,5\% van de oppervlakte. Het effect daarvan zal duidelijk worden in de volgende paragraaf, wanneer meerdere MALU's ge\"implementeerd worden.
+Ten slotte wordt nog ontleed hoeveel oppervlakte de individuele onderdelen van de schakeling innemen. \reftbl{tabel-resultaten-onderdelen} geeft een overzicht van de grootte van de verschillende delen van implementatie CG~3. Het valt op dat de zestien registers en de FSM, die bestaat uit 553 toestanden, samen goed zijn voor 95,5\% van de oppervlakte.
 
 \begin{table}[h]
 	\caption{Oppervlakte van de individuele onderdelen in de implementatie met \'e\'en MALU}
@@ -127,7 +127,7 @@ Mits de toevoeging van extra MALU's is het, zoals aangetoond, mogelijk de totale
 
 Op de implementaties met meerdere MALU's werd steeds de derde clock gating techniek (en het verwijderen van resetingangen) toegepast, aangezien dit in werkelijkheid de grootste energiebesparing teweeg zou moeten brengen. Implementaties met een aantal MALU's gaande van twee t.e.m.\ twee\"endertig werden gesynthetiseerd. Een nog hoger aantal MALU's zou immers compleet ingaan tegen de originele doelstelling.
 
-De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Zoals in de vorige paragraaf gezien, neemt een MALU zeer weinig oppervlakte in in de implementatie. Het toevoegen van een klein aantal extra MALU's brengt dus weinig extra oppervlakte en vermogenverbruik met zich mee. Het is dus een aangeraden manier om de snelheid van de schakeling op te drijven. Dit wordt nog verder onderzocht in de volgende paragraaf. Het gerapporteerde dynamisch verbruik van de implementatie met twee MALU's is lager dan dat van de implementatie met \'e\'en MALU, dit is opnieuw een fout van de software.
+De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \reffig{figuur-resultaten-md}. Het toevoegen van een klein aantal extra MALU's brengt weinig extra oppervlakte en vermogenverbruik met zich mee. Het is dus een aangeraden manier om de snelheid van de schakeling op te drijven. Dit wordt nog verder onderzocht in de volgende paragraaf. Het gerapporteerde dynamisch verbruik van de implementatie met twee MALU's is lager dan dat van de implementatie met \'e\'en MALU, dit is opnieuw een fout van de software.
 
 \begin{table}[h]
 	\caption{Syntheseresultaten voor implementaties met $d$ MALU's}
@@ -162,7 +162,7 @@ De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \r
 
 Aan een kloksnelheid $f = 10$ kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALU's die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk resetingangen verwijderd.
 
-Stel een maximale rekentijd $t_{\text{max}} \approx 50$ $ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALU's even snel wenst te maken als die met \'e\'en dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met $\Delta f = 1 - 0,472$. De kloksnelheden van de respectievelijke schakelingen zijn dan:
+Stel een maximale rekentijd $t_{\text{max}} \approx 50$ $ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALU's even snel wenst te maken als die met \'e\'en, dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met $\Delta f = 1 - 0,472$. De kloksnelheden van de respectievelijke schakelingen zijn dan:
 \[\begin{aligned}
 f_1	&\approx 10,3\text{ MHz}\\
 f_2	&\approx 5,44\text{ MHz}.
