@@ -204,15 +204,15 @@ De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}
 		\centering
 		\begin{tabular}{llllll}
 			\toprule
-			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{3}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
+			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
 			\cmidrule(r){2-3}
-			& \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 1,\\f = 10\text{kHz}\end{array}$} & \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 2,\\f = 5.44\text{MHz}\end{array}$} & & &\\
+			& \multicolumn{1}{c}{1 MALU} & \multicolumn{1}{c}{2 MALUs} & & &\\
 	 		\midrule
 			Veld																				& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
 %			Veiligheid [bit]																& 652								& 652								& 922							& ?								& 922\\
 			Pairing																			& Tate							& Tate							& $\eta_T$					& Ate			 					& Tate\\
-			Technologie																		& $0,13 \mu m$					& $0,13 \mu m$					& $0,18 \mu m$				& $0,13 \mu m$					& $0,25 \mu m$\\
-			Opp. [gates]																	& $27\,734$						& $28\,155$						& $193\,765$				& $97\,000$						& \emph{$10mm^2$}\footnotemark[3]\\
+			Technologie																		& 0,13 $\mu m$					& 0,13 $\mu m$					& 0,18 $\mu m$				& 0,13 $\mu m$					& 0,25 $\mu m$\\
+			Opp. [gates]																	& $27\,734$						& $28\,155$						& $193\,765$				& $97\,000$						& \emph{$10 mm^2$}\footnotemark[3]\\
 			$f$ [MHz]																		& 0,01							& 5,44							& 200							& 338								& 78\\
 			Rekentijd [$\mu s$]															& $51,5 \cdot 10^6$			& $50 \cdot 10^3$				& 46,7						& $15,8 \cdot 10^3$			& 250\footnotemark[4]\\
 			Vermogen [$mW$]																& $206 \cdot 10^{-6}$		& $48,6 \cdot 10^{-3}$		& 672							& \emph{onbekend}				& \emph{onbekend}\\
@@ -235,7 +235,7 @@ De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}
 Alvorens te vergelijken moet er uiteraard wel op gewezen worden dat het ontwerp uit \cite{beuchat-asic} zoals reeds vermeld niet ontworpen is met compactheid of laag vermogenverbruik in gedachten. Het is dus zeker niet de bedoeling het ontwerp af te breken. 
 
 De hier voorgestelde implementaties zijn niet alleen ongeveer een factor zeven kleiner dan degene voorgesteld in \cite{beuchat-asic}, hun vermogenverbruik is ongelofelijk veel lager. Het energieverbruik per bit veiligheid, ofwel de energie-effici\"entie, kan berekend worden als:
-\[\text{EE} = \frac{\text{vermogen} \cdot \text{rekentijd}}{\text{veiligheid}}.\]
+\[\text{EE} = \frac{\text{vermogen} \times \text{rekentijd}}{\text{veiligheid}}.\]
 Opgegeven waarden voor veiligheid zijn zeer veranderlijk van paper tot paper. In dit geval zullen waarden gebruikt worden die door de auteurs van \cite{beuchat-asic} worden opgegeven in \cite{beuchat}. Daar wordt gesteld dat het ontwerp uit deze thesis een veiligheid heeft van 652 bit en dat van \cite{beuchat-asic} 922 bit.
 
 De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie}. Er dient op gewezen te worden dat in het ontwerp uit \cite{beuchat-asic} met de $\eta_T$ pairing gewerkt wordt, die ongeveer een factor twee sneller berekend kan worden. Het is duidelijk dat het ontwerp uit deze thesis het potentieel heeft veel effici\"enter te zijn. Het gebruik van meer MALU's doet de de effici\"entie duidelijk stijgen. Dit is te verklaren door het feit dat meer MALU's relatief gezien zeer weinig extra vermogen verbruiken, maar de rekentijd wel gevoelig verlagen. Indien een iets grotere oppervlakte dus geen bezwaar is, kan de effici\"entie van de schakeling nog flink verhoogd worden door meer MALU's toe te voegen. Tevens kan, indien een lange rekentijd geen punt is, tegelijkertijd de frequentie verlaagd worden, wat de effici\"entie nog meer ten goede zal komen. 

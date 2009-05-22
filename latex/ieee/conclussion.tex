@@ -1,1 +1,9 @@
-\section{Conclussion\label{section-conclussion}}
+\section{Conclusion\label{section-conclussion}}
+
+In this paper, we presented a hardware implementation for the calculation of the Tate pairing in $\mathbb{F}_{2^m}$. The design focused heavily on a small area and a low energy consumption. An arithmetic core, which can be sped up without any changes to the controller's FSM, was shown. The memory register was optimized for energy efficiency. Due to the flexibility of the arithmetic core, the size and power consumption of the implementation can be fine-tuned in function of the application.
+
+The synthesis results are promising, it is possible to obtain an area lower than 30k gates. Furthermore, the energy efficiency of the circuit is easily ten to twenty times better than existing designs. With a dynamic power consumption as low as 96~$nA$, this design is a prime candidate for application in constrained environments.
+
+Future work should focus on reducing the FSM's footprint and improve the design of the memory block. Optimal placements of the variables in the register file might cut down on both power consumption and calculation time.
+
+Furthermore, the effect of larger field sizes should be investigated. Finally, the implementation of new pairings such as the $\eta_T$ and Ate pairing might prove interesting. The calculation time required will be much lower and since they're both based on the Tate pairing, no changes to the underlying should be necessary.

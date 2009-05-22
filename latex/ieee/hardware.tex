@@ -1,8 +1,10 @@
 \section{Hardware implementation\label{section-hardware}}
 
+In this section we propose a hardware architecture can execute Miller's algorithm as it was shown in the previous section. The circuit should be both compact and energy efficient, so the focus will not be on speed. In the next section this design will be synthesized as an ASIC implementation.
+
 \subsection{Restrictions}
 
-Since the design will be synthesized using a 0.13 $\mu m$ low leakage library by Faraday Corporation \cite{cell-databook}, we first take a look at which cells take up the largest area. A listing is given in \reftbl{table-cells}. It's clear that the usage of both registers and multiplexors should be kept to a minimum.
+Since the design will be synthesized using a 0.13 $\mu m$ low leakage library by Faraday Corporation \cite{cell-databook}, we first take a look at which cells take up the largest area with that technology. A listing is given in \reftbl{table-cells}. It's clear that the usage of both flip-flops (registers) and multiplexors should be kept to a minimum.
 
 \begin{table}[h]
 	\caption[Area of cells in an ASIC circuit]{Area of cells in an ASIC circuit (0.13 $\mu m$ low leakage technology by Faraday Corporation \cite{cell-databook})}
@@ -35,7 +37,9 @@ The core of the implementation is the MALU \cite{sakiyama, batina-pkc}, which ca
 		\caption{Arithmetic core for addition and modular reduction in $\mathbb{F}_{2^m}$\label{figure-malu}}
 \end{figure}
 
-Building on this, we construct a wrapper that allows multiplication in $\mathbb{F}_{2^m}$ as well. The result of a multiplication is calculated using the `shift-and-add' technique. To be able to do this, we need one extra register $T$ to store temporary results. The circuit and its control logic is shown in respectively \reffig{figure-gf2m} and \reffig{figure-gf2m-logic}. Note that when executing a multiplication, the input $A$ needs to be shifted to the left by one bit every clock cycle. This task is left up to whatever circuit implements this one. Instead of one MALU, multiple ones can be daisy-chained together to speed up the calculation of a multiplication.
+Building on this, we construct a wrapper that allows multiplication in $\mathbb{F}_{2^m}$ as well. The result of a multiplication is calculated using the `shift-and-add' technique. To be able to do this, we need one extra register $T$ to store temporary results. The circuit and its control logic is shown in respectively \reffig{figure-gf2m} and \reffig{figure-gf2m-logic}. Note that when executing a multiplication, the input $A$ needs to be shifted to the left by one bit every clock cycle. This task is left up to whatever circuit implements this one.
+
+Instead of one MALU, multiple ones can be daisy-chained together to speed up the calculation of a multiplication. When doing this, one should pick a number of MALUs $d$ for which $m \bmod d$ equals one. That way, the result of both an addition and a multiplication will be present at the same MALU's output and no extra multiplexers need to be added to the circuit.
 
 \begin{figure}[h]
 	\centering
@@ -63,7 +67,7 @@ Before we can correctly asses the merits of various memory designs, we need to k
 
 The basis for the memory is a compact design by Lee and Verbauwhede \cite{lee}. They propose a unidirectional circular shift register file in which the first two registers are connected to the arithmetic core. Furthermore, it's possible to swap the contents of the first two registers. While this design is certainly about as small as it gets, using it in a register file with fifteen registers is not really feasible for a low power design. We will try to prove this in the next few paragraphs by calculating the average number of write operations $\overline{w}$ that have to be executed before every arithmetic operation. This number is directly proportional to the energy consumed.
 
-The numbers that follow are rough averages and should be interpreted as such. Assume the size of the register file is $n$. First, calculate the average distance $\overline{r}$ between two registers by dividing the sum of possible distances $s$ by the number of possible combinations $c$:
+The numbers that follow are coarse estimates and should be interpreted as such. Assume the size of the register file is $n$. First, calculate the average distance $\overline{r}$ between two registers by dividing the sum of possible distances $s$ by the number of possible combinations $c$:
 \begin{displaymath}\begin{aligned}
 	s	&= \sum_{i = 1}^{n - 1} \sum_{j = i + 1}^n (j - i - 1)
 		&\qquad c	&= \sum_{i = 0}^{n - 1} i\\

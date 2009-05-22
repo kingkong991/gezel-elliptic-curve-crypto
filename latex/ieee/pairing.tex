@@ -1,6 +1,8 @@
 \section{Parameters and arithmetic for the Tate pairing\label{section-pairings}}
 
-As mentioned, we will be creating an accelerator for the Tate pairing. Recently, variants on that pairing have been published, such as the $\eta_T$ \cite{eta} and Ate \cite{ate} pairings. However, seeing as they are very recent discoveries, we felt it more appropriate to focus on the better known Tate pairing.
+In this section we will define all the parameters necessary to completely define the Tate pairing calculation. We will also present the algorithm necessary for the calculation and clarify some of the necessary arithmetic.
+
+It should be mentioned here that, recently, variants on the Tate pairing have been published, such as the $\eta_T$ \cite{eta} and Ate \cite{ate} pairings. However, seeing as they are very recent discoveries, we felt it more appropriate to focus on the better known Tate pairing.
 
 \subsection{Definition of the Tate pairing}
 
@@ -43,7 +45,7 @@ with $b \in \{0,1\}$. We also define \cite{beuchat}:
 				\end{cases}\\
 \nu		&= (-1)^{\delta}
 \end{aligned}\end{displaymath}
-The value of $b$ set to whatever value maximizes the order of the curve:
+The value of $b$ is set to whatever value maximizes the order of the curve:
 \begin{displaymath}
 \#E(\mathbb{F}_{2^m}) = 2^m + \nu \sqrt{2^{m+1}} + 1.
 \end{displaymath}
@@ -54,7 +56,7 @@ Considering that the final implementation should be as small as possible, we set
 R = z^{163} + z^7 + z^6 + z^3 + 1.
 \end{displaymath}
 
-Now that's been decided on these parameters, we can see that $b$ needs to equal one.
+Now that these parameters have been set, we can see that $b$ needs to equal one.
 
 The type of supersingular curve that's being used has an embedding degree $k = 4$. The result of the Tate pairing will thus be an element in $\mathbb{F}_{2^{4 m}}^*$. We define this field by means of tower extensions \cite{bertoni}:
 \begin{displaymath}\begin{gathered}
@@ -133,5 +135,3 @@ M	&= \frac{2^{4m} - 1}{l}\\
 	&= (2^{2m} - 1)(2^m - 2^{\frac{m + 1}{2}} + 1)\\
 	&= (2^{2m} - 1)(2^m + 1) + (1 - 2^{2m})2^{\frac{m + 1}{2}}\\
 \end{aligned}\end{displaymath}
-
-%In order to minimize the memory footprint, and thus the area of the implementation, all sub steps were optimized to use as little temporary values as possible. In total fifteen registers are necessary.
