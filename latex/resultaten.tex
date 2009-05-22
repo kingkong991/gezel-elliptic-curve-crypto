@@ -236,7 +236,9 @@ Alvorens te vergelijken moet er uiteraard wel op gewezen worden dat het ontwerp 
 
 De hier voorgestelde implementaties zijn niet alleen ongeveer een factor zeven kleiner dan degene voorgesteld in \cite{beuchat-asic}, hun vermogenverbruik is ongelofelijk veel lager. Het energieverbruik per bit veiligheid, ofwel de energie-effici\"entie, kan berekend worden als:
 \[\text{EE} = \frac{\text{vermogen} \times \text{rekentijd}}{\text{veiligheid}}.\]
-Opgegeven waarden voor veiligheid zijn zeer veranderlijk van paper tot paper. In dit geval zullen waarden gebruikt worden die door de auteurs van \cite{beuchat-asic} worden opgegeven in \cite{beuchat}. Daar wordt gesteld dat het ontwerp uit deze thesis een veiligheid heeft van 652 bit en dat van \cite{beuchat-asic} 922 bit.
+Normaal wordt de energie-effici\"entie berekend als vermogen gedeeld door de throughput. Daarbij wordt echter geen rekening gehouden met de veiligheid van de schakeling. Het is dan mogelijk een schakeling te cre\"eren met enkel een kloksignaal dat sowieso de beste energie-effici\"entie zal hebben. De veiligheid zal echter gelijk zijn aan 0 bit en het is uiteraard niet het geval dat zo een schakeling er bij een vergelijking als beste uitkomt. Vandaar het voorstel voor een lichtelijk aangepaste formule.
+
+Opgegeven waarden voor veiligheid zijn zeer veranderlijk van paper tot paper. In dit geval zullen RSA equivalente waarden gebruikt worden die door de auteurs van \cite{beuchat-asic} worden opgegeven in \cite{beuchat}. Daar wordt gesteld dat het ontwerp uit deze thesis een veiligheid heeft van 652 bit en dat van \cite{beuchat-asic} 922 bit.
 
 De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie}. Er dient op gewezen te worden dat in het ontwerp uit \cite{beuchat-asic} met de $\eta_T$ pairing gewerkt wordt, die ongeveer een factor twee sneller berekend kan worden. Het is duidelijk dat het ontwerp uit deze thesis het potentieel heeft veel effici\"enter te zijn. Het gebruik van meer MALU's doet de de effici\"entie duidelijk stijgen. Dit is te verklaren door het feit dat meer MALU's relatief gezien zeer weinig extra vermogen verbruiken, maar de rekentijd wel gevoelig verlagen. Indien een iets grotere oppervlakte dus geen bezwaar is, kan de effici\"entie van de schakeling nog flink verhoogd worden door meer MALU's toe te voegen. Tevens kan, indien een lange rekentijd geen punt is, tegelijkertijd de frequentie verlaagd worden, wat de effici\"entie nog meer ten goede zal komen. 
 
@@ -262,7 +264,7 @@ De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie
 		
 	\footnotesize \footnotemark[2] Implementatie zonder resets en met toepassing van clock gating schakeling drie.
 	
-	\footnotemark[3] Des te lager, des te conservatiever springt de implementatie om met energie.
+	\footnotemark[3] Des te lager, des te conservatiever springt de implementatie om met energie. Zie tekst.
 \end{table}
 
 Het is duidelijk dat de ontwerpen voorgesteld in deze thesis met kop en schouders uitsteken boven andere gepubliceerde ontwerpen indien compactheid en laag vermogen- en/of energieverbruik prioriteit genieten.

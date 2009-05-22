@@ -29,13 +29,13 @@ Instead of calculating the Tate pairing as proposed by Miller in '86 \cite{mille
 \begin{displaymath}
 \hat{e}(P, Q) : E(\mathbb{F}_q) [l] \times E(\mathbb{F}_q) [l] \mapsto \mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l.
 \end{displaymath}
-The notation $E(\mathbb{F}_q) [l]$ meaning the group of points $P \in E(\mathbb{F}_q)$ for which $l P = \mathcal{O}$. The result of the pairing is an element of the equivalence group $\mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l$, in which two elements $a \equiv b$ iif $a = bc^l$ with $c \in \mathbb{F}_{q^k}^*$. To eliminate this ambiguity, we will elevate the result of the pairing to the power $\frac{q^k - 1}{l}$, the result of which will be an $l$th root of unity $\mu_l$.
+The notation $E(\mathbb{F}_q) [l]$ meaning the group of points $P \in E(\mathbb{F}_q)$ for which $l P = \mathcal{O}$. The result of the pairing is an element of the equivalence group $\mathbb{F}_{q^k}^*/(\mathbb{F}_{q^k}^*)^l$, in which two elements $a \equiv b$ iif $a = bc^l$ with $c \in \mathbb{F}_{q^k}^*$. To eliminate this ambiguity, we will elevate the result of the pairing to the power $\frac{q^k - 1}{l}$, the result of which will be an $l$th root of unity.
 
 \subsection{Parameters}
 
 Before we can take a look at the arithmetic behind the Tate pairing computation, some parameters need to be set. First and foremost, the elliptic curve and the field over which it is defined need to be defined. Due to the simplicity of its arithmetic (only XORing), we choose a field $\mathbb{F}_{2^m}$. We are then forced to use the curve \cite{barreto-efficient}:
 \begin{displaymath}
-E(\mathbb{F}_{2^m}) : y^3 + y = x^3 + x + b,
+E : y^3 + y = x^3 + x + b,
 \end{displaymath}
 with $b \in \{0,1\}$. We also define \cite{beuchat}:
 \begin{displaymath}\begin{aligned}
@@ -51,7 +51,7 @@ The value of $b$ is set to whatever value maximizes the order of the curve:
 \end{displaymath}
 So, before the value of $b$ can be decided on, $m$ is to be set. We also define $l = \#E$.
 
-Considering that the final implementation should be as small as possible, we settle on $m = 163$, which, according to \cite{lenstra}, should still provide reasonable security. If necessary, the hardware which will be proposed in \refsect{section-hardware} can easily be adapted to larger fields. From \cite{sec2} the reduction polynomial is chosen to be 
+Considering that the final implementation should be as small as possible, we settle on $m = 163$, which, according to \cite{lenstra}, is equivalent in strength to RSA(652). Although this is not very strong, if necessary, the hardware which will be proposed in \refsect{section-hardware} can easily be adapted to larger fields. From \cite{sec2} the reduction polynomial is chosen to be 
 \begin{displaymath}
 R = z^{163} + z^7 + z^6 + z^3 + 1.
 \end{displaymath}
