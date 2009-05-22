@@ -76,7 +76,7 @@ The numbers that follow are coarse estimates and should be interpreted as such. 
 \end{aligned}\end{displaymath}
 thus:
 \begin{displaymath}\overline{r}	= \frac{n - 2}{3}.\end{displaymath}
-Now the average number of write operations $\overline{w}$, which have to be executed before every arithmetic operation, can be calculated. First, calculate the average number of cycles it takes to move the content of two registers to register one and two. This is equal to $\overline{r}$ times $n$. Multiplying this by the number of writes that have to be executed each cycle, gives us $\overline w$. Since shifts are only possible in one direction, every such shift demands $n$ write operations. The result is
+Now the average number of write operations $\overline{w}$, which have to be executed before every arithmetic operation, can be calculated. First, calculate the average number of cycles it takes to move the content of two registers to register one and two. This is equal to $\overline{r}$ times $n$. Multiplying this by the number of writes that have to be executed each cycle, gives us $\overline w$. Since register contents can only be shifted in one direction, every cycle $n$ shift operations will have to be executed, demanding $n$ write operations. The result is
 \begin{displaymath}
 	\overline{w} = O ( n^3 ).
 \end{displaymath}
