@@ -2,11 +2,11 @@
 
 In dit hoofdstuk zal de werking van pairings wiskundig uit de doeken gedaan worden. Meer specifiek zal de Tate pairing bestudeerd worden. Er zal duidelijk gemaakt worden hoe de pairing berekend kan worden. Vervolgens worden enkele schema's voorgesteld die gebruikt kunnen worden voor versleuteling van gegevens en de aanmaak van digitale handtekeningen. In het volgende hoofdstuk wordt dan een schakeling ontworpen waarmee de Tate pairing berekend kan worden.
 
-Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaande uiteenzetting wordt als startpunt opnieuw verwezen naar \cite{maas}. Het is uit dit werk dat de informatie in de volgende paragrafen afkomstig is, tenzij anders vermeld.
+Enkel de hoogstnodige theorie zal hier behandeld worden. Voor een meer diepgaande uiteenzetting wordt als startpunt opnieuw verwezen naar Maas \cite{maas}. Het is uit dit werk dat de informatie in de volgende paragrafen afkomstig is, tenzij anders vermeld.
 
 \section{Inleidende wiskunde}
 
-Alvorens de wiskundige theorie van pairings nader bekeken wordt, dient die van elliptische krommen duidelijk gemaakt te worden. Het is met behulp van deze constructies dat pairings berekend kunnen worden. Elliptische krommen worden doorgaans gedefinieerd over een eindig veld. Vandaar dat de noodzakelijk theorie van beiden hier even heel kort herhaald wordt.
+Alvorens de wiskundige theorie van pairings nader bekeken wordt, dient die van elliptische krommen duidelijk gemaakt te worden. Het is met behulp van deze constructies dat pairings berekend kunnen worden. Elliptische krommen worden doorgaans gedefinieerd over een eindig veld. Vandaar dat de noodzakelijke theorie van beiden hier even heel kort herhaald wordt.
 
 \subsection{Eindige velden}
 
@@ -32,7 +32,7 @@ A + B &= 2z + 1 \qquad & A \cdot B &= z^2 + z\\
 
 Een elliptische kromme $E$ wordt gevormd door de verzameling van punten die voldoen aan de vergelijking:
 \[E: Y^2 Z + a_1 XYZ + a_2 Y Z^2 = X^3 + a_3 X^2 Z + a_4 X Z^2 + a_5 Z^3.\]
-Het enige punt waarvoor $Z = 0$ en de vergelijking geldt ($X = 0,  Y = 1, Z = 0$), wordt het punt op oneindig $\mathcal{O}$ genoemd. Indien wordt gesteld dat $x = \frac{X}{Z}$ en $y = \frac{Y}{Z}$, bekomt men de affiene Weierstrass vergelijking:
+Het enige punt waarvoor $Z = 0$ en waarvoor de vergelijking geldt ($X = 0,  Y = 1, Z = 0$), wordt het punt op oneindig $\mathcal{O}$ genoemd. Indien wordt gesteld dat $x = \frac{X}{Z}$ en $y = \frac{Y}{Z}$, bekomt men de affiene Weierstrass vergelijking:
 \[E: y^2 + a_1 xy + a_2 y = x^3 + a_3 x^2 + a_4 x + a_5.\]
 Merk op dat in deze vorm het punt $\mathcal{O}$ niet meer voldoet aan de vergelijking, ook al behoort het nog steeds tot de kromme. De kromme dient zo gedefinieerd te zijn dat $\forall A \in E$ de parti\"ele afgeleiden $\frac{\partial A}{\partial X}$, $\frac{\partial A}{\partial Y}$ en $\frac{\partial A}{\partial Z}$ nooit allen tegelijkertijd gelijk zijn aan nul.
 
@@ -82,13 +82,13 @@ Een pairing moet tevens volgende eigenschappen bezitten: goed gedefinieerd, non-
 De Tate pairing over elliptische krommen wordt als volgt geschreven:
 \[e(P, Q): E(\mathbb{F}_{q^k})[l] \times E(\mathbb{F}_{q^k})/l E(\mathbb{F}_{q^k}) \mapsto \mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l.\]
 
-Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men dan dus een $l$-eenheidswortel. Soms spreekt men over de gereduceerde Tate pairing wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
+Het resultaat van de Tate pairing is niet uniek, maar een element van een equivalentieklasse $\mathbb{F}_{q^k}^* / (\mathbb{F}_{q^k}^*)^l$. Voor twee resultaten $a, b \in \mathbb{F}_{q^k}^*$ geldt $a \equiv b$ als en slechts als er een element $c \in \mathbb{F}_{q^k}^*$ bestaat waarvoor $a = bc^l$. Aangezien voor cryptografische toepassingen een uniek resultaat gewenst zal zijn, dient die $n$-de macht weggewerkt te worden. Dit kan door het resultaat te verheffen tot de macht $\frac{q^k - 1 }{l}$. Aangezien $a^{q^k - 1} = 1$ voor elke $a \in \mathbb{F}_{q^k}^*$ (kleine stelling van Fermat), verkrijgt men aldus een $l$-eenheidswortel. Soms spreekt men over de gereduceerde Tate pairing wanneer men expliciet wil aangeven dat deze machtsverheffing wordt uitgevoerd.
 
 Het formeel bewijzen van de Tate pairing valt buiten het bestek van deze thesis. Voor meer informatie zie onder andere \cite{maas, ruck, hess}.
 
 \section{Berekening van de Tate pairing\label{sectie-pairings-berekening}}
 
-Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat algoritme werkt.
+Reeds in 1986 stelde Miller een methode voor om de Tate pairing te berekenen \cite{miller, barreto-efficient}. \refalg{algoritme-pairings-miller} geeft weer hoe dat in zijn werk gaat.
 
 \begin{algorithm}[h]
 	\caption{Millers algoritme voor de Tate pairing}
