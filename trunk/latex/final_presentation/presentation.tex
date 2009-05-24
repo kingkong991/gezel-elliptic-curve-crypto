@@ -1,5 +1,5 @@
-%\documentclass[svgnames]{beamer}
-\documentclass[svgnames, handout,t]{beamer}
+\documentclass[svgnames]{beamer}
+%\documentclass[svgnames, handout,t]{beamer}
 
 \usefonttheme[onlymath]{serif}		% Display math in serif font
 
@@ -97,14 +97,14 @@ Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
 				\item Public key deduced from ID
 				\item No need for certificates
 			\end{itemize}
-		\item Contra:
-			\begin{itemize}
-				\item How to issue new keys, \ldots ?
-			\end{itemize}
 		\item Extra's:
 			\begin{itemize}
 				\item Non-interactive key establishment
 				\item Date-stamped encryption
+			\end{itemize}
+		\item Contra:
+			\begin{itemize}
+				\item How to issue new keys, \ldots ?
 			\end{itemize}
 	\end{itemize}
 \end{frame}
@@ -129,34 +129,34 @@ Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
 		\mu _l \in 	\mathbb{F}_{q^k}^*
 	\end{gathered}\]
 	
-	Mapping needs to be:	
-	\begin{itemize}
-		\item Bilinear: $\hat{e}(P_1 + P_2, Q) = \hat{e}(P_1, Q) \cdot \hat{e}(P_2, Q)$
-		\item Non-degenerate: $\hat{e}(P, P) \neq 1$
-		\item Well defined
-	\end{itemize}
+%	Mapping needs to be:	
+%	\begin{itemize}
+%		\item Bilinear: $\hat{e}(P_1 + P_2, Q) = \hat{e}(P_1, Q) \cdot \hat{e}(P_2, Q)$
+%		\item Non-degenerate: $\hat{e}(P, P) \neq 1$
+%		\item Well defined
+%	\end{itemize}
 \end{frame}
 
-\begin{frame}{How?}
-	Calculate using optimized version of Miller's algorithm:\\[1em]
-		\scriptsize{
-		\begin{algorithmic}
-			\REQUIRE $l \in \mathbb{Z}$; $t = \left\lfloor \log _2 (l) \right\rfloor$; $P, Q \in E(\mathbb{F}_{2^m})[l]$
-			\ENSURE $F = \hat{e}(P, Q) \in \mu _l$
-			\STATE $F \gets 1$
-			\STATE $V \gets P$
-			\FOR{$i = t - 1$ to $0$}
-				\STATE $F \gets F^2 \cdot G_{V,V}(\phi(Q))$
-				\STATE $V \gets 2 \cdot V$
-				\IF{$l_i = 1$ and $i \neq 0$}
-					\STATE $F \gets F \cdot G_{V,P}(\phi(Q))$
-					\STATE $V \gets V + P$
-				\ENDIF
-			\ENDFOR
-			\STATE $F \gets F^{\frac{2^{km} - 1 }{l}}$
-			\RETURN $F$
-		\end{algorithmic}}
-\end{frame}
+%\begin{frame}{How?}
+%	Calculate using optimized version of Miller's algorithm:\\[1em]
+%		\scriptsize{
+%		\begin{algorithmic}
+%			\REQUIRE $l \in \mathbb{Z}$; $t = \left\lfloor \log _2 (l) \right\rfloor$; $P, Q \in E(\mathbb{F}_{2^m})[l]$
+%			\ENSURE $F = \hat{e}(P, Q) \in \mu _l$
+%			\STATE $F \gets 1$
+%			\STATE $V \gets P$
+%			\FOR{$i = t - 1$ to $0$}
+%				\STATE $F \gets F^2 \cdot G_{V,V}(\phi(Q))$
+%				\STATE $V \gets 2 \cdot V$
+%				\IF{$l_i = 1$ and $i \neq 0$}
+%					\STATE $F \gets F \cdot G_{V,P}(\phi(Q))$
+%					\STATE $V \gets V + P$
+%				\ENDIF
+%			\ENDFOR
+%			\STATE $F \gets F^{\frac{2^{km} - 1 }{l}}$
+%			\RETURN $F$
+%		\end{algorithmic}}
+%\end{frame}
 
 \section{Implementation}
 \subsection*{Implementation}
@@ -213,7 +213,7 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{$\mathbb{F}_{2^m}$ Multiplication \& Addition}
-	Speed up calculation through daisy-chaining MALU's:\\[0.7em]
+	Speed up calculation through daisy-chaining MALUs:\\[0.7em]
 	\begin{changemargin}{-1cm}{-1cm}
 	\begin{center}\includegraphics[height=0.6\paperheight]{images/malu-width-d}\end{center}
 	\end{changemargin}
@@ -254,9 +254,9 @@ Avoid the use of flip-flops and muxes:
 	\begin{changemargin}{-2cm}{1.2cm}
 %		\begin{center}
 		\raggedleft
-			\includegraphics[height=0.13\paperheight]{images/cg-basic} \\[0.7em]
-			\includegraphics[height=0.1747\paperheight]{images/cg-no-glitch} \\[0.7em]
-			\includegraphics[height=0.13\paperheight]{images/cg-low-power}\\
+			\uncover<3->{\includegraphics[height=0.13\paperheight]{images/cg-basic}} \\[0.7em]
+			\uncover<4->{\includegraphics[height=0.1747\paperheight]{images/cg-no-glitch}} \\[0.7em]
+			\uncover<5->{\includegraphics[height=0.13\paperheight]{images/cg-low-power}}\\
 %		\end{center}
 	\end{changemargin}
 \end{frame}
@@ -267,14 +267,16 @@ Avoid the use of flip-flops and muxes:
 	\begin{itemize}
 		\item FSM with 553 states
 		\item Total n$^{\circ}$ of clockcycles $c$ for one pairing:
+				\[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil\]
 	\end{itemize}
-	\[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil.\]
-	
-	\vfill
 	
 	\begin{changemargin}{-4cm}{-4cm}
-		\begin{center}\includegraphics[height=0.4\paperheight]{images/results-multi-cycles}\end{center}
+		\begin{center}\includegraphics[height=0.40\paperheight]{images/results-multi-cycles}\end{center}
 	\end{changemargin}
+	
+	~\\[3em]
+	
+\vfill
 \end{frame}
 
 \begin{frame}{Synthesis}
@@ -343,12 +345,12 @@ Avoid the use of flip-flops and muxes:
 	 		\midrule
 			Field																& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$\\
 			Pairing															& Tate							& Tate							& $\eta_T$\\
-			Security [bit]													& $652$							& $652$							& $922$\\
-			Technology [$\mu m$]											& $0.13$							& $0.13$							& $0.18$\\
-			Area [gates]													& $27\,430$						& $28\,155$						& $193\,765$\\
-			$f$ [MHz]														& $10.3$							& $5.44$							& $200$\\
-			Calc. time [$\mu s$]											& $50 \cdot 10^3$				& $50 \cdot 10^3$				& $46.7$\\
-			Power [$mW$]													& $98.3 \cdot 10^{-3}$		& $48.6 \cdot 10^{-3}$		& $672$\\
+			Security $[$bit$]$											& $652$							& $652$							& $922$\\
+			Technology $[\mu m]$											& $0.13$							& $0.13$							& $0.18$\\
+			Area $[$gates$]$												& $27\,430$						& $28\,155$						& $193\,765$\\
+			$f$ $[$MHz$]$													& $10.3$							& $5.44$							& $200$\\
+			Calc. time $[\mu s]$											& $50 \cdot 10^3$				& $50 \cdot 10^3$				& $46.7$\\
+			Power $[mW]$													& $98.3 \cdot 10^{-3}$		& $48.6 \cdot 10^{-3}$		& $672$\\
 			Efficiency $\left[ \frac{nJ}{\text{bit}}\right]$	& $7.54$							& $3.73$							& $34.0$\\
 			\bottomrule		
 		\end{tabular}}
@@ -357,7 +359,17 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{Conclussion}
+	\begin{itemize}
+		\item Very small: $< 30$k gates
+		\item Extremely low power: $<220$ nA
+		\item Energy efficiency improvement up to $25 \times$ possible
+	\end{itemize}
 	
+	\\[3em]
+	
+	\begin{center}
+		\uncover<4->{Definitely possible to use in constrained environments}
+	\end{center}
 \end{frame}
 
 \begin{frame}{The end}
