@@ -11,6 +11,15 @@
 
 \usepackage{amsmath,amssymb,color}
 
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\usepackage{multirow}	% Multiple rows and columns in tables
+\usepackage{booktabs}	% Professional tables
+
+% Math stuff
+\newcommand{\xor}{\oplus}
+
 \usetheme{Berlin}
 \usecolortheme{bear}
 
@@ -21,6 +30,17 @@ Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
 \date{22 May 2009}
 %\pgfdeclareimage[height=1cm]{brown-logo}{brown-logo.pdf}
 %\logo{\pgfuseimage{brown-logo}\hspace*{0.3cm}}
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
 
 \AtBeginSection[]
 {
@@ -101,91 +121,243 @@ Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
 
 \begin{frame}{How?}
 	Several available pairings:
-	\begin{center}Weil, \alert{Tate}, ate, eta, $\ldots$\end{center}
+	\begin{center}Weil, \alert{Tate}, $\eta _T$, Ate, $\ldots$\end{center}
 	
 	Tate pairing:	
-	\[ \hat{e}(P, Q) : E(\mathbb{F}_q)[l] \times E(\mathbb{F}_q)[l] \mapsto \mu _l \]
+	\[\begin{gathered}
+		\hat{e}(P, Q) : E(\mathbb{F}_q)[l] \times E(\mathbb{F}_q)[l] \mapsto \mu _l \\
+		\mu _l \in 	\mathbb{F}_{q^k}^*
+	\end{gathered}\]
 	
 	Mapping needs to be:	
 	\begin{itemize}
-		\item<1-> Bilinear: $\hat{e}(P_1 + P_2, Q) = e(P_1, Q) \cdot e(P_2, Q)$
-		\item<1-> Non-degenerate: $\hat{e}(P, P) \neq 1$
-		\item<1-> Efficiently computable
+		\item Bilinear: $\hat{e}(P_1 + P_2, Q) = \hat{e}(P_1, Q) \cdot \hat{e}(P_2, Q)$
+		\item Non-degenerate: $\hat{e}(P, P) \neq 1$
+		\item Well defined
 	\end{itemize}
-	
+\end{frame}
 
+\begin{frame}{How?}
+	Calculate using optimized version of Miller's algorithm:\\[1em]
+		\scriptsize{
+		\begin{algorithmic}
+			\REQUIRE $l \in \mathbb{Z}$; $t = \left\lfloor \log _2 (l) \right\rfloor$; $P, Q \in E(\mathbb{F}_{2^m})[l]$
+			\ENSURE $F = \hat{e}(P, Q) \in \mu _l$
+			\STATE $F \gets 1$
+			\STATE $V \gets P$
+			\FOR{$i = t - 1$ to $0$}
+				\STATE $F \gets F^2 \cdot G_{V,V}(\phi(Q))$
+				\STATE $V \gets 2 \cdot V$
+				\IF{$l_i = 1$ and $i \neq 0$}
+					\STATE $F \gets F \cdot G_{V,P}(\phi(Q))$
+					\STATE $V \gets V + P$
+				\ENDIF
+			\ENDFOR
+			\STATE $F \gets F^{\frac{2^{km} - 1 }{l}}$
+			\RETURN $F$
+		\end{algorithmic}}
 \end{frame}
 
 \section{Implementation}
 \subsection*{Implementation}
-\begin{frame}{MALU}
-	Modulo Arithmetic Logical Unit [general]:\\[8mm]
+\begin{frame}{Restrictions}
+Avoid the use of flip-flops and muxes:
+
 	\begin{center}
-		\includegraphics[height=0.5\paperheight]{images/malu-basic}
+	\begin{tabular}{lr}
+		\toprule
+		Cell							& Area $\left[\frac{\text{gate}}{\text{bit}}\right]$\\
+		\midrule
+		D flip-flop (reset)		& 6\\
+		D flip-flop (no reset)	& 5.5\\
+		D latch						& 4.25\\
+		3 input MUX					& 4\\
+		2 input XOR					& 3.75\\
+		2 input MUX					& 2.25\\
+		2 input NAND				& 1\\
+		NOT							& 0.75\\
+		\bottomrule
+	\end{tabular}
 	\end{center}
 \end{frame}
 
-\begin{frame}{MALU}
-	Modulo Arithmetic Logical Unit [optimized]:\\[3mm]
-	\begin{center}
-		\includegraphics[height=0.5\paperheight]{images/malu-optimized}
-	\end{center}
+\begin{frame}{MALU - Addition \& Reduction in $\mathbb{F}_{2^m}$}
+\\[-1em]
+	\[\begin{gathered}
+		R = \left(T + B \quad (\text{mod } P_{\text{in}}) \right)_{0:m-2} \ll 1 \\
+		mod_{\text{u}} = \left(T + B \quad (\text{mod } P_{\text{in}}) \right)_{m - 1}
+	\end{gathered}\]
+	\begin{changemargin}{-2cm}{-2cm}
+	\begin{center}\includegraphics[height=0.5\paperheight]{images/malu-basic}\end{center}
+	\end{changemargin}
 \end{frame}
 
-\begin{frame}{MALU}
-	Modulo Arithmetic Logical Unit [optimized; d-bits wide]:\\
-	\begin{center}
-		\includegraphics[height=0.55\paperheight]{images/malu-width-d}
-	\end{center}
+\begin{frame}{MALU - Addition \& Reduction in $\mathbb{F}_{2^m}$}
+	Optimized MALU needs $\Delta = m - \left( \textsf{Hamm}(P) - 1 \right)$ less XOR's:\\[1.7em]
+	\begin{changemargin}{-2cm}{-2cm}
+	\begin{center}\includegraphics[height=0.5\paperheight]{images/malu-optimized}\end{center}
+	\end{changemargin}
 \end{frame}
 
-\begin{frame}{Wrappers - $GF_{2^m}$}
-	$GF_{2^m}$ Multiplication/Addition:\\
-	\begin{center}
-		\includegraphics[height=0.55\paperheight]{images/wrapper-gf2m}
-	\end{center}
+\begin{frame}{$\mathbb{F}_{2^m}$ Multiplication \& Addition}
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[height=0.65\paperheight]{images/wrapper-gf2m}\end{center}
+	\end{changemargin}
 \end{frame}
 
-\begin{frame}{Controller - Miller's algorithm}
-	\vfill
-	\centering
-		\includegraphics[width=0.8\paperwidth]{images/controller-miller}
-	\vfill
+\begin{frame}{$\mathbb{F}_{2^m}$ Multiplication \& Addition}
+	No FSM needed, simple logic:\\[0.7em]
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[height=0.55\paperheight]{images/wrapper-gf2m-logica}\end{center}
+	\end{changemargin}
 \end{frame}
 
-\begin{frame}{State of the art}
-	Some currently available implementations:\\
+\begin{frame}{$\mathbb{F}_{2^m}$ Multiplication \& Addition}
+	Speed up calculation through daisy-chaining MALU's:\\[0.7em]
+	\begin{changemargin}{-1cm}{-1cm}
+	\begin{center}\includegraphics[height=0.6\paperheight]{images/malu-width-d}\end{center}
+	\end{changemargin}
+\end{frame}
+
+\begin{frame}{Controller for Miller's algorithm}
+\vfill
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[width=1\paperwidth]{images/controller-miller}\end{center}
+	\end{changemargin}
+\vfill
+\end{frame}
+
+\begin{frame}{Memory design}
+	Starting design:
+	\[\overline{t} = O \left( \frac{n^2}{3} \right) \quad \qquad \overline{w} = O \left( \frac{n^3}{3} \right)\] \\[1.7em]
 	
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[width=0.8\paperwidth]{images/geheugen-circ}\end{center}
+	\end{changemargin}
+\end{frame}
+
+\begin{frame}{Memory design}
+	Final design:\\[0.3em]
+	\[\overline{t} = O \left( \frac{n}{4} \right) \quad \qquad \overline{w} = O \left( n \right)\] \\[1.7em]
+	
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[width=0.8\paperwidth]{images/geheugen-circ-optimized}\end{center}
+	\end{changemargin}
+\end{frame}
+
+\begin{frame}{Optimizations}
+	\begin{itemize}
+		\item Remove reset from registers $\left( -0.5 \: \frac{\text{gate}}{\text{bit}} \right)$
+		\item Implement clock gating:
+	\end{itemize}
+	
+	\begin{changemargin}{-2cm}{1.2cm}
+%		\begin{center}
+		\raggedleft
+			\includegraphics[height=0.13\paperheight]{images/cg-basic} \\[0.7em]
+			\includegraphics[height=0.1747\paperheight]{images/cg-no-glitch} \\[0.7em]
+			\includegraphics[height=0.13\paperheight]{images/cg-low-power}\\
+%		\end{center}
+	\end{changemargin}
+\end{frame}
+
+\section{Results}
+\subsection*{Results}
+\begin{frame}{Runtime}
+	\begin{itemize}
+		\item FSM with 553 states
+		\item Total n$^{\circ}$ of clockcycles $c$ for one pairing:
+	\end{itemize}
+	\[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil.\]
+	
+	\vfill
+	
+	\begin{changemargin}{-4cm}{-4cm}
+		\begin{center}\includegraphics[height=0.4\paperheight]{images/results-multi-cycles}\end{center}
+	\end{changemargin}
+\end{frame}
+
+\begin{frame}{Synthesis}
 	\begin{center}
-	\begin{tabular}{llll}
-		Name		&	Platform	&	Field	&	Speed\\
-		\hline
-		TinyTate		&	ATMega128L [7.4Mhz]	& $\mathbb{F}_{2^{256}}$	& 30.2s\\
-		TinyPBC		&	ATMega128L [7.4Mhz]	& $\mathbb{F}_{2^{256}}$	& 5.45s\\
-		Hankerson	&	P4 [2.8Ghz]				& $\mathbb{F}_{2^{1223}}$	& 0.07s\\
-		Hankerson	&	P4 [2.8Ghz]	(SSE) 	& $\mathbb{F}_{2^{1223}}$	& 0.03s\\
-		\end{tabular}
+		\tiny{\begin{tabular}{llrlrlr}
+			\\[-2em]
+			\toprule
+			\multirow{2}{*}{Implementation}	& \multicolumn{2}{c}{\multirow{2}{*}{Area [gates]}}	& \multicolumn{4}{c}{Power @ 10 kHz [$nW$]}\\
+			\cmidrule{4-7}
+			&	& & \multicolumn{2}{c}{Dynamic}	& \multicolumn{2}{c}{Leakage}\\
+			\midrule
+			Basic			& $28\,876$	& 			& $512$	&	 		& $117$ 	& \\
+			No Reset		& $27\,596$	& $96\%$	& $395$	& $77\%$	& $107$ 	& $92\%$\\
+			CG 1			& $27\,751$	& $96\%$	& $94$	& $18\%$	& $109$	& $94\%$\\
+			CG 2			& $27\,713$	& $96\%$	& $59$	& $12\%$	& $102$	& $88\%$\\
+			CG 3			& $27\,734$	& $96\%$	& $96$	& $19\%$	& $110$	& $94\%$\\
+			\bottomrule		
+		\end{tabular}}
+
+		\\[2em]
+
+		\begin{changemargin}{-1cm}{-1cm}\begin{center}
+			\includegraphics[width=0.45\paperwidth]{images/results-m1-en}
+		\end{center}\end{changemargin}
 	\end{center}
 \end{frame}
 
-\section{Conclussion}
-\subsection*{Conclussion}
-\begin{frame}{Progress so far}
-	\begin{itemize}
-		\item<1-> MALU
-		\item<1->	$GF_{2^m}$ functions
-		\item<1-> ECC functions
-		\item<1-> Pairing functions (partial)
-	\end{itemize}
+\begin{frame}{Synthesis - Continued}
+\vfill
+	\begin{center}
+	\begin{changemargin}{-0.3cm}{-0.8cm}
+		\begin{minipage}[c]{0.3\paperwidth}
+			\tiny{\begin{tabular}{llr}
+				\toprule
+				Component					& \multicolumn{2}{c}{Opp. [gates]}\\
+				\midrule
+				MALU				 			& $458$		& $1.7\%$\\
+				$\mathbb{F}_{2^m}$ core	&				& \\
+				$\quad$ Logic				& $783$		& $2.8\%$\\
+				$\quad$ Registers			& $962$		& $3.5\%$\\
+				Controller					&				& \\
+				$\quad$ Logic				& $13\,044$	& $47\%$\\
+				$\quad$ Registers			& $12\,487$	& $45\%$\\
+				\midrule
+				Total						& $27\,734$	& $100\%$\\
+				\bottomrule		
+			\end{tabular}}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.60\paperwidth}
+			\includegraphics[width=0.60\paperwidth]{images/results-md-en}
+		\end{minipage}		
+	\end{changemargin}
+	\end{center}
+\vfill
 \end{frame}
 
-\begin{frame}{To do}
-	\begin{itemize}
-		\item<1-> Complete pairing functions
-		\item<1-> Bugfixing
-		\item<1-> Optimization (VHDL)
-		\item<1-> Write thesis text
-	\end{itemize}
+\begin{frame}{Comparison}
+\vfill
+\begin{center}
+\small{\begin{tabular}{llll}
+			\toprule
+			&	\multicolumn{2}{c}{This work}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Beuchat}\\\text{\emph{et al.}}\end{array}$}\\
+			\cmidrule(r){2-3}
+			& \multicolumn{1}{c}{1 MALU} & \multicolumn{1}{c}{2 MALUs} &\\
+	 		\midrule
+			Field																& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$\\
+			Pairing															& Tate							& Tate							& $\eta_T$\\
+			Security [bit]													& $652$							& $652$							& $922$\\
+			Technology [$\mu m$]											& $0.13$							& $0.13$							& $0.18$\\
+			Area [gates]													& $27\,430$						& $28\,155$						& $193\,765$\\
+			$f$ [MHz]														& $10.3$							& $5.44$							& $200$\\
+			Calc. time [$\mu s$]											& $50 \cdot 10^3$				& $50 \cdot 10^3$				& $46.7$\\
+			Power [$mW$]													& $98.3 \cdot 10^{-3}$		& $48.6 \cdot 10^{-3}$		& $672$\\
+			Efficiency $\left[ \frac{nJ}{\text{bit}}\right]$	& $7.54$							& $3.73$							& $34.0$\\
+			\bottomrule		
+		\end{tabular}}
+\end{center}
+\vfill
+\end{frame}
+
+\begin{frame}{Conclussion}
+	
 \end{frame}
 
 \begin{frame}{The end}
