@@ -25,8 +25,9 @@
 
 \title{Compact implementations of pairings}
 \author[Anthony Van Herrewege]{Anthony Van Herrewege\\[2em]
-\small Lejla Batina \& Miroslav Knezevic\\
-Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
+\footnotesize Day. sup.: Lejla Batina, Miroslav Knezevic, Dr.~Ir.~Nele Mentens\\
+Prom.: Prof. Dr. Ir. Ingrid Verbauwhede, Prof. Dr. Ir. Bart Preneel\\
+Ass.: Prof. Dr. Ir. Wim Dehaene, Ir. Frederik Vercauteren}
 \date{22 May 2009}
 %\pgfdeclareimage[height=1cm]{brown-logo}{brown-logo.pdf}
 %\logo{\pgfuseimage{brown-logo}\hspace*{0.3cm}}
@@ -60,103 +61,33 @@ Prof. Dr. Ir. I. 	Verbauwhede \& Prof. Dr. Ir. B. Preneel}
   \tableofcontents
 \end{frame}
 
-\section{Problem}
-\subsection*{Problem}
-\begin{frame}{Symmetric cryptography}
-	\begin{itemize}
-		\item Pro:
-			\begin{itemize}
-				\item High security per bit
-				\item Very fast implementations
-			\end{itemize}
-		\item Contra:
-			\begin{itemize}
-				\item How to establish the key?
-			\end{itemize}		
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Asymmetric cryptography}
-	\begin{itemize}
-		\item Pro:
-			\begin{itemize}
-				\item No key establishment necessary
-				\item Central location with everyone's key
-			\end{itemize}
-		\item Contra:
-			\begin{itemize}
-				\item Need for certificate authorities, \ldots
-			\end{itemize}		
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Identity-based cryptography}
-	\begin{itemize}
-		\item Pro:
-			\begin{itemize}
-				\item Public key deduced from ID
-				\item No need for certificates
-			\end{itemize}
-		\item Extra's:
-			\begin{itemize}
-				\item Non-interactive key establishment
-				\item Date-stamped encryption
-			\end{itemize}
-		\item Contra:
-			\begin{itemize}
-				\item How to issue new keys, \ldots ?
-			\end{itemize}
-	\end{itemize}
-\end{frame}
-
 \section{Pairings}
 \subsection*{Pairings}
-\begin{frame}{What?}
+\begin{frame}{Overview}
 	\begin{itemize}
-		\item Mathematical construction discovered in the 40's
-		\item Allow implementation of ID-based cryptography
-		\item Strength based on discrete logarithm problem
+		\item Several available pairings:
+			\begin{center}Weil, \alert{Tate}, $\eta _T$, Ate, $\ldots$\end{center}
+		
+		\item	Must be bilinear:
+			\[ e(P_1 + P_2, Q) = e(P_1, Q) \cdot e(P_2, Q) \]
+	
+		\item \emph{Optimized} Tate pairing:	
+			\[\begin{gathered}
+				\hat{e}(P, Q) : E(\mathbb{F}_q)[l] \times E(\mathbb{F}_q)[l] \mapsto \mu _l \\
+				\mu _l = \text{group of $l$th roots of } \mathbb{F}_{q^k}^*
+			\end{gathered}\]
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{How?}
-	Several available pairings:
-	\begin{center}Weil, \alert{Tate}, $\eta _T$, Ate, $\ldots$\end{center}
-	
-	Tate pairing:	
-	\[\begin{gathered}
-		\hat{e}(P, Q) : E(\mathbb{F}_q)[l] \times E(\mathbb{F}_q)[l] \mapsto \mu _l \\
-		\mu _l \in 	\mathbb{F}_{q^k}^*
-	\end{gathered}\]
-	
-%	Mapping needs to be:	
-%	\begin{itemize}
-%		\item Bilinear: $\hat{e}(P_1 + P_2, Q) = \hat{e}(P_1, Q) \cdot \hat{e}(P_2, Q)$
-%		\item Non-degenerate: $\hat{e}(P, P) \neq 1$
-%		\item Well defined
-%	\end{itemize}
+\begin{frame}{Possibilities}
+	\begin{itemize}
+		\item Identity-based encryption
+		\item Short signatures
+		\item Non-interactive key agreement
+		\item Tripartite key agreement in 1 round
+		\item \ldots
+	\end{itemize}
 \end{frame}
-
-%\begin{frame}{How?}
-%	Calculate using optimized version of Miller's algorithm:\\[1em]
-%		\scriptsize{
-%		\begin{algorithmic}
-%			\REQUIRE $l \in \mathbb{Z}$; $t = \left\lfloor \log _2 (l) \right\rfloor$; $P, Q \in E(\mathbb{F}_{2^m})[l]$
-%			\ENSURE $F = \hat{e}(P, Q) \in \mu _l$
-%			\STATE $F \gets 1$
-%			\STATE $V \gets P$
-%			\FOR{$i = t - 1$ to $0$}
-%				\STATE $F \gets F^2 \cdot G_{V,V}(\phi(Q))$
-%				\STATE $V \gets 2 \cdot V$
-%				\IF{$l_i = 1$ and $i \neq 0$}
-%					\STATE $F \gets F \cdot G_{V,P}(\phi(Q))$
-%					\STATE $V \gets V + P$
-%				\ENDIF
-%			\ENDFOR
-%			\STATE $F \gets F^{\frac{2^{km} - 1 }{l}}$
-%			\RETURN $F$
-%		\end{algorithmic}}
-%\end{frame}
 
 \section{Implementation}
 \subsection*{Implementation}
@@ -193,7 +124,7 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{MALU - Addition \& Reduction in $\mathbb{F}_{2^m}$}
-	Optimized MALU needs $\Delta = m - \left( \textsf{Hamm}(P) - 1 \right)$ less XOR's:\\[1.7em]
+	Optimized MALU needs $\Delta = m - \left( \textsf{Hamm}(P) - 1 \right)$ less XORs:\\[1.7em]
 	\begin{changemargin}{-2cm}{-2cm}
 	\begin{center}\includegraphics[height=0.5\paperheight]{images/malu-optimized}\end{center}
 	\end{changemargin}
@@ -213,7 +144,7 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{$\mathbb{F}_{2^m}$ Multiplication \& Addition}
-	Speed up calculation through daisy-chaining MALUs:\\[0.7em]
+	Speed up calculation by daisy-chaining MALUs ($m \bmod d$!):\\[0.7em]
 	\begin{changemargin}{-1cm}{-1cm}
 	\begin{center}\includegraphics[height=0.6\paperheight]{images/malu-width-d}\end{center}
 	\end{changemargin}
@@ -228,7 +159,7 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{Memory design}
-	Starting design:
+	Initial design:
 	\[\overline{t} = O \left( \frac{n^2}{3} \right) \quad \qquad \overline{w} = O \left( \frac{n^3}{3} \right)\] \\[1.7em]
 	
 	\begin{changemargin}{-4cm}{-4cm}
@@ -252,12 +183,10 @@ Avoid the use of flip-flops and muxes:
 	\end{itemize}
 	
 	\begin{changemargin}{-2cm}{1.2cm}
-%		\begin{center}
 		\raggedleft
 			\uncover<3->{\includegraphics[height=0.13\paperheight]{images/cg-basic}} \\[0.7em]
 			\uncover<4->{\includegraphics[height=0.1747\paperheight]{images/cg-no-glitch}} \\[0.7em]
 			\uncover<5->{\includegraphics[height=0.13\paperheight]{images/cg-low-power}}\\
-%		\end{center}
 	\end{changemargin}
 \end{frame}
 
@@ -266,7 +195,7 @@ Avoid the use of flip-flops and muxes:
 \begin{frame}{Runtime}
 	\begin{itemize}
 		\item FSM with 553 states
-		\item Total n$^{\circ}$ of clockcycles $c$ for one pairing:
+		\item Total n$^{\circ}$ of clock cycles $c$ for one pairing:
 				\[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil\]
 	\end{itemize}
 	
@@ -335,10 +264,9 @@ Avoid the use of flip-flops and muxes:
 \end{frame}
 
 \begin{frame}{Comparison}
-\vfill
 \begin{center}
 \small{\begin{tabular}{llll}
-			\toprule
+			\\[-1.5em] \toprule
 			&	\multicolumn{2}{c}{This work}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Beuchat}\\\text{\emph{et al.}}\end{array}$}\\
 			\cmidrule(r){2-3}
 			& \multicolumn{1}{c}{1 MALU} & \multicolumn{1}{c}{2 MALUs} &\\
@@ -354,22 +282,33 @@ Avoid the use of flip-flops and muxes:
 			Efficiency $\left[ \frac{nJ}{\text{bit}}\right]$	& $7.54$							& $3.73$							& $34.0$\\
 			\bottomrule		
 		\end{tabular}}
+		
+		\\[1.5em]
+		
+		Efficiency = $\frac{\text{power} \; \times \; \text{calc. time}}{\text{security}}$
 \end{center}
-\vfill
 \end{frame}
 
-\begin{frame}{Conclussion}
+\begin{frame}{Conclusion}
 	\begin{itemize}
 		\item Very small: $< 30$k gates
 		\item Extremely low power: $<220$ nA
-		\item Energy efficiency improvement up to $25 \times$ possible
+		\item Energy efficiency improvement up to more than $25 \times$ possible
 	\end{itemize}
 	
-	\\[3em]
+	\\[1em]
 	
 	\begin{center}
 		\uncover<4->{Definitely possible to use in constrained environments}
 	\end{center}
+	
+	\begin{itemize}
+		\item<5-> Example with 3 MALUs:
+				\[\begin{aligned}
+					&\text{Area} = 29\text{k gates} & \qquad &f = 9.70 \text{ Mhz}\\
+					&\text{Power = } 100 \text{ } \mu \text{A} \quad & \qquad &\text{Time = } 19.6 \text{ ms}
+				\end{aligned}\]
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{The end}
