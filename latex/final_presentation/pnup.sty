@@ -1,0 +1,87 @@
+\RequirePackage{pgfpages}
+
+\pgfpagesdeclarelayout{3 on 1 with notes} {
+   \edef\pgfpageoptionheight{\the\paperheight}
+   \edef\pgfpageoptionwidth{\the\paperwidth}
+   \edef\pgfpageoptionborder{0pt}
+}
+{
+   \pgfpagesphysicalpageoptions
+   {%
+     logical pages=6,%
+     physical height=\pgfpageoptionheight,%
+     physical width=\pgfpageoptionwidth,%
+     last logical shipout=3%
+   }
+   \pgfpageslogicalpageoptions{1}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.25\pgfphysicalwidth}{.8333333
+\pgfphysicalheight},%
+%     border code=\pgfusepath{stroke}
+   }%
+   \pgfpageslogicalpageoptions{2}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.25\pgfphysicalwidth}{.5\pgfphysicalheight},%
+%     border code=\pgfusepath{stroke}%
+   }%
+   \pgfpageslogicalpageoptions{3}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.25\pgfphysicalwidth}{.1666666
+\pgfphysicalheight},%
+%     border code=\pgfusepath{stroke}%
+   }%
+   \pgfpageslogicalpageoptions{4}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.75\pgfphysicalwidth}{.8333333
+\pgfphysicalheight},%
+     copy from=4
+   }%
+   \pgfpageslogicalpageoptions{5}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.75\pgfphysicalwidth}{.5\pgfphysicalheight},%
+     copy from=5
+   }%
+   \pgfpageslogicalpageoptions{6}
+   {%
+     border shrink=\pgfpageoptionborder,%
+     resized width=.5\pgfphysicalwidth,%
+     resized height=.3333\pgfphysicalheight,%
+     center=\pgfpoint{.75\pgfphysicalwidth}{.1666666
+\pgfphysicalheight},%
+     copy from=6
+   }%
+   \AtBeginDocument{
+     \newbox\notesbox
+     \setbox\notesbox=\vbox{
+       \hsize=\paperwidth
+       \vskip-1in\hskip-1in\vbox{
+         \vskip1cm
+       Notes\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth\vskip1cm
+       \hrule width\paperwidth}
+     }
+     \pgfpagesshipoutlogicalpage{4}\copy\notesbox
+     \pgfpagesshipoutlogicalpage{5}\copy\notesbox
+     \pgfpagesshipoutlogicalpage{6}\copy\notesbox
+   }
+} 
