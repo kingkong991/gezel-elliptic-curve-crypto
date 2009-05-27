@@ -1,5 +1,12 @@
 \documentclass[svgnames]{beamer}
-%\documentclass[svgnames, handout,t]{beamer}
+%\documentclass[svgnames, handout]{beamer}
+
+\usepackage{pnup}
+\usepackage{pgfpages}
+
+%\pgfpagesuselayout{3 on 1 with notes}[a4paper,border shrink=5mm]
+
+\mode<handout>{\setbeamercolor{background canvas}{bg=black!5}}
 
 \usefonttheme[onlymath]{serif}		% Display math in serif font
 
@@ -25,9 +32,9 @@
 
 \title{Compact implementations of pairings}
 \author[Anthony Van Herrewege]{Anthony Van Herrewege\\[2em]
-\footnotesize Day. sup.: Lejla Batina, Miroslav Knezevic, Dr.~Ir.~Nele Mentens\\
+\footnotesize Day. sup.: Dr. Lejla Batina, Miroslav Knezevic, Dr. Ir. Nele Mentens\\
 Prom.: Prof. Dr. Ir. Ingrid Verbauwhede, Prof. Dr. Ir. Bart Preneel\\
-Ass.: Prof. Dr. Ir. Wim Dehaene, Ir. Frederik Vercauteren}
+Ass.: Prof. Dr. Ir. Wim Dehaene, Dr. Ir. Frederik Vercauteren}
 \date{22 May 2009}
 %\pgfdeclareimage[height=1cm]{brown-logo}{brown-logo.pdf}
 %\logo{\pgfuseimage{brown-logo}\hspace*{0.3cm}}
@@ -52,6 +59,8 @@ Ass.: Prof. Dr. Ir. Wim Dehaene, Ir. Frederik Vercauteren}
 }
 \beamerdefaultoverlayspecification{<+->}
 
+\setbeameroption{show notes}
+
 \begin{document}
 
 \frame{\titlepage}
@@ -68,7 +77,7 @@ Ass.: Prof. Dr. Ir. Wim Dehaene, Ir. Frederik Vercauteren}
 		\item Several available pairings:
 			\begin{center}Weil, \alert{Tate}, $\eta _T$, Ate, $\ldots$\end{center}
 		
-		\item	Must be bilinear:
+		\item	Bilinearity property:
 			\[ e(P_1 + P_2, Q) = e(P_1, Q) \cdot e(P_2, Q) \]
 	
 		\item \emph{Optimized} Tate pairing:	
@@ -285,7 +294,7 @@ Avoid the use of flip-flops and muxes:
 		
 		\\[1.5em]
 		
-		Efficiency = $\frac{\text{power} \; \times \; \text{calc. time}}{\text{security}}$
+		Efficiency = $\frac{\text{power} \; \times \; \text{calc. time}}{\text{bits security}}$
 \end{center}
 \end{frame}
 
