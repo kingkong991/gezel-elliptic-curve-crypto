@@ -5,34 +5,35 @@
 
 % Plaats van afbeeldingen
 \graphicspath{{images/}}
-\DeclareGraphicsExtensions{.png}
+\DeclareGraphicsExtensions{.pdf, .eps, .png}
 
 % Vak
 \newcommand{\vak}{ESAT - Thesis}
 
 % Opgave
-\newcommand{\opgave}{Compacte implementaties van pairings}
+\newcommand{\opgave}{Compacte implementaties van paringen}
 
 % Titel
-\newcommand{\titel}{\LARGE \opgave}
+\newcommand{\titel}{\opgave}
 
 % Datum
-\newcommand{\datum}{22 mei 2009}
+%\newcommand{\datum}{22 mei 2009}
+\newcommand{\datum}{2008 -- 2009}
 
 % Departement
-\newcommand{\departement}{Departement Elektrotechniek}
+\newcommand{\departement}{Departement\\Elektrotechniek - ESAT}
 
 % Departement Adres
-\newcommand{\depadres}{Kasteelpark Arenberg 10, B-3001 Leuven (Heverlee), Belgi\"e}
+\newcommand{\depadres}{Kasteelpark Arenberg 10, BE-3001 Leuven, Belgi\"e}
 
 % Departement Contact Info
-\newcommand{\depcontact}{Tel.: +32~16~321130 - Fax: +32~16~321986}
+\newcommand{\depcontact}{Tel.: +32~16~32~11~30 - Fax: +32~16~32~19~86}
 
 % Professoren
-\newcommand{\professoren}{Prof.~dr.~ir.~Bart~Preneel\\Prof.~dr.~ir.~Ingrid~Verbauwhede}
+\newcommand{\professoren}{\mbox{\hspace{4mm}}Prof.~Dr.~Ir.~Bart~Preneel\\\mbox{\hspace{4mm}}Prof.~Dr.~Ir.~Ingrid~Verbauwhede}
 
 % Assistenten
-\newcommand{\assistenten}{dr.~ir.~Lejla~Batina\\ir.~Miroslav~Knezevic}
+\newcommand{\assistenten}{\mbox{\hspace{4mm}}Dr.~Lejla~Batina\\\mbox{\hspace{4mm}}Miroslav~(Drago)~Knezevic\\\mbox{\hspace{4mm}}Dr.~Ir.~Nele~Mentens}
 
 % Student
 \newcommand{\student}{Anthony~Van~Herrewege}
@@ -42,63 +43,53 @@
 
 \begin{minipage}[c]{100mm}
 \small
-\textsc{Katholieke Universiteit Leuven\\
-Faculteit Toegepaste Wetenschappen\\
-\departement\\[3mm]
-\depadres\\
-\depcontact}
+\textsc{Faculteit\\
+Ingenieurswetenschappen}\\
+\\
+\textsc{Departement\\
+Elektrotechniek - ESAT}
 \end{minipage}
 \hfill
 \begin{minipage}{45mm}
-\parbox[b]{15mm}{\rule{1pt}{32mm}}
-\includegraphics[height=32mm,bb=0 0 309 520]{voorblad-sedes}
+\raggedleft{
+%\parbox[b]{10mm}{\rule{1pt}{32mm}}
+\includegraphics[height=7em]{voorblad-sedes}}
 \end{minipage}
 
-\vspace*{\stretch{1}}
+\vspace{1em}
 
-\begin{center}
-\parbox[c]{0.7\textwidth}{
-    \centering \textbf{\titel}
+\raggedleft{
+\rule{25mm}{1pt}\\
+\vspace{1em}
+\textsc{Katholieke\\Universiteit\\Leuven}
 }
-\end{center}
 
 \vspace*{\stretch{2}}
 
-\begin{tabular}{p{6cm} p{3cm} p{6cm}}
-	\begin{minipage}[b]{60mm}
-		Promotoren:\\
-		\professoren \\[3mm]
-		Dagelijkse begeleiders:\\
-		\assistenten
-	\end{minipage}
+\begin{center}
+\parbox[c]{0.7\textwidth}{
+    \centering \huge \textsf{\titel}
+}
+\end{center}
 
-	& &
+\vspace*{\stretch{1}}
 
-	\begin{minipage}[b]{60mm}
-		Eindwerk voorgedragen tot het behalen van het diploma van Burgerlijk ingenieur, richting elektrotechniek, optie multimedia en signaalverwerking
-		\\[3mm]
-		door:\\[3mm]
-		\large \student
-	\end{minipage}
-\end{tabular}
-
-%\begin{minipage}{60mm}
-%{\large Promotors:\\}
-%\professoren \\[3mm]
-%{\large Assistenten:\\}
-%\assistenten
-%\end{minipage}
-%\hfill
-%\begin{minipage}{50mm}
-%{\large Door:\\}
-%\parbox[t]{3mm}{~}
-%\student
-%\end{minipage}
-
-\vspace*{20mm}
+\raggedleft{
+\begin{minipage}[b]{0.40\textwidth}
+		Eindwerk voorgedragen tot het behalen van het diploma van Master in de Ingenieurswetenschappen: Elektrotechniek (ICT), optie ICT-multimedia en signaalverwerking (Burgerlijk elektrotechnisch ingenieur)
+	\\[1em]
+	{\large \textbf{\student}}
+	\\[2em]
+	Promotors:\\
+	\large{\professoren} \\[1em]
+	Begeleiders:\\
+	\large{\assistenten}
+\end{minipage}}
+	
+\vfill
 
 \centering \datum
 
-\vfill	
+%\vfill	
 
 \end{document}
