@@ -20,7 +20,7 @@ Het verkregen resultaat zal niet volledig kloppen, maar komt zeer dicht in de bu
 
 \section{Benodigde rekentijd}
 
-Alvorens de syntheseresultaten te presenteren, wordt even uitgeweid over het noodzakelijk aantal klokcycli $c$ om \'e\'en pairing te berekenen. Merk op dat de formules die volgen enkel kloppen voor willekeurige $m$ indien $\textsf{Hamm}(l) = 3$, wat het geval is voor de gekozen parameters (zie \refsect{sectie-implementatie-parameters}).
+Alvorens de syntheseresultaten te presenteren, wordt even uitgeweid over het noodzakelijk aantal klokcycli $c$ om \'e\'en paring te berekenen. Merk op dat de formules die volgen enkel kloppen voor willekeurige $m$ indien $\textsf{Hamm}(l) = 3$, wat het geval is voor de gekozen parameters (zie \refsect{sectie-implementatie-parameters}).
 
 Het totaal aantal cycli voor een schakeling met veldgrootte $m$ en aantal MALU's $d$ wordt gegeven door:
 \[c = 21681 + 4322 + 2998 \cdot \left\lceil \frac{m}{d} \right\rceil.\]
@@ -34,7 +34,7 @@ waarbij de co\"efficienten opnieuw voor respectievelijk geheugenverschuivingen, 
 In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoeveel klokcycli nodig zijn om een berekening te voltooien in het geval $m = 163$. In \reffig{figuur-resultaten-multi-cycles} wordt hetzelfde weergegeven, maar dan voor elke $d$ van 1 t.e.m.\ 163. Het is duidelijk dat de tijdsbesparing dankzij extra MALU's vrij snel teniet wordt gedaan door het aantal cycli dat niet door $d$ be\"invloed wordt.
 
 \begin{table}[h]
-	\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ het aantal MALU's $d$ voor veldgrootte $m = 163$}
+	\caption{Aantal klokcycli $c$ nodig voor \'e\'en paring i.f.v.\ het aantal MALU's $d$ voor veldgrootte $m = 163$}
 	\label{tabel-resultaten-multi-cycles}
 
 	\begin{narrow}{-1cm}{-1cm}
@@ -51,7 +51,7 @@ In \reftbl{tabel-resultaten-multi-cycles} wordt voor enkele waarden getoond hoev
 \begin{figure}[h]
 	\centering
 		\fbox{\includegraphics[width=11.9cm]{results-multi-cycles}}
-		\caption{Aantal klokcycli $c$ nodig voor \'e\'en pairing i.f.v.\ het aantal MALU's $d$ voor veldgrootte $m = 163$\label{figuur-resultaten-multi-cycles}}
+		\caption{Aantal klokcycli $c$ nodig voor \'e\'en paring i.f.v.\ het aantal MALU's $d$ voor veldgrootte $m = 163$\label{figuur-resultaten-multi-cycles}}
 \end{figure}
 
 \section{Basisimplementatie \& optimalisaties\label{section-resultaten-basisimplementatie}}
@@ -160,7 +160,7 @@ De resultaten van de synthese zijn te zien in \reftbl{tabel-resultaten-md} en \r
 
 \section{Hogere kloksnelheid vs.\ meerdere MALU's}
 
-Aan een kloksnelheid $f = 10$ kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en pairing te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALU's die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk resetingangen verwijderd.
+Aan een kloksnelheid $f = 10$ kHz doet een schakeling met \'e\'en MALU er 51.5 seconden over om \'e\'en paring te berekenen. Dit zal  in de meeste gevallen onaanvaardbaar zijn. Daarom wordt hier onderzocht wat de effecten op de schakeling zijn indien de kloksnelheid wordt opgedreven en er eventueel meerdere MALU's gebruikt worden. Ter illustratie zal voor een implementatie met meerdere MALU's die met twee nader onderzocht worden. Opnieuw wordt in beide gevallen clock gating schakeling drie gebruikt en worden zoveel mogelijk resetingangen verwijderd.
 
 Stel een maximale rekentijd $t_{\text{max}} \approx 50$ $ms$. Voor een implementatie met \'e\'en MALU moet de klokfrequentie $f_1$ dan 1030 maal verhoogd worden. Wanneer men de schakeling met twee MALU's even snel wenst te maken als die met \'e\'en, dan dient de kloksnelheid $f_2$ van die eerste vermenigvuldigd te worden met $\Delta f = 1 - 0,472$. De kloksnelheden van de respectievelijke schakelingen zijn dan:
 \[\begin{aligned}
@@ -173,7 +173,7 @@ Ter vergelijking worden de resulterende parameters van beide implementaties gege
 Hoewel de implementatie met twee MALU's 3\% groter is dan die met \'e\'en, verbruikt ze slechts half zoveel vermogen. Het lijkt dus vanzelfsprekend om steeds voor een implementatie met meerdere MALU's te kiezen indien de snelheid moet opgedreven worden. Hoeveel MALU's ideaal zijn, zal afhankelijk zijn van de toepassing.
 
 \begin{table}[h]
-	\caption{Vergelijking van syntheseresultaten voor twee verschillende implementaties met dezelfde uitvoeringstijd voor \'e\'en pairing}
+	\caption{Vergelijking van syntheseresultaten voor twee verschillende implementaties met dezelfde uitvoeringstijd voor \'e\'en paring}
 	\label{tabel-resultaten-m1-vs-m2}
 
 	\centering
@@ -192,9 +192,9 @@ Hoewel de implementatie met twee MALU's 3\% groter is dan die met \'e\'en, verbr
 
 \section{Vergelijking met bestaande implementaties}
 
-Gezien de vrij recente ontdekking van pairings is het beschikbare aantal implementaties voor ASIC's ook vrij beperkt. Er werden slechts drie papers in de literatuur gevonden waarin het voorgestelde ontwerp naar een ASIC gesynthetiseerd werd. Op andere implementaties werd reeds ingegaan in \refsect{inleiding-pairings}.
+Gezien de vrij recente ontdekking van paringen is het beschikbare aantal implementaties voor ASIC's ook vrij beperkt. Er werden slechts drie papers in de literatuur gevonden waarin het voorgestelde ontwerp naar een ASIC gesynthetiseerd werd. Andere types implementaties werden reeds besproken in \refsect{inleiding-paringen}.
 
-De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}, \cite{kammler} en \cite{savas}. Zowel in \cite{beuchat-asic} als \cite{savas} wordt met het oog op het behalen van zo hoog mogelijke snelheden ontworpen. De implementatie uit \cite{kammler} bevat naast de schakeling voor pairings tevens een RISC processor. In \cite{savas} wordt de finale machtsverheffing niet uitgevoerd. \reftbl{tabel-resultaten-asic} geeft een vergelijkend overzicht van het ontwerp voorgesteld in deze thesis en de vermelde ontwerpen. Aangezien het ontwerp uit \cite{beuchat-asic} het enige is waarvan alle gegevens bekend zijn, zal in de tekst die volgt enkel met dat ontwerp vergeleken worden. 
+De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}, \cite{kammler} en \cite{savas}. Zowel in \cite{beuchat-asic} als \cite{savas} wordt met het oog op het behalen van zo hoog mogelijke snelheden ontworpen. De implementatie uit \cite{kammler} bevat naast de schakeling voor paringen tevens een RISC processor. In \cite{savas} wordt de finale machtsverheffing niet uitgevoerd. \reftbl{tabel-resultaten-asic} geeft een vergelijkend overzicht van het ontwerp voorgesteld in deze thesis en de vermelde ontwerpen. Aangezien het ontwerp uit \cite{beuchat-asic} het enige is waarvan alle gegevens bekend zijn, zal in de tekst die volgt enkel met dat ontwerp vergeleken worden. 
 
 \begin{table}[h]
 	\caption{Vergelijking van de implementatie voorgesteld in deze thesis met ASIC implementaties uit de literatuur}
@@ -204,13 +204,13 @@ De drie ASIC ontwerpen worden voorgesteld in respectievelijk \cite{beuchat-asic}
 		\centering
 		\begin{tabular}{llllll}
 			\toprule
-			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
+			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Paring-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}	& \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{Kammler}\\\text{\emph{et al.} \cite{kammler}}\end{array}$}}	&  \multicolumn{1}{c}{\multirow{2}{*}{$\begin{array}{@{}c@{}}\text{K\"om\"urc\"u en}\\\text{Savas \cite{savas}}\end{array}$}}\\
 			\cmidrule(r){2-3}
 			& \multicolumn{1}{c}{1 MALU} & \multicolumn{1}{c}{2 MALUs} & & &\\
 	 		\midrule
 			Veld																				& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{2^{163}}$	& $\mathbb{F}_{3^{97}}$	& $\mathbb{F}_{p}$ 256 bit	& $\mathbb{F}_{3^{97}}$ \\
 %			Veiligheid [bit]																& 652								& 652								& 922							& ?								& 922\\
-			Pairing																			& Tate							& Tate							& $\eta_T$					& Ate			 					& Tate\\
+			Paring																			& Tate							& Tate							& $\eta_T$					& Ate			 					& Tate\\
 			Technologie																		& 0,13 $\mu m$					& 0,13 $\mu m$					& 0,18 $\mu m$				& 0,13 $\mu m$					& 0,25 $\mu m$\\
 			Opp. [gates]																	& $27\,734$						& $28\,155$						& $193\,765$				& $97\,000$						& \emph{$10 mm^2$}\footnotemark[3]\\
 			$f$ [MHz]																		& 0,01							& 5,44							& 200							& 338								& 78\\
@@ -236,11 +236,11 @@ Alvorens te vergelijken moet er uiteraard wel op gewezen worden dat het ontwerp 
 
 De hier voorgestelde implementaties zijn niet alleen ongeveer een factor zeven kleiner dan degene voorgesteld in \cite{beuchat-asic}, hun vermogenverbruik is ongelofelijk veel lager. Het energieverbruik per bit veiligheid, ofwel de energie-effici\"entie, kan berekend worden als:
 \[\text{EE} = \frac{\text{vermogen} \times \text{rekentijd}}{\text{veiligheid}}.\]
-Normaal wordt de energie-effici\"entie berekend als vermogen gedeeld door de throughput. Daarbij wordt echter geen rekening gehouden met de veiligheid van de schakeling. Het is dan mogelijk een schakeling te cre\"eren met enkel een kloksignaal dat sowieso de beste energie-effici\"entie zal hebben. De veiligheid zal echter gelijk zijn aan 0 bit en het is uiteraard niet het geval dat zo een schakeling er bij een vergelijking als beste uitkomt. Vandaar het voorstel voor een lichtelijk aangepaste formule.
+Normaal wordt de energie-effici\"entie berekend als vermogen gedeeld door de throughput. Daarbij wordt echter geen rekening gehouden met de veiligheid van de schakeling. Het is dan mogelijk een schakeling te cre\"eren met enkel een kloksignaal dat sowieso de beste energie-effici\"entie zal hebben. De veiligheid zal echter gelijk zijn aan 1 bit en het is uiteraard niet de bedoeling dat zo een schakeling er bij een vergelijking als beste uitkomt. Vandaar het voorstel voor een lichtelijk aangepaste formule.
 
 Opgegeven waarden voor veiligheid zijn zeer veranderlijk van paper tot paper. In dit geval zullen RSA equivalente waarden gebruikt worden die door de auteurs van \cite{beuchat-asic} worden opgegeven in \cite{beuchat}. Daar wordt gesteld dat het ontwerp uit deze thesis een veiligheid heeft van 652 bit en dat van \cite{beuchat-asic} 922 bit.
 
-De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie}. Er dient op gewezen te worden dat in het ontwerp uit \cite{beuchat-asic} met de $\eta_T$ pairing gewerkt wordt, die ongeveer een factor twee sneller berekend kan worden. Het is duidelijk dat het ontwerp uit deze thesis het potentieel heeft veel effici\"enter te zijn. Het gebruik van meer MALU's doet de de effici\"entie duidelijk stijgen. Dit is te verklaren door het feit dat meer MALU's relatief gezien zeer weinig extra vermogen verbruiken, maar de rekentijd wel gevoelig verlagen. Indien een iets grotere oppervlakte dus geen bezwaar is, kan de effici\"entie van de schakeling nog flink verhoogd worden door meer MALU's toe te voegen. Tevens kan, indien een lange rekentijd geen punt is, tegelijkertijd de frequentie verlaagd worden, wat de effici\"entie nog meer ten goede zal komen. 
+De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie}. Er dient op gewezen te worden dat in het ontwerp uit \cite{beuchat-asic} met de $\eta_T$ paring gewerkt wordt, die ongeveer een factor twee sneller berekend kan worden. Het is duidelijk dat het ontwerp uit deze thesis het potentieel heeft veel effici\"enter te zijn. Het gebruik van meer MALU's doet de de effici\"entie duidelijk stijgen. Dit is te verklaren door het feit dat meer MALU's relatief gezien zeer weinig extra vermogen verbruiken, maar de rekentijd wel gevoelig verlagen. Indien een iets grotere oppervlakte dus geen bezwaar is, kan de effici\"entie van de schakeling nog flink verhoogd worden door meer MALU's toe te voegen. Tevens kan, indien een lange rekentijd geen punt is, tegelijkertijd de frequentie verlaagd worden, wat de effici\"entie nog meer ten goede zal komen. 
 
 \begin{table}[h]
 	\caption{Vergelijking van energie-effici\"entie van de implementatie voorgesteld in deze thesis met ASIC implementaties uit de literatuur}
@@ -250,7 +250,7 @@ De resultaten van de berekening zijn te zien in \reftbl{tabel-resultaten-energie
 		\centering
 		\begin{tabular}{llll}
 			\toprule
-			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Pairing-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}\\
+			&	\multicolumn{2}{c}{Thesis (CG 3)\footnotemark[2]}	& \multirow{3}{*}{$\begin{array}{@{}c@{}}\text{Paring-}\\\text{Lite \cite{beuchat-asic}}\end{array}$}\\
 			\cmidrule(r){2-3}
 			& \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 1,\\f = 10\text{kHz}\end{array}$} & \multicolumn{1}{c}{$\begin{array}{@{}c@{}}d = 2,\\f = 5.44\text{MHz}\end{array}$} &\\
 	 		\midrule
