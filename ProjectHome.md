@@ -1,0 +1,1 @@
+Hardware (GEZEL) implementation of elliptic curve pairings for use in constrained environments.
